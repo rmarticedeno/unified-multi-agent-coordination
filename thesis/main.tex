@@ -1,0 +1,39 @@
+\documentclass[12pt,oneside]{report}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage[hypertexnames=false]{hyperref}
+\usepackage{setspace}
+\usepackage{csquotes}
+
+\geometry{letterpaper, margin=1in}
+\onehalfspacing
+
+\title{Unified Multi-Agent Coordination Bridging Large Language Models and Symbolic AI for Autonomous Systems}
+\author{Roberto Marti Cedeno}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\pagenumbering{roman}
+\input{chapters/abstract}
+\tableofcontents
+
+\clearpage
+\pagenumbering{arabic}
+\input{chapters/introduction}
+\input{chapters/background}
+\input{chapters/methodology}
+\input{chapters/results}
+\input{chapters/conclusion}
+
+\nocite{placeholder}
+\bibliographystyle{plain}
+\bibliography{references/references}
+
+\end{document}
