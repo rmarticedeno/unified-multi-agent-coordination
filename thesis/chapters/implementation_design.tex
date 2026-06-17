@@ -1,0 +1,197 @@
+\chapter{Implementation Design}
+\label{chap:implementation-design}
+
+\section{Instantiation of the Framework}
+
+This chapter instantiates the theoretical framework from Chapter~\ref{chap:theoretical-solution} using the Agent2Agent (A2A) protocol as the communication layer. A2A is an open protocol intended to support communication and coordination among agents built with different technologies. Its project documentation describes standardized communication, Agent Cards for discovery, flexible interaction patterns, and rich data exchange through text, files, and structured JSON \cite{a2aproject2025}. Google's announcement similarly frames A2A as an open protocol for secure information exchange and coordination among agents across enterprise platforms \cite{google2025a2a}.
+
+The implementation design uses A2A as a concrete mechanism for interoperability while preserving the theoretical separation between coordination logic and agent internals. Participating agents may be implemented with different models, frameworks, or programming languages. The coordinator interacts with them through their advertised A2A interfaces and uses their capability metadata to decide whether they can contribute to a requested solution.
+
+\section{System Components}
+
+The proposed implementation contains nine principal components. The Agent Registry stores the known agents that may participate in the system. The Agent Card Validator retrieves and validates each advertised Agent Card before the agent becomes available for coordination. The Capability Index transforms agent descriptions, skills, modalities, and constraints into a searchable representation. The Coordinator receives user problems, maintains the global context, and controls the solution workflow. The LLM Planner supports semantic interpretation, task decomposition, and candidate solution construction.
+
+The Feasibility Analyzer checks the candidate solution against deterministic constraints: whether required skills are covered, whether input and output modalities are compatible, whether dependencies can be ordered, whether selected agents are available, and whether authority boundaries are respected. The A2A Client sends tasks to remote agents and receives messages, status updates, and artifacts. The Task Monitor records execution state and failures. The Artifact Aggregator combines outputs into the final response. The Generated NLP Agent Factory creates temporary solution-local specifications for simple linguistic agents when a narrow NLP capability is needed but no registered agent provides it.
+
+\begin{table}[htbp]
+\centering
+\caption{Implementation components mapped to theoretical concepts.}
+\label{tab:implementation-components}
+\begin{tabular}{p{0.30\textwidth}p{0.58\textwidth}}
+\toprule
+\textbf{Component} & \textbf{Role in the implementation} \\
+\midrule
+Agent Registry & Maintains the concrete set of discoverable participating agents. \\
+Agent Card Validator & Checks that advertised A2A metadata is present, parseable, and acceptable. \\
+Capability Index & Represents skills, descriptions, modalities, and constraints for matching. \\
+Coordinator & Implements the central coordinating role from the theory. \\
+LLM Planner & Performs semantic interpretation and candidate decomposition. \\
+Feasibility Analyzer & Applies deterministic checks before accepting a plan. \\
+A2A Client & Executes communication with selected agents. \\
+Task Monitor & Tracks task state, errors, and completion evidence. \\
+Artifact Aggregator & Builds the final result from agent outputs. \\
+Generated NLP Agent Factory & Specifies temporary lightweight linguistic agents when justified. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Agent Discovery Through A2A Agent Cards}
+
+The implementation uses a custom registry of validated A2A Agent Card locations. The registry is not a replacement for A2A discovery metadata; it is the local admission and indexing layer used by the thesis system. Each registered entry points to an Agent Card and stores derived metadata required for coordination. This design keeps the system open, because new agents can be admitted by adding their Agent Card location, while preserving control over which agents are trusted enough to participate.
+
+An Agent Card is treated as the concrete implementation of the abstract capability description. The card provides the agent's identity, description, service endpoint, supported interaction modes, skills, and security requirements. The coordinator does not assume that the agent's internal implementation is visible. It only assumes that the card provides enough external information for matching and communication.
+
+\section{Minimum Data Structures}
+
+The implementation can be described through five conceptual records. These records are not tied to a specific programming language; they define the information that the prototype must preserve.
+
+\begin{verbatim}
+AgentRegistryEntry:
+  agent_id
+  agent_card_url
+  service_endpoint
+  description
+  skills
+  input_modes
+  output_modes
+  status
+  trust_level
+
+ProblemRequest:
+  user_goal
+  constraints
+  required_artifacts
+  context
+
+FeasibilityReport:
+  feasible
+  matched_agents
+  generated_nlp_agents
+  missing_capabilities
+  risks
+  explanation
+
+SolutionProposal:
+  decomposition
+  selected_agents
+  generated_nlp_agents
+  execution_order
+  expected_artifacts
+
+GeneratedNlpAgentSpec:
+  purpose
+  input
+  output
+  method
+  validation_rule
+  lifecycle
+\end{verbatim}
+
+The \texttt{AgentRegistryEntry} materializes the discoverable agent set. The \texttt{ProblemRequest} represents the user's goal and constraints. The \texttt{FeasibilityReport} explains whether the system can solve the problem and why. The \texttt{SolutionProposal} is the executable coordination plan. The \texttt{GeneratedNlpAgentSpec} represents a temporary linguistic capability, such as a classifier or extractor, that can be created for the current solution without becoming a permanent system agent.
+
+\section{Coordinator Workflow}
+
+The coordinator follows a simple-first decision process. It first attempts direct capability matching. If one agent can solve the problem without decomposition, the coordinator delegates directly. If no direct match exists, the coordinator asks the LLM Planner to propose a decomposition and candidate capability mapping. The Feasibility Analyzer then checks the proposal deterministically. If the plan requires a missing but simple linguistic capability, the Generated NLP Agent Factory may add a temporary specification to the proposal. If the plan still lacks a critical capability, the coordinator returns infeasibility.
+
+\begin{verbatim}
+coordinate(problem):
+  registry = load_available_agents()
+  capabilities = build_capability_index(registry)
+
+  direct_match = find_direct_capability(problem, capabilities)
+  if direct_match is valid:
+      return execute_with_agent(problem, direct_match)
+
+  candidate_plan = llm_planner.decompose(problem, capabilities)
+  checked_plan = feasibility_analyzer.check(candidate_plan, capabilities)
+
+  if checked_plan.requires_simple_linguistic_capability:
+      nlp_agent = generated_nlp_agent_factory.specify(checked_plan.gap)
+      checked_plan = checked_plan.with_auxiliary_agent(nlp_agent)
+      checked_plan = feasibility_analyzer.check(checked_plan, capabilities)
+
+  if checked_plan.is_not_feasible:
+      return infeasibility_error(checked_plan.missing_capabilities,
+                                 checked_plan.risks,
+                                 checked_plan.explanation)
+
+  results = execute_a2a_tasks(checked_plan.execution_order)
+  return artifact_aggregator.combine(results)
+\end{verbatim}
+
+This workflow keeps the LLM useful but bounded. The LLM Planner interprets the natural-language goal and proposes decompositions, but it does not alone decide feasibility. Deterministic checks remain responsible for explicit properties such as availability, modality compatibility, declared skills, and missing capabilities.
+
+\section{Linguistic Agents in the A2A Instantiation}
+
+In the implementation, linguistic agents are A2A-compatible agents whose skills describe language-mediated capabilities. A linguistic agent may advertise skills for summarization, entity extraction, intent classification, translation, capability matching, or explanation generation. The coordinator treats these skills as ordinary capabilities, but it also records that their outputs may require confidence thresholds or validation rules.
+
+The system distinguishes between full LLM agents and simpler NLP agents at the implementation level. A full LLM agent is appropriate when the task requires broad semantic reasoning, flexible dialogue, multi-step synthesis, or explanation under ambiguity. A simpler NLP agent is appropriate when the task is narrow, repeatable, and easily validated. For example, if the decomposition requires extracting named entities from a short text, the coordinator may propose a temporary NLP extraction agent rather than delegating to a general LLM agent.
+
+Generated NLP agents are solution-local. The coordinator includes their specifications in the \texttt{SolutionProposal}, including purpose, method, expected input, expected output, validation rule, and lifecycle. They do not automatically enter the registry. Promotion to a persistent registered agent would require a separate admission process.
+
+\section{Architecture Diagram}
+
+Figure~\ref{fig:implementation-architecture} summarizes the implementation structure. The diagram is intentionally abstract enough to support later coding choices while still showing the concrete A2A instantiation.
+
+\begin{figure}[htbp]
+\centering
+\fbox{
+\begin{minipage}{0.88\textwidth}
+\centering
+User Problem\\
+$\downarrow$\\
+Coordinator\\
+$\downarrow$\\
+\begin{tabular}{ccc}
+Agent Registry & LLM Planner & Feasibility Analyzer \\
+$\downarrow$ & $\downarrow$ & $\downarrow$ \\
+Agent Cards & Candidate Plan & Validated Plan \\
+\end{tabular}\\
+$\downarrow$\\
+A2A Client and Task Monitor\\
+$\downarrow$\\
+Remote A2A Agents and Temporary NLP Agent Specifications\\
+$\downarrow$\\
+Artifact Aggregator\\
+$\downarrow$\\
+Final Result or Infeasibility Error
+\end{minipage}
+}
+\caption{Implementation architecture for the A2A-based instantiation.}
+\label{fig:implementation-architecture}
+\end{figure}
+
+\section{Execution Sequence}
+
+The execution sequence begins with the user's problem request. The coordinator loads the current registry and validates that registered agents are available. It then constructs or refreshes the capability index. If direct matching fails, the LLM Planner proposes a decomposition. The Feasibility Analyzer checks the decomposition and either approves it, requests an auxiliary NLP specification, or rejects it as infeasible. Approved tasks are sent through the A2A Client to selected agents. The Task Monitor records task status and failures. The Artifact Aggregator combines outputs into the final response.
+
+\begin{figure}[htbp]
+\centering
+\fbox{
+\begin{minipage}{0.88\textwidth}
+\begin{enumerate}
+\item User submits a problem and constraints.
+\item Coordinator loads registry entries and Agent Card metadata.
+\item Coordinator attempts direct capability matching.
+\item LLM Planner proposes decomposition if direct matching is insufficient.
+\item Feasibility Analyzer validates skills, modalities, dependencies, and authority.
+\item Generated NLP Agent Factory adds a temporary specification when justified.
+\item A2A Client delegates tasks to selected agents.
+\item Task Monitor records status, errors, and completion evidence.
+\item Artifact Aggregator returns the final result or an infeasibility report.
+\end{enumerate}
+\end{minipage}
+}
+\caption{Execution sequence for coordinated problem solving.}
+\label{fig:execution-sequence}
+\end{figure}
+
+\section{Failure and Infeasibility Handling}
+
+The implementation treats infeasibility as a first-class result. If no agent or auxiliary capability can satisfy a required subtask, the coordinator returns a structured error. If an agent is unavailable, the system may try another compatible agent; if no replacement exists, it reports the missing dependency. If modalities are incompatible, the report identifies which input or output mode cannot be bridged. If the LLM proposes a decomposition that violates explicit constraints, the Feasibility Analyzer rejects it.
+
+This behavior is essential for simplicity and trust. The system should not create complex plans merely to appear capable. It should coordinate only when the available and generated capabilities justify the solution. Otherwise, it should explain the boundary clearly.
+
+\section{Expected Implementation Outcome}
+
+The resulting implementation is a distributed multi-agent environment with a central coordinating role. Agents remain independently deployable and vendor independent. A2A provides the concrete communication and discovery substrate through Agent Cards and task exchange. The coordinator uses LLM reasoning for semantic interpretation and decomposition, but deterministic checks decide whether the plan satisfies the system's explicit boundaries. Linguistic agents provide NLP capabilities at different levels of complexity, and simple auxiliary NLP agents can be proposed when they reduce complexity and remain verifiable.
