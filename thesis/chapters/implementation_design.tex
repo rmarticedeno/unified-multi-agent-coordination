@@ -7,6 +7,18 @@ This chapter instantiates the theoretical framework from Chapter~\ref{chap:theor
 
 The implementation design uses A2A as a concrete mechanism for interoperability while preserving the theoretical separation between coordination logic and agent internals. Participating agents may be implemented with different models, frameworks, or programming languages. The coordinator interacts with them through their advertised A2A interfaces and uses their capability metadata to decide whether they can contribute to a requested solution.
 
+The mapping between formal objects and implementation records is direct. The five records defined in Section~\ref{sec:data-structures} materialize the formal objects of Chapter~\ref{chap:theoretical-solution} as follows.
+
+\begin{itemize}
+  \item \texttt{AgentRegistryEntry} materializes an agent $a$ (Definition~3.1), supplying $\mathit{id}$, the parsed Agent Card supplying $C(a)$, $M_{\mathrm{in}}(a)$, $M_{\mathrm{out}}(a)$, and the local admission policy supplying $\tau(a)$.
+  \item \texttt{ProblemRequest} is the concrete shape of the $P = (g, R, \mathit{ctx})$ object (Definition~3.5).
+  \item \texttt{SolutionProposal} is a concrete coordination plan $\Pi = (T, \alpha, \prec, A_{\mathrm{out}}, \kappa)$ (Definition~3.6).
+  \item \texttt{FeasibilityReport} records the verdict of the feasibility predicate (Definition~3.7).
+  \item \texttt{GeneratedNlpAgentSpec} is the concrete shape of the auxiliary specification $\mathit{aux}$ (Definition~3.4), bound by rules A1--A4.
+\end{itemize}
+
+Each of the four properties stated in Chapter~\ref{chap:theoretical-solution} (soundness, simplicity, bounded auxiliary synthesis, observability) corresponds to a concrete check or trace recorded by the implementation.
+
 \section{System Components}
 
 The proposed implementation contains nine principal components. The Agent Registry stores the known agents that may participate in the system. The Agent Card Validator retrieves and validates each advertised Agent Card before the agent becomes available for coordination. The Capability Index transforms agent descriptions, skills, modalities, and constraints into a searchable representation. The Coordinator receives user problems, maintains the global context, and controls the solution workflow. The LLM Planner supports semantic interpretation, task decomposition, and candidate solution construction.
@@ -42,6 +54,7 @@ The implementation uses a custom registry of validated A2A Agent Card locations.
 An Agent Card is treated as the concrete implementation of the abstract capability description. The card provides the agent's identity, description, service endpoint, supported interaction modes, skills, and security requirements. The coordinator does not assume that the agent's internal implementation is visible. It only assumes that the card provides enough external information for matching and communication.
 
 \section{Minimum Data Structures}
+\label{sec:data-structures}
 
 The implementation can be described through five conceptual records. These records are not tied to a specific programming language; they define the information that the prototype must preserve.
 

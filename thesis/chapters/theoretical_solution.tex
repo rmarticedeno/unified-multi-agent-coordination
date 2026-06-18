@@ -1,11 +1,56 @@
 \chapter{Proposed Theoretical Framework}
 \label{chap:theoretical-solution}
 
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+  node distance=8mm and 8mm,
+  every node/.style={font=\small},
+  box/.style={draw, rounded corners, align=center, minimum height=8mm, inner sep=4pt},
+  coord/.style={box, fill=blue!10, minimum width=42mm, minimum height=22mm},
+  sym/.style={box, fill=blue!8},
+  lng/.style={box, fill=orange!12},
+  outc/.style={box, fill=green!10, minimum width=34mm},
+  grp/.style={draw, dashed, rounded corners, inner sep=5pt},
+  arr/.style={-Latex, thick},
+  reg/.style={box, fill=gray!8, minimum width=28mm, minimum height=6mm}
+]
+\node[lng] (user) {User request\\(\textit{NL})};
+\node[coord, right=18mm of user] (coord) {\textbf{Coordinator}\\[2mm]
+  \begin{tabular}{cccc}
+  \scriptsize Interpreter & \scriptsize Planner & \scriptsize Analyzer & \scriptsize Generator
+  \end{tabular}};
+\node[reg, above=14mm of coord] (reg) {Registered agents\\$K(R)$};
+\node[outc, below left=10mm and 4mm of coord] (acc) {Accepted Plan $\Pi$};
+\node[outc, below right=10mm and 4mm of coord] (inf) {Infeasibility $\bot$};
+
+\draw[arr] (user) -- node[above]{\scriptsize T1} (coord);
+\draw[arr] (reg) -- node[right]{\scriptsize capabilities} (coord.north west);
+\draw[arr] (coord.south) -- ++(0,-2mm) -| (acc.north) node[pos=0.25,above]{\scriptsize feasible};
+\draw[arr] (coord.south) -- ++(0,-2mm) -| (inf.north) node[pos=0.25,above]{\scriptsize $\lnot$ feasible};
+
+\begin{scope}[on background layer]
+  \node[grp, fit=(coord)(acc)(inf)(reg), label=above:\scriptsize Framework contribution] {};
+  \node[grp, fit=(user), label=above:\scriptsize Linguistic surface] {};
+\end{scope}
+\end{tikzpicture}
+\caption{End-to-end view of the proposed coordination process. A user request enters the system, is interpreted by the linguistic layer, decomposed and validated against the symbolic capability space, and is either executed as a coordinated plan of agent commitments or returned as an explicit infeasibility verdict. The coordinator is the central element; the user, the registry, and the two terminal outcomes are its environment.}
+\label{fig:process-overview}
+\end{figure}
+
 \section{Purpose of the Framework}
 
-The solution proposed in this thesis is a general model for coordinating heterogeneous agents in an open multi-agent system. Its purpose is not to prescribe a single software protocol, programming language, model provider, or deployment platform. Instead, it defines the conceptual conditions under which a group of autonomous agents can be treated as a coordinated problem-solving system. The framework assumes that agents may differ in internal architecture, reasoning method, language capability, and ownership, but that they can participate in a common coordination process if their capabilities and interaction boundaries are sufficiently described.
+The solution proposed in this thesis is a general model for coordinating heterogeneous agents in an open multi-agent system that bridges linguistic reasoning, provided by large language models, with symbolic coordination, expressed through explicit capabilities, plans, and commitments. Its purpose is not to prescribe a single software protocol, programming language, model provider, or deployment platform. Instead, it defines the conceptual conditions under which a group of autonomous agents can be treated as a coordinated problem-solving system. The framework assumes that agents may differ in internal architecture, reasoning method, language capability, and ownership, but that they can participate in a common coordination process if their capabilities and interaction boundaries are sufficiently described.
 
 The central research problem is therefore one of controlled openness. A useful multi-agent system should be able to accept diverse agents, discover what they can do, determine whether a requested problem is solvable within the current system boundary, and coordinate a solution when feasible. At the same time, such a system should avoid unnecessary complexity. The decision process should remain as simple as possible: if a direct capability match is sufficient, no elaborate planning procedure is required; if a decomposition is necessary, it should be no deeper than the problem demands; if the system lacks a required capability, it should return a clear infeasibility explanation instead of simulating competence.
+
+The thesis hypothesis is that such a system is achievable by combining a centrally coordinated capability-matching loop with a disciplined boundary between linguistic interpretation and symbolic execution. The framework formalizes this hypothesis as a small set of objects, a deterministic feasibility predicate, a bounded rule set for auxiliary capability synthesis, and a set of properties the loop is intended to satisfy.
+
+\section{Assumptions and Scope}
+
+The framework rests on a compact set of assumptions. First, participating agents are treated as black boxes with respect to their internal implementation. An agent may contain symbolic rules, a large language model, a classical planner, a retrieval system, a statistical model, a deterministic program, or a combination of these mechanisms. What is observable to the coordinator is the externally declared capability profile. Second, the coordinator is a single, trusted component that maintains the global view of the problem, the available capabilities, and the current solution plan. This is a deliberate departure from fully decentralized coordination in exchange for an explicit feasibility decision point. Third, capability descriptions are static within a coordination session and are provided honestly by participating agents. Fourth, the communication protocol layer satisfies the required protocol properties stated in Section~\ref{sec:protocol} (Protocol Substitutability). Fifth, the symbolic layer is assumed to be correct with respect to its own specifications: a deterministic feasibility check is trusted to return a sound verdict on the explicit constraints it examines.
+
+The framework makes no claim about a number of related concerns and explicitly excludes them from scope. It does not verify the internals of language models, since the controllable boundary in this work is the symbolic envelope around the model rather than the model itself. It does not replace low-level agent communication languages such as KQML or FIPA-ACL \cite{finin1994kqml,labrou1997proposal,fipa2002acl}; such protocols may be used for transport and message structure. It does not provide a solution to decentralized consensus, Byzantine fault tolerance, or open-market task allocation in adversarial settings. It does not guarantee optimality of the resulting coordination plan, only that the plan is justified relative to the declared capabilities. Finally, it does not claim that generated auxiliary specifications are equivalent in quality to dedicated, long-trained agents; they are narrow, validated substitutes used when justified by simplicity and boundedness.
 
 \section{Design Requirements for the MAS}
 
@@ -13,15 +58,21 @@ The theoretical framework is guided by a compact set of design requirements. Fir
 
 Third, the system must be interoperable. Agents require shared conventions for describing capabilities, exchanging messages, returning artifacts, and reporting errors. Fourth, the system is distributed by design. Agents remain independently deployable units, and coordination occurs through explicit interactions rather than shared internal state. Fifth, the system must preserve coordination. Although agents are distributed, the solution process requires a central coordinating role that maintains the global view of the problem, the available capabilities, and the current solution plan.
 
-Sixth, the system must prefer simplicity whenever possible. The coordinator should use the least complex decision rule that can justify a correct action. A single-agent direct solution is preferable to a multi-agent workflow when the former is sufficient. A deterministic capability check is preferable to an LLM judgment when the condition is explicit. A generated auxiliary agent should be proposed only when it reduces complexity or fills a narrow missing language capability. Finally, the system must be observable and bounded: decisions, delegations, failures, and produced artifacts should be traceable, and agents should operate under explicit authority boundaries.
+Sixth, the system must prefer simplicity whenever possible. The coordinator should use the least complex decision rule that can justify a correct action. A single-agent direct solution is preferable to a multi-agent workflow when the former is sufficient. A deterministic capability check is preferable to an LLM judgment when the condition is explicit. A generated auxiliary agent should be proposed only when it reduces complexity or fills a narrow missing language capability. Seventh, the system must support a symbolic execution envelope: plans, commitments, and tool calls must be expressible in machine-checkable form so that they can be validated before execution. Finally, the system must be observable and bounded: decisions, delegations, failures, and produced artifacts should be traceable, and agents should operate under explicit authority boundaries.
 
 \section{Agents and Capabilities}
 
-In the proposed framework, an agent is an autonomous computational participant that can accept tasks, perform actions, and return results within a declared boundary of competence. The internal implementation of the agent is intentionally abstract. An agent may contain symbolic rules, an LLM, a classical planner, a retrieval system, a statistical model, a deterministic program, or a combination of these mechanisms. What matters for coordination is not the internal mechanism alone, but the externally visible capability profile.
+In the proposed framework, an agent is an autonomous computational participant that can accept tasks, perform actions, and return results within a declared boundary of competence. The internal implementation of the agent is intentionally abstract. What matters for coordination is not the internal mechanism alone, but the externally visible capability profile.
+
+\textbf{Definition 3.1 (Agent).} An agent is a tuple $a = (\mathit{id}, C(a), M_{\mathrm{in}}(a), M_{\mathrm{out}}(a), \tau(a))$ where $\mathit{id}$ is a unique identifier, $C(a)$ is a finite set of declared capabilities, $M_{\mathrm{in}}(a)$ and $M_{\mathrm{out}}(a)$ are finite sets of accepted input and produced output modalities, and $\tau(a)$ is a trust level drawn from a partial order.
 
 A capability is a declared ability to transform certain inputs into certain outputs under known constraints. Capabilities may be functional, such as generating a plan, classifying a document, querying a database, validating a formal expression, or producing an artifact. They may also be communicative, such as explaining a result, negotiating a dependency, or translating between terminology used by different agents. For a coordinator, a capability description is useful only if it supports matching between problem requirements and agent responsibilities.
 
+\textbf{Definition 3.2 (Capability).} A capability is a tuple $c = (\mathit{name}, \Sigma_{\mathrm{in}}, \Sigma_{\mathrm{out}}, \gamma, \nu)$ where $\Sigma_{\mathrm{in}}$ and $\Sigma_{\mathrm{out}}$ are input and output schemas, $\gamma$ is a set of explicit constraints (preconditions, authority limits, resource bounds), and $\nu$ is a deterministic validator that decides whether a candidate output satisfies the capability's contract.
+
 The capability space is the abstract set of all capabilities currently available to the system. The system boundary is defined by this space: a task is feasible only if its required capabilities can be mapped to existing agents or to acceptable auxiliary capabilities synthesized for the solution. This formulation prevents the coordinator from treating every problem as solvable. The system may be intelligent and adaptive, but it remains bounded by what its participating agents can actually perform.
+
+\textbf{Definition 3.3 (Capability Space and System Boundary).} Given a registry $R$ of currently available agents, the capability space is $K(R) = \bigcup_{a \in R} C(a)$. The system boundary is the pair $\beta(R) = (K(R), M(R))$ where $M(R) = \bigcup_{a \in R} M_{\mathrm{in}}(a) \cup M_{\mathrm{out}}(a)$ is the set of supported modalities.
 
 \section{Linguistic Agents}
 
@@ -31,34 +82,219 @@ A linguistic agent is not necessarily a full LLM agent. Some linguistic tasks re
 
 The framework therefore maps linguistic agents to capabilities rather than to one implementation class. A linguistic capability should describe the kind of language operation performed, the accepted input forms, the expected output artifacts, the limits of confidence, and the conditions under which the result should be validated by another agent. This capability-oriented view keeps the theory general. It allows the system to include powerful LLM-based agents, lightweight NLP agents, and hybrid language-processing agents under the same conceptual model.
 
+\section{The Linguistic--Symbolic Bridge}
+
+A central component of the framework is the explicit boundary between linguistic reasoning and symbolic execution. The bridge is not a single translator but a set of four named transitions, each with a producer, a consumer, a data shape, a trust assumption, and a failure mode.
+
+\textbf{Transition 1 (NL $\rightarrow$ Symbolic Problem).} The user problem, expressed in natural language, is transformed by an LLM-based interpreter into a structured $\mathit{ProblemRequest}$ (see Definition 3.4). The interpreter is trusted to produce a faithful structured representation, but the symbolic layer does not depend on the natural-language text thereafter. Failure mode: the interpreter misrepresents the user intent; mitigation is to expose the resulting $\mathit{ProblemRequest}$ to the user or a verification step.
+
+\textbf{Transition 2 (Symbolic Problem $\rightarrow$ Candidate Plan).} Given the $\mathit{ProblemRequest}$ and the current capability index, an LLM-based planner proposes a candidate coordination plan, expressed in symbolic form. The planner is trusted to propose, not to decide. The plan is checked deterministically before it is accepted. Failure mode: the planner invents a capability that does not exist; mitigation is the feasibility analyzer (see Section~\ref{sec:feasibility-boundary}).
+
+\textbf{Transition 3 (Symbolic Plan $\rightarrow$ NL Explanation).} A symbolic plan is rendered back into natural language for human review, for follow-up questions, or for delegation contexts where another agent expects a prose brief. The renderer is trusted only for presentation; the underlying plan is the authoritative artifact. Failure mode: a misleading explanation; mitigation is to keep the plan and the explanation as separate objects linked by identifier.
+
+\textbf{Transition 4 (Observation $\rightarrow$ Structured Feedback).} External observations, including tool errors, agent failures, infeasibility reports, and protocol violations, are transformed into structured feedback that updates the plan state. This transition may be performed by a small classifier, a rule, or an LLM, depending on the observation's structure. The symbolic layer is trusted to update only the parts of the plan that the feedback explicitly references.
+
+The bridge aligns with classical agent theory. The BDI separation between beliefs, desires, and intentions \cite{rao1991modeling,rao1995bdi} corresponds to the distinction between the structured problem (belief), the candidate plan (desire), and the accepted plan (intention). ACL performatives such as request, inform, and commit \cite{austin1962how,searle1969speech,cohen1990intention,fipa2002acl} correspond to message-level operations on the plan. The framework uses the bridge as the architectural embodiment of this discipline: the LLM produces, the symbolic layer decides.
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+  node distance=10mm and 6mm,
+  every node/.style={font=\small},
+  box/.style={draw, rounded corners, align=center, minimum height=8mm, minimum width=24mm, inner sep=3pt},
+  sym/.style={box, fill=blue!8},
+  lng/.style={box, fill=orange!12},
+  grp/.style={draw, dashed, rounded corners, inner sep=4pt},
+  arr/.style={-Latex, thick}
+]
+\node[lng] (user) {User problem\\(\textit{NL})};
+\node[sym, right=of user] (req) {ProblemRequest\\$P = (g, R, \mathit{ctx})$};
+\node[lng, right=of req] (plan) {Candidate plan\\via LLM Planner};
+\node[sym, right=of plan] (feas) {Feasibility\\Analyzer};
+\node[sym, below=of feas] (aux) {Generated $\mathit{aux}$\\if synthesizable};
+\node[sym, left=of aux] (capidx) {Capability\\index $K(R)$};
+\node[sym, right=of aux] (acc) {Accepted plan\\$\Pi$ or $\bot$};
+\node[sym, below=of acc] (comm) {Commitments\\$\mathcal{C}(\Pi)$};
+\node[sym, left=of comm] (proto) {Protocol\\transport};
+\node[sym, left=of proto] (agg) {Artifact\\Aggregator};
+\node[lng, left=of agg] (out) {Result or\\infeasibility};
+
+\draw[arr] (user) -- node[above]{\scriptsize T1} (req);
+\draw[arr] (req) -- node[above]{\scriptsize T2} (plan);
+\draw[arr] (plan) -- (feas);
+\draw[arr] (capidx) -- (feas);
+\draw[arr] (feas) -- node[above,sloped]{\scriptsize aux if gap} (aux);
+\draw[arr] (aux) -- (acc);
+\draw[arr] (feas) -- node[above]{\scriptsize feasible} (acc);
+\draw[arr] (acc) -- (comm);
+\draw[arr] (comm) -- (proto);
+\draw[arr] (proto) -- (agg);
+\draw[arr] (agg) -- (out);
+
+\begin{scope}[on background layer]
+  \node[grp, fit=(req)(acc)(capidx)(aux), label=above:\scriptsize Symbolic layer] {};
+  \node[grp, fit=(user)(plan), label=above:\scriptsize Linguistic layer] {};
+  \node[grp, fit=(comm)(proto)(agg)(out), label=below:\scriptsize Execution and feedback] {};
+\end{scope}
+\end{tikzpicture}
+\caption{Data flow across the linguistic--symbolic bridge. Transitions T1 (NL $\rightarrow$ ProblemRequest) and T2 (ProblemRequest $\rightarrow$ candidate plan) are produced by the LLM planner; the remaining transitions are deterministic on the symbolic side. The bridge ensures that no commitment is created without a corresponding plan and that no plan is accepted without feasibility verification.}
+\label{fig:theoretical-bridge}
+\end{figure}
+
 \section{Auxiliary Linguistic Capability Synthesis}
 
 The coordinator may encounter a problem whose decomposition requires a simple linguistic capability that is not currently represented by an existing agent. In such cases, the framework allows auxiliary linguistic capability synthesis. This means that the coordinator may propose a temporary, task-local linguistic agent as part of the solution plan. The generated agent is not assumed to become a permanent member of the system. It is a bounded capability specification created to satisfy a narrow subtask.
 
 This concept is important because it preserves both openness and simplicity. If a problem requires only a small text-normalization step, it may be excessive to delegate to a full LLM agent or to reject the whole problem because no registered agent advertises that exact micro-capability. A synthesized auxiliary linguistic agent can fill the gap if its purpose, inputs, outputs, validation rule, and lifecycle are explicit. The coordinator should not silently invent complex agents. It should expose the generated capability as part of the solution proposal so that the system can evaluate whether the addition is acceptable.
 
-Auxiliary synthesis is constrained by feasibility. The coordinator may synthesize only capabilities that are simple enough to be specified, validated, and bounded within the current task. If the missing capability requires domain knowledge, long-term autonomy, external authority, privileged access, or uncertain reasoning beyond the coordinator's validation capacity, the correct response is infeasibility rather than automatic generation.
+\textbf{Definition 3.4 (Generated Auxiliary Specification).} An auxiliary specification is a tuple $\mathit{aux} = (\mathit{purpose}, \Sigma_{\mathrm{in}}, \Sigma_{\mathrm{out}}, \mathit{method}, \nu, \lambda)$ where $\mathit{purpose}$ is a short human-readable description, $\Sigma_{\mathrm{in}}$ and $\Sigma_{\mathrm{out}}$ are schemas, $\mathit{method}$ is an enumerated or closed-form procedure, $\nu$ is a deterministic validator, and $\lambda$ is a lifecycle token that bounds the validity of $\mathit{aux}$ to the current plan.
 
-\section{Hierarchical Coordination}
+Auxiliary synthesis is constrained by four explicit rules.
+
+\textbf{Rule A1 (Closed method).} Synthesis is allowed only for capabilities whose $\mathit{method}$ can be enumerated, expressed as a closed-form procedure, or specified as a small set of deterministic steps. Open-ended language generation does not qualify.
+
+\textbf{Rule A2 (Validator present).} A valid $\nu$ must be specified at synthesis time. Capabilities without a deterministic validator cannot be synthesized.
+
+\textbf{Rule A3 (No side effects).} Synthesis is forbidden when the gap requires persistent state writes, external authority, or privileged access beyond the coordinator's validation capacity.
+
+\textbf{Rule A4 (Lifecycle bound).} Every synthesized $\mathit{aux}$ is created with a lifecycle token $\lambda$ that ties its validity to the current coordination plan. It does not enter the registry automatically.
+
+For example, a decomposition that requires extracting email addresses from a short free-text field is an acceptable synthesis target: the method is a regular expression, the validator confirms the output matches the email schema, and the lifecycle is bound to the current plan. A decomposition that requires medical-image classification is not an acceptable target: the method is not enumerable, the validator cannot be specified in advance, and the capability is not bounded by the current plan.
+
+\section{Inter-Agent Communication Protocol}
+\label{sec:protocol}
+
+The framework treats the communication protocol as an infrastructure layer rather than as a component of its symbolic reasoning. The protocol carries task delegations, capability descriptions, status updates, and artifacts between the coordinator and participating agents. Its responsibilities are limited to transport, addressing, and delivery; it does not interpret the content of the messages, decide feasibility, or expose agent internals. Because the framework does not depend on a particular protocol, the implementation chapter is free to select or compose any protocol that satisfies the required properties stated below. The framework remains sound as long as the protocol in use satisfies these properties, regardless of its name or its vendor.
+
+The following eight properties describe what the framework requires of the protocol. They are stated as design intentions; the implementation chapter is responsible for demonstrating that the chosen protocol satisfies them or for showing how a composition of protocols can satisfy the full set.
+
+\textbf{Property 3.5 (Addressability).} Every participating agent has a stable, unique identifier reachable through the protocol. The coordinator can address any registered agent by this identifier and can confirm its liveness before delegating a task.
+
+\textbf{Property 3.6 (Capability Advertisement).} The protocol can carry a structured capability description corresponding to Definition~3.2: input and output schemas, explicit constraints, and a deterministic validator. The coordinator uses these descriptions to match problem requirements against the available capability space $K(R)$ (Definition~3.3).
+
+\textbf{Property 3.7 (Task Delegation).} The protocol can carry a typed delegation from the coordinator to a specific agent, comprising a task body, an expected artifact description, and a lifecycle token $\lambda$ (the same token used in Definition~3.4 for auxiliary specifications). The delegation is addressed to a single agent and is not broadcast.
+
+\textbf{Property 3.8 (Status and Result Delivery).} The protocol can carry status updates (pending, running, completed, failed) and the resulting artifact from a delegated agent back to the coordinator. Status transitions are delivered in the order they occur, and the resulting artifact, if any, is delivered with an associated completion signal.
+
+\textbf{Property 3.9 (Authenticated Origin).} Each message identifies its sender, and the protocol layer rejects messages whose origin cannot be verified against the trust assignment $\tau(a)$ (Definition~3.1) of the claimed agent. The coordinator treats an unauthenticated message as if the corresponding agent were unavailable.
+
+\textbf{Property 3.10 (Ordered Delivery within a Session).} Messages belonging to the same coordination session are delivered in the order they were produced. Out-of-order delivery is detected and reported to the coordinator as a protocol violation, which the symbolic layer records as a structured feedback event under Transition~4 of the linguistic--symbolic bridge.
+
+\textbf{Property 3.11 (Bounded Latency and Liveness).} Within a session, a delegated task receives a status update or a result within a declared time bound. If the bound is exceeded, the coordinator observes the absence of a reply and triggers an infeasibility response rather than blocking indefinitely. Liveness is therefore a property of the protocol as observed by the coordinator, not an internal guarantee of the participating agents.
+
+\textbf{Property 3.12 (Independence from Internal Agent Architecture).} The protocol does not require agents to expose their internal reasoning, language model, memory, or tool registry. Only the artifacts listed in Properties 3.5--3.8 are visible across the protocol boundary. This property is what makes the framework vendor independent at the protocol level, in the same way that Definition~3.1 makes the framework vendor independent at the agent level.
+
+\textbf{Property 3.13 (Protocol Substitutability).} Any protocol satisfying Properties 3.5--3.12 can be substituted for the framework's communication layer without affecting Properties 3.1--3.4 (soundness, simplicity, bounded auxiliary synthesis, observability). The framework's correctness therefore does not depend on a specific protocol choice. The implementation chapter is responsible for selecting or composing a protocol that satisfies the full set; whether the chosen protocol is widely deployed, open, or proprietary is an implementation concern rather than a theoretical one.
+
+\section{Hierarchical Coordination and Commitments}
 
 The framework uses hierarchical coordination in a limited and explicit sense. The central coordinator has authority over task interpretation, capability matching, decomposition, feasibility assessment, and orchestration of the solution plan. It does not erase the autonomy of participating agents. Each agent remains responsible for executing tasks within its declared boundary and for returning results or errors. The coordinator manages the global problem-solving process; agents perform bounded contributions.
 
 This hierarchy is necessary because open distributed systems need a global decision point for feasibility. Without such a role, no component has responsibility for deciding whether the system as a whole can solve a problem. A user may request a result that requires several agents, but each individual agent may see only its local task. The coordinator maintains the overall context, determines dependencies, selects agents, and verifies that the combination of agents can plausibly satisfy the request.
 
+The framework also introduces an explicit notion of commitment to address a gap repeatedly noted in the background: dialogue alone does not guarantee accountability \cite{singh1999commitments}. A commitment is created when the coordinator delegates a subtask to a specific agent. It records the debtor (the agent), the creditor (the coordinator on behalf of the user), the action to be performed, the expected artifact, and the conditions under which the commitment is discharged. The commitment persists in symbolic form regardless of what the participating agents say to each other in natural language. This makes it possible to detect, after the fact, whether an agent accepted a task, whether it executed, and whether the result satisfies the postcondition.
+
 The coordinator's reasoning has two complementary modes. Semantic reasoning interprets the user problem and compares it with natural-language capability descriptions. Deterministic reasoning checks explicit constraints such as required input and output forms, permission boundaries, unavailable agents, missing capabilities, or incompatible dependencies. The theoretical framework does not require a particular algorithm for semantic reasoning. It requires only that semantic interpretation be bounded by explicit checks before a solution is accepted as feasible.
 
 \section{Feasibility Boundary}
+\label{sec:feasibility-boundary}
 
-Feasibility is the condition under which the system can construct a justified solution plan for a given problem using the capabilities available within the system boundary. A problem is feasible if its required subtasks can be mapped to participating agents or acceptable auxiliary linguistic capabilities, if the dependencies among those subtasks can be ordered, if the expected artifacts can be produced, and if no required authority or modality is absent. A problem is infeasible if any critical capability is missing, if the required interaction cannot be supported, if an agent needed for the solution is unavailable, or if the task exceeds the declared authority of the system.
+\textbf{Definition 3.5 (Problem Request).} A problem request is a tuple $P = (g, R, \mathit{ctx})$ where $g$ is a natural-language goal, $R$ is a set of required capability descriptors, and $\mathit{ctx}$ is auxiliary context. $R$ may include auxiliary-eligible descriptors, which the coordinator may satisfy by synthesis.
+
+\textbf{Definition 3.6 (Coordination Plan).} A coordination plan is a tuple $\Pi = (T, \alpha, \prec, A_{\mathrm{out}}, \kappa)$ where $T$ is a finite set of subtasks, $\alpha : T \rightarrow \mathcal{A} \cup \mathcal{X}$ assigns each subtask to a registered agent or an auxiliary specification, $\prec$ is a partial order on $T$ expressing dependencies, $A_{\mathrm{out}}$ is a set of expected artifacts, and $\kappa$ is the completion criterion.
+
+\textbf{Definition 3.7 (Feasibility).} Given a problem $P = (g, R, \mathit{ctx})$ and a registry $R$ (with capability space $K(R)$ and boundary $\beta(R)$), the feasibility predicate is
+\[
+\mathit{feasible}(P, R) \;\Longleftrightarrow\;
+\begin{array}{l}
+\forall c \in R : c \in K(R) \lor \mathit{synthesizable}(c), \\
+\forall c \in R : \Sigma_{\mathrm{out}}(c) \subseteq M(R) \lor \text{bridgeable}, \\
+\exists \Pi : T = R \land \alpha \text{ is total} \land \prec \text{ is a valid partial order}, \\
+\forall t \in T : \tau(\alpha(t)) \geq \tau_{\mathrm{req}}(t).
+\end{array}
+\]
+
+In words, a problem is feasible if every required capability is either available in the registry or synthesizable under rules A1--A4, if all required input and output modalities are present or can be bridged, if a valid coordination plan can be constructed with a total assignment and a consistent partial order, and if every assigned agent meets the trust requirement of its subtask. A problem is infeasible if any of these conditions fail. The infeasibility response identifies the specific failure: a missing capability, an unbridgeable modality, an unsatisfiable dependency, or an authority gap.
 
 The feasibility boundary is not fixed permanently. It changes as agents join, leave, update their capabilities, or become unavailable. It also changes when the coordinator is allowed to synthesize simple auxiliary linguistic capabilities. However, the boundary must always be explicit at the moment a problem is evaluated. The system should avoid pretending to solve tasks outside its boundary. A principled error is preferable to an unsupported plan.
 
-An infeasibility response should explain why the system cannot solve the problem. The explanation may identify missing capabilities, incompatible input or output requirements, unavailable agents, unresolved dependencies, or authority limitations. This response is part of the coordination model rather than an exceptional failure. In an open MAS, infeasibility is a normal outcome of honest boundary management.
+\section{Properties of the Framework}
 
-\section{Coordination Plan}
+The framework is intended to satisfy a small set of named properties. No formal proofs are given; the statements are intended to be testable in the implementation and results chapters.
 
-A coordination plan is the abstract representation of how the system intends to solve a feasible problem. It includes the decomposition of the problem into subtasks, the mapping from subtasks to agents or auxiliary linguistic capabilities, the dependency order among subtasks, the expected artifacts, and the criteria for completion. The plan should be minimal with respect to the problem. If a problem can be solved by a single agent, the plan should not introduce unnecessary collaboration. If multiple agents are required, each delegation should be justified by a capability need.
+\textbf{Property 3.1 (Soundness of Feasibility).} If the coordinator returns $\Pi$ as feasible, then for every subtask $t \in T$, the assigned executor $\alpha(t)$ is either a registered agent whose declared capability covers the subtask's requirements or a synthesized auxiliary specification that passes rules A1--A4. The system does not return a plan it cannot justify.
 
-The coordination plan also provides observability. It records why each agent was selected, what output is expected, and how the result contributes to the whole. This trace allows the system to distinguish between failure of an individual agent and failure of the global decomposition. It also supports later evaluation, because the system can be judged not only by the final result but also by the quality of its coordination.
+\textbf{Property 3.2 (Simplicity Preference).} If a problem $P$ can be satisfied by direct delegation to a single agent $a$, the coordinator returns a plan of size one. Decomposition is introduced only when no single agent covers $R$.
 
-The theoretical framework therefore defines a distributed but centrally coordinated system. Agents remain autonomous and heterogeneous. The central role interprets, bounds, decomposes, delegates, and integrates. Linguistic agents provide language-mediated capabilities at different levels of complexity. Feasibility is explicit. Simplicity is preferred. Implementation details are intentionally deferred to the next chapter, where this general model is instantiated through a concrete agent communication protocol and software design.
+\textbf{Property 3.3 (Bounded Auxiliary Synthesis).} The set of auxiliary specifications produced for a plan $\Pi$ is finite, each member satisfies A1--A4, and no auxiliary specification persists beyond the lifecycle token $\lambda$ attached to its plan.
+
+\textbf{Property 3.4 (Observability).} Every accepted plan $\Pi$ is stored with the trace of its decisions: which agent or auxiliary was selected for each subtask, which constraints were checked, which infeasibility reasons were considered, and which execution events occurred. The trace is sufficient to distinguish agent failure from coordination failure after the fact.
+
+These properties are stated as design intentions rather than theorems. They provide the criteria against which the implementation and the empirical evaluation in Chapter~\ref{chap:results} can be assessed.
+
+\section{Worked Example}
+
+Consider a small registry of three agents, each advertising a single capability.
+
+\begin{itemize}
+  \item $a_1$ (Summarizer): summarization of English text, input modality text, output modality text.
+  \item $a_2$ (Calculator): arithmetic evaluation of an expression in a fixed grammar, input modality $\mathit{expr}$, output modality $\mathit{number}$.
+  \item $a_3$ (DB-Query): execution of a read-only SQL query against a registered database, input modality $\mathit{sql}$, output modality $\mathit{table}$.
+\end{itemize}
+
+A user submits the following natural-language request: ``Summarize the quarterly report, then compute the percentage change in revenue between Q1 and Q2, and finally list the top five customers by total order value.''
+
+The LLM interpreter produces the structured $\mathit{ProblemRequest}$ $P = (g, R, \mathit{ctx})$ with $R = \{\mathit{summarize}, \mathit{arithmetic}, \mathit{top\_k\_sql}\}$. The capability matcher finds direct coverage for $\mathit{summarize}$ (via $a_1$) and $\mathit{arithmetic}$ (via $a_2$). The $\mathit{top\_k\_sql}$ capability is not present; however, the coordinator recognizes that $a_3$ accepts a SQL query and that the missing piece is a small translation step from "top five customers by total order value" into a SQL string. The coordinator generates an auxiliary specification $\mathit{aux} = (\mathit{sql\_templating}, \Sigma_{\mathrm{in}} = \text{schema}, \Sigma_{\mathrm{out}} = \mathit{sql}, \mathit{method} = \text{template}, \nu = \text{parse-and-validate}, \lambda = \Pi_1)$. The method is enumerable, the validator parses the generated SQL against the database schema, and the lifecycle is bound to the current plan.
+
+The candidate plan is $\Pi_1 = (\{t_1, t_2, t_3\}, \alpha, \prec, A_{\mathrm{out}}, \kappa)$ with $\alpha(t_1) = a_1$, $\alpha(t_2) = a_2$, $\alpha(t_3) = \mathrm{exec}(a_3, \mathit{aux})$, $\prec = \{t_1 \prec t_3, t_2 \prec t_3\}$, $A_{\mathrm{out}} = \{\mathit{summary}, \mathit{pct}, \mathit{table}\}$, and $\kappa$ requiring all three artifacts to be present and well-formed. The Feasibility Analyzer confirms coverage, modality compatibility, total assignment, partial-order consistency, and trust levels. The plan is approved.
+
+If, instead, the user had requested "summarize the quarterly report and predict next year's revenue," the request would be infeasible: the second subtask requires a forecasting capability that is neither registered nor synthesizable under rules A1--A4. The coordinator returns a structured infeasibility response identifying the missing capability and the reason it cannot be synthesized.
+
+Figure~\ref{fig:process-with-example} instantiates the process overview for the present example. The three agents supply the capability index, the generator produces $\mathit{aux}$ under rules A1--A4, and the outcome follows the path determined by the feasibility predicate.
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+  node distance=8mm and 8mm,
+  every node/.style={font=\small},
+  box/.style={draw, rounded corners, align=center, minimum height=8mm, inner sep=4pt},
+  coord/.style={box, fill=blue!10, minimum width=46mm, minimum height=28mm},
+  sym/.style={box, fill=blue!8},
+  lng/.style={box, fill=orange!12},
+  outc/.style={box, fill=green!10, minimum width=36mm},
+  arr/.style={-Latex, thick},
+  reg/.style={box, fill=gray!8, minimum width=24mm, minimum height=6mm}
+]
+\node[lng] (user) {User request\\\scriptsize ``Summarize, compute pct, top 5.''};
+\node[coord, right=18mm of user] (coord) {\textbf{Coordinator}\\[2mm]
+  \begin{tabular}{c}
+  \scriptsize T1: $\mathrm{NL} \to \mathit{ProblemRequest}$ \\
+  \scriptsize T2: candidate plan $\Pi_1$ \\
+  \scriptsize Feasibility check (Def.~3.7) \\
+  \scriptsize Generator: $\mathit{aux}$ if gap
+  \end{tabular}};
+\node[reg, above=14mm of coord] (reg) {Registered agents};
+\node[reg, below=2mm of reg] (a1) {$a_1$ Summarizer};
+\node[reg, below=1mm of a1] (a2) {$a_2$ Calculator};
+\node[reg, below=1mm of a2] (a3) {$a_3$ DB-Query};
+\node[outc, below left=10mm and 4mm of coord] (acc) {Accepted $\Pi_1$};
+\node[sym, below=2mm of acc, minimum width=36mm] (comm) {Commitments $\to$\\Protocol transport};
+\node[outc, below right=10mm and 4mm of coord] (inf) {Infeasibility $\bot$};
+
+\draw[arr] (user) -- node[above]{\scriptsize T1} (coord);
+\draw[arr] (reg) -- node[right]{\scriptsize $K(R)$} (coord.north west);
+\draw[arr] (coord.south) -- ++(0,-2mm) -| (acc.north) node[pos=0.25,above]{\scriptsize feasible};
+\draw[arr] (coord.south) -- ++(0,-2mm) -| (inf.north) node[pos=0.25,above]{\scriptsize $\lnot$ feasible};
+\draw[arr] (acc) -- (comm);
+\end{tikzpicture}
+\caption{Worked example instantiated against the process overview. The three agents supply the capability index, the generator produces the auxiliary spec $\mathit{aux}$ under rules A1--A4, and the outcome follows the path determined by the feasibility predicate.}
+\label{fig:process-with-example}
+\end{figure}
+
+\section{Scope, Limitations, and Open Questions}
+
+The framework is intentionally narrow. It assumes honest capability descriptions, static capabilities within a session, and a single trusted coordinator. It does not address the design of the underlying LLM, the selection of training data, or the optimization of model parameters. It does not provide a fully decentralized coordination algorithm, and it does not provide economic mechanisms for resource allocation in competitive settings. It also assumes that the deterministic checks it performs are themselves correct with respect to the symbolic specifications they examine; a faulty feasibility analyzer would compromise Property~3.1.
+
+Several questions remain open. First, capability descriptions are currently static; future work could allow agents to refine their declared capabilities based on observed performance, while preserving the honesty assumption. Second, the bridge between linguistic and symbolic representations could be made more robust by requiring a verification step on the structured $\mathit{ProblemRequest}$ before downstream planning. Third, commitments are recorded as symbolic artifacts; richer commitment protocols, including conditional commitments and nested commitments, could extend the framework to more complex multi-agent negotiations. Fourth, the framework currently relies on a single coordinator; exploring how the same feasibility discipline can be preserved under decentralized or hierarchical-multi-coordinator settings is a natural next step.
+
+The framework therefore defines a small, defensible contribution: a set of objects and a feasibility discipline that separates linguistic interpretation from symbolic execution, treats infeasibility as a normal outcome, and bounds the conditions under which auxiliary capabilities may be synthesized. The next chapter instantiates this framework through a concrete agent communication protocol and software design.
