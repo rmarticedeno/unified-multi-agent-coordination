@@ -12,8 +12,15 @@
 \usepackage{setspace}
 \usepackage{csquotes}
 \usepackage{amsmath}
+\usepackage{amsthm}
 \usepackage{tikz}
-\usetikzlibrary{positioning,fit,backgrounds,arrows.meta}
+\usetikzlibrary{positioning,fit,backgrounds,arrows.meta,calc}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[chapter]
+\newtheorem{property}{Property}[chapter]
+\newtheorem{auxrule}{Rule}
+\renewcommand{\theauxrule}{A\arabic{auxrule}}
 
 \geometry{letterpaper, margin=1in}
 \hypersetup{hidelinks}

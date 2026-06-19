@@ -1,0 +1,32 @@
+\begin{tikzpicture}[
+  node distance=11mm and 12mm,
+  every node/.style={font=\small},
+  box/.style={draw=black!75, rounded corners=2pt, align=center, minimum height=10mm, inner sep=4pt},
+  linguistic/.style={box, fill=black!7, text width=27mm},
+  symbolic/.style={box, fill=black!17, text width=38mm},
+  knowledge/.style={box, fill=white, text width=34mm},
+  outcome/.style={box, fill=black!4, text width=30mm},
+  participant/.style={box, densely dashed, fill=white, text width=32mm},
+  flow/.style={-Latex, semithick},
+  group/.style={draw=black!55, dashed, rounded corners=2pt, inner sep=5pt}
+]
+\node[linguistic] (request) {Natural-language\\problem statement};
+\node[linguistic, right=of request] (interpret) {Linguistic\\interpretation};
+\node[symbolic, right=14mm of interpret] (authority) {\textbf{Coordinating authority}\\candidate plan and\\feasibility decision};
+\node[knowledge, above=of authority] (registry) {Session registry $\mathcal{R}$\\capabilities and constraints};
+\node[outcome, below left=14mm and -2mm of authority] (plan) {Accepted plan $\Pi$};
+\node[outcome, below right=14mm and -2mm of authority] (reject) {Infeasibility report $I$};
+\node[participant, below=11mm of plan] (agents) {Distributed participating agents};
+
+\draw[flow] (request) -- node[above, font=\scriptsize]{request} (interpret);
+\draw[flow] (interpret) -- node[above, font=\scriptsize]{candidate $P$} (authority);
+\draw[flow] (registry) -- node[right, font=\scriptsize]{operational boundary} (authority);
+\draw[flow] (authority.south) -- ++(0,-3mm) -| node[pos=.72, left, font=\scriptsize]{authorized} (plan.north);
+\draw[flow] (authority.south) -- ++(0,-3mm) -| node[pos=.72, right, font=\scriptsize]{rejected} (reject.north);
+\draw[Latex-Latex, semithick] (plan) -- node[midway, right=2mm, align=left, fill=white, inner sep=1pt, font=\scriptsize]{commitments\\artifacts} (agents);
+
+\begin{scope}[on background layer]
+  \node[group, fit=(request)(interpret), label=above:{\scriptsize Linguistic surface}] {};
+  \node[group, fit=(registry)(authority)(plan)(reject), label=above:{\scriptsize Symbolic decision boundary}] {};
+\end{scope}
+\end{tikzpicture}
