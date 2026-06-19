@@ -1,20 +1,20 @@
-\documentclass[12pt,oneside]{report}
+\documentclass[12pt,oneside]{uhmasterthesis}
 
+\usepackage[english]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
-\usepackage{lmodern}
-\usepackage{geometry}
+\usepackage{fvextra}
+\usepackage{csquotes}
+\usepackage{amsmath,amssymb,amsfonts,amsthm,mathtools}
 \usepackage{graphicx}
 \usepackage{array}
 \usepackage{booktabs}
 \usepackage{longtable}
-\usepackage[hypertexnames=false]{hyperref}
-\usepackage{setspace}
-\usepackage{csquotes}
-\usepackage{amsmath}
-\usepackage{amsthm}
+\usepackage{microtype}
+\usepackage[hypertexnames=false,hidelinks,linktocpage]{hyperref}
 \usepackage{tikz}
 \usetikzlibrary{positioning,fit,backgrounds,arrows.meta,calc}
+\setlength{\emergencystretch}{2em}
 
 \theoremstyle{definition}
 \newtheorem{definition}{Definition}[chapter]
@@ -22,31 +22,48 @@
 \newtheorem{auxrule}{Rule}
 \renewcommand{\theauxrule}{A\arabic{auxrule}}
 
-\geometry{letterpaper, margin=1in}
-\hypersetup{hidelinks}
-\onehalfspacing
-
 \title{Unified Multi-Agent Coordination Bridging Large Language Models and Symbolic AI for Autonomous Systems}
 \author{Roberto Marti Cedeno}
-\date{\today}
+\university{Universidad de La Habana}
+\faculty{Facultad de Matemática y Computación}
+\advisor{}
+\coadvisor{}
+\degree{Máster en Ciencia de la Computación}
+\worktype{Tesis de Maestría}
+\date{La Habana, junio de 2026}
+\logo{Graphics/uhlogo}
+\qrlogo{}
+\repositoryurl{https://github.com/rmarticedeno/unified-multi-agent-coordination}
+
+\hypersetup{
+  pdftitle={Unified Multi-Agent Coordination Bridging Large Language Models and Symbolic AI for Autonomous Systems},
+  pdfauthor={Roberto Marti Cedeno},
+  pdfsubject={Master's thesis in Computer Science},
+  pdfkeywords={multi-agent systems, large language models, symbolic artificial intelligence, autonomous systems}
+}
 
 \begin{document}
 
+\frontmatter
 \maketitle
-
-\pagenumbering{roman}
 \input{chapters/abstract}
 \tableofcontents
+\cleardoublepage
+\listoffigures
+\cleardoublepage
+\listoftables
 
-\clearpage
-\pagenumbering{arabic}
+\mainmatter
 \input{chapters/introduction}
 \input{chapters/background}
+\input{chapters/methodology}
 \input{chapters/theoretical_solution}
 \input{chapters/implementation_design}
 \input{chapters/results}
+\input{chapters/discussion}
 \input{chapters/conclusion}
 
+\backmatter
 \bibliographystyle{plain}
 \bibliography{references/references}
 

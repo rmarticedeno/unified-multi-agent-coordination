@@ -1,0 +1,75 @@
+\chapter{Research Methodology}
+\label{chap:methodology}
+
+\section{Research Paradigm and Study Type}
+
+This thesis adopts a design-science paradigm because its central research output is an artifact: a coordination framework with explicit constructs, decision rules, an architectural instantiation, and an evaluation method. The study combines exploratory and analytical work in the literature review, formal and architectural design in the construction phase, and quantitative and qualitative analysis in the planned evaluation. Quantitative measures assess classification, task execution, latency, and overhead; qualitative trace analysis examines whether authorization and refusal decisions are intelligible and supported by recorded evidence.
+
+\section{Research Process}
+
+The research process contains five linked stages. First, a critical literature review identifies the strengths and unresolved limitations of classical multi-agent coordination, symbolic reasoning, LLM agents, and interoperability protocols. Second, the research gap is translated into requirements for openness, interoperability, bounded authority, traceability, and explicit refusal. Third, these requirements are formalized as a protocol-independent framework. Fourth, the framework is mapped to an A2A-based implementation design. Fifth, controlled scenarios compare the complete design with baselines and ablations. Each stage produces evidence for one or more specific objectives rather than serving as an independent implementation activity.
+
+\begin{table}[htbp]
+\centering
+\caption{Alignment of objectives, methods, and evidence.}
+\label{tab:method-alignment}
+\begin{tabular}{p{0.12\textwidth}p{0.38\textwidth}p{0.38\textwidth}}
+\toprule
+\textbf{Objective} & \textbf{Method} & \textbf{Evidence} \\
+\midrule
+1 & Critical thematic literature synthesis & Comparison criteria and explicit research gap \\
+2 & Formal and conceptual modeling & Definitions, rules, feasibility predicates, and stated properties \\
+3 & Architectural design and protocol mapping & Components, records, workflows, and theory-to-implementation traceability \\
+4 & Controlled scenario evaluation & Baseline comparisons, ablations, metrics, and execution traces \\
+5 & Analytical discussion & Scope analysis, failure cases, limitations, and validity threats \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Unit of Analysis and Scenario Design}
+
+The primary unit of analysis is a coordination attempt: one problem request, one admitted registry snapshot, the candidate plan or refusal produced for that request, and the resulting execution trace when a plan is authorized. Scenarios are constructed by varying four factors: capability coverage, artifact compatibility, authority constraints, and runtime availability. This factorial view prevents evaluation from relying only on successful demonstrations.
+
+The scenario suite must contain feasible direct-delegation cases, feasible decomposed cases, cases requiring an approved bounded linguistic transformation, and infeasible cases caused by missing capability, incompatible modality, cyclic dependency, insufficient authority, or unavailable agents. Each scenario includes a reference feasibility label and the minimum justification required for that label. Reference labels should be reviewed independently before system outputs are examined.
+
+\section{Baselines and Ablations}
+
+Three configurations provide the minimum comparison. The \emph{hybrid framework} uses LLM interpretation followed by symbolic feasibility checks. The \emph{LLM-only baseline} receives the same request and registry descriptions but accepts or rejects its own proposed plan without the symbolic feasibility layer. The \emph{rule-only baseline} receives a structured request and applies the same explicit predicates without LLM interpretation. The first baseline tests the contribution of symbolic authorization; the second tests the contribution of linguistic mediation.
+
+Additional ablations remove one mechanism at a time: contract validation, explicit authority checks, trace recording, or bounded-auxiliary rules. These ablations are evaluated only where the removed mechanism is relevant to the scenario. They are not treated as independent general-purpose systems.
+
+\section{Evaluation Dimensions and Metrics}
+
+\begin{table}[htbp]
+\centering
+\caption{Evaluation dimensions, indicators, and evidence.}
+\label{tab:method-metrics}
+\begin{tabular}{p{0.24\textwidth}p{0.30\textwidth}p{0.34\textwidth}}
+\toprule
+\textbf{Dimension} & \textbf{Indicator} & \textbf{Metric or evidence} \\
+\midrule
+Feasibility judgment & Correct authorization or refusal & Accuracy, precision, recall, and F1 for feasible-plan classification \\
+Plan validity & Detection of invalid candidates & Invalid-plan rejection rate by failure category \\
+Execution outcome & Required artifacts completed & Task success rate and contract-valid artifact rate \\
+Traceability & Required decision evidence recorded & Trace-field completeness and reconstructable-decision rate \\
+Efficiency & Coordination effort & End-to-end latency, planner calls, messages, and token usage \\
+Robustness & Stability under controlled variation & Performance under paraphrase, agent loss, and metadata perturbation \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Outcome metrics and process metrics are reported separately. A correct final artifact does not erase an unauthorized action or an invalid intermediate plan. Conversely, a justified refusal is a correct outcome for an infeasible request and must not be counted as task failure.
+
+\section{Experimental Procedure}
+
+For each scenario, every applicable configuration receives semantically equivalent inputs and an identical admitted-agent snapshot. Stochastic configurations are executed repeatedly with recorded model, decoding parameters, prompt version, and random seed where supported. Each run stores the interpreted request, candidate plan, predicate outcomes, authorization decision, messages, status transitions, artifacts, validation results, latency, and resource use. Aggregate results are accompanied by per-category error analysis. The implementation version, protocol version, hardware, and software environment must be fixed and reported before measurements are collected.
+
+\section{Analysis Strategy}
+
+Feasibility decisions are compared with reference labels through a confusion matrix and category-level error rates. Paired scenario results are used for comparisons because configurations face the same requests. Descriptive statistics include central tendency and dispersion rather than averages alone. Where the sample size and distribution justify inference, paired statistical tests and effect sizes are reported. Qualitative analysis classifies false acceptance, false refusal, invalid decomposition, unsupported auxiliary synthesis, authority violation, artifact mismatch, and incomplete evidence.
+
+\section{Validity and Reproducibility}
+
+Construct validity depends on whether the metrics capture justified coordination rather than surface task completion. This threat is mitigated by separating plan validity, execution success, and trace completeness. Internal validity may be affected by unequal prompts, model nondeterminism, or baseline implementation quality; shared inputs, repeated runs, versioned configurations, and paired comparisons reduce these effects. External validity is limited by the selected scenarios, admitted agents, and A2A instantiation. The theoretical framework is protocol-independent, but empirical findings may not generalize to decentralized authorization, physical robots, adversarial registries, or other protocols. Conclusion validity depends on scenario count and variance and must therefore be assessed after data collection.
+
+Reproducibility requires publication of scenario specifications, reference labels, registry snapshots, configuration files, prompts, raw traces, analysis scripts, and exact dependency versions. Sensitive credentials and private agent endpoints are excluded, but their interfaces and response fixtures should be represented by reproducible substitutes.

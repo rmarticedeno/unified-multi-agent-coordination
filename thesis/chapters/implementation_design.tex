@@ -1,4 +1,4 @@
-\chapter{Implementation Design}
+\chapter{System Design and A2A Instantiation}
 \label{chap:implementation-design}
 
 \section{Instantiation of the Framework}
@@ -58,7 +58,7 @@ An Agent Card is treated as the concrete implementation of the abstract capabili
 
 The implementation can be described through five conceptual records. These records are not tied to a specific programming language; they define the information that the prototype must preserve.
 
-\begin{verbatim}
+\begin{Verbatim}[fontsize=\small,breaklines=true,breakanywhere=true]
 AgentRegistryEntry:
   agent_id
   agent_card_url
@@ -98,15 +98,15 @@ GeneratedNlpAgentSpec:
   method
   validation_rule
   lifecycle
-\end{verbatim}
+\end{Verbatim}
 
-The \texttt{AgentRegistryEntry} materializes the discoverable agent set. The \texttt{ProblemRequest} represents the user's goal and constraints. The \texttt{FeasibilityReport} explains whether the system can solve the problem and why. The \texttt{SolutionProposal} is the executable coordination plan. The \texttt{GeneratedNlpAgentSpec} represents a temporary linguistic capability, such as a classifier or extractor, that can be created for the current solution without becoming a permanent system agent.
+The \texttt{AgentRegistry\allowbreak Entry} materializes the discoverable agent set. The \texttt{Problem\allowbreak Request} represents the user's goal and constraints. The \texttt{Feasibility\allowbreak Report} explains whether the system can solve the problem and why. The \texttt{Solution\allowbreak Proposal} is the executable coordination plan. The \texttt{Generated\allowbreak Nlp\allowbreak Agent\allowbreak Spec} represents a temporary linguistic capability, such as a classifier or extractor, that can be created for the current solution without becoming a permanent system agent.
 
 \section{Coordinator Workflow}
 
 The coordinator follows a simple-first decision process. It first attempts direct capability matching. If one agent can solve the problem without decomposition, the coordinator delegates directly. If no direct match exists, the coordinator asks the LLM Planner to propose a decomposition and candidate capability mapping. The Feasibility Analyzer then checks the proposal deterministically. If the plan requires a missing but simple linguistic capability, the Generated NLP Agent Factory may add a temporary specification to the proposal. If the plan still lacks a critical capability, the coordinator returns infeasibility.
 
-\begin{verbatim}
+\begin{Verbatim}[fontsize=\small,breaklines=true,breakanywhere=true]
 coordinate(problem):
   registry = load_available_agents()
   capabilities = build_capability_index(registry)
@@ -130,7 +130,7 @@ coordinate(problem):
 
   results = execute_a2a_tasks(checked_plan.execution_order)
   return artifact_aggregator.combine(results)
-\end{verbatim}
+\end{Verbatim}
 
 This workflow keeps the LLM useful but bounded. The LLM Planner interprets the natural-language goal and proposes decompositions, but it does not alone decide feasibility. Deterministic checks remain responsible for explicit properties such as availability, modality compatibility, declared skills, and missing capabilities.
 
@@ -205,6 +205,6 @@ The implementation treats infeasibility as a first-class result. If no agent or 
 
 This behavior is essential for simplicity and trust. The system should not create complex plans merely to appear capable. It should coordinate only when the available and generated capabilities justify the solution. Otherwise, it should explain the boundary clearly.
 
-\section{Expected Implementation Outcome}
+\section{Chapter Synthesis}
 
-The resulting implementation is a distributed multi-agent environment with a central coordinating role. Agents remain independently deployable and vendor independent. A2A provides the concrete communication and discovery substrate through Agent Cards and task exchange. The coordinator uses LLM reasoning for semantic interpretation and decomposition, but deterministic checks decide whether the plan satisfies the system's explicit boundaries. Linguistic agents provide NLP capabilities at different levels of complexity, and simple auxiliary NLP agents can be proposed when they reduce complexity and remain verifiable.
+The design specifies a distributed multi-agent environment with a central coordinating role. Agents remain independently deployable and vendor independent. A2A provides the communication and discovery substrate through Agent Cards and task exchange. The coordinator uses LLM reasoning for semantic interpretation and decomposition, while deterministic checks decide whether the plan satisfies the system's explicit boundaries. Linguistic agents provide natural-language processing capabilities at different levels of complexity, and simple auxiliary capabilities may be proposed only when they reduce complexity and remain contractually verifiable. The evaluation defined in Chapters~\ref{chap:methodology} and~\ref{chap:results} must determine whether an implementation preserves these properties in practice.
