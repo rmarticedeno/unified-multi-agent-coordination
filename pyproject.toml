@@ -6,10 +6,15 @@ readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "a2a-sdk>=0.3.0",
+    "fastapi>=0.125.0",
     "httpx>=0.28.1",
     "lingo-ai==2.0.2",
     "pydantic>=2.12.4",
+    "uvicorn>=0.38.0",
 ]
+
+[project.scripts]
+unified-coordination-service = "unified_multi_agent_coordination.service:main"
 
 [dependency-groups]
 dev = [
@@ -19,3 +24,4 @@ dev = [
 
 [tool.pytest.ini_options]
 pythonpath = ["src"]
+testpaths = ["tests"]

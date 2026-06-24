@@ -10,11 +10,14 @@ from .lingo_coordinator import LingoLinguisticCoordinator
 from .models import (
     AgentRegistryEntry,
     CoordinationPlanResult,
+    CoordinationRunResult,
     FeasibilityReport,
     PredicateEvidence,
     ProblemRequest,
     SolutionProposal,
+    TaskExecutionResult,
     TaskSpec,
+    TraceEvent,
 )
 
 
@@ -49,9 +52,12 @@ class CoordinationAgent:
         request = await self._admit_request(user_request, registry, context)
         proposal = self._direct_solution_plan(request, registry)
         if proposal is None:
-            proposal = await self._linguistic().propose_solution(
-                request, registry
-            )
+            if isinstance(user_request, ProblemRequest) and self._linguistic_coordinator is None:
+                proposal = self._unassigned_solution_plan(request)
+            else:
+                proposal = await self._linguistic().propose_solution(
+                    request, registry
+                )
         report = self.feasibility_analyzer.check(request, registry, proposal)
         return CoordinationPlanResult(
             request=request,
@@ -59,6 +65,77 @@ class CoordinationAgent:
             feasibility_report=report,
             registry_snapshot=registry,
         )
+
+    async def coordinate(
+        self,
+        user_request: str | ProblemRequest,
+        context: dict[str, Any] | None = None,
+        payload: dict[str, Any] | None = None,
+        timeout_s: float = 30.0,
+    ) -> CoordinationRunResult:
+        """Plan, authorize, dispatch, and aggregate one coordination attempt."""
+        plan_result = await self.build_solution_plan(user_request, context=context)
+        report = plan_result.feasibility_report
+        if not report.feasible:
+            return CoordinationRunResult(
+                status="infeasible",
+                plan_result=plan_result,
+                explanation=report.explanation,
+                trace=self.trace(),
+            )
+
+        task_results: list[TaskExecutionResult] = []
+        for task in self._ordered_tasks(plan_result.proposal):
+            try:
+                task_result = await self.sdk.send_task(
+                    report,
+                    task,
+                    self._payload_for_task(payload, task),
+                    timeout_s=timeout_s,
+                )
+            except Exception as exc:
+                agent_id = task.assigned_to or report.matched_agents.get(task.task_id) or ""
+                task_result = TaskExecutionResult(
+                    task_id=task.task_id,
+                    agent_id=agent_id,
+                    status="failed",
+                    error=str(exc),
+                )
+            task_results.append(task_result)
+
+        artifacts = [
+            artifact
+            for task_result in task_results
+            for artifact in task_result.artifacts
+        ]
+        status = (
+            "completed"
+            if all(result.status == "completed" for result in task_results)
+            else "failed"
+        )
+        explanation = (
+            "Authorized coordination completed."
+            if status == "completed"
+            else "Authorized coordination encountered runtime failures."
+        )
+        return CoordinationRunResult(
+            status=status,
+            plan_result=plan_result,
+            task_results=task_results,
+            artifacts=artifacts,
+            explanation=explanation,
+            trace=self.trace(),
+        )
+
+    def trace(self) -> list[TraceEvent]:
+        """Return linguistic and SDK trace events for the current session."""
+        linguistic_events: list[TraceEvent] = []
+        if self._linguistic_coordinator is not None:
+            linguistic_events = [
+                TraceEvent.model_validate(event)
+                for event in self._linguistic_coordinator.state.trace
+            ]
+        return [*linguistic_events, *self.sdk.trace()]
 
     async def _admit_request(
         self,
@@ -104,6 +181,21 @@ class CoordinationAgent:
         return SolutionProposal(
             tasks=tasks,
             selected_agents=selected_agents,
+            execution_order=[task.task_id for task in tasks],
+            expected_artifacts=list(request.required_artifacts),
+            completion_criteria=self._completion_criteria(request),
+        )
+
+    def _unassigned_solution_plan(self, request: ProblemRequest) -> SolutionProposal:
+        tasks = [
+            TaskSpec(
+                task_id=f"t{index}",
+                requirement_name=requirement.name,
+            )
+            for index, requirement in enumerate(request.requirements, start=1)
+        ]
+        return SolutionProposal(
+            tasks=tasks,
             execution_order=[task.task_id for task in tasks],
             expected_artifacts=list(request.required_artifacts),
             completion_criteria=self._completion_criteria(request),
@@ -167,6 +259,29 @@ class CoordinationAgent:
             feasibility_report=report,
             registry_snapshot=[],
         )
+
+    def _ordered_tasks(self, proposal: SolutionProposal) -> list[TaskSpec]:
+        task_by_id = {task.task_id: task for task in proposal.tasks}
+        ordered: list[TaskSpec] = []
+        for task_id in proposal.execution_order:
+            task = task_by_id.get(task_id)
+            if task is not None:
+                ordered.append(task)
+        if ordered:
+            return ordered
+        return list(proposal.tasks)
+
+    @staticmethod
+    def _payload_for_task(
+        payload: dict[str, Any] | None,
+        task: TaskSpec,
+    ) -> dict[str, Any]:
+        if not payload:
+            return {}
+        task_payload = payload.get(task.task_id)
+        if isinstance(task_payload, dict):
+            return task_payload
+        return dict(payload)
 
     @staticmethod
     def _completion_criteria(request: ProblemRequest) -> list[str]:

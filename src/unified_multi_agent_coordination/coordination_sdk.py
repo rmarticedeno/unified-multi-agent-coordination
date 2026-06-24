@@ -2,14 +2,22 @@
 
 from __future__ import annotations
 
+import asyncio
 import inspect
 from collections.abc import Awaitable, Callable, Mapping
 from typing import Any
 
 import httpx
 
-from .a2a_adapter import A2AAdapter
-from .models import AgentRegistryEntry, FeasibilityReport, TaskSpec, TraceEvent
+from .a2a_adapter import A2AAdapter, AuthorizationError
+from .models import (
+    AgentRegistryEntry,
+    CapabilityRequirement,
+    FeasibilityReport,
+    TaskExecutionResult,
+    TaskSpec,
+    TraceEvent,
+)
 
 
 class RemoteRegistryError(RuntimeError):
@@ -45,9 +53,11 @@ class CoordinationSdk:
         self._trace: list[TraceEvent] = []
         self._local_registry: dict[str, AgentRegistryEntry] = {}
         self._remote_registry: dict[str, AgentRegistryEntry] = {}
+        self._local_handlers: dict[str, Callable[..., Any]] = {}
+        self._linguistic_handlers: dict[str, Callable[..., Any]] = {}
         self.a2a_adapter = A2AAdapter(
             card_fetcher or self._fetch_agent_card,
-            task_sender or self._missing_task_sender,
+            task_sender or self._send_remote_a2a_task,
         )
 
     async def refresh_registry(self) -> list[AgentRegistryEntry]:
@@ -129,7 +139,9 @@ class CoordinationSdk:
     ) -> AgentRegistryEntry:
         """Admit a remote A2A agent from an Agent Card URL."""
         entry = await self.a2a_adapter.register_from_card_url(agent_card_url)
+        entry.agent_kind = "remote_a2a"
         entry.trust_level = trust_level
+        entry.invocation_endpoint = entry.invocation_endpoint or entry.service_endpoint
         self._local_registry[entry.agent_id] = entry
         self._record(
             "sdk_agent_registered",
@@ -139,17 +151,183 @@ class CoordinationSdk:
         )
         return entry
 
+    def register_local_agent(
+        self,
+        name: str,
+        capabilities: list[CapabilityRequirement],
+        handler: Callable[..., Any],
+        *,
+        agent_id: str | None = None,
+        description: str = "",
+        trust_level: str = "standard",
+        status: str = "available",
+        validation_contract: dict[str, Any] | None = None,
+    ) -> AgentRegistryEntry:
+        """Register a local Python handler as an SDK-managed agent."""
+        entry = self._handler_entry(
+            name=name,
+            capabilities=capabilities,
+            handler=handler,
+            agent_kind="local_python",
+            scheme="local",
+            agent_id=agent_id,
+            description=description,
+            trust_level=trust_level,
+            status=status,
+            validation_contract=validation_contract,
+        )
+        self._local_handlers[entry.agent_id] = handler
+        self._record(
+            "sdk_local_agent_registered",
+            f"Registered local agent {entry.agent_id}.",
+            agent_id=entry.agent_id,
+        )
+        return entry
+
+    def register_linguistic_agent(
+        self,
+        name: str,
+        capabilities: list[CapabilityRequirement],
+        handler: Callable[..., Any],
+        *,
+        agent_id: str | None = None,
+        description: str = "",
+        trust_level: str = "standard",
+        status: str = "available",
+        validation_contract: dict[str, Any] | None = None,
+    ) -> AgentRegistryEntry:
+        """Register a linguistic runtime as an SDK-managed capability provider."""
+        entry = self._handler_entry(
+            name=name,
+            capabilities=capabilities,
+            handler=handler,
+            agent_kind="linguistic",
+            scheme="linguistic",
+            agent_id=agent_id,
+            description=description,
+            trust_level=trust_level,
+            status=status,
+            validation_contract=validation_contract,
+        )
+        self._linguistic_handlers[entry.agent_id] = handler
+        self._record(
+            "sdk_linguistic_agent_registered",
+            f"Registered linguistic agent {entry.agent_id}.",
+            agent_id=entry.agent_id,
+        )
+        return entry
+
+    async def invoke_agent(
+        self,
+        agent_id: str,
+        task: TaskSpec,
+        payload: dict[str, Any],
+        timeout_s: float = 30.0,
+    ) -> TaskExecutionResult:
+        """Invoke one admitted agent through its SDK-managed runtime path."""
+        entry = self._agent_by_id(agent_id)
+        if entry is None:
+            result = TaskExecutionResult(
+                task_id=task.task_id,
+                agent_id=agent_id,
+                status="failed",
+                error=f"Unknown agent {agent_id}.",
+            )
+            self._record(
+                "sdk_task_failed",
+                f"Task {task.task_id} failed before dispatch.",
+                task_id=task.task_id,
+                agent_id=agent_id,
+                error=result.error,
+            )
+            return result
+
+        self._record(
+            "sdk_task_started",
+            f"Task {task.task_id} started.",
+            task_id=task.task_id,
+            agent_id=agent_id,
+            agent_kind=entry.agent_kind,
+        )
+        try:
+            output = await asyncio.wait_for(
+                self._invoke_entry(entry, task, payload),
+                timeout=timeout_s,
+            )
+        except TimeoutError:
+            result = TaskExecutionResult(
+                task_id=task.task_id,
+                agent_id=agent_id,
+                agent_kind=entry.agent_kind,
+                status="timeout",
+                error=f"Task {task.task_id} timed out.",
+            )
+            self._record(
+                "sdk_task_timeout",
+                result.error,
+                task_id=task.task_id,
+                agent_id=agent_id,
+            )
+            return result
+        except Exception as exc:
+            result = TaskExecutionResult(
+                task_id=task.task_id,
+                agent_id=agent_id,
+                agent_kind=entry.agent_kind,
+                status="failed",
+                error=str(exc),
+            )
+            self._record(
+                "sdk_task_failed",
+                f"Task {task.task_id} failed.",
+                task_id=task.task_id,
+                agent_id=agent_id,
+                error=str(exc),
+            )
+            return result
+
+        result = self._execution_result(entry, task, output)
+        self._record(
+            "sdk_task_completed",
+            f"Task {task.task_id} completed.",
+            task_id=task.task_id,
+            agent_id=agent_id,
+            artifact_count=len(result.artifacts),
+        )
+        return result
+
+    async def send_task(
+        self,
+        report: FeasibilityReport,
+        task: TaskSpec,
+        payload: dict[str, Any],
+        timeout_s: float = 30.0,
+    ) -> TaskExecutionResult:
+        """Delegate a task only after symbolic authorization."""
+        agent_id = task.assigned_to or report.matched_agents.get(task.task_id)
+        if not report.feasible or not agent_id:
+            self._record(
+                "sdk_delegation_refused",
+                f"Task {task.task_id} was not authorized.",
+                task_id=task.task_id,
+            )
+            raise AuthorizationError(f"Task {task.task_id} is not authorized.")
+        return await self.invoke_agent(
+            agent_id,
+            task,
+            payload,
+            timeout_s=timeout_s,
+        )
+
     async def send_task_after_authorization(
         self,
         report: FeasibilityReport,
         task: TaskSpec,
         payload: dict[str, Any],
         timeout_s: float = 30.0,
-    ) -> Any:
-        """Delegate a task through the A2A adapter after authorization."""
-        return await self.a2a_adapter.send_task_after_authorization(
-            report, task, payload, timeout_s=timeout_s
-        )
+    ) -> TaskExecutionResult:
+        """Compatibility wrapper for the newer send_task API."""
+        return await self.send_task(report, task, payload, timeout_s=timeout_s)
 
     def trace(self) -> list[TraceEvent]:
         """Return SDK and adapter trace events."""
@@ -167,10 +345,34 @@ class CoordinationSdk:
         self._raise_for_status(response)
         return await self._maybe_await(response.json())
 
-    async def _missing_task_sender(self, agent_id: str, payload: dict[str, Any]) -> Any:
-        raise NotImplementedError(
-            f"No task sender configured for agent {agent_id}."
+    async def _send_remote_a2a_task(self, agent_id: str, payload: dict[str, Any]) -> Any:
+        entry = self._agent_by_id(agent_id)
+        if entry is None:
+            raise RuntimeError(f"Unknown remote A2A agent {agent_id}.")
+
+        try:
+            from a2a.client import ClientConfig, create_client
+            from a2a.helpers import new_text_message
+            from a2a.types.a2a_pb2 import Role, SendMessageRequest
+        except ImportError as exc:
+            raise RuntimeError("A2A SDK client support is not available.") from exc
+
+        client = await create_client(
+            agent=entry.invocation_endpoint or entry.service_endpoint,
+            client_config=ClientConfig(streaming=False),
         )
+        try:
+            message = new_text_message(
+                self._payload_to_text(payload),
+                role=Role.ROLE_USER,
+            )
+            request = SendMessageRequest(message=message)
+            chunks: list[Any] = []
+            async for chunk in client.send_message(request):
+                chunks.append(self._jsonable_output(chunk))
+            return {"chunks": chunks}
+        finally:
+            await client.close()
 
     async def _entries_from_registry_payload(
         self, payload: Any
@@ -241,6 +443,129 @@ class CoordinationSdk:
             if not self.self_agent_id or entry.agent_id != self.self_agent_id
         ]
 
+    def _agent_by_id(self, agent_id: str) -> AgentRegistryEntry | None:
+        for entry in self._visible_registry():
+            if entry.agent_id == agent_id:
+                return entry
+        return None
+
+    def _handler_entry(
+        self,
+        *,
+        name: str,
+        capabilities: list[CapabilityRequirement],
+        handler: Callable[..., Any],
+        agent_kind: str,
+        scheme: str,
+        agent_id: str | None,
+        description: str,
+        trust_level: str,
+        status: str,
+        validation_contract: dict[str, Any] | None,
+    ) -> AgentRegistryEntry:
+        normalized_id = agent_id or self._normalize_agent_id(name)
+        entry = AgentRegistryEntry(
+            agent_id=normalized_id,
+            name=name,
+            agent_kind=agent_kind,  # type: ignore[arg-type]
+            description=description,
+            service_endpoint=f"{scheme}://{normalized_id}",
+            invocation_endpoint=f"{scheme}://{normalized_id}",
+            skills=list(capabilities),
+            input_modes=self._capability_modes(capabilities, "input_modes"),
+            output_modes=self._capability_modes(capabilities, "output_modes"),
+            status=status,  # type: ignore[arg-type]
+            trust_level=trust_level,
+            validation_contract=dict(validation_contract or {}),
+            source_card={"handler": self._handler_name(handler)},
+        )
+        self._local_registry[entry.agent_id] = entry
+        return entry
+
+    async def _invoke_entry(
+        self,
+        entry: AgentRegistryEntry,
+        task: TaskSpec,
+        payload: dict[str, Any],
+    ) -> Any:
+        if entry.agent_kind == "local_python":
+            return await self._call_handler(
+                self._local_handlers[entry.agent_id],
+                task,
+                payload,
+            )
+        if entry.agent_kind == "linguistic":
+            return await self._call_handler(
+                self._linguistic_handlers[entry.agent_id],
+                task,
+                payload,
+            )
+        return await self.a2a_adapter.task_sender(entry.agent_id, payload)
+
+    async def _call_handler(
+        self,
+        handler: Callable[..., Any],
+        task: TaskSpec,
+        payload: dict[str, Any],
+    ) -> Any:
+        signature = inspect.signature(handler)
+        positional = [
+            parameter
+            for parameter in signature.parameters.values()
+            if parameter.kind
+            in {
+                inspect.Parameter.POSITIONAL_ONLY,
+                inspect.Parameter.POSITIONAL_OR_KEYWORD,
+            }
+            and parameter.default is inspect.Parameter.empty
+        ]
+        if len(positional) >= 2:
+            result = handler(task, payload)
+        elif len(positional) == 1:
+            result = handler(payload)
+        else:
+            result = handler()
+        return await self._maybe_await(result)
+
+    def _execution_result(
+        self,
+        entry: AgentRegistryEntry,
+        task: TaskSpec,
+        output: Any,
+    ) -> TaskExecutionResult:
+        normalized = self._jsonable_output(output)
+        return TaskExecutionResult(
+            task_id=task.task_id,
+            agent_id=entry.agent_id,
+            agent_kind=entry.agent_kind,
+            output=normalized,
+            artifacts=self._extract_artifacts(normalized),
+            metadata={"invocation_endpoint": entry.invocation_endpoint},
+        )
+
+    def _extract_artifacts(self, output: Any) -> list[dict[str, Any]]:
+        if output is None:
+            return []
+        if isinstance(output, dict):
+            artifacts = output.get("artifacts")
+            if isinstance(artifacts, list):
+                return [self._artifact_record(item) for item in artifacts]
+            parts = output.get("parts")
+            if isinstance(parts, list):
+                return self.a2a_adapter.convert_artifact_parts(parts)
+            artifact = output.get("artifact")
+            if artifact is not None:
+                return [self._artifact_record(artifact)]
+            return [output]
+        if isinstance(output, list):
+            return [self._artifact_record(item) for item in output]
+        return [{"kind": "value", "value": output}]
+
+    def _artifact_record(self, value: Any) -> dict[str, Any]:
+        if isinstance(value, dict):
+            return value
+        return {"kind": "value", "value": self._jsonable_output(value)}
+
     def _record(self, event_type: str, message: str, **data: Any) -> TraceEvent:
         event = TraceEvent(event_type=event_type, message=message, data=data)
         self._trace.append(event)
@@ -260,6 +585,68 @@ class CoordinationSdk:
         if inspect.isawaitable(value):
             return await value
         return value
+
+    @staticmethod
+    def _jsonable_output(value: Any) -> Any:
+        if isinstance(value, (str, int, float, bool)) or value is None:
+            return value
+        if isinstance(value, list):
+            return [CoordinationSdk._jsonable_output(item) for item in value]
+        if isinstance(value, tuple):
+            return [CoordinationSdk._jsonable_output(item) for item in value]
+        if isinstance(value, dict):
+            return {
+                str(key): CoordinationSdk._jsonable_output(item)
+                for key, item in value.items()
+            }
+        if hasattr(value, "model_dump"):
+            return value.model_dump(mode="json")
+        try:
+            from google.protobuf.json_format import MessageToDict
+            from google.protobuf.message import Message as ProtobufMessage
+        except ImportError:
+            ProtobufMessage = None  # type: ignore[assignment]
+        if ProtobufMessage is not None and isinstance(value, ProtobufMessage):
+            return MessageToDict(value, preserving_proto_field_name=True)
+        if hasattr(value, "__dict__"):
+            return {
+                str(key): CoordinationSdk._jsonable_output(item)
+                for key, item in value.__dict__.items()
+                if not key.startswith("_")
+            }
+        return str(value)
+
+    @staticmethod
+    def _payload_to_text(payload: dict[str, Any]) -> str:
+        for key in ("input", "text", "message", "prompt"):
+            value = payload.get(key)
+            if isinstance(value, str):
+                return value
+        return str(CoordinationSdk._jsonable_output(payload))
+
+    @staticmethod
+    def _capability_modes(
+        capabilities: list[CapabilityRequirement],
+        field_name: str,
+    ) -> list[str]:
+        modes: list[str] = []
+        for capability in capabilities:
+            for mode in getattr(capability, field_name):
+                if mode not in modes:
+                    modes.append(mode)
+        return modes
+
+    @staticmethod
+    def _normalize_agent_id(name: str) -> str:
+        normalized = "".join(
+            character.lower() if character.isalnum() else "-"
+            for character in name.strip()
+        ).strip("-")
+        return normalized or "agent"
+
+    @staticmethod
+    def _handler_name(handler: Callable[..., Any]) -> str:
+        return getattr(handler, "__qualname__", getattr(handler, "__name__", repr(handler)))
 
     @staticmethod
     def _require_list(value: Any, key: str) -> list[Any]:

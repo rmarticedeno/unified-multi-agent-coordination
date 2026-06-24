@@ -11,7 +11,9 @@ The implementation separates two roles. \texttt{CoordinationSdk} is the communic
 
 A2A remains the default wire model for independently deployed agents. Remote agents are admitted through A2A Agent Cards and invoked through A2A-compatible task exchange. Local Python agents and Lingo-based linguistic agents are registered through the SDK and normalized into the same internal agent records, with identity, capabilities, input and output modes, trust metadata, invocation endpoint, and validation contract. Local and linguistic agent authors are therefore not required to implement A2A plumbing, while the coordination agent can reason over a uniform registry.
 
-The prototype also uses Lingo as an optional linguistic and context-engineering substrate \cite{lingo2026}. Lingo is not hidden inside the SDK as a coordinator. Instead, Lingo-backed interpretation, extraction, classification, or candidate-planning behavior is exposed as SDK-registered linguistic capabilities. Non-linguistic local agents can use the SDK without depending on Lingo. The prototype dependency set pins \texttt{lingo-ai==2.0.2} and uses \texttt{a2a-sdk}, \texttt{pydantic}, \texttt{httpx}, \texttt{pytest}, and \texttt{pytest-asyncio} for the executable implementation and tests.
+The prototype also uses Lingo as an optional linguistic and context-engineering substrate \cite{lingo2026}. Lingo is not hidden inside the SDK as a coordinator. Instead, Lingo-backed interpretation, extraction, classification, or candidate-planning behavior is exposed as SDK-registered linguistic capabilities. Non-linguistic local agents can use the SDK without depending on Lingo. The prototype dependency set pins \texttt{lingo-ai==2.0.2} and uses \texttt{a2a-sdk}, \texttt{pydantic}, \texttt{httpx}, \texttt{FastAPI}, \texttt{Uvicorn}, \texttt{pytest}, and \texttt{pytest-asyncio} for the executable implementation, service wrapper, and tests.
+
+For deployment and reproducibility, the repository includes a thin HTTP service and Docker configuration around the same \texttt{CoordinationAgent} and \texttt{CoordinationSdk} objects. The service exposes health, registry, plan, coordinate, and feasibility endpoints. It does not introduce a second coordinator, bypass the SDK boundary, or change the theoretical ownership of planning and authorization. Docker support is therefore an execution environment wrapper for later verification, not evidence that the evaluation protocol has already been run.
 
 The mapping between formal objects and implementation records is direct. The records defined in Section~\ref{sec:data-structures} materialize the formal objects of Chapter~\ref{chap:theoretical-solution} as follows.
 
@@ -170,9 +172,27 @@ TraceEvent:
   message
   data
   timestamp
+
+TaskExecutionResult:
+  task_id
+  agent_id
+  agent_kind
+  status
+  output
+  artifacts
+  error
+  metadata
+
+CoordinationRunResult:
+  status
+  plan_result
+  task_results
+  artifacts
+  explanation
+  trace
 \end{Verbatim}
 
-The \texttt{CoordinationSdk} public surface is intentionally limited to registration, inspection, dispatch, trace access, and session control. It hides the differences among remote A2A agents, local Python agents, and Lingo-backed linguistic agents while preserving enough metadata for the coordination agent to apply feasibility rules uniformly. The \texttt{CoordinationAgent} public surface contains the complete coordination workflow and feasibility query. The \texttt{AgentRegistry\allowbreak Entry} materializes the discoverable agent set. The \texttt{Capability\allowbreak Requirement} and \texttt{Problem\allowbreak Request} represent the user's goal, constraints, required capabilities, and required artifacts. The \texttt{Solution\allowbreak Proposal} is a candidate plan, not an executable plan until accepted. The \texttt{Feasibility\allowbreak Report} explains whether the coordination agent can solve the problem and why. The \texttt{Generated\allowbreak Nlp\allowbreak Agent\allowbreak Spec} represents a temporary linguistic capability, such as a classifier or extractor, that can be created for the current solution without becoming a permanent system agent. The \texttt{Coordinator\allowbreak State} and \texttt{Trace\allowbreak Event} records provide the auditable ledger required by the traceability property.
+The \texttt{CoordinationSdk} public surface is intentionally limited to registration, inspection, dispatch, trace access, and session control. It hides the differences among remote A2A agents, local Python agents, and Lingo-backed linguistic agents while preserving enough metadata for the coordination agent to apply feasibility rules uniformly. The \texttt{CoordinationAgent} public surface contains the complete coordination workflow and feasibility query. The \texttt{AgentRegistry\allowbreak Entry} materializes the discoverable agent set. The \texttt{Capability\allowbreak Requirement} and \texttt{Problem\allowbreak Request} represent the user's goal, constraints, required capabilities, and required artifacts. The \texttt{Solution\allowbreak Proposal} is a candidate plan, not an executable plan until accepted. The \texttt{Feasibility\allowbreak Report} explains whether the coordination agent can solve the problem and why. \texttt{TaskExecutionResult} and \texttt{CoordinationRunResult} separate runtime observations from the pre-execution feasibility decision. The \texttt{Generated\allowbreak Nlp\allowbreak Agent\allowbreak Spec} represents a temporary linguistic capability, such as a classifier or extractor, that can be created for the current solution without becoming a permanent system agent. The \texttt{Coordinator\allowbreak State} and \texttt{Trace\allowbreak Event} records provide the auditable ledger required by the traceability property.
 
 \section{Coordinator Workflow}
 

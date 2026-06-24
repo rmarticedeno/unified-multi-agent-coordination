@@ -1,5 +1,4 @@
-def main():
-    print("Hello from unified-multi-agent-coordination!")
+from unified_multi_agent_coordination.service import main
 
 
 if __name__ == "__main__":

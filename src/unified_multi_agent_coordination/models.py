@@ -32,17 +32,20 @@ class CapabilityRequirement(BaseModel):
 
 
 class AgentRegistryEntry(BaseModel):
-    """A normalized view of an admitted remote agent."""
+    """A normalized view of an admitted agent."""
 
     agent_id: str
     name: str
+    agent_kind: Literal["remote_a2a", "local_python", "linguistic"] = "remote_a2a"
     description: str = ""
     service_endpoint: str
+    invocation_endpoint: str = ""
     skills: list[CapabilityRequirement] = Field(default_factory=list)
     input_modes: list[str] = Field(default_factory=list)
     output_modes: list[str] = Field(default_factory=list)
     status: Literal["available", "unavailable"] = "available"
     trust_level: str = "standard"
+    validation_contract: JsonObject = Field(default_factory=dict)
     source_card: JsonObject = Field(default_factory=dict)
 
 
@@ -122,6 +125,19 @@ class CoordinationPlanResult(BaseModel):
     registry_snapshot: list[AgentRegistryEntry] = Field(default_factory=list)
 
 
+class TaskExecutionResult(BaseModel):
+    """A normalized runtime observation for one dispatched task."""
+
+    task_id: str
+    agent_id: str
+    agent_kind: str = "unknown"
+    status: Literal["completed", "failed", "timeout", "refused"] = "completed"
+    output: Any = None
+    artifacts: list[JsonObject] = Field(default_factory=list)
+    error: str = ""
+    metadata: JsonObject = Field(default_factory=dict)
+
+
 class TraceEvent(BaseModel):
     """An auditable event in the coordination trace."""
 
@@ -131,3 +147,14 @@ class TraceEvent(BaseModel):
     message: str
     data: JsonObject = Field(default_factory=dict)
     timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+
+class CoordinationRunResult(BaseModel):
+    """The end-to-end result of an authorized coordination attempt."""
+
+    status: Literal["completed", "infeasible", "failed"] = "completed"
+    plan_result: CoordinationPlanResult
+    task_results: list[TaskExecutionResult] = Field(default_factory=list)
+    artifacts: list[JsonObject] = Field(default_factory=list)
+    explanation: str = ""
+    trace: list[TraceEvent] = Field(default_factory=list)

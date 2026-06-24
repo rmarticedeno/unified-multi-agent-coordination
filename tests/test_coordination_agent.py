@@ -129,3 +129,66 @@ async def test_build_solution_plan_uses_linguistic_planner_when_direct_match_is_
 
     assert result.proposal.tasks[0].assigned_to == "other"
     assert not result.feasibility_report.feasible
+
+
+@pytest.mark.asyncio
+async def test_coordinate_dispatches_authorized_tasks_in_execution_order_and_aggregates():
+    calls = []
+    summarize = CapabilityRequirement(name="summarize", output_modes=["text"])
+    classify = CapabilityRequirement(name="classify", input_modes=["text"], output_modes=["json"])
+    sdk = CoordinationSdk(http_client=FakeHttpClient(FakeResponse({})))
+
+    def summarize_handler(payload):
+        calls.append("summarize")
+        return {"artifacts": [{"kind": "text", "text": payload["document"][:7]}]}
+
+    def classify_handler(payload):
+        calls.append("classify")
+        return {"artifacts": [{"kind": "data", "data": {"label": "brief"}}]}
+
+    summarizer = sdk.register_local_agent("Summarizer", [summarize], summarize_handler)
+    classifier = sdk.register_local_agent("Classifier", [classify], classify_handler)
+    agent = CoordinationAgent(sdk=sdk)
+    request = ProblemRequest(
+        user_goal="Summarize and classify.",
+        requirements=[summarize, classify],
+        required_artifacts=["summary", "label"],
+    )
+
+    result = await agent.coordinate(request, payload={"document": "hello world"})
+
+    assert result.status == "completed"
+    assert calls == ["summarize", "classify"]
+    assert [task.agent_id for task in result.task_results] == [
+        summarizer.agent_id,
+        classifier.agent_id,
+    ]
+    assert result.artifacts == [
+        {"kind": "text", "text": "hello w"},
+        {"kind": "data", "data": {"label": "brief"}},
+    ]
+    assert any(event.event_type == "sdk_task_completed" for event in result.trace)
+
+
+@pytest.mark.asyncio
+async def test_coordinate_returns_structured_infeasibility_without_dispatch():
+    calls = []
+    sdk = CoordinationSdk(http_client=FakeHttpClient(FakeResponse({})))
+    sdk.register_local_agent(
+        "Classifier",
+        [CapabilityRequirement(name="classify")],
+        lambda payload: calls.append("classify"),
+    )
+    agent = CoordinationAgent(sdk=sdk)
+    request = ProblemRequest(
+        user_goal="Summarize.",
+        requirements=[CapabilityRequirement(name="summarize")],
+        required_artifacts=["summary"],
+    )
+
+    result = await agent.coordinate(request)
+
+    assert result.status == "infeasible"
+    assert result.task_results == []
+    assert calls == []
+    assert not result.plan_result.feasibility_report.feasible

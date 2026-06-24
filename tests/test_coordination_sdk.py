@@ -1,7 +1,16 @@
 import httpx
 import pytest
 
-from unified_multi_agent_coordination import CoordinationSdk, RemoteRegistryError
+from unified_multi_agent_coordination import (
+    AuthorizationError,
+    CapabilityRequirement,
+    CoordinationSdk,
+    FeasibilityAnalyzer,
+    ProblemRequest,
+    RemoteRegistryError,
+    SolutionProposal,
+    TaskSpec,
+)
 
 
 class FakeResponse:
@@ -201,3 +210,111 @@ async def test_register_a2a_agent_and_reset_session_preserve_registry():
 
     assert sdk.trace() == []
     assert [agent.agent_id for agent in await sdk.registry_snapshot()] == ["summarizer"]
+
+
+@pytest.mark.asyncio
+async def test_register_local_agent_and_dispatch_normalizes_artifacts():
+    sdk = CoordinationSdk(http_client=FakeHttpClient(FakeResponse({})))
+    requirement = CapabilityRequirement(name="summarize", output_modes=["text"])
+
+    def handler(task, payload):
+        return {
+            "artifacts": [
+                {
+                    "kind": "text",
+                    "text": f"{task.requirement_name}: {payload['text']}",
+                }
+            ]
+        }
+
+    entry = sdk.register_local_agent("Summarizer", [requirement], handler)
+    task = TaskSpec(task_id="t1", requirement_name="summarize", assigned_to=entry.agent_id)
+    report = FeasibilityAnalyzer().check(
+        ProblemRequest(
+            user_goal="Summarize.",
+            requirements=[requirement],
+            required_artifacts=["summary"],
+        ),
+        [entry],
+        SolutionProposal(
+            tasks=[task],
+            execution_order=["t1"],
+            expected_artifacts=["summary"],
+            completion_criteria=["summary exists"],
+        ),
+    )
+
+    result = await sdk.send_task(report, task, {"text": "hello"})
+
+    assert result.status == "completed"
+    assert result.agent_kind == "local_python"
+    assert result.artifacts == [{"kind": "text", "text": "summarize: hello"}]
+    assert sdk.trace()[-1].event_type == "sdk_task_completed"
+
+
+@pytest.mark.asyncio
+async def test_register_linguistic_agent_and_dispatch_async_handler():
+    sdk = CoordinationSdk(http_client=FakeHttpClient(FakeResponse({})))
+    requirement = CapabilityRequirement(name="classify", output_modes=["json"])
+
+    async def handler(payload):
+        return {"artifacts": [{"kind": "data", "data": {"label": payload["label"]}}]}
+
+    entry = sdk.register_linguistic_agent("Classifier", [requirement], handler)
+    task = TaskSpec(task_id="t1", requirement_name="classify", assigned_to=entry.agent_id)
+    report = FeasibilityAnalyzer().check(
+        ProblemRequest(
+            user_goal="Classify.",
+            requirements=[requirement],
+            required_artifacts=["label"],
+        ),
+        [entry],
+        SolutionProposal(
+            tasks=[task],
+            execution_order=["t1"],
+            expected_artifacts=["label"],
+            completion_criteria=["label exists"],
+        ),
+    )
+
+    result = await sdk.send_task(report, task, {"label": "finance"})
+
+    assert result.status == "completed"
+    assert result.agent_kind == "linguistic"
+    assert result.artifacts[0]["data"] == {"label": "finance"}
+
+
+@pytest.mark.asyncio
+async def test_send_task_blocks_without_authorization():
+    sdk = CoordinationSdk(http_client=FakeHttpClient(FakeResponse({})))
+    requirement = CapabilityRequirement(name="summarize")
+    entry = sdk.register_local_agent("Summarizer", [requirement], lambda payload: {})
+    task = TaskSpec(task_id="t1", requirement_name="summarize", assigned_to=entry.agent_id)
+    report = FeasibilityAnalyzer().check(
+        ProblemRequest(user_goal="x", requirements=[requirement]),
+        [],
+        SolutionProposal(tasks=[task]),
+    )
+
+    with pytest.raises(AuthorizationError):
+        await sdk.send_task(report, task, {})
+
+    assert sdk.trace()[-1].event_type == "sdk_delegation_refused"
+
+
+@pytest.mark.asyncio
+async def test_runtime_failure_is_returned_and_traced():
+    sdk = CoordinationSdk(http_client=FakeHttpClient(FakeResponse({})))
+    requirement = CapabilityRequirement(name="summarize")
+
+    def handler(payload):
+        raise RuntimeError("handler unavailable")
+
+    entry = sdk.register_local_agent("Summarizer", [requirement], handler)
+    task = TaskSpec(task_id="t1", requirement_name="summarize", assigned_to=entry.agent_id)
+
+    result = await sdk.invoke_agent(entry.agent_id, task, {})
+
+    assert result.status == "failed"
+    assert result.error == "handler unavailable"
+    assert sdk.trace()[-1].event_type == "sdk_task_failed"

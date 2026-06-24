@@ -1,0 +1,13 @@
+services:
+  coordination-service:
+    build:
+      context: .
+    image: unified-multi-agent-coordination:local
+    environment:
+      COORDINATION_REGISTRY_URL: ${COORDINATION_REGISTRY_URL:-}
+      COORDINATION_SELF_AGENT_ID: ${COORDINATION_SELF_AGENT_ID:-}
+      COORDINATION_REQUEST_TIMEOUT_S: ${COORDINATION_REQUEST_TIMEOUT_S:-10.0}
+      COORDINATION_SERVICE_HOST: 0.0.0.0
+      COORDINATION_SERVICE_PORT: 8000
+    ports:
+      - "${COORDINATION_SERVICE_PORT:-8000}:8000"

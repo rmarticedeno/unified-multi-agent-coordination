@@ -80,6 +80,7 @@ class A2AAdapter:
             name=name,
             description=str(raw.get("description") or ""),
             service_endpoint=endpoint,
+            invocation_endpoint=endpoint,
             skills=skills,
             input_modes=input_modes,
             output_modes=output_modes,
