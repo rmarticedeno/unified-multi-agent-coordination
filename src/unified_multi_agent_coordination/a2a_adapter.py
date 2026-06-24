@@ -40,31 +40,51 @@ class A2AAdapter:
     def normalize_card(self, card: Any, fallback_url: str = "") -> AgentRegistryEntry:
         """Convert a dict/object Agent Card into the local registry shape."""
         raw = self._as_dict(card)
-        name = str(raw.get("name") or raw.get("id") or raw.get("agent_id"))
-        endpoint = str(raw.get("url") or raw.get("service_endpoint") or fallback_url)
+        endpoint = str(
+            raw.get("url")
+            or raw.get("service_endpoint")
+            or raw.get("serviceEndpoint")
+            or self._first_interface_url(raw)
+            or fallback_url
+        )
+        name = str(
+            raw.get("name")
+            or raw.get("id")
+            or raw.get("agent_id")
+            or raw.get("agentId")
+            or endpoint
+        )
+        agent_id = str(raw.get("agent_id") or raw.get("agentId") or raw.get("id") or name)
         skills = [
             self._normalize_skill(skill)
             for skill in raw.get("skills", [])
             if skill is not None
         ]
         input_modes = self._string_list(
-            raw.get("defaultInputModes") or raw.get("input_modes") or raw.get("inputModes")
+            raw.get("defaultInputModes")
+            or raw.get("default_input_modes")
+            or raw.get("input_modes")
+            or raw.get("inputModes")
         )
         output_modes = self._string_list(
             raw.get("defaultOutputModes")
+            or raw.get("default_output_modes")
             or raw.get("output_modes")
             or raw.get("outputModes")
         )
+        status = raw.get("status")
+        if status not in {"available", "unavailable"}:
+            status = "available"
         return AgentRegistryEntry(
-            agent_id=name,
+            agent_id=agent_id,
             name=name,
             description=str(raw.get("description") or ""),
             service_endpoint=endpoint,
             skills=skills,
             input_modes=input_modes,
             output_modes=output_modes,
-            status="available",
-            trust_level=str(raw.get("trust_level") or "standard"),
+            status=status,
+            trust_level=str(raw.get("trust_level") or raw.get("trustLevel") or "standard"),
             source_card=raw,
         )
 
@@ -145,7 +165,12 @@ class A2AAdapter:
 
     def _normalize_skill(self, skill: Any) -> CapabilityRequirement:
         raw = self._as_dict(skill)
-        name = str(raw.get("name") or raw.get("id") or raw.get("skill_id"))
+        name = str(
+            raw.get("name")
+            or raw.get("id")
+            or raw.get("skill_id")
+            or raw.get("skillId")
+        )
         return CapabilityRequirement(
             name=name,
             description=str(raw.get("description") or ""),
@@ -160,6 +185,13 @@ class A2AAdapter:
             return value
         if hasattr(value, "model_dump"):
             return value.model_dump()
+        try:
+            from google.protobuf.json_format import MessageToDict
+            from google.protobuf.message import Message as ProtobufMessage
+        except ImportError:
+            ProtobufMessage = None  # type: ignore[assignment]
+        if ProtobufMessage is not None and isinstance(value, ProtobufMessage):
+            return MessageToDict(value, preserving_proto_field_name=True)
         if hasattr(value, "__dict__"):
             return dict(value.__dict__)
         return {}
@@ -171,3 +203,15 @@ class A2AAdapter:
         if isinstance(value, str):
             return [value]
         return [str(item) for item in value]
+
+    @staticmethod
+    def _first_interface_url(raw: dict[str, Any]) -> str:
+        interfaces = raw.get("supported_interfaces") or raw.get("supportedInterfaces") or []
+        if not isinstance(interfaces, list):
+            return ""
+        for item in interfaces:
+            interface = A2AAdapter._as_dict(item)
+            url = interface.get("url")
+            if url:
+                return str(url)
+        return ""

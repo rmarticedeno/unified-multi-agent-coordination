@@ -113,6 +113,15 @@ class FeasibilityReport(BaseModel):
     evidence: list[PredicateEvidence] = Field(default_factory=list)
 
 
+class CoordinationPlanResult(BaseModel):
+    """A coordination-agent planning result before task dispatch."""
+
+    request: ProblemRequest
+    proposal: SolutionProposal
+    feasibility_report: FeasibilityReport
+    registry_snapshot: list[AgentRegistryEntry] = Field(default_factory=list)
+
+
 class TraceEvent(BaseModel):
     """An auditable event in the coordination trace."""
 

@@ -1,6 +1,7 @@
 import asyncio
 
 import pytest
+from a2a import types as a2a_types
 
 from unified_multi_agent_coordination import (
     A2AAdapter,
@@ -138,3 +139,43 @@ def test_artifact_part_conversion_handles_text_data_and_file():
     assert converted[0] == {"kind": "text", "text": "hello"}
     assert converted[1] == {"kind": "data", "data": {"value": 42}}
     assert converted[2]["name"] == "report.txt"
+
+
+def test_normalize_card_supports_protobuf_agent_card_interfaces():
+    async def fetcher(url: str):
+        return {}
+
+    async def sender(agent_id: str, payload: dict):
+        return {}
+
+    adapter = A2AAdapter(fetcher, sender)
+    card = a2a_types.AgentCard(
+        name="summarizer",
+        description="Summarizes text",
+        version="1.0.0",
+        supported_interfaces=[
+            a2a_types.AgentInterface(
+                url="http://summarizer.example/a2a",
+                protocol_binding="JSONRPC",
+            )
+        ],
+        skills=[
+            a2a_types.AgentSkill(
+                id="summarize",
+                name="summarize",
+                description="Create summaries",
+                input_modes=["text"],
+                output_modes=["text"],
+            )
+        ],
+        default_input_modes=["text"],
+        default_output_modes=["text"],
+    )
+
+    entry = adapter.normalize_card(card)
+
+    assert entry.agent_id == "summarizer"
+    assert entry.service_endpoint == "http://summarizer.example/a2a"
+    assert entry.input_modes == ["text"]
+    assert entry.output_modes == ["text"]
+    assert entry.skills[0].name == "summarize"
