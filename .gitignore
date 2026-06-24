@@ -31,3 +31,4 @@ build/
 *.synctex.gz
 *.toc
 thesis/build/
+a2a-samples/

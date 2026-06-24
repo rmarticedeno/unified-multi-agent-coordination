@@ -217,12 +217,14 @@ Given a request $P$ and registry snapshot $\mathcal{R}$, feasibility holds when 
 \]
 \end{definition}
 
+These predicates are operational acceptance criteria for implementation and evaluation, not a proof of the internal correctness of arbitrary agents. They specify which evidence must be present in the coordinator's trace before a plan may be authorized. The claim is therefore limited to pre-execution justification under the admitted contracts and registry snapshot.
+
 The predicates make the acceptance criteria explicit. $\mathsf{Complete}$ requires that the task set and expected artifacts cover $\mathcal{Q}$ and $\mathcal{O}$. $\mathsf{Covered}$ requires
 \[
 \forall t \in \mathcal{T},\quad
 \alpha(t) \models q(t),
 \]
-with every registered assignment drawn from $\mathcal{B}(\mathcal{R})$ and every auxiliary assignment drawn from $\mathcal{X}_{\Pi}$ after satisfying Rules~\ref{rule:approved-construction}--\ref{rule:lifecycle}. $\mathsf{Compatible}$ requires each dependency edge to connect compatible output and input schemas or an explicitly admitted bridge. $\mathsf{Acyclic}$ requires $\prec$ to define a valid finite partial order. $\mathsf{Authorized}$ checks availability, trust, permissions, resource limits, and the constraints in $\Gamma$. $\mathsf{Verifiable}$ requires a completion-evidence contract and validator for every task and requires $\kappa$ to be decidable from the recorded task states and artifacts.
+with every registered assignment drawn from $\mathcal{B}(\mathcal{R})$ and justified by a recorded capability contract, and every auxiliary assignment drawn from $\mathcal{X}_{\Pi}$ after satisfying Rules~\ref{rule:approved-construction}--\ref{rule:lifecycle}. $\mathsf{Compatible}$ requires each dependency edge to connect recorded output and input schemas, modalities, and artifact identifiers, or an explicitly admitted bridge with its own validator. $\mathsf{Acyclic}$ requires $\prec$ to define a valid finite partial order. $\mathsf{Authorized}$ checks availability, trust, permissions, resource limits, and the constraints in $\Gamma$ against the registry snapshot and policy evidence used for the decision. $\mathsf{Verifiable}$ requires a completion-evidence contract and deterministic validator for every task and requires $\kappa$ to be decidable from recorded task states, artifacts, and validation results.
 
 An infeasibility report is a structured artifact $I=(\mathit{code},U,E,H)$, where $U$ identifies unsatisfied requirements or constraints, $E$ records the checks that produced the verdict, and $H$ contains admissible remediation hints, such as admitting a missing capability or providing a required modality. A remediation hint is not a fabricated plan. It explains how the boundary would need to change before the request could be reconsidered.
 
