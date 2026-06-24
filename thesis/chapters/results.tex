@@ -7,7 +7,7 @@ At the present stage, the repository specifies the theoretical framework, implem
 
 \section{Evaluation Questions}
 
-The empirical evaluation addresses four questions. First, does the hybrid framework distinguish feasible from infeasible requests more accurately than the baselines? Second, does symbolic authorization reduce false acceptance of plans with missing coverage, incompatible artifacts, cycles, or authority violations? Third, what latency, message, and model-use overhead does that validation introduce? Fourth, do recorded traces permit an independent reviewer to reconstruct why a plan was authorized or refused?
+The empirical evaluation addresses four questions. First, does the hybrid coordination agent distinguish feasible from infeasible requests more accurately than the baselines? Second, does symbolic authorization reduce false acceptance of plans with missing coverage, incompatible artifacts, cycles, or authority violations? Third, what latency, message, and model-use overhead does that validation introduce across remote A2A, local Python, and Lingo-backed agents? Fourth, do recorded traces permit an independent reviewer to reconstruct why a plan was authorized or refused, verify that agent invocation passed through \texttt{CoordinationSdk}, and verify that planning and feasibility remained owned by \texttt{CoordinationAgent}?
 
 \section{Scenario Matrix}
 
@@ -27,6 +27,10 @@ Input/output contract mismatch & Infeasible & Incompatible artifact or modality 
 Dependency cycle & Infeasible & Failed acyclicity predicate \\
 Insufficient authority & Infeasible & Failed permission or trust predicate \\
 Agent loss after authorization & Runtime failure & Authorization trace followed by availability failure \\
+Remote A2A agent only & Feasible or infeasible by contract & Agent Card ingestion, A2A task dispatch, and normalized artifact evidence \\
+Local Python agent only & Feasible or infeasible by contract & SDK registration, handler invocation, and validated local output \\
+Lingo linguistic agent only & Feasible or infeasible by contract & SDK registration, Lingo runtime invocation, and structured linguistic artifact \\
+Mixed remote, local, and linguistic plan & Feasible or infeasible by contract & Shared feasibility predicates and unified SDK trace across agent kinds \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -35,10 +39,10 @@ The last category is deliberately separated from planning infeasibility. A plan 
 
 \section{Results Reporting}
 
-The primary results table must report, for each configuration, feasibility precision, feasibility recall, F1, invalid-plan rejection rate, task success rate, trace completeness, median latency, message count, and model usage. Results must also be disaggregated by scenario category. A single aggregate score is insufficient because a configuration can appear successful by accepting too many requests or by benefiting from a majority class.
+The primary results table must report, for each configuration, feasibility precision, feasibility recall, F1, invalid-plan rejection rate, task success rate, trace completeness, communication-boundary compliance, coordination-ownership compliance, median latency, message count, and model usage. Results must also be disaggregated by scenario category, agent kind, and runtime path. A single aggregate score is insufficient because a configuration can appear successful by accepting too many requests, by benefiting from a majority class, bypassing the SDK communication boundary, or placing planning authority in the wrong layer.
 
 For every false acceptance and false refusal, the analysis records the first incorrect decision and its cause. Runtime failures are classified separately as agent unavailability, transport error, invalid artifact, timeout, or aggregation failure. The worked example in Chapter~\ref{chap:theoretical-solution} serves as an explanatory case, not as empirical evidence.
 
 \section{Criteria for Answering the Research Questions}
 
-RQ1 is supported when the scenario traces show that capability, compatibility, dependency, authority, contract, and completion records are sufficient to reconstruct the reference decision. RQ2 is supported when the hybrid configuration retains interpretation coverage while rejecting invalid proposals that the LLM-only baseline accepts. RQ3 is supported when auxiliary capabilities are admitted only under the stated eligibility and lifecycle rules and do not satisfy substantive missing expertise. RQ4 is answered by the comparative outcome, process, and overhead measurements. Until those measurements are collected, these remain evaluation criteria rather than empirical findings.
+RQ1 is supported when the scenario traces show that capability, compatibility, dependency, authority, contract, and completion records are sufficient to reconstruct the reference decision. RQ2 is supported when the hybrid \texttt{CoordinationAgent} retains interpretation coverage while rejecting invalid proposals that the variant without symbolic feasibility accepts. RQ3 is supported when auxiliary capabilities are admitted only under the stated eligibility and lifecycle rules and do not satisfy substantive missing expertise. RQ4 is answered by the comparative outcome, process, boundary-compliance, ownership-compliance, and overhead measurements. Until those measurements are collected, these remain evaluation criteria rather than empirical findings.
