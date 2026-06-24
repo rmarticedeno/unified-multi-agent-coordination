@@ -1,48 +1,48 @@
-\chapter{Evaluación y resultados}
+\chapter{Evaluation and Results}
 \label{chap:results}
 
-\section{Estado de la evaluación}
+\section{Evaluation Status}
 
 At the present stage, the repository specifies the theoretical framework, implementation design, and evaluation protocol but does not contain a completed experimental dataset. Consequently, this chapter defines the exact reporting structure and acceptance criteria; it does not present fabricated measurements. Numerical tables must be populated only from preserved execution traces produced under the procedure in Chapter~\ref{chap:methodology}.
 
-\section{Preguntas de evaluación}
+\section{Evaluation Questions}
 
 The empirical evaluation addresses four questions. First, does the hybrid coordination agent distinguish feasible from infeasible requests more accurately than the baselines? Second, does symbolic authorization reduce false acceptance of plans with missing coverage, incompatible artifacts, cycles, or authority violations? Third, what latency, message, and model-use overhead does that validation introduce across remote A2A, local Python, and Lingo-backed agents? Fourth, do recorded traces permit an independent reviewer to reconstruct why a plan was authorized or refused, verify that agent invocation passed through \texttt{CoordinationSdk}, and verify that planning and feasibility remained owned by \texttt{CoordinationAgent}?
 
-\section{Matriz de escenarios}
+\section{Scenario Matrix}
 
 \begin{table}[htbp]
 \centering
-\caption{Categorías mínimas de escenarios para la evaluación.}
+\caption{Minimum scenario categories for evaluation.}
 \label{tab:scenario-matrix}
 \begin{tabular}{p{0.28\textwidth}p{0.20\textwidth}p{0.40\textwidth}}
 \toprule
-\textbf{Categoría de escenario} & \textbf{Veredicto de referencia} & \textbf{Evidencia decisiva esperada} \\
+\textbf{Scenario category} & \textbf{Reference verdict} & \textbf{Expected decisive evidence} \\
 \midrule
-Una capacidad admitida cubre la solicitud & Viable & Asignación directa y contrato de salida válido \\
-Múltiples capacidades compatibles cubren la solicitud & Viable & Grafo acíclico de dependencias y artefactos \\
-Brecha lingüística estrecha aprobada & Viable & Elegibilidad auxiliar, validador y ciclo de vida local a la tarea \\
-Capacidad requerida ausente & Inviable & Requisito no cubierto explícito \\
-Incompatibilidad de contrato de entrada/salida & Inviable & Par de artefacto o modalidad incompatible \\
-Ciclo de dependencias & Inviable & Predicado de aciclicidad fallido \\
-Autoridad insuficiente & Inviable & Predicado de permiso o confianza fallido \\
-Pérdida de agente después de la autorización & Fallo en tiempo de ejecución & Traza de autorización seguida de fallo de disponibilidad \\
-Solo agente A2A remoto & Viable o inviable según contrato & Ingesta de Agent Card, despacho de tarea A2A y evidencia de artefacto normalizada \\
-Solo agente local en Python & Viable o inviable según contrato & Registro en SDK, invocación del manejador y salida local validada \\
-Solo agente lingüístico Lingo & Viable o inviable según contrato & Registro en SDK, invocación del runtime de Lingo y artefacto lingüístico estructurado \\
-Plan mixto remoto, local y lingüístico & Viable o inviable según contrato & Predicados de viabilidad compartidos y traza SDK unificada entre tipos de agentes \\
+Single admitted capability covers request & Feasible & Direct assignment and valid output contract \\
+Multiple compatible capabilities cover request & Feasible & Acyclic dependency and artifact graph \\
+Approved narrow linguistic gap & Feasible & Auxiliary eligibility, validator, and task-local lifecycle \\
+Required capability absent & Infeasible & Explicit uncovered requirement \\
+Input/output contract mismatch & Infeasible & Incompatible artifact or modality pair \\
+Dependency cycle & Infeasible & Failed acyclicity predicate \\
+Insufficient authority & Infeasible & Failed permission or trust predicate \\
+Agent loss after authorization & Runtime failure & Authorization trace followed by availability failure \\
+Remote A2A agent only & Feasible or infeasible by contract & Agent Card ingestion, A2A task dispatch, and normalized artifact evidence \\
+Local Python agent only & Feasible or infeasible by contract & SDK registration, handler invocation, and validated local output \\
+Lingo linguistic agent only & Feasible or infeasible by contract & SDK registration, Lingo runtime invocation, and structured linguistic artifact \\
+Mixed remote, local, and linguistic plan & Feasible or infeasible by contract & Shared feasibility predicates and unified SDK trace across agent kinds \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 The last category is deliberately separated from planning infeasibility. A plan may be justified when authorized and still fail because the environment changes. Conflating these outcomes would obscure whether an error belongs to interpretation, planning, coordination, or execution.
 
-\section{Reporte de resultados}
+\section{Results Reporting}
 
 The primary results table must report, for each configuration, feasibility precision, feasibility recall, F1, invalid-plan rejection rate, task success rate, trace completeness, communication-boundary compliance, coordination-ownership compliance, median latency, message count, and model usage. Results must also be disaggregated by scenario category, agent kind, and runtime path. A single aggregate score is insufficient because a configuration can appear successful by accepting too many requests, by benefiting from a majority class, bypassing the SDK communication boundary, or placing planning authority in the wrong layer.
 
 For every false acceptance and false refusal, the analysis records the first incorrect decision and its cause. Runtime failures are classified separately as agent unavailability, transport error, invalid artifact, timeout, or aggregation failure. The worked example in Chapter~\ref{chap:theoretical-solution} serves as an explanatory case, not as empirical evidence.
 
-\section{Criterios para responder las preguntas de investigación}
+\section{Criteria for Answering the Research Questions}
 
-PI1 se sustenta cuando las trazas de los escenarios muestran que los registros de capacidad, compatibilidad, dependencia, autoridad, contrato y completitud son suficientes para reconstruir la decisión de referencia. PI2 se sustenta cuando el \texttt{CoordinationAgent} híbrido conserva cobertura de interpretación y, a la vez, rechaza propuestas inválidas que la variante sin viabilidad simbólica acepta. PI3 se sustenta cuando las capacidades auxiliares se admiten únicamente bajo las reglas declaradas de elegibilidad y ciclo de vida, sin satisfacer experiencia sustantiva ausente. PI4 se responde mediante las mediciones comparativas de resultado, proceso, cumplimiento de frontera, cumplimiento de propiedad y sobrecarga. Hasta que esas mediciones se recopilen, estos elementos siguen siendo criterios de evaluación y no hallazgos empíricos.
+RQ1 is supported when the scenario traces show that capability, compatibility, dependency, authority, contract, and completion records are sufficient to reconstruct the reference decision. RQ2 is supported when the hybrid \texttt{CoordinationAgent} retains interpretation coverage while rejecting invalid proposals that the variant without symbolic feasibility accepts. RQ3 is supported when auxiliary capabilities are admitted only under the stated eligibility and lifecycle rules and do not satisfy substantive missing expertise. RQ4 is answered by the comparative outcome, process, boundary-compliance, ownership-compliance, and overhead measurements. Until those measurements are collected, these remain evaluation criteria rather than empirical findings.

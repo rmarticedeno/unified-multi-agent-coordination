@@ -1,13 +1,13 @@
-\chapter{Introducción}
+\chapter{Introduction}
 \label{chap:introduction}
 
-\section{Contexto y motivación}
+\section{Context and Motivation}
 
 Autonomous systems increasingly coordinate components that differ in ownership, implementation, authority, and reasoning method. Large language models (LLMs) extend these systems with natural-language interpretation, flexible task decomposition, and explanation. Symbolic artificial intelligence (AI), in contrast, provides explicit representations of capabilities, constraints, plans, and state transitions. The two approaches are complementary: language models are effective at proposing meaning under ambiguity, whereas symbolic methods are effective at checking conditions that can be stated precisely.
 
 This complementarity does not automatically yield dependable coordination. An LLM can describe a plausible division of work even when no admitted agent possesses a required capability, two tasks exchange incompatible artifacts, or an action exceeds the authority granted to its executor. Free-form dialogue can also obscure whether an agent merely discussed a task, accepted a commitment, or supplied evidence of completion. These distinctions matter whenever coordinated agents can invoke tools, modify shared state, or affect an external environment.
 
-\section{Planteamiento del problema y brecha de investigación}
+\section{Problem Statement and Research Gap}
 
 Classical multi-agent systems provide explicit interaction protocols, commitments, organizational roles, and formal coordination mechanisms. Recent LLM-agent systems provide broad linguistic flexibility and tool-use interfaces. Emerging interoperability protocols improve connectivity among independently implemented agents. Nevertheless, these lines of work do not by themselves define when a natural-language coordination proposal is sufficiently justified for execution. In particular, connectivity does not establish semantic compatibility, and fluent agreement does not establish feasibility.
 
@@ -19,11 +19,11 @@ The scientific problem addressed by this thesis is therefore:
 
 The problem is not merely the construction of another agent platform. It is the absence of a precise operational boundary between a linguistically plausible proposal and a plan that the current system is justified in authorizing.
 
-\section{Objeto de estudio y campo de acción}
+\section{Object of Study and Field of Action}
 
 The \emph{object of study} is coordination in heterogeneous autonomous multi-agent systems. The \emph{field of action} is the hybrid mediation of natural-language requests into symbolically constrained plans, commitments, execution traces, and infeasibility decisions for independently implemented agents.
 
-\section{Objetivo de investigación}
+\section{Research Objective}
 
 The general objective is to design and specify a unified coordination framework that uses LLMs for semantic interpretation and candidate decomposition while using symbolic representations and deterministic checks to authorize, trace, or reject multi-agent plans.
 
@@ -37,25 +37,25 @@ The specific objectives are:
   \item Analyze the scope, limitations, validity threats, and practical implications of the proposed framework.
 \end{enumerate}
 
-\section{Preguntas de investigación}
+\section{Research Questions}
 
 The thesis is guided by the following questions:
 
 \begin{description}
-  \item[PI1] ¿Qué información de coordinación debe representarse explícitamente para distinguir un plan multiagente ejecutable de uno lingüísticamente plausible?
-  \item[PI2] ¿Cómo debe dividirse la responsabilidad entre el razonamiento basado en LLM y la validación simbólica en un flujo de coordinación heterogéneo?
-  \item[PI3] ¿Cómo pueden introducirse capacidades lingüísticas estrechas ausentes sin conceder nueva competencia o autoridad no acotada?
-  \item[PI4] ¿Qué medidas de resultado y de proceso permiten determinar si el marco propuesto mejora la aceptación justificada de planes, el rechazo explícito, la trazabilidad, la disciplina de la frontera de comunicación y la disciplina de propiedad de la coordinación frente a líneas base basadas solo en LLM y solo en reglas?
+  \item[RQ1] Which coordination information must be represented explicitly to distinguish an executable multi-agent plan from a linguistically plausible one?
+  \item[RQ2] How should responsibility be divided between LLM-based reasoning and symbolic validation in a heterogeneous coordination workflow?
+  \item[RQ3] How can missing narrow linguistic capabilities be introduced without granting unbounded new competence or authority?
+  \item[RQ4] Which outcome and process measures can determine whether the proposed framework improves justified plan acceptance, explicit refusal, traceability, communication-boundary discipline, and coordination-ownership discipline relative to LLM-only and rule-only baselines?
 \end{description}
 
-\section{Alcance y contribuciones}
+\section{Scope and Contributions}
 
 The thesis focuses on plan-level coordination under a trusted central authorization role and distributed execution. It does not claim to verify the internal reasoning of participating agents, solve Byzantine coordination, or guarantee runtime success after a plan is authorized. Within this scope, its contributions are: a formal separation between linguistic proposal and symbolic authorization; an explicit feasibility model; rules for bounded task-local auxiliary capabilities; a mapping from the theory to a coordination-agent design over A2A-compatible SDK middleware; and an evaluation protocol that measures both final outcomes and the validity of the process that produced them.
 
-\section{Enfoque metodológico}
+\section{Methodological Approach}
 
 The research follows a design-science approach. It combines a critical literature synthesis, formal and architectural modeling, implementation-oriented specification, and controlled scenario-based evaluation. The evaluation distinguishes planning feasibility from runtime success and includes ablations and baselines so that the effect of linguistic interpretation and symbolic validation can be assessed separately. Chapter~\ref{chap:methodology} explains this design in detail.
 
-\section{Organización de la tesis}
+\section{Thesis Organization}
 
 Chapter~\ref{chap:state-of-the-art} synthesizes the theoretical foundations and research gap. Chapter~\ref{chap:methodology} defines the research and evaluation method. Chapter~\ref{chap:theoretical-solution} presents the protocol-independent framework. Chapter~\ref{chap:implementation-design} maps it to a coordination-agent architecture over SDK middleware using A2A as the interoperability backbone. Chapter~\ref{chap:results} specifies the evaluation execution and reporting structure. Chapter~\ref{chap:discussion} examines the implications, limitations, and validity threats. The final chapter relates the contributions to the objectives and identifies future work.

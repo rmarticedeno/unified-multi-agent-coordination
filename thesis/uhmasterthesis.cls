@@ -184,11 +184,6 @@
 % Spanish names
 % -----------------------------
 \AtBeginDocument{%
-  \renewcommand{\contentsname}{Índice general}%
-  \renewcommand{\listfigurename}{Índice de figuras}%
   \renewcommand{\listtablename}{Índice de tablas}%
-  \renewcommand{\bibname}{Bibliografía}%
-  \renewcommand{\chaptername}{Capítulo}%
-  \renewcommand{\figurename}{Figura}%
   \renewcommand{\tablename}{Tabla}%
 }

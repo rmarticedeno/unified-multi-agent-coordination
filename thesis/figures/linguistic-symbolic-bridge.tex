@@ -9,19 +9,19 @@
   feedback/.style={-Latex, semithick, dashed},
   lane/.style={draw=black!50, dashed, rounded corners=2pt, inner sep=5pt}
 ]
-\node[linguistic] (utterance) {Expresión de usuario $u$};
-\node[linguistic, right=of utterance] (problem) {Problema candidato $\widehat{P}$};
-\node[symbolic, below=15mm of problem] (problemcheck) {Validación del\\contrato del problema};
-\node[symbolic, right=of problemcheck] (boundary) {Frontera operacional\\$\mathcal{B}(\mathcal{R})$};
-\node[symbolic, right=of boundary] (authorize) {Viabilidad y\\autorización};
-\node[symbolic, right=of authorize] (decision) {$\Pi$ o\\inviabilidad $I$};
-\node[linguistic, above=15mm of authorize] (candidate) {Plan candidato $\widehat{\Pi}$};
-\node[linguistic, above=15mm of decision] (explanation) {Decisión legible\\para humanos};
+\node[linguistic] (utterance) {User expression $u$};
+\node[linguistic, right=of utterance] (problem) {Candidate problem $\widehat{P}$};
+\node[symbolic, below=15mm of problem] (problemcheck) {Problem-contract\\validation};
+\node[symbolic, right=of problemcheck] (boundary) {Operational boundary\\$\mathcal{B}(\mathcal{R})$};
+\node[symbolic, right=of boundary] (authorize) {Feasibility and\\authorization};
+\node[symbolic, right=of authorize] (decision) {$\Pi$ or\\infeasibility $I$};
+\node[linguistic, above=15mm of authorize] (candidate) {Candidate plan $\widehat{\Pi}$};
+\node[linguistic, above=15mm of decision] (explanation) {Human-readable\\decision};
 
-\node[execution, below=15mm of decision] (commitments) {Compromisos};
-\node[execution, left=of commitments] (participants) {Agentes participantes};
-\node[execution, left=of participants] (observations) {Artefactos y\\observaciones};
-\node[execution, left=of observations] (structured) {Retroalimentación\\estructurada};
+\node[execution, below=15mm of decision] (commitments) {Commitments};
+\node[execution, left=of commitments] (participants) {Participating agents};
+\node[execution, left=of participants] (observations) {Artifacts and\\observations};
+\node[execution, left=of observations] (structured) {Structured feedback};
 
 \draw[flow] (utterance) -- node[above]{T1} (problem);
 \draw[flow] (problem) -- (problemcheck);
@@ -37,8 +37,8 @@
 \draw[feedback] (structured.north) -- node[left]{T4} (problemcheck.south);
 
 \begin{scope}[on background layer]
-  \node[lane, fit=(utterance)(problem)(candidate)(explanation), label=above left:{\scriptsize Carril lingüístico}] {};
-  \node[lane, fit=(problemcheck)(boundary)(authorize)(decision), label=above left:{\scriptsize Carril simbólico}] {};
-  \node[lane, fit=(structured)(observations)(participants)(commitments), label=below left:{\scriptsize Ejecución distribuida y retroalimentación}] {};
+  \node[lane, fit=(utterance)(problem)(candidate)(explanation), label=above left:{\scriptsize Linguistic lane}] {};
+  \node[lane, fit=(problemcheck)(boundary)(authorize)(decision), label=above left:{\scriptsize Symbolic lane}] {};
+  \node[lane, fit=(structured)(observations)(participants)(commitments), label=below left:{\scriptsize Distributed execution and feedback}] {};
 \end{scope}
 \end{tikzpicture}

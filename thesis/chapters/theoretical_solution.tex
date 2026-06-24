@@ -1,11 +1,11 @@
-\chapter{Marco teórico propuesto}
+\chapter{Proposed Theoretical Framework}
 \label{chap:theoretical-solution}
 
 This chapter develops the theoretical framework proposed by the thesis. The framework addresses a specific coordination problem: how a distributed collection of heterogeneous agents can accept a problem stated in natural language, establish whether the problem lies within its current operational boundary, and construct a coordinated solution without allowing linguistic plausibility to substitute for executable justification. The proposed answer combines a central coordinating authority with distributed execution, capability-based admission, explicit commitments, and a symbolic feasibility decision. Language-oriented components interpret and propose; symbolic components authorize, record, and reject when the available evidence is insufficient.
 
 The framework is intentionally independent of a particular communication protocol, model provider, programming language, or deployment platform. Chapter~\ref{chap:implementation-design} instantiates the concepts using concrete technologies, but those choices are not part of the theoretical claim. The present chapter instead defines the objects, boundaries, and properties that any conforming implementation must preserve.
 
-\section{Propósito y contribución}
+\section{Purpose and Contribution}
 
 Open multi-agent systems derive value from heterogeneity. Agents can differ in ownership, internal architecture, reasoning method, data access, and operational authority while still contributing to a shared objective. The same heterogeneity also complicates coordination. A fluent description of a capability does not establish that the capability exists; a plausible decomposition does not establish that its subtasks can exchange compatible artifacts; and a successful delegation message does not establish that the delegated work has been completed. These distinctions are especially important when large language models participate in interpretation and planning, because linguistic confidence can conceal missing capabilities or violated constraints.
 
@@ -18,11 +18,11 @@ Figure~\ref{fig:process-overview} summarizes this separation. The central coordi
 \begin{figure}[htbp]
 \centering
 \resizebox{0.96\textwidth}{!}{\input{figures/theoretical-overview}}
-\caption{Frontera conceptual del marco propuesto. La interpretación lingüística produce una representación candidata del problema; la autoridad coordinadora la evalúa contra el registro de la sesión y devuelve un plan autorizado o un informe explícito de inviabilidad. La ejecución permanece distribuida entre los agentes participantes.}
+\caption{Conceptual boundary of the proposed framework. Linguistic interpretation produces a candidate problem representation; the coordinating authority evaluates it against the session registry and returns either an authorized plan or an explicit infeasibility report. Execution remains distributed among participating agents.}
 \label{fig:process-overview}
 \end{figure}
 
-\section{Supuestos y requisitos de diseño}
+\section{Assumptions and Design Requirements}
 
 The framework rests on five assumptions. First, participating agents are treated as black boxes with respect to their internal reasoning. An agent may use rules, a planner, a language model, retrieval, statistical learning, deterministic software, or a hybrid of these methods. Coordination depends only on the contract the agent exposes and on the evidence it returns. Second, the registry is evaluated as a session-level snapshot. Agents may join, leave, or change between sessions, but a feasibility decision is made against a definite set of available descriptions and states.
 
@@ -34,7 +34,7 @@ These requirements create a deliberate asymmetry. Execution is distributed, but 
 
 The scope is correspondingly limited. The framework does not prove the correctness of an agent's internal reasoning, guarantee that an accepted plan will succeed at runtime, optimize resource allocation in competitive markets, or provide decentralized consensus. It also does not replace an agent communication language or transport protocol. Its claim is narrower: under the stated assumptions, it makes the basis for plan acceptance, delegation, and refusal explicit and testable.
 
-\section{Modelo conceptual de agentes y capacidades}
+\section{Conceptual Model of Agents and Capabilities}
 
 The conceptual model separates an agent's implementation from its externally relevant coordination state. This permits a language-model agent, a symbolic planner, a database service, and a deterministic program to participate under the same abstraction without implying that their internal forms of autonomy are identical.
 
@@ -78,7 +78,7 @@ The operational boundary $\mathcal{B}(\mathcal{R})$ is the set of agent--capabil
 
 The boundary is evaluated rather than presumed. It may contract when an agent becomes unavailable or loses authority, and it may expand when a new agent is admitted. Task-local auxiliary capabilities can extend it only under the bounded rules defined later in this chapter. The boundary therefore describes what the system can justify at a particular decision point, not what it might be able to learn or deploy in the future.
 
-\section{Agentes lingüísticos y mediación simbólica}
+\section{Linguistic Agents and Symbolic Mediation}
 
 A linguistic agent is an agent whose principal capabilities transform, interpret, or produce language-mediated artifacts. Typical capabilities include intent interpretation, summarization, classification, translation, information extraction, semantic matching, question answering, and natural-language explanation. Such agents are necessary because user goals and capability descriptions frequently arrive as prose, whereas coordination requires structured task and artifact contracts.
 
@@ -89,13 +89,15 @@ An agent $a$ is linguistic with respect to a capability $c \in C(a)$ when the co
 
 This definition concerns function rather than implementation. A linguistic agent may use a large language model, a smaller statistical model, rules, retrieval, a controlled vocabulary, or a hybrid pipeline. Broad contextual interpretation may justify an LLM, whereas language detection, constrained extraction, or normalization may be implemented more simply. Treating every language operation as an LLM task would weaken the simplicity requirement and could increase cost, latency, and uncertainty without adding relevant capability.
 
-The linguistic--symbolic bridge is consequently modeled as a sequence of artifacts and validation boundaries, not as a single translation component. The theory requires that linguistic mediation produce typed, inspectable candidate artifacts rather than authoritative execution decisions. Interpretation and proposal outputs must remain distinguishable from authorization evidence, must preserve relevant uncertainty or ambiguity, and must be bound to explicit schemas, modalities, contracts, or constraints before they can be evaluated. Four transitions define the core loop.
+The linguistic--symbolic bridge is consequently modeled as a sequence of artifacts and validation boundaries, not as a single translation component. Four transitions define the core loop.
+
+A concrete implementation may realize this bridge through a conversational-modeling toolkit such as Lingo \cite{lingo2026}. Lingo is not part of the theoretical claim, and the framework does not depend on that particular library. It is useful as an implementation witness because its primitives separate typed conversational state from model output. In such an instantiation, a Lingo \texttt{Context} can serve as the mutable linguistic ledger used by interpretation and trace generation; \texttt{Engine.create}, \texttt{Engine.decide}, and \texttt{Engine.choose} can implement controlled proposal operations; \texttt{Flow} can encode procedural candidate-planning workflows; \texttt{StateMachine} can represent deterministic workflow states; Pydantic-backed schemas can materialize capability and artifact contracts; and \texttt{@app.when} reflexes can provide early guardrails or context injection. None of these mechanisms authorizes execution by itself. They support T1 and T2, and may help render T4 observations, but the accepted plan remains the result of the symbolic authorization step in T3.
 
 \begin{description}
-  \item[Transición T1: interpretación.] A user expression $u$ is transformed into a candidate problem representation $\widehat{P}$. Because interpretation may be uncertain, $\widehat{P}$ is not yet authoritative. Required fields, explicit constraints, ambiguities, and referenced artifacts are checked before it is admitted as $P$.
-  \item[Transición T2: propuesta.] Given the admitted problem and $\mathcal{B}(\mathcal{R})$, a linguistic reasoner proposes a candidate decomposition $\widehat{\Pi}$. This stage may use semantic matching to compare the goal with natural-language capability descriptions. It proposes assignments but does not authorize them.
-  \item[Transición T3: autorización.] Symbolic predicates evaluate $\widehat{\Pi}$ against capability coverage, data-flow compatibility, dependencies, availability, authority, and evidence contracts. The result is an accepted plan $\Pi$ or an infeasibility report $I$.
-  \item[Transición T4: anclaje de retroalimentación.] Status updates, artifacts, timeouts, invalid outputs, and protocol errors become structured observations linked to the corresponding task and commitment. These observations may discharge a commitment, trigger bounded replanning, or terminate the plan with an execution failure.
+  \item[Transition T1: interpretation.] A user expression $u$ is transformed into a candidate problem representation $\widehat{P}$. Because interpretation may be uncertain, $\widehat{P}$ is not yet authoritative. Required fields, explicit constraints, ambiguities, and referenced artifacts are checked before it is admitted as $P$.
+  \item[Transition T2: proposal.] Given the admitted problem and $\mathcal{B}(\mathcal{R})$, a linguistic reasoner proposes a candidate decomposition $\widehat{\Pi}$. This stage may use semantic matching to compare the goal with natural-language capability descriptions. It proposes assignments but does not authorize them.
+  \item[Transition T3: authorization.] Symbolic predicates evaluate $\widehat{\Pi}$ against capability coverage, data-flow compatibility, dependencies, availability, authority, and evidence contracts. The result is an accepted plan $\Pi$ or an infeasibility report $I$.
+  \item[Transition T4: feedback grounding.] Status updates, artifacts, timeouts, invalid outputs, and protocol errors become structured observations linked to the corresponding task and commitment. These observations may discharge a commitment, trigger bounded replanning, or terminate the plan with an execution failure.
 \end{description}
 
 Natural-language explanations may be rendered from either $\Pi$ or $I$, but the explanation is not the authoritative state. The symbolic artifact remains available for inspection and execution. Figure~\ref{fig:theoretical-bridge} shows the flow across the three conceptual lanes.
@@ -103,13 +105,13 @@ Natural-language explanations may be rendered from either $\Pi$ or $I$, but the 
 \begin{figure}[htbp]
 \centering
 \input{figures/linguistic-symbolic-bridge}
-\caption{Flujo de artefactos entre los carriles lingüístico, simbólico y de ejecución distribuida. Los componentes lingüísticos producen representaciones candidatas; la validación simbólica autoriza un plan o registra la inviabilidad; las observaciones de ejecución regresan mediante una ruta estructurada de retroalimentación.}
+\caption{Artifact flow across the linguistic, symbolic, and distributed-execution lanes. Linguistic components produce candidate representations; symbolic validation authorizes a plan or records infeasibility; execution observations return through a structured feedback path.}
 \label{fig:theoretical-bridge}
 \end{figure}
 
 The framework is compatible with, but not equivalent to, classical BDI terminology. The admitted problem contributes to the coordinator's beliefs, a candidate plan represents a proposed course of action, and authorization establishes an intention-like commitment to execution \cite{rao1991modeling,rao1995bdi}. This is an architectural analogy rather than a claim that the tuples defined here constitute a complete BDI semantics. Similarly, structured delegations and status reports can carry communicative forces related to request, inform, and commit \cite{austin1962how,searle1969speech,cohen1990intention,fipa2002acl}, but their exact message encoding belongs to the implementation layer.
 
-\section{Capacidades lingüísticas auxiliares acotadas}
+\section{Bounded Auxiliary Linguistic Capabilities}
 
 An admitted registry will not contain every narrow language transformation that a decomposition may require. Rejecting an otherwise feasible plan because a trivial normalization or extraction step is absent can be disproportionate; assigning the same step to a general-purpose LLM can also be unnecessarily complex. The framework therefore permits a task-local auxiliary linguistic capability when the missing operation can be constructed from an approved, bounded method and validated against an explicit contract.
 
@@ -148,7 +150,7 @@ The lifecycle token $\lambda$ limits the auxiliary capability to its plan, and e
 
 These rules distinguish a bounded micro-capability from an attempt to synthesize expertise. Extracting fields from a fixed schema, normalizing a constrained identifier, or applying an approved classifier may be eligible. Producing a medical diagnosis, forecasting an unconstrained market, or generating privileged database operations is not eligible merely because a language model can describe a procedure. When no registered capability and no admissible auxiliary specification covers a requirement, the correct planning result is infeasibility.
 
-\section{Coordinación, compromisos y abstracción de comunicación}
+\section{Coordination, Commitments, and Communication Abstraction}
 
 The framework uses hierarchical coordination in a limited sense. The coordinator owns interpretation state, the registry snapshot, candidate-plan evaluation, and acceptance of the joint plan. Participating agents retain autonomy over whether and how they execute a delegated capability, subject to their advertised contracts. The hierarchy therefore establishes responsibility for the global decision without converting distributed agents into internal modules of the coordinator.
 
@@ -165,16 +167,16 @@ where $d$ is the debtor agent, $r$ is the coordinating creditor acting on behalf
 
 A commitment is created only after plan authorization and delegation acceptance. It is discharged when the expected artifact and evidence satisfy the task contract, or terminated with a recorded failure. Maintaining commitments as symbolic state addresses a weakness of conversation-only coordination: dialogue can indicate willingness, but it does not by itself establish who owes which artifact or what observation counts as completion \cite{singh1999commitments}.
 
-\subsection{Propiedades de comunicación requeridas}
+\subsection{Required Communication Properties}
 \label{sec:protocol}
 
 The communication layer transports coordination artifacts but does not decide their meaning. To preserve the theory, an implementation must provide authenticated addressability, correlated task delegation, capability and contract conveyance, status and artifact delivery, timeout and cancellation semantics, and detectable failures. Messages associated with a session must carry enough identity and correlation information to reconstruct their causal order even when the underlying transport does not guarantee global ordering.
 
 Capability descriptions must be versioned or otherwise bound to the registry snapshot used for feasibility. Delegations must identify the task, plan, expected artifact, and applicable lifecycle. Results must identify their producing agent and task so that validation and commitment discharge are unambiguous. Duplicate, delayed, or out-of-order messages must be detectable and handled idempotently at the coordination layer. Lack of progress must become an observable timeout rather than an assumption that the agent remains active.
 
-These requirements define a communication abstraction, not a specific protocol. Any protocol or composition of protocols may instantiate it if the required artifacts and observations can be represented without exposing agent internals. If an implementation packages communication behind a middleware boundary, that boundary remains subordinate to the coordinating authority: it supplies capability records, task transport, artifact observations, and failure reports, while planning, feasibility, and authorization remain coordination responsibilities. Substitutability is therefore conditional: changing the transport or runtime must not change the semantics of capability admission, task correlation, commitment state, or feasibility evidence.
+These requirements define a communication abstraction, not a specific protocol. Any protocol or composition of protocols may instantiate it if the required artifacts and observations can be represented without exposing agent internals. An implementation may package this abstraction as a middleware SDK that is the only public communication boundary used by the coordinating agent. Such an SDK can use A2A for remote interoperability, local runtimes for deterministic tools, and linguistic runtimes such as Lingo for language-mediated capabilities, provided that all of them expose the same capability, task, artifact, and trace contracts to the feasibility model. Planning, feasibility, and authorization remain responsibilities of the coordinating agent above the SDK. Substitutability is therefore conditional: changing the transport or runtime must not change the semantics of capability admission, task correlation, commitment state, or feasibility evidence.
 
-\section{Modelo de viabilidad}
+\section{Feasibility Model}
 \label{sec:feasibility-boundary}
 
 Feasibility is a pre-execution judgment about whether a plan is justified by the current contracts and constraints. It is not a prediction that every agent will execute successfully. Runtime failure remains possible and is handled through commitment state and structured feedback. This separation is essential: without it, a failed execution could be mistaken for an unsound planning decision, or an optimistic planning decision could be defended by a later successful accident.
@@ -226,7 +228,7 @@ An infeasibility report is a structured artifact $I=(\mathit{code},U,E,H)$, wher
 
 The operational boundary is dynamic across sessions but fixed for a single authorization decision. If the registry changes during planning, the candidate must be re-evaluated against the new snapshot. If it changes after authorization, the affected commitment becomes unavailable or invalid and enters the feedback loop. This rule avoids accepting a plan from a capability view that no longer corresponds to the agents available for execution.
 
-\section{Propiedades del marco}
+\section{Properties of the Framework}
 
 The following properties state the behavior expected from a conforming implementation. They are conditional on the assumptions and contract descriptions introduced above; they are not claims about the internal correctness of arbitrary agents.
 
@@ -257,7 +259,7 @@ At the planning boundary, the coordinator returns either an accepted plan or an 
 
 These properties provide evaluation targets rather than completed proofs. The implementation must operationalize each predicate, and the empirical evaluation must examine whether observed traces conform to the stated behavior.
 
-\section{Ejemplo desarrollado}
+\section{Worked Example}
 
 Consider a registry snapshot containing three agents. Agent $a_1$ summarizes English documents and returns a textual summary with source references. Agent $a_2$ computes arithmetic expressions over typed numeric inputs and returns both a value and a reproducible calculation trace. Agent $a_3$ executes read-only aggregate queries expressed through a constrained query object and returns a tabular artifact. All three agents are available and admitted for the relevant data.
 
@@ -270,7 +272,7 @@ The candidate plan contains tasks $t_1$ for summarization, $t_2$ for percentage 
 \begin{figure}[htbp]
 \centering
 \resizebox{0.96\textwidth}{!}{\input{figures/worked-example-task-graph}}
-\caption{Grafo de tareas y artefactos para el ejemplo desarrollado. El extractor temporal $x_1$ realiza únicamente la selección acotada de campos Q1/Q2; los agentes registrados mantienen la responsabilidad de resumir, calcular y agregar de forma restringida.}
+\caption{Task-and-artifact graph for the worked example. The temporary extractor $x_1$ performs only the bounded Q1/Q2 field selection; registered agents remain responsible for summarization, calculation, and constrained aggregation.}
 \label{fig:worked-example}
 \end{figure}
 
@@ -280,7 +282,7 @@ Now extend the request with ``predict next year's revenue.'' No registered agent
 
 The example illustrates the intended division of labor. Linguistic interpretation identifies the requested operations and proposes a decomposition. Symbolic authorization verifies the exact capability and artifact chain. Auxiliary synthesis is used only for a narrow, controlled transformation. Explicit refusal preserves the boundary when the missing capability is substantive.
 
-\section{Limitaciones y síntesis del capítulo}
+\section{Limitations and Chapter Synthesis}
 
 The framework has several limitations. Its contractual reasoning depends on the quality and honesty of admitted descriptions. A malicious or substantially inaccurate capability claim can invalidate the justification even if the coordinator applies the predicates correctly. Trust establishment, attestation, reputation, and adversarial admission are therefore complementary research problems. The session-snapshot model also simplifies highly dynamic environments; frequent changes may require repeated authorization and could reduce practical liveness.
 

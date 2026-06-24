@@ -7,20 +7,20 @@
   result/.style={draw=black!85, very thick, rounded corners=2pt, fill=black!8, align=center, text width=24mm, minimum height=14mm},
   flow/.style={-Latex, semithick}
 ]
-\node[input] (report) at (0,2.1) {Informe trimestral};
-\node[task] (summarize) at (3.2,2.1) {$t_1$: resumir\\ejecutor $a_1$};
-\node[artifact] (summary) at (6.2,2.1) {Resumen};
+\node[input] (report) at (0,2.1) {Quarterly report};
+\node[task] (summarize) at (3.2,2.1) {$t_1$: summarize\\executor $a_1$};
+\node[artifact] (summary) at (6.2,2.1) {Summary};
 
-\node[aux] (extract) at (3.2,0.3) {$x_1$: extraer\\valores Q1/Q2};
-\node[artifact] (pair) at (6.2,0.3) {Par de ingresos};
-\node[task] (calculate) at (9.2,0.3) {$t_2$: porcentaje\\ejecutor $a_2$};
-\node[artifact] (percentage) at (11.9,0.3) {Porcentaje};
+\node[aux] (extract) at (3.2,0.3) {$x_1$: extract\\Q1/Q2 values};
+\node[artifact] (pair) at (6.2,0.3) {Revenue pair};
+\node[task] (calculate) at (9.2,0.3) {$t_2$: percentage\\executor $a_2$};
+\node[artifact] (percentage) at (11.9,0.3) {Percentage};
 
-\node[input] (query) at (0,-1.5) {Solicitud agregada\\tipada};
-\node[task] (analytics) at (3.2,-1.5) {$t_3$: clientes principales\\ejecutor $a_3$};
-\node[artifact] (table) at (6.2,-1.5) {Tabla de clientes};
+\node[input] (query) at (0,-1.5) {Typed aggregate\\request};
+\node[task] (analytics) at (3.2,-1.5) {$t_3$: top customers\\executor $a_3$};
+\node[artifact] (table) at (6.2,-1.5) {Customer table};
 
-\node[result] (result) at (13.2,1.8) {Resultado\\agregado};
+\node[result] (result) at (13.2,1.8) {Aggregated\\result};
 
 \draw[flow] (report) -- (summarize);
 \draw[flow] (summarize) -- (summary);
@@ -35,5 +35,5 @@
 \draw[flow] (table.east) -| ($(result.south)+(0,-2mm)$);
 
 \node[draw=black!55, dashed, rounded corners=2pt, fit=(extract), inner sep=4pt,
-  label=below:{\scriptsize capacidad auxiliar local a la tarea}] {};
+  label=below:{\scriptsize task-local auxiliary capability}] {};
 \end{tikzpicture}
