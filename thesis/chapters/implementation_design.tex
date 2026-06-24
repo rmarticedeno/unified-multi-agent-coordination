@@ -1,7 +1,7 @@
-\chapter{System Design: Coordination Agent over SDK Middleware}
+\chapter{Diseño del sistema: agente de coordinación sobre middleware SDK}
 \label{chap:implementation-design}
 
-\section{Instantiation of the Framework}
+\section{Instanciación del marco}
 
 This chapter instantiates the theoretical framework from Chapter~\ref{chap:theoretical-solution} as a Python coordination agent built over a middleware SDK. The implementation design keeps the theoretical contribution protocol-independent, but it chooses the Agent2Agent (A2A) protocol as the canonical interoperability backbone for concrete communication. A2A is an open protocol intended to support communication and coordination among agents built with different technologies. Its project documentation describes standardized communication, Agent Cards for discovery, flexible interaction patterns, and rich data exchange through text, files, and structured JSON \cite{a2aproject2025}. Google's announcement similarly frames A2A as an open protocol for secure information exchange and coordination among agents across enterprise platforms \cite{google2025a2a}.
 
@@ -12,6 +12,8 @@ The implementation separates two roles. \texttt{CoordinationSdk} is the communic
 A2A remains the default wire model for independently deployed agents. Remote agents are admitted through A2A Agent Cards and invoked through A2A-compatible task exchange. Local Python agents and Lingo-based linguistic agents are registered through the SDK and normalized into the same internal agent records, with identity, capabilities, input and output modes, trust metadata, invocation endpoint, and validation contract. Local and linguistic agent authors are therefore not required to implement A2A plumbing, while the coordination agent can reason over a uniform registry.
 
 The prototype also uses Lingo as an optional linguistic and context-engineering substrate \cite{lingo2026}. Lingo is not hidden inside the SDK as a coordinator. Instead, Lingo-backed interpretation, extraction, classification, or candidate-planning behavior is exposed as SDK-registered linguistic capabilities. Non-linguistic local agents can use the SDK without depending on Lingo. The prototype dependency set pins \texttt{lingo-ai==2.0.2} and uses \texttt{a2a-sdk}, \texttt{pydantic}, \texttt{httpx}, \texttt{pytest}, and \texttt{pytest-asyncio} for the executable implementation and tests.
+
+Lingo is therefore an implementation witness for the abstract transitions defined in Chapter~\ref{chap:theoretical-solution}. A Lingo \texttt{Context} can serve as the mutable linguistic ledger used by interpretation and trace generation. \texttt{Engine.create}, \texttt{Engine.decide}, and \texttt{Engine.choose} can implement controlled proposal operations. \texttt{Flow} can encode procedural candidate-planning workflows, while \texttt{StateMachine} can represent deterministic workflow states. Pydantic-backed schemas can materialize capability and artifact contracts, and \texttt{@app.when} reflexes can provide early guardrails or context injection. These mechanisms support interpretation, proposal, and feedback grounding; they do not authorize execution by themselves.
 
 The mapping between formal objects and implementation records is direct. The records defined in Section~\ref{sec:data-structures} materialize the formal objects of Chapter~\ref{chap:theoretical-solution} as follows.
 
@@ -30,7 +32,7 @@ The mapping between formal objects and implementation records is direct. The rec
 
 Each of the five properties stated in Chapter~\ref{chap:theoretical-solution} (justified acceptance, simplicity, bounded auxiliary synthesis, traceability, and explicit refusal) corresponds to a concrete decision or trace event owned by the \texttt{CoordinationAgent}, supported by communication evidence supplied through the SDK.
 
-\section{System Components}
+\section{Componentes del sistema}
 
 The proposed implementation is organized around a coordinating agent above a middleware SDK. The \texttt{CoordinationAgent} is the planner and authorizer. It receives user requests, maintains coordination state, requests linguistic interpretation when needed, constructs candidate plans, applies deterministic feasibility checks, decides whether to authorize or refuse the plan, dispatches authorized work through the SDK, and aggregates the final result.
 
@@ -40,26 +42,26 @@ The private SDK subsystems keep communication responsibilities simple. The Regis
 
 \begin{table}[htbp]
 \centering
-\caption{Implementation components mapped to theoretical concepts.}
+\caption{Componentes de implementación mapeados a conceptos teóricos.}
 \label{tab:implementation-components}
 \begin{tabular}{p{0.30\textwidth}p{0.58\textwidth}}
 \toprule
-\textbf{Component} & \textbf{Role in the implementation} \\
+\textbf{Componente} & \textbf{Rol en la implementación} \\
 \midrule
-\texttt{CoordinationAgent} & Owns interpretation workflow, direct matching, decomposition, feasibility checks, auxiliary decisions, authorization, and final result construction. \\
-\texttt{CoordinationSdk} & Exposes middleware operations for registration, registry inspection, capability indexing, task dispatch, artifact normalization, runtime failure reporting, traces, and session reset. \\
-\texttt{FeasibilityAnalyzer} & Applies deterministic checks for the \texttt{CoordinationAgent}; it is not part of the SDK's communication boundary. \\
-A2A Gateway & Handles Agent Card ingestion and A2A-compatible communication with remote agents. \\
-Local Agent Runtime & Wraps Python handlers and deterministic local tools as SDK-managed agent capabilities. \\
-Lingo Agent Runtime & Wraps optional Lingo apps, flows, tools, state machines, and guardrails as ordinary SDK capabilities. \\
-SDK Trace Store & Tracks communication events, runtime failures, task status, and artifact observations. \\
-Artifact Normalizer & Converts remote, local, and linguistic outputs into records usable by validators and aggregators. \\
-Auxiliary Capability Factory & Used by the \texttt{CoordinationAgent} to specify temporary lightweight linguistic agents when justified. \\
+\texttt{CoordinationAgent} & Posee el flujo de interpretación, correspondencia directa, descomposición, verificaciones de viabilidad, decisiones auxiliares, autorización y construcción del resultado final. \\
+\texttt{CoordinationSdk} & Expone operaciones de middleware para registro, inspección del registro, indexación de capacidades, despacho de tareas, normalización de artefactos, reporte de fallos en tiempo de ejecución, trazas y reinicio de sesión. \\
+\texttt{FeasibilityAnalyzer} & Aplica verificaciones deterministas para \texttt{CoordinationAgent}; no forma parte de la frontera de comunicación del SDK. \\
+Pasarela A2A & Gestiona la ingesta de Agent Cards y la comunicación compatible con A2A con agentes remotos. \\
+Runtime de agente local & Envuelve manejadores de Python y herramientas locales deterministas como capacidades de agentes administradas por el SDK. \\
+Runtime de agente Lingo & Envuelve aplicaciones, flujos, herramientas, máquinas de estado y guardrails opcionales de Lingo como capacidades ordinarias del SDK. \\
+Almacén de trazas del SDK & Rastrea eventos de comunicación, fallos en tiempo de ejecución, estado de tareas y observaciones de artefactos. \\
+Normalizador de artefactos & Convierte salidas remotas, locales y lingüísticas en registros utilizables por validadores y agregadores. \\
+Fábrica de capacidades auxiliares & Usada por \texttt{CoordinationAgent} para especificar agentes lingüísticos temporales y ligeros cuando están justificados. \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\section{Agent Registration and Communication Boundary}
+\section{Registro de agentes y frontera de comunicación}
 
 The SDK admits three kinds of agents through one communication boundary. A remote A2A agent is registered with \texttt{register\_a2a\_agent(agent\_card\_url, trust\_level=...)}. The SDK fetches the Agent Card, validates the metadata, extracts identity, service endpoint, skills, modalities, and security requirements, and converts them into an internal registry entry. Because the external representation remains A2A-compatible, other conforming A2A implementations can participate without custom glue.
 
@@ -69,7 +71,7 @@ A linguistic agent is registered through the SDK's linguistic-agent registration
 
 No registered agent communicates directly with another registered agent through application-level shortcuts. The \texttt{CoordinationAgent} also does not bypass the SDK to reach remote transports, local handlers, or Lingo runtimes. This preserves one communication boundary while keeping planning and feasibility outside the SDK.
 
-\section{Minimum Data Structures}
+\section{Estructuras de datos mínimas}
 \label{sec:data-structures}
 
 The implementation can be described through two public surfaces and a set of typed conceptual records. The records are represented as Pydantic models in the prototype so that Lingo structured generation, deterministic validation, SDK registration, coordination-agent planning, and test fixtures use the same schema surface. The records are not tied to a deployment platform; they define the information that the prototype must preserve.
@@ -174,7 +176,7 @@ TraceEvent:
 
 The \texttt{CoordinationSdk} public surface is intentionally limited to registration, inspection, dispatch, trace access, and session control. It hides the differences among remote A2A agents, local Python agents, and Lingo-backed linguistic agents while preserving enough metadata for the coordination agent to apply feasibility rules uniformly. The \texttt{CoordinationAgent} public surface contains the complete coordination workflow and feasibility query. The \texttt{AgentRegistry\allowbreak Entry} materializes the discoverable agent set. The \texttt{Capability\allowbreak Requirement} and \texttt{Problem\allowbreak Request} represent the user's goal, constraints, required capabilities, and required artifacts. The \texttt{Solution\allowbreak Proposal} is a candidate plan, not an executable plan until accepted. The \texttt{Feasibility\allowbreak Report} explains whether the coordination agent can solve the problem and why. The \texttt{Generated\allowbreak Nlp\allowbreak Agent\allowbreak Spec} represents a temporary linguistic capability, such as a classifier or extractor, that can be created for the current solution without becoming a permanent system agent. The \texttt{Coordinator\allowbreak State} and \texttt{Trace\allowbreak Event} records provide the auditable ledger required by the traceability property.
 
-\section{Coordinator Workflow}
+\section{Flujo de trabajo del coordinador}
 
 The application-level coordinator is \texttt{CoordinationAgent}. It talks to the distributed system only through \texttt{CoordinationSdk}, but it keeps planning and authorization outside the SDK. This means the SDK is reusable for non-coordinating clients, while the thesis contribution remains concentrated in the coordination agent's feasibility-aware workflow.
 
@@ -226,15 +228,15 @@ Task dispatch remains polymorphic inside the SDK but not visible to the coordina
 
 This workflow keeps the LLM useful but bounded. Lingo may supply typed context handling and structured proposal mechanisms through SDK-registered linguistic capabilities, but it does not alone decide feasibility. Deterministic checks remain responsible for explicit properties such as availability, modality compatibility, declared skills, authority, and missing capabilities. Lingo's native tool-calling interface may be useful for controlled experiments that intentionally remove symbolic checks, but the main hybrid implementation uses developer-controlled structured output so that symbolic authorization remains explicit.
 
-\section{Local and Linguistic Agent Specializations}
+\section{Especializaciones de agentes locales y lingüísticos}
 
 The SDK treats local and linguistic agents as specializations of the same communication boundary rather than as separate architectural paths. A local agent is appropriate when the capability is deterministic, symbolic, scriptable, or already implemented in Python. Examples include a rule-based planner, a schema validator, a database wrapper, a file transformer, or a mathematical tool. The SDK supplies the communication wrapper, so the local agent author focuses on the capability contract and handler behavior.
 
-A linguistic agent is appropriate when the capability transforms, interprets, classifies, summarizes, or produces language-mediated artifacts. It may be implemented with Lingo, an LLM, a smaller NLP model, rules, retrieval, or a hybrid pipeline. In the prototype, Lingo can realize both broad and narrow linguistic work: \texttt{Engine.create} can extract a typed object, \texttt{Engine.decide} can perform a bounded binary classification, \texttt{Engine.choose} can select from an enumerated set, \texttt{Flow} can encode a procedural workflow, and a \texttt{StateMachine} can constrain a multi-step dialogue.
+A linguistic agent is appropriate when the capability transforms, interprets, classifies, summarizes, or produces language-mediated artifacts. It may be implemented with Lingo, an LLM, a smaller NLP model, rules, retrieval, or a hybrid pipeline. When a registered linguistic capability is implemented with Lingo, it follows the primitive mapping described at the beginning of this chapter; other implementations must still expose the same typed capability, artifact, and validation contracts to the SDK.
 
 Generated NLP agents are solution-local. The \texttt{CoordinationAgent} includes their specifications in the \texttt{SolutionProposal}, including purpose, method, expected input, expected output, validation rule, and lifecycle. They do not automatically enter the registry. Promotion to a persistent registered agent would require a separate SDK admission process.
 
-\section{Architecture Diagram}
+\section{Diagrama de arquitectura}
 
 Figure~\ref{fig:implementation-architecture} summarizes the implementation structure. The diagram is intentionally abstract enough to support later coding choices while still showing that coordination logic belongs to \texttt{CoordinationAgent}, while communication and runtime adaptation belong to \texttt{CoordinationSdk}.
 
@@ -243,34 +245,34 @@ Figure~\ref{fig:implementation-architecture} summarizes the implementation struc
 \fbox{
 \begin{minipage}{0.90\textwidth}
 \centering
-User Problem or Application Request\\
+Problema del usuario o solicitud de aplicación\\
 $\downarrow$\\
 \texttt{CoordinationAgent}\\
 $\downarrow$\\
 \begin{tabular}{ccc}
-Problem Interpretation & Feasibility Analyzer & Plan / Result Aggregation \\
+Interpretación & Viabilidad & Agregación \\
 \end{tabular}\\
 $\downarrow$\\
-\texttt{CoordinationSdk} Middleware Boundary\\
+Frontera de middleware \texttt{CoordinationSdk}\\
 $\downarrow$\\
 \begin{tabular}{ccc}
-A2A Gateway & Local Agent Runtime & Lingo Agent Runtime \\
+Pasarela A2A & Runtime local & Runtime Lingo \\
 \end{tabular}\\
 $\downarrow$\\
 \begin{tabular}{ccc}
-Remote A2A Agents & Local Python Agents & Linguistic Agents \\
+A2A remotos & Python locales & Lingüísticos \\
 \end{tabular}\\
 $\downarrow$\\
-Artifacts, Status, Failures, and Communication Trace\\
+Artefactos, estados, fallos y traza de comunicación\\
 $\downarrow$\\
-Final Result or Structured Infeasibility Report
+Resultado final o informe estructurado de inviabilidad
 \end{minipage}
 }
-\caption{CoordinationAgent over SDK middleware for A2A-compatible coordination across remote, local, and linguistic agents.}
+\caption{\texttt{CoordinationAgent} sobre middleware SDK para coordinación compatible con A2A entre agentes remotos, locales y lingüísticos.}
 \label{fig:implementation-architecture}
 \end{figure}
 
-\section{Execution Sequence}
+\section{Secuencia de ejecución}
 
 The execution sequence begins when the user or application submits a problem request to \texttt{CoordinationAgent.coordinate}. The coordination agent asks the SDK for the current registry snapshot and capability index. It obtains a typed problem representation from a structured caller or by invoking a registered linguistic capability through the SDK. The coordination agent then attempts direct matching before considering decomposition. The \texttt{FeasibilityAnalyzer} checks the candidate plan and either approves it, permits an auxiliary NLP specification to be added, or rejects it as infeasible. Approved tasks are dispatched through \texttt{sdk.send\_task(...)}. The SDK chooses the correct internal runtime, records status and failures, normalizes artifacts, and exposes communication trace events. The coordination agent aggregates the authorized outputs or returns an infeasibility report.
 
@@ -279,29 +281,29 @@ The execution sequence begins when the user or application submits a problem req
 \fbox{
 \begin{minipage}{0.88\textwidth}
 \begin{enumerate}
-\item User or application submits a problem and constraints to \texttt{CoordinationAgent}.
-\item Coordination agent reads registry and capabilities through \texttt{CoordinationSdk}.
-\item Coordination agent obtains or constructs a typed \texttt{ProblemRequest}.
-\item Coordination agent attempts direct capability matching before decomposition.
-\item Coordination agent requests candidate planning only when direct matching is insufficient.
-\item Feasibility Analyzer validates skills, modalities, dependencies, authority, and evidence contracts.
-\item Auxiliary Capability Factory adds a temporary specification only when justified.
-\item Coordination agent dispatches authorized tasks through \texttt{sdk.send\_task(...)}.
-\item SDK records runtime status, errors, artifacts, and communication evidence.
-\item Coordination agent returns the final result or a structured infeasibility report.
+\item El usuario o la aplicación envía un problema y restricciones a \texttt{CoordinationAgent}.
+\item El agente de coordinación lee el registro y las capacidades mediante \texttt{CoordinationSdk}.
+\item El agente de coordinación obtiene o construye un \texttt{ProblemRequest} tipado.
+\item El agente de coordinación intenta correspondencia directa de capacidades antes de la descomposición.
+\item El agente de coordinación solicita planificación candidata solo cuando la correspondencia directa es insuficiente.
+\item El analizador de viabilidad valida habilidades, modalidades, dependencias, autoridad y contratos de evidencia.
+\item La fábrica de capacidades auxiliares añade una especificación temporal solo cuando está justificada.
+\item El agente de coordinación despacha tareas autorizadas mediante \texttt{sdk.send\_task(...)}.
+\item El SDK registra estado en tiempo de ejecución, errores, artefactos y evidencia de comunicación.
+\item El agente de coordinación devuelve el resultado final o un informe estructurado de inviabilidad.
 \end{enumerate}
 \end{minipage}
 }
-\caption{Execution sequence for CoordinationAgent-mediated problem solving.}
+\caption{Secuencia de ejecución para la resolución de problemas mediada por \texttt{CoordinationAgent}.}
 \label{fig:execution-sequence}
 \end{figure}
 
-\section{Failure and Infeasibility Handling}
+\section{Manejo de fallos e inviabilidad}
 
 The implementation treats infeasibility as a first-class coordination-agent result. If no remote, local, linguistic, or approved auxiliary capability can satisfy a required subtask, the \texttt{CoordinationAgent} returns a structured report. If an agent is unavailable, the coordination agent may select another compatible agent from the SDK registry; if no replacement exists, it reports the missing dependency. If modalities are incompatible, the report identifies which input or output mode cannot be bridged. If a linguistic planner proposes a decomposition that violates explicit constraints, the \texttt{FeasibilityAnalyzer} rejects it.
 
 The SDK normalizes runtime failures rather than planning failures. A2A transport failures, local handler exceptions, Lingo execution failures, invalid artifacts, cancellations, and timeouts are recorded as structured observations linked to the relevant task and agent. This behavior is essential for simplicity and trust. The system should not create complex plans merely to appear capable. It should coordinate only when the available and generated capabilities justify the solution. Otherwise, the coordination agent should explain the boundary clearly. Lingo guardrails may detect obvious unsafe, irrelevant, or ambiguous inputs early, but such reflexes are treated as advisory preprocessing rather than as replacements for the feasibility verdict.
 
-\section{Chapter Synthesis}
+\section{Síntesis del capítulo}
 
 The design specifies a distributed multi-agent environment with a clear split between coordination and communication. \texttt{CoordinationAgent} owns planning, feasibility, authorization, auxiliary decisions, and aggregation. \texttt{CoordinationSdk} owns A2A interoperability, local runtime invocation, Lingo runtime invocation, registry normalization, task dispatch, artifact normalization, communication failures, and trace access. Agents remain independently deployable and vendor independent. A2A provides the interoperability backbone through Agent Cards and task exchange. Local Python agents and Lingo-backed linguistic agents are wrapped by the SDK so that they participate through the same registry, dispatch, artifact, and trace mechanisms as remote A2A agents. The evaluation defined in Chapters~\ref{chap:methodology} and~\ref{chap:results} must determine whether an implementation preserves both communication-boundary compliance and coordination-ownership compliance in practice.

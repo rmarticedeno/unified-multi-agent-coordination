@@ -1,7 +1,7 @@
-\chapter{State of the Art}
+\chapter{Estado del arte}
 \label{chap:state-of-the-art}
 
-\section{Framing the Research Problem}
+\section{Delimitación del problema de investigación}
 
 The contemporary discussion of artificial intelligence agents is marked by a productive but sometimes imprecise convergence between two research traditions. The first tradition is the classical computer-science study of autonomous agents and multi-agent systems, in which an agent is a situated computational entity that perceives an environment, reasons over goals or policies, and acts through effectors \cite{wooldridge1995intelligent,russell2021artificial,jennings2000agent}. The second tradition is the recent development of large language model (LLM) applications that use natural language, tool invocation, memory, and planning prompts to produce behavior that is described as agentic \cite{brown2020language,wei2022chain,yao2023react,wang2024survey}. The overlap between these traditions is substantial, but not identical. Classical agents emphasize autonomy, reactivity, proactiveness, social ability, commitments, and environment interaction; LLM agents often emphasize linguistic reasoning, flexible task decomposition, and interaction with external tools.
 
@@ -11,7 +11,7 @@ The literature therefore motivates a bridging problem. Classical multi-agent sys
 
 The phrase state of the art is used here in a precise sense. It does not refer only to the most recent LLM frameworks or protocols, because novelty alone is not sufficient for autonomous coordination. Instead, the relevant state of the art consists of the strongest available concepts, formalisms, systems, and evaluation practices that inform the design of a coordinated autonomous system. This includes older but still foundational work on agency and communication, mature symbolic methods for action and verification, and newer LLM-based systems that demonstrate flexible linguistic control. The purpose of the chapter is therefore synthetic: it identifies what each research line contributes, where each line remains insufficient, and why a unified LLM-symbolic MAS architecture is a coherent research target.
 
-\section{Classical Foundations of Autonomous Agents}
+\section{Fundamentos clásicos de los agentes autónomos}
 
 The classical agent literature provides the conceptual baseline for this thesis. Wooldridge and Jennings characterize agents through autonomy, social ability, reactivity, and proactiveness, thereby distinguishing agents from passive objects or services \cite{wooldridge1995intelligent}. Russell and Norvig formulate the rational-agent view, in which an agent maps percept histories to actions and is evaluated by a performance measure in an environment \cite{russell2021artificial}. These definitions remain important because they locate agency in a control loop: perception, internal state update, decision, and action. The same loop is required for autonomous systems whether their reasoning module is symbolic, neural, or hybrid.
 
@@ -25,22 +25,22 @@ The boundary between agent and non-agent software is therefore not merely termin
 
 \begin{table}[htbp]
 \centering
-\caption{Agent architectural traditions relevant to unified coordination.}
+\caption{Tradiciones arquitectónicas de agentes relevantes para la coordinación unificada.}
 \label{tab:agent-architectures}
 \begin{tabular}{p{0.24\textwidth}p{0.66\textwidth}}
 \toprule
-\textbf{Tradition} & \textbf{Relevance to this thesis} \\
+\textbf{Tradición} & \textbf{Relevancia para esta tesis} \\
 \midrule
-Reactive agents & Provide fast environment response and motivate safety shields that can override slower deliberation. \\
-Deliberative agents & Provide explicit planning, goal reasoning, and action selection over symbolic state. \\
-BDI agents & Separate beliefs, desires, and intentions, which is useful for interpreting LLM proposals before execution. \\
-Hybrid agents & Combine reactive control with deliberative reasoning, matching the need to combine LLM reasoning with symbolic execution. \\
-Agent-oriented programming & Provides software abstractions for roles, commitments, messages, plans, and organizational structure. \\
+Agentes reactivos & Proveen respuesta rápida al entorno y motivan resguardos de seguridad que pueden anular una deliberación más lenta. \\
+Agentes deliberativos & Proveen planificación explícita, razonamiento sobre objetivos y selección de acciones sobre estado simbólico. \\
+Agentes BDI & Separan creencias, deseos e intenciones, lo cual ayuda a interpretar propuestas de LLM antes de la ejecución. \\
+Agentes híbridos & Combinan control reactivo con razonamiento deliberativo, alineado con la necesidad de combinar razonamiento LLM y ejecución simbólica. \\
+Programación orientada a agentes & Provee abstracciones de software para roles, compromisos, mensajes, planes y estructura organizativa. \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\section{Multi-Agent Coordination}
+\section{Coordinación multiagente}
 
 Multi-agent systems extend the agent concept from individual autonomy to distributed computation among multiple autonomous entities. In a MAS, agents may cooperate, compete, negotiate, delegate, or coordinate around shared resources \cite{ferber1999multi,weiss2013multiagent,wooldridge2009introduction}. The key difficulty is that no single agent necessarily possesses complete knowledge, global control, or unlimited authority. Coordination is therefore required to manage dependencies among activities, allocate tasks, resolve conflicts, synchronize plans, and maintain coherent collective behavior. Malone and Crowston define coordination broadly as the management of dependencies between activities \cite{malone1994interdisciplinary}; the MAS literature operationalizes this idea through protocols, organizational structures, distributed algorithms, and shared environments.
 
@@ -56,7 +56,7 @@ Coordination failure is as important as coordination success. Distributed system
 
 The distinction between centralized and decentralized coordination also requires careful treatment. Centralized orchestration simplifies global control and is common in practical LLM systems, where a controller routes messages among role-specific agents. Decentralized coordination can improve robustness and scalability, but it requires stronger assumptions about local decision-making and communication semantics. Hybrid coordination is often more realistic: a central orchestrator may allocate tasks, while agents negotiate details, update shared artifacts, and call local tools. For autonomous systems, the correct choice is domain-dependent. Safety-critical execution may require centralized authorization, while exploratory planning may benefit from decentralized proposal generation and critique.
 
-\section{Agent Communication Languages and Interaction Protocols}
+\section{Lenguajes de comunicación de agentes y protocolos de interacción}
 
 Coordination depends on communication, but not all communication has the same semantics. Classical Agent Communication Languages (ACLs) were developed to provide structured, interoperable message exchange among agents. Their theoretical basis lies in speech-act theory, where utterances are understood as actions that can request, inform, promise, or commit \cite{austin1962how,searle1969speech,cohen1990intention}. KQML introduced performatives such as ask, tell, and reply, together with message fields for content, language, and ontology \cite{finin1994kqml,labrou1997proposal}. FIPA-ACL later standardized communicative acts and interaction protocols with more explicit semantics grounded in mental attitudes \cite{fipa2002acl}.
 
@@ -70,7 +70,7 @@ The transition from ACLs to natural-language coordination should therefore be un
 
 Another issue is observability. In a free-form conversation, the state of the protocol is often implicit in the transcript. A human reader may infer that a task has moved from proposal to execution, but a verifier cannot safely depend on such inference. Structured communicative acts make protocol state observable. For example, a request can be represented with a sender, receiver, content, deadline, acceptance status, and completion criterion. This explicit state is compatible with LLM-generated messages, but it requires an architectural layer that treats dialogue as input to a coordination model rather than as the coordination model itself.
 
-\section{Symbolic Foundations}
+\section{Fundamentos simbólicos}
 
 Symbolic AI provides the formal machinery needed to represent knowledge, define actions, and reason about consequences. Early work on logic and common-sense reasoning established the idea that intelligent behavior can be supported by symbolic descriptions of the world and action \cite{mccarthy1969some,newell1976computer}. Reiter's work on knowledge in action developed logical foundations for specifying dynamic systems \cite{reiter2001knowledge}. Knowledge graphs and ontologies extend this tradition by supporting semantic integration across heterogeneous data sources \cite{hogan2021knowledge}. In a unified agent architecture, these symbolic representations can serve as the stable substrate against which LLM-generated interpretations are checked.
 
@@ -84,7 +84,7 @@ Symbolic methods also clarify the difference between a plan and an explanation. 
 
 There are also limits to symbolic methods. A planner can only reason over what has been modeled. A rule engine can only enforce rules that are encoded. A knowledge graph may be incomplete or stale. The role of the LLM is therefore not only convenience; it can help interpret underspecified tasks, retrieve relevant context, and generate candidate formalizations. The strongest hybrid design is not a symbolic system with a superficial language interface, nor an LLM system with occasional tool calls. It is an architecture that assigns responsibilities according to epistemic strength: language models handle interpretation and communication; symbolic components handle explicit constraints, commitments, and execution semantics.
 
-\section{Neuro-Symbolic AI and Hybrid Reasoning}
+\section{IA neuro-simbólica y razonamiento híbrido}
 
 Neuro-symbolic AI studies the integration of neural learning with symbolic reasoning. Surveys emphasize that neural systems are effective for perception, pattern recognition, and language, while symbolic systems support abstraction, compositionality, explanation, and formal reasoning \cite{besold2017neural,garcez2019neural,hitzler2022neuro}. LLMs intensify this integration problem. They are neural models with broad linguistic competence, but their outputs are not inherently grounded in formal semantics. A hybrid architecture can exploit their strengths while delegating constraint satisfaction, planning, and verification to symbolic components.
 
@@ -98,7 +98,7 @@ The bridge is not a single translator. It is better understood as a set of trans
 
 Hybrid reasoning also raises a granularity question. The LLM may operate at the level of high-level tasks, while a symbolic planner operates at the level of primitive actions. If the boundary is too high, the symbolic layer cannot catch relevant failures. If the boundary is too low, the LLM may be forced to produce brittle formal details it is not well suited to generate. A practical architecture should allow multiple levels of representation: strategic goals, decomposed tasks, protocol messages, symbolic constraints, and executable tool calls. Coordination then becomes the process of maintaining consistency across these levels.
 
-\section{LLMs as Agent Components}
+\section{Los LLM como componentes de agentes}
 
 The rise of transformer-based language models created new possibilities for agent design. The transformer architecture enabled scalable sequence modeling through attention mechanisms \cite{vaswani2017attention}. Large pre-trained models demonstrated few-shot and instruction-following behavior \cite{brown2020language,ouyang2022training}. Chain-of-thought prompting showed that intermediate reasoning traces can improve performance on some reasoning tasks \cite{wei2022chain}. These developments made it practical to use LLMs as flexible reasoning and communication modules inside larger systems.
 
@@ -112,7 +112,7 @@ The current LLM-agent literature also reveals a tension between generality and r
 
 For multi-agent coordination, another limitation is social reasoning. LLMs can simulate dialogue and infer intentions, but simulated agreement does not necessarily correspond to coordinated execution. A planning agent may believe a worker agent has accepted a task because the worker responded positively, while the worker may lack the capability or authority to execute it. Classical MAS concepts such as capabilities, commitments, and organizational roles can reduce this ambiguity. The LLM can make role-based interaction more natural, but the system should still maintain explicit records of who can do what, who has promised what, and what evidence resolves the promise.
 
-\section{LLM-Based Multi-Agent Systems}
+\section{Sistemas multiagente basados en LLM}
 
 LLM-based multi-agent systems adapt MAS ideas to teams of language-model-driven components. Surveys of LLM agents and LLM-based MAS identify common patterns: role specialization, debate, delegation, reflection, tool use, and conversation-based collaboration \cite{wang2024survey,guo2024llmmas,tran2025multiagent}. These systems often assign roles such as planner, critic, coder, reviewer, researcher, or executor. The roles are usually encoded in prompts rather than in formal organizational models, but the functional resemblance to classical MAS is clear.
 
@@ -120,16 +120,16 @@ AutoGen introduced a flexible framework for composing conversable agents that ma
 
 \begin{table}[htbp]
 \centering
-\caption{Representative LLM-based multi-agent approaches.}
+\caption{Enfoques multiagente representativos basados en LLM.}
 \label{tab:llm-mas}
 \begin{tabular}{p{0.20\textwidth}p{0.33\textwidth}p{0.34\textwidth}}
 \toprule
-\textbf{Approach} & \textbf{Coordination pattern} & \textbf{Limitation motivating hybrid design} \\
+\textbf{Enfoque} & \textbf{Patrón de coordinación} & \textbf{Limitación que motiva el diseño híbrido} \\
 \midrule
-AutoGen & Programmable conversations among agents, tools, and humans. & Conversation flexibility does not by itself provide formal protocol semantics. \\
-CAMEL & Role-playing agents cooperate through prompted dialogue. & Role behavior is prompt-dependent and difficult to verify. \\
-MetaGPT & Specialized agents exchange structured artifacts within a workflow. & Standard operating procedures require domain design and may remain task-specific. \\
-ChatDev & Software development is decomposed into communicative roles. & Success depends on artifact consistency and evaluation of generated code. \\
+AutoGen & Conversaciones programables entre agentes, herramientas y humanos. & La flexibilidad conversacional no proporciona por sí sola semántica formal de protocolo. \\
+CAMEL & Agentes con roles cooperan mediante diálogo inducido por prompts. & El comportamiento de rol depende del prompt y es difícil de verificar. \\
+MetaGPT & Agentes especializados intercambian artefactos estructurados dentro de un flujo de trabajo. & Los procedimientos operativos estándar requieren diseño de dominio y pueden seguir siendo específicos de la tarea. \\
+ChatDev & El desarrollo de software se descompone en roles comunicativos. & El éxito depende de la consistencia de los artefactos y de la evaluación del código generado. \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -140,25 +140,25 @@ A second lesson is that role prompting is not the same as role semantics. In man
 
 The literature also suggests that multi-agent decomposition can sometimes improve output quality while also increasing system complexity. More agents mean more messages, more state transitions, more opportunities for inconsistency, and higher computational cost. The benefit of additional agents should therefore be justified by functional separation: one agent may specialize in natural-language interpretation, another in symbolic planning, another in verification, and another in execution. This division aligns with heterogeneous MAS more than with homogeneous debate among multiple copies of the same model. The thesis problem is thus not merely how to make many LLMs talk, but how to coordinate different kinds of reasoning entities.
 
-\section{Modern Agent Interoperability Protocols}
+\section{Protocolos modernos de interoperabilidad entre agentes}
 
 The recent growth of agent frameworks has produced a new interoperability problem. Agents built in different frameworks may need to access tools, exchange context, advertise capabilities, delegate tasks, or collaborate across organizational boundaries. Several emerging protocols address parts of this problem. The Model Context Protocol (MCP) defines a standardized way for AI applications to connect to external tools and data sources through clients and servers \cite{anthropic2024mcp,modelcontextprotocol2025spec}. Agent2Agent (A2A) focuses on communication and collaboration among agents, including capability discovery through agent descriptions \cite{google2025a2a,a2aproject2025}. The Agent Communication Protocol (ACP) was introduced as an HTTP-native agent communication standard and has since been described by IBM and the Linux Foundation as joining forces with A2A under the LF AI and Data umbrella \cite{ibm2025acp,lfaidata2025acp}. The Agent Network Protocol (ANP) emphasizes decentralized identity, discovery, and messaging for agent networks \cite{anp2025,chang2025anp}.
 
 \begin{longtable}{p{0.16\textwidth}p{0.30\textwidth}p{0.38\textwidth}}
-\caption{Emerging interoperability protocols for agent systems.}
+\caption{Protocolos emergentes de interoperabilidad para sistemas de agentes.}
 \label{tab:protocols}\\
 \toprule
-\textbf{Protocol} & \textbf{Primary focus} & \textbf{Relevance to unified coordination} \\
+\textbf{Protocolo} & \textbf{Enfoque principal} & \textbf{Relevancia para la coordinación unificada} \\
 \midrule
 \endfirsthead
 \toprule
-\textbf{Protocol} & \textbf{Primary focus} & \textbf{Relevance to unified coordination} \\
+\textbf{Protocolo} & \textbf{Enfoque principal} & \textbf{Relevancia para la coordinación unificada} \\
 \midrule
 \endhead
-MCP & Tool and context integration between AI applications and external systems. & Provides a standardized tool/context boundary, but does not by itself define full agent-to-agent social semantics. \\
-A2A & Agent-to-agent communication, capability discovery, and collaboration. & Addresses cross-framework agent interaction and can support higher-level coordination protocols. \\
-ACP & Lightweight HTTP-native agent communication, now aligned with A2A efforts. & Illustrates convergence toward shared messaging standards for heterogeneous agents. \\
-ANP & Decentralized identity, discovery, and networked agent communication. & Highlights identity and discovery as first-class concerns in open agent ecosystems. \\
+MCP & Integración de herramientas y contexto entre aplicaciones de IA y sistemas externos. & Provee una frontera estandarizada de herramientas/contexto, pero no define por sí solo una semántica social completa entre agentes. \\
+A2A & Comunicación agente-a-agente, descubrimiento de capacidades y colaboración. & Aborda la interacción entre agentes de distintos marcos y puede soportar protocolos de coordinación de mayor nivel. \\
+ACP & Comunicación ligera entre agentes nativa de HTTP, ahora alineada con los esfuerzos de A2A. & Ilustra la convergencia hacia estándares de mensajería compartidos para agentes heterogéneos. \\
+ANP & Identidad descentralizada, descubrimiento y comunicación en red entre agentes. & Destaca la identidad y el descubrimiento como preocupaciones de primer orden en ecosistemas abiertos de agentes. \\
 \bottomrule
 \end{longtable}
 
@@ -168,7 +168,7 @@ The protocol landscape also illustrates the difference between connectivity and 
 
 Protocol evolution is also a governance issue. If agents are expected to operate across organizations, they must advertise identity, capabilities, permissions, and trust assumptions. Decentralized discovery may support open ecosystems, but it also creates risks around impersonation, malicious agents, and incompatible policy regimes. A unified architecture should therefore separate protocol transport from trust decisions. It should be possible to discover an agent without automatically trusting it, to receive a request without accepting it, and to expose a tool without granting unrestricted authority. These distinctions are familiar in distributed systems and security engineering, but they must be made explicit in LLM-agent architectures.
 
-\section{Safety, Verification, and Governance}
+\section{Seguridad, verificación y gobernanza}
 
 Safety and verification are central because autonomous agents can produce effects beyond text generation. Classical MAS and autonomous-systems research has long examined model checking, runtime verification, ethical decision constraints, and verification of agent programs \cite{fisher2013verifying,bordini2006model,dennis2016practical}. These techniques become more important when LLMs participate in action selection. A language model may produce a plausible action that violates a precondition, exceeds authority, leaks information, or conflicts with another agent's commitment. Symbolic verification cannot eliminate all risks, but it can check well-specified properties of plans, tool calls, and execution traces.
 
@@ -182,7 +182,7 @@ Verification must also be scoped realistically. Full verification of an open-end
 
 Governance also requires traceability. A coordinated system should record why an action was selected, which agent proposed it, which module validated it, which policy authorized it, and what result followed. Such traces support debugging, evaluation, and accountability. They also support scientific analysis: without traces, it is difficult to determine whether success came from genuine coordination, accidental model knowledge, or hidden human intervention. For a master's thesis solution, traceability is valuable both as an engineering feature and as an empirical research instrument.
 
-\section{Evaluation and Benchmarks}
+\section{Evaluación y bancos de prueba}
 
 Evaluation of unified LLM-symbolic multi-agent systems requires multiple dimensions. Classical MAS evaluation considers coordination efficiency, communication overhead, task allocation quality, robustness to agent failure, scalability, and social welfare. LLM-agent evaluation considers task success, reasoning quality, tool-use accuracy, factuality, cost, latency, robustness, and safety. A unified system must be evaluated across both sets of criteria. A system that produces elegant dialogue but fails execution is inadequate; a system that executes reliably but cannot interpret natural-language goals may also fail the intended use case.
 
@@ -190,17 +190,17 @@ Several benchmarks have shaped LLM-agent evaluation. AgentBench evaluates LLMs a
 
 \begin{table}[htbp]
 \centering
-\caption{Evaluation dimensions for unified LLM-symbolic multi-agent systems.}
+\caption{Dimensiones de evaluación para sistemas multiagente LLM--simbólicos unificados.}
 \label{tab:evaluation}
 \begin{tabular}{p{0.25\textwidth}p{0.65\textwidth}}
 \toprule
-\textbf{Dimension} & \textbf{Representative questions} \\
+\textbf{Dimensión} & \textbf{Preguntas representativas} \\
 \midrule
-Task performance & Does the system achieve the specified goal, and with what cost, latency, and solution quality? \\
-Coordination quality & Are tasks allocated effectively, messages grounded, conflicts resolved, and commitments tracked? \\
-Symbolic validity & Do generated plans satisfy preconditions, constraints, and domain rules before execution? \\
-Robustness & Does performance persist under rephrased goals, partial observability, agent failure, or adversarial inputs? \\
-Safety and governance & Are tool calls authorized, logged, monitored, and constrained by explicit policies? \\
+Desempeño de la tarea & ¿El sistema alcanza el objetivo especificado, y con qué costo, latencia y calidad de solución? \\
+Calidad de coordinación & ¿Las tareas se asignan eficazmente, los mensajes se anclan, los conflictos se resuelven y los compromisos se rastrean? \\
+Validez simbólica & ¿Los planes generados satisfacen precondiciones, restricciones y reglas de dominio antes de la ejecución? \\
+Robustez & ¿El desempeño se mantiene ante objetivos reformulados, observabilidad parcial, fallos de agentes o entradas adversarias? \\
+Seguridad y gobernanza & ¿Las llamadas a herramientas se autorizan, registran, monitorean y restringen mediante políticas explícitas? \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -211,7 +211,7 @@ A useful evaluation design should therefore include both outcome metrics and pro
 
 Evaluation should also include ablations. A unified architecture can be compared against variants that remove the symbolic planner, remove the LLM interpreter, remove protocol tracking, or remove runtime monitoring. Such comparisons make it possible to test whether each component contributes to performance, safety, or interpretability. Without ablation, the architecture may appear effective only because the task is easy or because a single model performs most of the work. The state of the art in agent evaluation increasingly recognizes this issue, but unified LLM-symbolic MAS evaluation remains underdeveloped.
 
-\section{Synthesis and Research Gap}
+\section{Síntesis y brecha de investigación}
 
 The reviewed literature shows that the components needed for unified coordination already exist, but they remain insufficiently integrated. Classical agent theory defines autonomy, interaction, commitment, planning, and verification. MAS research provides mechanisms for task allocation, negotiation, shared-state coordination, norms, and distributed constraint reasoning. Symbolic AI supplies formal representations for knowledge, plans, rules, and control. LLM research supplies linguistic interpretation, flexible communication, tool-use scaffolding, and broad task generalization. Modern interoperability protocols supply practical interfaces for tools, context, and cross-agent communication.
 

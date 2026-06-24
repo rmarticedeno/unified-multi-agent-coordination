@@ -10,23 +10,23 @@
   flow/.style={-Latex, semithick},
   group/.style={draw=black!55, dashed, rounded corners=2pt, inner sep=5pt}
 ]
-\node[linguistic] (request) {Natural-language\\problem statement};
-\node[linguistic, right=of request] (interpret) {Linguistic\\interpretation};
-\node[symbolic, right=14mm of interpret] (authority) {\textbf{Coordinating authority}\\candidate plan and\\feasibility decision};
-\node[knowledge, above=of authority] (registry) {Session registry $\mathcal{R}$\\capabilities and constraints};
-\node[outcome, below left=14mm and -2mm of authority] (plan) {Accepted plan $\Pi$};
-\node[outcome, below right=14mm and -2mm of authority] (reject) {Infeasibility report $I$};
-\node[participant, below=11mm of plan] (agents) {Distributed participating agents};
+\node[linguistic] (request) {Problema en\\lenguaje natural};
+\node[linguistic, right=of request] (interpret) {Interpretación\\lingüística};
+\node[symbolic, right=14mm of interpret] (authority) {\textbf{Autoridad coordinadora}\\plan candidato y\\decisión de viabilidad};
+\node[knowledge, above=of authority] (registry) {Registro de sesión $\mathcal{R}$\\capacidades y restricciones};
+\node[outcome, below left=14mm and -2mm of authority] (plan) {Plan aceptado $\Pi$};
+\node[outcome, below right=14mm and -2mm of authority] (reject) {Informe de inviabilidad $I$};
+\node[participant, below=11mm of plan] (agents) {Agentes participantes distribuidos};
 
-\draw[flow] (request) -- node[above, font=\scriptsize]{request} (interpret);
-\draw[flow] (interpret) -- node[above, font=\scriptsize]{candidate $P$} (authority);
-\draw[flow] (registry) -- node[right, font=\scriptsize]{operational boundary} (authority);
-\draw[flow] (authority.south) -- ++(0,-3mm) -| node[pos=.72, left, font=\scriptsize]{authorized} (plan.north);
-\draw[flow] (authority.south) -- ++(0,-3mm) -| node[pos=.72, right, font=\scriptsize]{rejected} (reject.north);
-\draw[Latex-Latex, semithick] (plan) -- node[midway, right=2mm, align=left, fill=white, inner sep=1pt, font=\scriptsize]{commitments\\artifacts} (agents);
+\draw[flow] (request) -- node[above, font=\scriptsize]{solicitud} (interpret);
+\draw[flow] (interpret) -- node[above, font=\scriptsize]{$P$ candidato} (authority);
+\draw[flow] (registry) -- node[right, font=\scriptsize]{frontera operacional} (authority);
+\draw[flow] (authority.south) -- ++(0,-3mm) -| node[pos=.72, left, font=\scriptsize]{autorizado} (plan.north);
+\draw[flow] (authority.south) -- ++(0,-3mm) -| node[pos=.72, right, font=\scriptsize]{rechazado} (reject.north);
+\draw[Latex-Latex, semithick] (plan) -- node[midway, right=2mm, align=left, fill=white, inner sep=1pt, font=\scriptsize]{compromisos\\artefactos} (agents);
 
 \begin{scope}[on background layer]
-  \node[group, fit=(request)(interpret), label=above:{\scriptsize Linguistic surface}] {};
-  \node[group, fit=(registry)(authority)(plan)(reject), label=above:{\scriptsize Symbolic decision boundary}] {};
+  \node[group, fit=(request)(interpret), label=above:{\scriptsize Superficie lingüística}] {};
+  \node[group, fit=(registry)(authority)(plan)(reject), label=above:{\scriptsize Frontera simbólica de decisión}] {};
 \end{scope}
 \end{tikzpicture}
