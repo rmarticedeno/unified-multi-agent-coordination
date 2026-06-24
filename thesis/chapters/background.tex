@@ -118,6 +118,8 @@ LLM-based multi-agent systems adapt MAS ideas to teams of language-model-driven 
 
 AutoGen introduced a flexible framework for composing conversable agents that may use LLMs, tools, or humans in the loop \cite{wu2023autogen}. CAMEL uses role-playing prompts to study communicative cooperation among agents \cite{li2023camel}. MetaGPT encodes software-engineering workflows as standard operating procedures distributed across specialized agents \cite{hong2023metagpt}. ChatDev similarly frames software development as communication among role-specialized agents \cite{qian2023communicative}. These systems demonstrate that multi-agent decomposition can improve task structure, distribute responsibilities, and support iterative critique. However, they also reveal persistent limitations: high token cost, fragile prompt design, unclear protocol semantics, duplicated work, and difficulty verifying whether dialogue corresponds to correct execution.
 
+Lightweight conversational-modeling frameworks address a narrower but important part of this landscape. Lingo is a type-safe Python framework for building LLM-powered applications around explicit conversational state, structured generation, structured flows, finite-state control, reflexive guardrails, and developer-controlled tool loops \cite{lingo2026}. Its relevance is not that it replaces a MAS platform, an interoperability protocol, or a symbolic planner. Rather, it shows a state-of-the-art pattern for disciplining the linguistic layer itself: free-form language is wrapped in typed context, constrained model decisions, schema-validated outputs, and state-conditioned dialogue. This makes Lingo a useful example of how linguistic agents can be engineered inside a larger autonomous system while still requiring external authorization and feasibility validation before generated proposals become executable commitments.
+
 \begin{table}[htbp]
 \centering
 \caption{Representative LLM-based multi-agent approaches.}
@@ -130,9 +132,12 @@ AutoGen & Programmable conversations among agents, tools, and humans. & Conversa
 CAMEL & Role-playing agents cooperate through prompted dialogue. & Role behavior is prompt-dependent and difficult to verify. \\
 MetaGPT & Specialized agents exchange structured artifacts within a workflow. & Standard operating procedures require domain design and may remain task-specific. \\
 ChatDev & Software development is decomposed into communicative roles. & Success depends on artifact consistency and evaluation of generated code. \\
+Lingo & Typed conversational modeling with context, structured generation, flows, state machines, and reflexive guardrails. & Provides a disciplined linguistic layer, but not distributed MAS protocol semantics or symbolic feasibility checks. \\
 \bottomrule
 \end{tabular}
 \end{table}
+
+This framework landscape clarifies the difference between a linguistic-agent construction toolkit and a coordination architecture. The former can narrow model behavior into typed acts, support state-conditioned dialogue, and expose guardrail hooks; the latter must still decide which agents may act, whether a plan is feasible, how artifacts satisfy contracts, and what communication trace establishes completion. For this thesis, the SOTA implication is that language-mediated flexibility should be retained, but it should be placed behind explicit contracts, protocol state, and symbolic authorization.
 
 The main lesson from this literature is that LLM-MAS research has reintroduced coordination as a practical necessity. When multiple LLM agents interact, the system needs role assignment, message routing, shared memory, conflict resolution, and evaluation of partial results. These are classical MAS problems. What is new is the linguistic richness of the agents and their ability to transform vague human instructions into candidate artifacts. The challenge is to connect that richness with formal models of interaction, state, and execution. Without such grounding, multi-agent dialogue may produce impressive transcripts but weak guarantees.
 
