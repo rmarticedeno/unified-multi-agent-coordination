@@ -28,6 +28,6 @@ Generated build output is intentionally ignored by Git.
 
 ## Argument structure
 
-The thesis follows this research sequence: introduction and problem formulation; critical state of the art; research methodology; proposed theoretical framework; A2A-based system design; evaluation and results; discussion; and conclusions. The evaluation chapter currently defines the reporting protocol and explicitly marks empirical measurements as pending so that unexecuted experiments are not presented as findings.
+The thesis follows this research sequence: introduction and problem formulation; critical state of the art; research methodology; proposed protocol-independent theoretical framework; protocol-adaptable system design; evaluation and results; discussion; and conclusions. The evaluation chapter currently defines the reporting protocol and explicitly marks empirical measurements as pending so that unexecuted experiments are not presented as findings.
 
 The cover follows the University of Havana and Faculty of Mathematics and Computer Science branding supplied in the curated template. Its QR code is generated at compile time from the repository URL declared with `\repositoryurl{...}` in `main.tex`; no separately generated QR image is required.

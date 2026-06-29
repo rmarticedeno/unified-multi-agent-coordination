@@ -32,7 +32,7 @@ The specific objectives are:
 \begin{enumerate}
   \item Critically synthesize classical multi-agent coordination, symbolic AI, LLM-agent architectures, and interoperability protocols to identify the unresolved integration gap.
   \item Define a protocol-independent theoretical framework for capabilities, tasks, authority, commitments, artifact compatibility, bounded auxiliary capabilities, and feasibility.
-  \item Instantiate the framework as an implementable Python coordination agent over middleware SDK that preserves Agent2Agent interoperability while supporting remote, local, and Lingo-authored agents without coupling the theoretical contribution to a particular model provider or agent framework.
+  \item Instantiate the framework as an implementable Python coordination agent over middleware SDK that preserves protocol-mediated interoperability while supporting remote, local, and Lingo-authored agents without coupling the theoretical contribution to a particular model provider, agent framework, or communication protocol.
   \item Define a reproducible evaluation protocol that compares the hybrid design with relevant baselines using outcome and process metrics.
   \item Analyze the scope, limitations, validity threats, and practical implications of the proposed framework.
 \end{enumerate}
@@ -50,7 +50,7 @@ The thesis is guided by the following questions:
 
 \section{Scope and Contributions}
 
-The thesis focuses on plan-level coordination under a trusted central authorization role and distributed execution. It does not claim to verify the internal reasoning of participating agents, solve Byzantine coordination, or guarantee runtime success after a plan is authorized. Within this scope, its contributions are: a formal separation between linguistic proposal and symbolic authorization; an explicit feasibility model; rules for bounded task-local auxiliary capabilities; a mapping from the theory to a coordination-agent design over A2A-compatible SDK middleware; and an evaluation protocol that measures both final outcomes and the validity of the process that produced them.
+The thesis focuses on plan-level coordination under a trusted central authorization role and distributed execution. It does not claim to verify the internal reasoning of participating agents, solve Byzantine coordination, or guarantee runtime success after a plan is authorized. Within this scope, its contributions are: a formal separation between linguistic proposal and symbolic authorization; an explicit feasibility model; rules for bounded task-local auxiliary capabilities; a mapping from the theory to a protocol-adaptable coordination-agent design over SDK middleware; and an evaluation protocol that measures both final outcomes and the validity of the process that produced them.
 
 \section{Methodological Approach}
 
@@ -58,4 +58,4 @@ The research follows a design-science approach. It combines a critical literatur
 
 \section{Thesis Organization}
 
-Chapter~\ref{chap:state-of-the-art} synthesizes the theoretical foundations and research gap. Chapter~\ref{chap:methodology} defines the research and evaluation method. Chapter~\ref{chap:theoretical-solution} presents the protocol-independent framework. Chapter~\ref{chap:implementation-design} maps it to a coordination-agent architecture over SDK middleware using A2A as the interoperability backbone. Chapter~\ref{chap:results} specifies the evaluation execution and reporting structure. Chapter~\ref{chap:discussion} examines the implications, limitations, and validity threats. The final chapter relates the contributions to the objectives and identifies future work.
+Chapter~\ref{chap:state-of-the-art} synthesizes the theoretical foundations and research gap. Chapter~\ref{chap:methodology} defines the research and evaluation method. Chapter~\ref{chap:theoretical-solution} presents the protocol-independent framework. Chapter~\ref{chap:implementation-design} maps it to a coordination-agent architecture over SDK middleware and then selects a concrete interoperability adapter for implementation. Chapter~\ref{chap:results} specifies the evaluation execution and reporting structure. Chapter~\ref{chap:discussion} examines the implications, limitations, and validity threats. The final chapter relates the contributions to the objectives and identifies future work.
