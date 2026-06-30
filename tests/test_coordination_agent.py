@@ -192,3 +192,55 @@ async def test_coordinate_returns_structured_infeasibility_without_dispatch():
     assert result.task_results == []
     assert calls == []
     assert not result.plan_result.feasibility_report.feasible
+
+
+@pytest.mark.asyncio
+async def test_build_solution_plan_authorizes_bounded_auxiliary_gap():
+    sdk = CoordinationSdk(http_client=FakeHttpClient(FakeResponse({})))
+    agent = CoordinationAgent(sdk=sdk)
+    request = ProblemRequest(
+        user_goal="Extract Q1 and Q2 revenue cells.",
+        requirements=[
+            CapabilityRequirement(
+                name="extract revenue cells",
+                description="extract Q1 and Q2 revenue values",
+                output_schema={"required": ["q1_revenue", "q2_revenue"]},
+                auxiliary_eligible=True,
+            )
+        ],
+        required_artifacts=["revenue_pair"],
+    )
+
+    result = await agent.build_solution_plan(request)
+
+    assert result.feasibility_report.feasible
+    assert result.proposal.generated_nlp_agents
+    assert result.proposal.tasks[0].auxiliary_spec_id == "aux-1"
+
+
+@pytest.mark.asyncio
+async def test_coordinate_executes_bounded_auxiliary_task():
+    sdk = CoordinationSdk(http_client=FakeHttpClient(FakeResponse({})))
+    agent = CoordinationAgent(sdk=sdk)
+    request = ProblemRequest(
+        user_goal="Extract Q1 and Q2 revenue cells.",
+        requirements=[
+            CapabilityRequirement(
+                name="extract revenue cells",
+                description="extract Q1 and Q2 revenue values",
+                output_schema={"required": ["q1_revenue", "q2_revenue"]},
+                auxiliary_eligible=True,
+            )
+        ],
+        required_artifacts=["revenue_pair"],
+    )
+
+    result = await agent.coordinate(
+        request,
+        payload={"q1_revenue": 10, "q2_revenue": 15},
+    )
+
+    assert result.status == "completed"
+    assert result.task_results[0].agent_kind == "auxiliary"
+    assert result.artifacts[0]["data"] == {"q1_revenue": 10, "q2_revenue": 15}
+    assert any(event.event_type == "sdk_auxiliary_task_completed" for event in result.trace)

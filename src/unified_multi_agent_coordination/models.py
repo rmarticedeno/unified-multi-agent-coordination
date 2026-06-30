@@ -29,6 +29,8 @@ class CapabilityRequirement(BaseModel):
     constraints: list[str] = Field(default_factory=list)
     auxiliary_eligible: bool = False
     required_trust_level: str = "standard"
+    expected_evidence: list[str] = Field(default_factory=list)
+    validation_contract: JsonObject = Field(default_factory=dict)
 
 
 class AgentRegistryEntry(BaseModel):
@@ -83,6 +85,7 @@ class TaskSpec(BaseModel):
     auxiliary_spec_id: str | None = None
     depends_on: list[str] = Field(default_factory=list)
     expected_artifacts: list[str] = Field(default_factory=list)
+    validation_contract: JsonObject = Field(default_factory=dict)
 
 
 class SolutionProposal(BaseModel):

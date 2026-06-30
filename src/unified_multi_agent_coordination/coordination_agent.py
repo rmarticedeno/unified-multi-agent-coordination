@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from typing import Any
 
+from .auxiliary import BoundedAuxiliaryCapabilityFactory
 from .coordination_sdk import CoordinationSdk, RemoteRegistryError
 from .feasibility import FeasibilityAnalyzer
 from .lingo_coordinator import LingoLinguisticCoordinator
@@ -30,11 +31,13 @@ class CoordinationAgent:
         *,
         feasibility_analyzer: FeasibilityAnalyzer | None = None,
         linguistic_coordinator: LingoLinguisticCoordinator | None = None,
+        auxiliary_factory: BoundedAuxiliaryCapabilityFactory | None = None,
         self_agent_id: str | None = None,
     ) -> None:
         self.sdk = sdk
         self.feasibility_analyzer = feasibility_analyzer or FeasibilityAnalyzer()
         self._linguistic_coordinator = linguistic_coordinator
+        self.auxiliary_factory = auxiliary_factory or BoundedAuxiliaryCapabilityFactory()
         self.self_agent_id = self_agent_id or sdk.self_agent_id
 
     async def build_solution_plan(
@@ -59,6 +62,11 @@ class CoordinationAgent:
                     request, registry
                 )
         report = self.feasibility_analyzer.check(request, registry, proposal)
+        if not report.feasible:
+            proposal = self._with_auxiliary_specs(request, proposal, report)
+            report = self.feasibility_analyzer.check(request, registry, proposal)
+        if self._linguistic_coordinator is not None:
+            self._linguistic_coordinator.record_feasibility(report)
         return CoordinationPlanResult(
             request=request,
             proposal=proposal,
@@ -174,6 +182,8 @@ class CoordinationAgent:
                     task_id=task_id,
                     requirement_name=requirement.name,
                     assigned_to=agent.agent_id,
+                    expected_artifacts=self._task_expected_artifacts(requirement, request),
+                    validation_contract=dict(requirement.validation_contract),
                 )
             )
             selected_agents[task_id] = agent.agent_id
@@ -191,6 +201,8 @@ class CoordinationAgent:
             TaskSpec(
                 task_id=f"t{index}",
                 requirement_name=requirement.name,
+                expected_artifacts=self._task_expected_artifacts(requirement, request),
+                validation_contract=dict(requirement.validation_contract),
             )
             for index, requirement in enumerate(request.requirements, start=1)
         ]
@@ -220,6 +232,46 @@ class CoordinationAgent:
         if not self.self_agent_id:
             return registry
         return [agent for agent in registry if agent.agent_id != self.self_agent_id]
+
+    def _with_auxiliary_specs(
+        self,
+        request: ProblemRequest,
+        proposal: SolutionProposal,
+        report: FeasibilityReport,
+    ) -> SolutionProposal:
+        if not report.missing_capabilities:
+            return proposal
+
+        req_by_name = {self._norm(req.name): req for req in request.requirements}
+        generated = list(proposal.generated_nlp_agents)
+        changed_tasks: list[TaskSpec] = []
+        changed = False
+        lifecycle = f"plan:{abs(hash(request.user_goal))}"
+
+        for task in proposal.tasks:
+            if task.assigned_to or task.auxiliary_spec_id:
+                changed_tasks.append(task)
+                continue
+            requirement = req_by_name.get(self._norm(task.requirement_name))
+            if requirement is None or requirement.name not in report.missing_capabilities:
+                changed_tasks.append(task)
+                continue
+            spec = self.auxiliary_factory.specify(requirement, lifecycle=lifecycle)
+            if spec is None:
+                changed_tasks.append(task)
+                continue
+            generated.append(spec)
+            changed_tasks.append(task.model_copy(update={"auxiliary_spec_id": spec.spec_id}))
+            changed = True
+
+        if not changed:
+            return proposal
+        return proposal.model_copy(
+            update={
+                "tasks": changed_tasks,
+                "generated_nlp_agents": generated,
+            }
+        )
 
     def _linguistic(self) -> LingoLinguisticCoordinator:
         if self._linguistic_coordinator is None:
@@ -291,6 +343,17 @@ class CoordinationAgent:
                 for artifact in request.required_artifacts
             ]
         return ["all task validators pass"]
+
+    @staticmethod
+    def _task_expected_artifacts(
+        requirement,
+        request: ProblemRequest,
+    ) -> list[str]:
+        if len(request.requirements) == 1:
+            return list(request.required_artifacts)
+        if requirement.name in request.required_artifacts:
+            return [requirement.name]
+        return []
 
     @staticmethod
     def _norm(value: str) -> str:

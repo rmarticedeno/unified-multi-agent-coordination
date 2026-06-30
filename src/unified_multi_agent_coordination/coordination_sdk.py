@@ -14,6 +14,7 @@ from .models import (
     AgentRegistryEntry,
     CapabilityRequirement,
     FeasibilityReport,
+    GeneratedNlpAgentSpec,
     TaskExecutionResult,
     TaskSpec,
     TraceEvent,
@@ -287,6 +288,26 @@ class CoordinationSdk:
             return result
 
         result = self._execution_result(entry, task, output)
+        validation_errors = self._validate_execution_result(entry, task, result)
+        if validation_errors:
+            result = result.model_copy(
+                update={
+                    "status": "failed",
+                    "error": "; ".join(validation_errors),
+                    "metadata": {
+                        **result.metadata,
+                        "validation_errors": validation_errors,
+                    },
+                }
+            )
+            self._record(
+                "sdk_task_validation_failed",
+                f"Task {task.task_id} failed artifact validation.",
+                task_id=task.task_id,
+                agent_id=agent_id,
+                errors=validation_errors,
+            )
+            return result
         self._record(
             "sdk_task_completed",
             f"Task {task.task_id} completed.",
@@ -305,6 +326,9 @@ class CoordinationSdk:
     ) -> TaskExecutionResult:
         """Delegate a task only after symbolic authorization."""
         agent_id = task.assigned_to or report.matched_agents.get(task.task_id)
+        aux = self._authorized_auxiliary(report, task)
+        if report.feasible and aux is not None:
+            return self._invoke_auxiliary(aux, task, payload)
         if not report.feasible or not agent_id:
             self._record(
                 "sdk_delegation_refused",
@@ -328,6 +352,106 @@ class CoordinationSdk:
     ) -> TaskExecutionResult:
         """Compatibility wrapper for the newer send_task API."""
         return await self.send_task(report, task, payload, timeout_s=timeout_s)
+
+    def _authorized_auxiliary(
+        self,
+        report: FeasibilityReport,
+        task: TaskSpec,
+    ) -> GeneratedNlpAgentSpec | None:
+        if not task.auxiliary_spec_id:
+            return None
+        for spec in report.generated_nlp_agents:
+            if spec.spec_id == task.auxiliary_spec_id:
+                return spec
+        return None
+
+    def _invoke_auxiliary(
+        self,
+        spec: GeneratedNlpAgentSpec,
+        task: TaskSpec,
+        payload: dict[str, Any],
+    ) -> TaskExecutionResult:
+        self._record(
+            "sdk_auxiliary_task_started",
+            f"Auxiliary task {task.task_id} started.",
+            task_id=task.task_id,
+            auxiliary_spec_id=spec.spec_id,
+            method=spec.method,
+        )
+        artifact = self._auxiliary_artifact(spec, payload)
+        missing = self._missing_required_fields(spec.output_schema, artifact)
+        if missing:
+            result = TaskExecutionResult(
+                task_id=task.task_id,
+                agent_id=spec.spec_id,
+                agent_kind="auxiliary",
+                status="failed",
+                output=artifact,
+                artifacts=[artifact],
+                error=f"Auxiliary output missing required fields: {', '.join(missing)}.",
+                metadata={"method": spec.method, "validation_rule": spec.validation_rule},
+            )
+            self._record(
+                "sdk_auxiliary_task_validation_failed",
+                result.error,
+                task_id=task.task_id,
+                auxiliary_spec_id=spec.spec_id,
+                missing=missing,
+            )
+            return result
+
+        result = TaskExecutionResult(
+            task_id=task.task_id,
+            agent_id=spec.spec_id,
+            agent_kind="auxiliary",
+            output=artifact,
+            artifacts=[artifact],
+            metadata={"method": spec.method, "validation_rule": spec.validation_rule},
+        )
+        self._record(
+            "sdk_auxiliary_task_completed",
+            f"Auxiliary task {task.task_id} completed.",
+            task_id=task.task_id,
+            auxiliary_spec_id=spec.spec_id,
+        )
+        return result
+
+    def _auxiliary_artifact(
+        self,
+        spec: GeneratedNlpAgentSpec,
+        payload: dict[str, Any],
+    ) -> dict[str, Any]:
+        source = payload.get("data") if isinstance(payload.get("data"), dict) else payload
+        if spec.method == "schema_extraction":
+            required = spec.output_schema.get("required", [])
+            if isinstance(required, list) and required:
+                data = {str(key): source.get(str(key)) for key in required if str(key) in source}
+            else:
+                data = dict(source)
+            return {"kind": "data", "data": data, **data}
+        if spec.method == "normalization":
+            value = payload.get("value", payload.get("text", payload.get("input", "")))
+            normalized = str(value).strip().lower()
+            return {"kind": "data", "data": {"normalized": normalized}, "normalized": normalized}
+        label = payload.get("label") or payload.get("value") or payload.get("text")
+        return {"kind": "data", "data": {"label": label}, "label": label}
+
+    @staticmethod
+    def _missing_required_fields(
+        schema: dict[str, Any],
+        artifact: dict[str, Any],
+    ) -> list[str]:
+        required = schema.get("required", [])
+        if not isinstance(required, list):
+            return []
+        data = artifact.get("data")
+        data_keys = set(data) if isinstance(data, dict) else set()
+        artifact_keys = set(artifact)
+        return [
+            str(field)
+            for field in required
+            if str(field) not in artifact_keys and str(field) not in data_keys
+        ]
 
     def trace(self) -> list[TraceEvent]:
         """Return SDK and adapter trace events."""
@@ -542,6 +666,93 @@ class CoordinationSdk:
             artifacts=self._extract_artifacts(normalized),
             metadata={"invocation_endpoint": entry.invocation_endpoint},
         )
+
+    def _validate_execution_result(
+        self,
+        entry: AgentRegistryEntry,
+        task: TaskSpec,
+        result: TaskExecutionResult,
+    ) -> list[str]:
+        contract = self._validation_contract_for(entry, task)
+        if not contract:
+            return []
+
+        errors: list[str] = []
+        required_kinds = contract.get("artifact_kinds", [])
+        if isinstance(required_kinds, list):
+            available_kinds = {str(artifact.get("kind")) for artifact in result.artifacts}
+            missing_kinds = [
+                str(kind) for kind in required_kinds if str(kind) not in available_kinds
+            ]
+            if missing_kinds:
+                errors.append(f"missing artifact kinds: {', '.join(missing_kinds)}")
+
+        required_artifacts = contract.get("required_artifacts", [])
+        if isinstance(required_artifacts, list):
+            missing_artifacts = [
+                str(name)
+                for name in required_artifacts
+                if not self._artifact_named(result.artifacts, str(name))
+            ]
+            if missing_artifacts:
+                errors.append(f"missing artifacts: {', '.join(missing_artifacts)}")
+
+        required_fields = contract.get("required_fields", [])
+        if isinstance(required_fields, list):
+            missing_fields = [
+                str(field)
+                for field in required_fields
+                if not self._field_present(result.artifacts, str(field))
+            ]
+            if missing_fields:
+                errors.append(f"missing artifact fields: {', '.join(missing_fields)}")
+
+        return errors
+
+    def _validation_contract_for(
+        self,
+        entry: AgentRegistryEntry,
+        task: TaskSpec,
+    ) -> dict[str, Any]:
+        contract: dict[str, Any] = {}
+        contract.update(entry.validation_contract)
+        for skill in entry.skills:
+            if self._normalize_agent_id(skill.name) == self._normalize_agent_id(
+                task.requirement_name
+            ):
+                contract.update(skill.validation_contract)
+                break
+        contract.update(task.validation_contract)
+        return contract
+
+    @staticmethod
+    def _artifact_named(artifacts: list[dict[str, Any]], name: str) -> bool:
+        wanted = name.strip().lower()
+        for artifact in artifacts:
+            values = [
+                artifact.get("artifact_id"),
+                artifact.get("id"),
+                artifact.get("name"),
+                artifact.get("kind"),
+                artifact.get("type"),
+            ]
+            if any(str(value).strip().lower() == wanted for value in values if value):
+                return True
+            data = artifact.get("data")
+            if isinstance(data, dict) and wanted in {str(key).lower() for key in data}:
+                return True
+        return False
+
+    @staticmethod
+    def _field_present(artifacts: list[dict[str, Any]], field: str) -> bool:
+        wanted = field.strip().lower()
+        for artifact in artifacts:
+            if wanted in {str(key).lower() for key in artifact}:
+                return True
+            data = artifact.get("data")
+            if isinstance(data, dict) and wanted in {str(key).lower() for key in data}:
+                return True
+        return False
 
     def _extract_artifacts(self, output: Any) -> list[dict[str, Any]]:
         if output is None:

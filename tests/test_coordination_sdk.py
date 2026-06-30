@@ -318,3 +318,39 @@ async def test_runtime_failure_is_returned_and_traced():
     assert result.status == "failed"
     assert result.error == "handler unavailable"
     assert sdk.trace()[-1].event_type == "sdk_task_failed"
+
+
+@pytest.mark.asyncio
+async def test_explicit_validation_contract_can_fail_runtime_artifacts():
+    sdk = CoordinationSdk(http_client=FakeHttpClient(FakeResponse({})))
+    requirement = CapabilityRequirement(
+        name="classify",
+        validation_contract={"required_fields": ["label"]},
+    )
+
+    entry = sdk.register_local_agent(
+        "Classifier",
+        [requirement],
+        lambda payload: {"artifacts": [{"kind": "data", "data": {"score": 0.8}}]},
+    )
+    task = TaskSpec(task_id="t1", requirement_name="classify", assigned_to=entry.agent_id)
+    report = FeasibilityAnalyzer().check(
+        ProblemRequest(
+            user_goal="Classify.",
+            requirements=[requirement],
+            required_artifacts=["label"],
+        ),
+        [entry],
+        SolutionProposal(
+            tasks=[task],
+            execution_order=["t1"],
+            expected_artifacts=["label"],
+            completion_criteria=["label exists"],
+        ),
+    )
+
+    result = await sdk.send_task(report, task, {})
+
+    assert result.status == "failed"
+    assert "label" in result.error
+    assert sdk.trace()[-1].event_type == "sdk_task_validation_failed"

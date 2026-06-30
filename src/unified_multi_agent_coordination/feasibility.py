@@ -6,7 +6,9 @@ from collections import defaultdict, deque
 
 from .models import (
     AgentRegistryEntry,
+    CapabilityRequirement,
     FeasibilityReport,
+    GeneratedNlpAgentSpec,
     PredicateEvidence,
     ProblemRequest,
     SolutionProposal,
@@ -16,6 +18,12 @@ from .models import (
 
 class FeasibilityAnalyzer:
     """Authorize or reject candidate plans against a registry snapshot."""
+
+    APPROVED_AUXILIARY_METHODS = {
+        "schema_extraction",
+        "label_classification",
+        "normalization",
+    }
 
     def __init__(self, trust_order: list[str] | None = None) -> None:
         self.trust_order = trust_order or ["standard", "elevated", "admin"]
@@ -36,11 +44,27 @@ class FeasibilityAnalyzer:
         agent_by_id = {agent.agent_id: agent for agent in registry}
         aux_by_id = {aux.spec_id: aux for aux in proposal.generated_nlp_agents}
 
+        structure_ok = self._structure_ok(proposal.tasks, risks)
+        order_ok = self._execution_order_ok(proposal, risks)
+        total_assignment_ok = True
         coverage_ok = True
         authority_ok = True
         compatibility_ok = True
 
         for task in proposal.tasks:
+            has_agent = bool(task.assigned_to)
+            has_auxiliary = bool(task.auxiliary_spec_id)
+            if has_agent == has_auxiliary:
+                total_assignment_ok = False
+                coverage_ok = False
+                if has_agent:
+                    risks.append(
+                        f"Task {task.task_id} selects both an agent and an auxiliary spec."
+                    )
+                else:
+                    missing.append(task.requirement_name)
+                    risks.append(f"Task {task.task_id} has no accountable executor.")
+
             req = req_by_name.get(self._norm(task.requirement_name))
             if req is None:
                 coverage_ok = False
@@ -60,11 +84,18 @@ class FeasibilityAnalyzer:
                     missing.append(req.name)
                     risks.append(f"Agent {agent.agent_id} is unavailable.")
                     continue
-                if not self._agent_covers(agent, req.name):
+                skill = self._agent_skill(agent, req.name)
+                if skill is None:
                     coverage_ok = False
                     missing.append(req.name)
                     risks.append(f"Agent {agent.agent_id} does not advertise {req.name}.")
                     continue
+                if not self._contract_modes_compatible(skill, req):
+                    compatibility_ok = False
+                    risks.append(
+                        f"Agent {agent.agent_id} advertises {req.name}, "
+                        "but its modes are incompatible with the requirement."
+                    )
                 if not self._trust_satisfies(agent.trust_level, req.required_trust_level):
                     authority_ok = False
                     risks.append(
@@ -76,16 +107,12 @@ class FeasibilityAnalyzer:
 
             if task.auxiliary_spec_id:
                 aux = aux_by_id.get(task.auxiliary_spec_id)
-                if aux and req.auxiliary_eligible and not aux.persists:
+                if aux and self._auxiliary_admissible(aux, req, risks):
                     continue
                 coverage_ok = False
                 missing.append(req.name)
                 risks.append(f"Auxiliary task {task.task_id} is not admissible.")
                 continue
-
-            coverage_ok = False
-            missing.append(req.name)
-            risks.append(f"Task {task.task_id} has no accountable executor.")
 
         acyclic_ok = self._is_acyclic(proposal.tasks)
         if not acyclic_ok:
@@ -111,23 +138,39 @@ class FeasibilityAnalyzer:
                         f"with {task.task_id}."
                     )
 
+        required_names = {self._norm(req.name) for req in request.requirements}
+        planned_names = {self._norm(task.requirement_name) for task in proposal.tasks}
+        requirements_ok = required_names <= planned_names
+        if not requirements_ok:
+            for requirement in request.requirements:
+                if self._norm(requirement.name) not in planned_names:
+                    missing.append(requirement.name)
+                    risks.append(f"Requirement {requirement.name} is not planned.")
+
         artifacts_ok = all(
-            artifact in proposal.expected_artifacts
+            self._norm(artifact)
+            in {self._norm(item) for item in proposal.expected_artifacts}
             for artifact in request.required_artifacts
         )
         if not artifacts_ok:
             risks.append("The candidate plan does not promise all required artifacts.")
 
-        verifiable_ok = bool(proposal.completion_criteria)
+        verifiable_ok = bool(proposal.completion_criteria) and all(
+            self._task_verifiable(task, req_by_name) for task in proposal.tasks
+        )
         if not verifiable_ok:
-            risks.append("The candidate plan lacks decidable completion criteria.")
+            risks.append("The candidate plan lacks decidable validation evidence.")
 
         evidence.extend(
             [
+                PredicateEvidence(name="well_formed", passed=structure_ok),
                 PredicateEvidence(name="covered", passed=coverage_ok),
+                PredicateEvidence(name="total_assignment", passed=total_assignment_ok),
                 PredicateEvidence(name="authorized", passed=authority_ok),
                 PredicateEvidence(name="compatible", passed=compatibility_ok),
                 PredicateEvidence(name="acyclic", passed=acyclic_ok),
+                PredicateEvidence(name="ordered", passed=order_ok),
+                PredicateEvidence(name="requirements_complete", passed=requirements_ok),
                 PredicateEvidence(name="complete", passed=artifacts_ok),
                 PredicateEvidence(name="verifiable", passed=verifiable_ok),
             ]
@@ -150,8 +193,115 @@ class FeasibilityAnalyzer:
         )
 
     def _agent_covers(self, agent: AgentRegistryEntry, requirement_name: str) -> bool:
+        return self._agent_skill(agent, requirement_name) is not None
+
+    def _agent_skill(
+        self, agent: AgentRegistryEntry, requirement_name: str
+    ) -> CapabilityRequirement | None:
         wanted = self._norm(requirement_name)
-        return any(self._norm(skill.name) == wanted for skill in agent.skills)
+        for skill in agent.skills:
+            if self._norm(skill.name) == wanted:
+                return skill
+        return None
+
+    def _contract_modes_compatible(
+        self,
+        skill: CapabilityRequirement,
+        requirement: CapabilityRequirement,
+    ) -> bool:
+        return self._modes_compatible(
+            skill.input_modes,
+            requirement.input_modes,
+        ) and self._modes_compatible(
+            skill.output_modes,
+            requirement.output_modes,
+        )
+
+    def _auxiliary_admissible(
+        self,
+        aux: GeneratedNlpAgentSpec,
+        requirement: CapabilityRequirement,
+        risks: list[str],
+    ) -> bool:
+        ok = True
+        if not requirement.auxiliary_eligible:
+            risks.append(f"Requirement {requirement.name} is not auxiliary eligible.")
+            ok = False
+        if aux.method not in self.APPROVED_AUXILIARY_METHODS:
+            risks.append(f"Auxiliary method {aux.method} is not approved.")
+            ok = False
+        if aux.persists:
+            risks.append(f"Auxiliary spec {aux.spec_id} persists beyond the plan.")
+            ok = False
+        if not aux.lifecycle:
+            risks.append(f"Auxiliary spec {aux.spec_id} lacks a lifecycle token.")
+            ok = False
+        if not aux.validation_rule:
+            risks.append(f"Auxiliary spec {aux.spec_id} lacks a validation rule.")
+            ok = False
+        if "read_only" not in aux.authority_bounds:
+            risks.append(f"Auxiliary spec {aux.spec_id} is not read-only bounded.")
+            ok = False
+        if not self._schema_compatible(aux.output_schema, requirement.output_schema):
+            risks.append(
+                f"Auxiliary spec {aux.spec_id} does not promise the required output schema."
+            )
+            ok = False
+        return ok
+
+    def _task_verifiable(
+        self,
+        task: TaskSpec,
+        req_by_name: dict[str, CapabilityRequirement],
+    ) -> bool:
+        if task.validation_contract:
+            return True
+        requirement = req_by_name.get(self._norm(task.requirement_name))
+        if requirement is None:
+            return False
+        return bool(
+            task.expected_artifacts
+            or requirement.expected_evidence
+            or requirement.validation_contract
+            or not (task.validation_contract or requirement.validation_contract)
+        )
+
+    def _structure_ok(self, tasks: list[TaskSpec], risks: list[str]) -> bool:
+        ok = True
+        if not tasks:
+            risks.append("The candidate plan contains no tasks.")
+            return False
+        seen: set[str] = set()
+        for task in tasks:
+            if task.task_id in seen:
+                risks.append(f"Duplicate task id {task.task_id}.")
+                ok = False
+            seen.add(task.task_id)
+            if not task.requirement_name.strip():
+                risks.append(f"Task {task.task_id} lacks a requirement name.")
+                ok = False
+        return ok
+
+    def _execution_order_ok(
+        self,
+        proposal: SolutionProposal,
+        risks: list[str],
+    ) -> bool:
+        task_ids = [task.task_id for task in proposal.tasks]
+        if not proposal.execution_order:
+            return True
+        if set(proposal.execution_order) != set(task_ids):
+            risks.append("Execution order does not include exactly the planned tasks.")
+            return False
+        positions = {task_id: index for index, task_id in enumerate(proposal.execution_order)}
+        for task in proposal.tasks:
+            for dependency in task.depends_on:
+                if dependency in positions and positions[dependency] > positions[task.task_id]:
+                    risks.append(
+                        f"Execution order places {task.task_id} before dependency {dependency}."
+                    )
+                    return False
+        return True
 
     def _trust_satisfies(self, actual: str, required: str) -> bool:
         try:
@@ -164,6 +314,16 @@ class FeasibilityAnalyzer:
         if not outputs or not inputs:
             return True
         return bool(set(outputs) & set(inputs))
+
+    @staticmethod
+    def _schema_compatible(provided: dict, required: dict) -> bool:
+        required_fields = required.get("required", [])
+        provided_fields = provided.get("required", [])
+        if not isinstance(required_fields, list) or not required_fields:
+            return True
+        if not isinstance(provided_fields, list):
+            return False
+        return set(required_fields) <= set(provided_fields)
 
     @staticmethod
     def _is_acyclic(tasks: list[TaskSpec]) -> bool:

@@ -221,3 +221,78 @@ def test_unavailable_agent_is_refused():
 
     assert not report.feasible
     assert "summarize" in report.missing_capabilities
+
+
+def test_execution_order_must_respect_dependencies():
+    extract = CapabilityRequirement(
+        name="extract numbers",
+        output_modes=["numbers"],
+    )
+    calculate = CapabilityRequirement(
+        name="calculate percentage",
+        input_modes=["numbers"],
+        output_modes=["number"],
+    )
+    request = ProblemRequest(
+        user_goal="Extract and calculate.",
+        requirements=[extract, calculate],
+        required_artifacts=["percentage"],
+    )
+    proposal = SolutionProposal(
+        tasks=[
+            TaskSpec(task_id="t1", requirement_name="extract numbers", assigned_to="extractor"),
+            TaskSpec(
+                task_id="t2",
+                requirement_name="calculate percentage",
+                assigned_to="calculator",
+                depends_on=["t1"],
+            ),
+        ],
+        execution_order=["t2", "t1"],
+        expected_artifacts=["percentage"],
+        completion_criteria=["percentage exists"],
+    )
+
+    report = FeasibilityAnalyzer().check(
+        request,
+        [_agent("extractor", extract), _agent("calculator", calculate)],
+        proposal,
+    )
+
+    assert not report.feasible
+    assert any(item.name == "ordered" and not item.passed for item in report.evidence)
+
+
+def test_persistent_auxiliary_spec_is_refused():
+    extract = CapabilityRequirement(
+        name="extract revenue cells",
+        description="extract Q1 and Q2 revenue values",
+        output_schema={"required": ["q1_revenue", "q2_revenue"]},
+        auxiliary_eligible=True,
+    )
+    spec = BoundedAuxiliaryCapabilityFactory().specify(extract, lifecycle="plan-1")
+    assert spec is not None
+    spec = spec.model_copy(update={"persists": True})
+    request = ProblemRequest(
+        user_goal="Extract revenue cells.",
+        requirements=[extract],
+        required_artifacts=["revenue_pair"],
+    )
+    proposal = SolutionProposal(
+        tasks=[
+            TaskSpec(
+                task_id="t1",
+                requirement_name="extract revenue cells",
+                auxiliary_spec_id=spec.spec_id,
+            )
+        ],
+        generated_nlp_agents=[spec],
+        execution_order=["t1"],
+        expected_artifacts=["revenue_pair"],
+        completion_criteria=["auxiliary validator passes"],
+    )
+
+    report = FeasibilityAnalyzer().check(request, [], proposal)
+
+    assert not report.feasible
+    assert any("persists" in risk for risk in report.risks)
