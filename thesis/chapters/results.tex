@@ -3,70 +3,93 @@
 
 \section{Evaluation Status}
 
-At the present stage, the repository specifies the theoretical framework, implementation design, service wrapper, Docker deployment configuration, and evaluation protocol. The implementation also includes unit tests, deterministic local scenarios, and a Docker real-network A2A system harness. Numerical claims in this chapter must still be populated only from preserved execution traces produced under the procedure in Chapter~\ref{chap:methodology}; passing infrastructure tests alone is not evidence of baseline superiority. Docker support improves reproducibility and supplies system-level traces, but comparative empirical conclusions require the baseline and ablation runs described below.
+The evaluation executed three evidence layers. First, the non-Docker test suite verifies the core coordination records, feasibility predicates, SDK adapters, service endpoints, retry behavior, Lingo-facing coordinator surface, and ledger recovery. Second, deterministic local scenarios exercise the full coordination path without external services. Third, a Docker A2A system harness deploys one coordinator service, one registry service, multiple independently deployed A2A fixture agents, a coordinator configured with a failing registry, and an HTTP-only system-test runner. In addition, two local LLM reference batches were executed against \texttt{http://127.0.0.1:1234} using only \texttt{qwen/qwen3-1.7b} and \texttt{google/gemma-4-e2b}. These local LLM runs are not treated as authorizers; they are evidence about linguistic interpretation and candidate decomposition under the thesis boundary.
 
-\section{Evaluation Questions}
+The preserved raw evidence is written under \texttt{demo\_runs/}. The generated analysis summary is written under \texttt{demo\_runs/thesis\_analysis/}. The local LLM batches use prompt version \texttt{local-llm-reference-v1}, temperature 0, schema-constrained JSON output, and one model per batch. The Qwen batch ran first, then the model was switched once and the Gemma batch was run.
 
-The empirical evaluation addresses four questions. First, does the hybrid coordination agent distinguish feasible from infeasible requests more accurately than the baselines? Second, does symbolic authorization reduce false acceptance of plans with missing coverage, incompatible artifacts, cycles, or authority violations? Third, what latency, message, and model-use overhead does that validation introduce across remote A2A, local Python, and Lingo-backed agents? Fourth, do recorded traces permit an independent reviewer to reconstruct why a plan was authorized or refused, verify that agent invocation passed through \texttt{CoordinationSdk}, and verify that planning and feasibility remained owned by \texttt{CoordinationAgent}?
+\section{Deterministic Local Scenarios}
 
-\section{Scenario Matrix}
+The deterministic scenario runner produced seven coordination attempts. All seven observed statuses matched their reference statuses. Four plans were symbolically authorized; three requests were refused before dispatch. In all seven cases, no dispatch occurred before authorization or explicit refusal was recorded. The outcomes are summarized in Table~\ref{tab:deterministic-results}.
 
 \begin{table}[htbp]
 \centering
-\caption{Minimum scenario categories for evaluation.}
-\label{tab:scenario-matrix}
-\begin{tabular}{p{0.28\textwidth}p{0.20\textwidth}p{0.40\textwidth}}
+\caption{Deterministic local scenario outcomes.}
+\label{tab:deterministic-results}
+\small
+\begin{tabular}{@{}p{0.31\textwidth}p{0.14\textwidth}p{0.14\textwidth}p{0.15\textwidth}r@{}}
 \toprule
-\textbf{Scenario category} & \textbf{Reference verdict} & \textbf{Expected decisive evidence} \\
+\textbf{Scenario} & \textbf{Reference} & \textbf{Observed} & \textbf{Authorization} & \textbf{Dispatches} \\
 \midrule
-Single admitted capability covers request & Feasible & Direct assignment and valid output contract \\
-Multiple compatible capabilities cover request & Feasible & Acyclic dependency and artifact graph \\
-Approved narrow linguistic gap & Feasible & Auxiliary eligibility, validator, and task-local lifecycle \\
-Required capability absent & Infeasible & Explicit uncovered requirement \\
-Input/output contract mismatch & Infeasible & Incompatible artifact or modality pair \\
-Dependency cycle & Infeasible & Failed acyclicity predicate \\
-Insufficient authority & Infeasible & Failed permission or trust predicate \\
-Agent loss after authorization & Runtime failure & Authorization trace followed by availability failure \\
-Remote A2A agent only & Feasible or infeasible by contract & Agent Card ingestion, A2A task dispatch, and normalized artifact evidence \\
-Local Python agent only & Feasible or infeasible by contract & SDK registration, handler invocation, and validated local output \\
-Lingo linguistic agent only & Feasible or infeasible by contract & SDK registration, Lingo runtime invocation, and structured linguistic artifact \\
-Mixed remote, local, and linguistic plan & Feasible or infeasible by contract & Shared feasibility predicates and unified SDK trace across agent kinds \\
+Research brief production & Completed & Completed & Feasible & 4 \\
+Financial report validation & Failed & Failed & Feasible & 4 \\
+Smart building maintenance triage & Infeasible & Infeasible & Infeasible & 0 \\
+Warehouse task coordination & Completed & Completed & Feasible & 4 \\
+Incident response runbook & Infeasible & Infeasible & Infeasible & 0 \\
+Data privacy redaction pipeline & Completed & Completed & Feasible & 4 \\
+Travel plan local fixtures & Infeasible & Infeasible & Infeasible & 0 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-The last category is deliberately separated from planning infeasibility. A plan may be justified when authorized and still fail because the environment changes. Conflating these outcomes would obscure whether an error belongs to interpretation, planning, coordination, or execution.
+These results support the central distinction between planning feasibility and runtime success. The financial report scenario is authorized because the required capability chain is available and symbolically admissible, but the run fails when a downstream artifact violates its validation contract. The smart-building, incident-response, and travel scenarios demonstrate explicit refusal: the coordinator records infeasibility and performs no task dispatch.
+
+\section{Docker A2A System Harness}
+
+The Docker harness passed all eleven system checks. The report includes health and registry discovery, direct and multi-agent remote A2A execution, missing-capability refusal, authority refusal, mode/dependency rejection, invalid-artifact runtime failure, timeout failure, registry outage, and session resume. The median latency across the eleven checks was 45.12 ms in the preserved run. Table~\ref{tab:docker-results} reports the observed status for each check.
 
 \begin{table}[htbp]
 \centering
-\caption{Docker A2A system harness checks.}
-\label{tab:docker-system-matrix}
-\begin{tabular}{p{0.32\textwidth}p{0.18\textwidth}p{0.38\textwidth}}
+\caption{Docker A2A system harness outcomes.}
+\label{tab:docker-results}
+\small
+\begin{tabular}{@{}p{0.36\textwidth}p{0.18\textwidth}p{0.18\textwidth}r@{}}
 \toprule
-\textbf{System check} & \textbf{Reference verdict} & \textbf{Expected decisive evidence} \\
+\textbf{Check} & \textbf{Reference} & \textbf{Observed} & \textbf{Latency ms} \\
 \midrule
-Health and registry discovery & Available & Coordinator and registry reachable; Agent Cards fetched from independent containers \\
-Remote A2A direct task & Completed & Authorized plan, A2A dispatch, valid artifact field, and trace ordering \\
-Remote A2A multi-agent task & Completed & Multiple container agents invoked through SDK with propagated prior artifacts \\
-Missing capability & Infeasible & No dispatch and explicit uncovered requirement \\
-Insufficient authority & Infeasible & Failed authorization predicate and no dispatch \\
-Mode/dependency mismatch & Infeasible & Failed compatibility predicate through \texttt{/feasibility} \\
-Invalid artifact & Runtime failure & Feasible authorization followed by SDK artifact-validation failure \\
-Slow remote agent & Runtime failure & Feasible authorization followed by timeout or failed task observation \\
-Registry outage & Infeasible & Failed registry-availability evidence \\
-Session resume & Completed & Reused recorded terminal result without changing the artifact set \\
+Health & OK & OK & 1.79 \\
+Registry discovery & All agents visible & All agents visible & 0.01 \\
+Remote A2A direct success & Completed & Completed & 46.76 \\
+Remote A2A multi-agent success & Completed & Completed & 37.75 \\
+Missing capability refusal & Infeasible & Infeasible & 89.93 \\
+Authority refusal & Infeasible & Infeasible & 92.95 \\
+Mode/dependency rejection & Infeasible & Infeasible & 2.87 \\
+Bad artifact runtime failure & Failed & Failed & 36.40 \\
+Timeout runtime failure & Failed & Failed & 45.12 \\
+Registry outage & Infeasible & Infeasible & 291.67 \\
+Resume session & Completed & Completed & 101.95 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-The raw Docker system report is written to \texttt{demo\_runs/docker\_system\_report.json}. It records the reference verdict, observed status, registry snapshot, predicate evidence, task results, artifacts, trace event types, latency, and whether dispatch began only after authorization. These records may be promoted into the thesis results only when the corresponding run configuration is intentionally selected and preserved.
+The Docker evidence strengthens the implementation claim because these checks do not inject Python objects into the coordinator. The runner communicates through HTTP endpoints inside the Docker network, and remote agents are discovered through Agent Cards before task dispatch. The invalid-artifact and timeout cases show that authorization does not claim guaranteed runtime success; it establishes that the plan is justified at the boundary where the current registry, constraints, and validation contracts are known.
 
-\section{Results Reporting}
+\section{Local LLM Reference Batches}
 
-The primary results table must report, for each configuration, feasibility precision, feasibility recall, F1, invalid-plan rejection rate, task success rate, trace completeness, communication-boundary compliance, coordination-ownership compliance, median latency, message count, and model usage. Results must also be disaggregated by scenario category, agent kind, and runtime path. A single aggregate score is insufficient because a configuration can appear successful by accepting too many requests, by benefiting from a majority class, bypassing the SDK communication boundary, or placing planning authority in the wrong layer.
+The local LLM reference checks used the same seven scenario descriptions and available registry summaries. Each model was asked to return a schema-valid, non-authoritative interpretation and candidate decomposition. The runner verified that the response model or system fingerprint matched the requested model ID before preserving the output. Table~\ref{tab:local-llm-results} summarizes the batches.
 
-For every false acceptance and false refusal, the analysis records the first incorrect decision and its cause. Runtime failures are classified separately as agent unavailability, transport error, invalid artifact, timeout, or aggregation failure. The worked example in Chapter~\ref{chap:theoretical-solution} serves as an explanatory case, not as empirical evidence.
+\begin{table}[htbp]
+\centering
+\caption{Local LLM reference batch outcomes.}
+\label{tab:local-llm-results}
+\small
+\begin{tabular}{@{}p{0.20\textwidth}rrrrrr@{}}
+\toprule
+\textbf{Model} & \textbf{Parsed} & \textbf{Req. names} & \textbf{Artifacts} & \textbf{Verdict} & \textbf{Agents} & \textbf{Tokens} \\
+\midrule
+Qwen 3 1.7B & 7/7 & 0/7 & 4/7 & 4/7 & 7/7 & 6001 \\
+Gemma 4 E2B & 7/7 & 0/7 & 3/7 & 4/7 & 7/7 & 7708 \\
+\bottomrule
+\end{tabular}
+\end{table}
 
-\section{Criteria for Answering the Research Questions}
+Both local models produced parseable schema-valid JSON for every scenario and assigned candidate tasks only to registered agents. However, neither model reproduced the exact internal requirement names used by the symbolic fixtures. This is a useful negative result rather than a failure of the thesis: it shows why linguistic output must be mediated before it becomes an executable plan. The LLMs can produce structured candidate interpretations, but exact capability identity, artifact requirements, feasibility verdicts, and execution authorization remain the responsibility of the symbolic coordination layer.
 
-RQ1 is supported when the scenario traces show that capability, compatibility, dependency, authority, contract, and completion records are sufficient to reconstruct the reference decision. RQ2 is supported when the hybrid \texttt{CoordinationAgent} retains interpretation coverage while rejecting invalid proposals that the variant without symbolic feasibility accepts. RQ3 is supported when auxiliary capabilities are admitted only under the stated eligibility and lifecycle rules and do not satisfy substantive missing expertise. RQ4 is answered by the comparative outcome, process, boundary-compliance, ownership-compliance, and overhead measurements. Until those measurements are collected, these remain evaluation criteria rather than empirical findings.
+\section{Research Question Interpretation}
+
+RQ1 asks which coordination information must be represented explicitly. The deterministic and Docker scenarios show that capability names, registry entries, artifact contracts, dependency order, trust/authority predicates, validation contracts, and trace events are all needed to distinguish accepted plans, explicit refusals, and runtime failures.
+
+RQ2 asks how responsibility should be divided between LLM reasoning and symbolic validation. The local LLM reference batches support the proposed division: the models can produce structured linguistic candidates, but exact requirement identity and verdict agreement remain imperfect. The coordination agent therefore treats model output as proposal evidence only and applies deterministic feasibility checks before dispatch.
+
+RQ3 asks how narrow missing linguistic capabilities can be introduced without unbounded authority. The deterministic redaction scenario exercises the bounded auxiliary path: a narrow extraction step is admitted under explicit method, validator, and task-local lifecycle rules, while substantive missing capabilities in other scenarios are refused.
+
+RQ4 asks which measures can determine whether the framework improves justified acceptance, explicit refusal, traceability, communication-boundary discipline, and coordination-ownership discipline. The current evidence demonstrates those measures on the implemented prototype: outcome agreement, refusal without dispatch, runtime-failure separation, Docker-level A2A boundary checks, model-specific local LLM traces, token usage, and latency are all recorded. The evidence does not establish broad benchmark superiority over all possible LLM-only or rule-only systems; such superiority would require a larger paired comparative study. It does establish that the implementation preserves the manuscript's main boundary: language proposes, symbolic coordination authorizes or refuses, and execution proceeds only through the SDK-managed communication surface.

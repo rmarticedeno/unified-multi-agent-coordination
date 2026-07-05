@@ -20,6 +20,8 @@ unified-coordination-scenarios = "unified_multi_agent_coordination.end_to_end_sc
 unified-a2a-fixture-agent = "unified_multi_agent_coordination.a2a_fixture_agent:main"
 unified-fixture-registry = "unified_multi_agent_coordination.fixture_registry:main"
 unified-docker-system-tests = "unified_multi_agent_coordination.docker_system_tests:main"
+unified-local-llm-reference = "unified_multi_agent_coordination.local_llm_reference:main"
+unified-thesis-results = "unified_multi_agent_coordination.thesis_results:main"
 
 [build-system]
 requires = ["hatchling"]

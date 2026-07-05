@@ -34,6 +34,37 @@ The runner writes `demo_runs/end_to_end_scenarios.json` by default. Each scenari
 uv run --with-editable . unified-coordination-scenarios --showcase
 ```
 
+## Thesis Evidence Analysis
+
+Generate thesis-ready summaries from the preserved deterministic, Docker, and local-LLM reports:
+
+```powershell
+uv run --with-editable . unified-thesis-results
+```
+
+The command writes `demo_runs/thesis_analysis/summary.json`,
+`demo_runs/thesis_analysis/tables.md`, and
+`demo_runs/thesis_analysis/tables.tex`.
+
+Local LLM reference checks use the OpenAI-compatible local endpoint at
+`http://127.0.0.1:1234` and are deliberately run one model at a time. Only
+`qwen/qwen3-1.7b` and `google/gemma-4-e2b` are accepted:
+
+```powershell
+lms unload --all
+lms load qwen/qwen3-1.7b --identifier qwen/qwen3-1.7b -y
+uv run --with-editable . unified-local-llm-reference --model qwen/qwen3-1.7b
+
+lms unload --all
+lms load google/gemma-4-e2b --identifier google/gemma-4-e2b -y
+uv run --with-editable . unified-local-llm-reference --model google/gemma-4-e2b
+```
+
+Each model batch writes a model-specific report under `demo_runs/local_llm/`.
+The runner verifies that the endpoint advertises the requested model and that
+the completion response identifies the requested model before preserving
+outputs.
+
 ## Service
 
 Start the FastAPI service locally:

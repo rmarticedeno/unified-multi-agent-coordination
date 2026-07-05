@@ -1,0 +1,183 @@
+x-app-service: &app-service
+  build:
+    context: .
+  image: unified-multi-agent-coordination:system
+
+x-http-healthcheck: &http-healthcheck
+  test:
+    [
+      "CMD",
+      "python",
+      "-c",
+      "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=2).read()",
+    ]
+  interval: 2s
+  timeout: 3s
+  retries: 30
+  start_period: 5s
+
+services:
+  coordination-service:
+    <<: *app-service
+    environment:
+      COORDINATION_REGISTRY_URL: http://registry:8000/agents
+      COORDINATION_REQUEST_TIMEOUT_S: 2.0
+      COORDINATION_REGISTRY_RETRIES: 1
+      COORDINATION_TASK_RETRIES: 0
+      COORDINATION_RETRY_BACKOFF_S: 0.05
+      COORDINATION_LEDGER_PATH: /app/demo_runs/docker-ledger.jsonl
+      COORDINATION_SERVICE_HOST: 0.0.0.0
+      COORDINATION_SERVICE_PORT: 8000
+    ports:
+      - "8010:8000"
+    volumes:
+      - ./demo_runs:/app/demo_runs
+    depends_on:
+      registry:
+        condition: service_healthy
+    healthcheck: *http-healthcheck
+
+  coordination-bad-registry:
+    <<: *app-service
+    environment:
+      COORDINATION_REGISTRY_URL: http://registry-outage:8000/agents
+      COORDINATION_REQUEST_TIMEOUT_S: 0.2
+      COORDINATION_REGISTRY_RETRIES: 0
+      COORDINATION_TASK_RETRIES: 0
+      COORDINATION_LEDGER_PATH: /app/demo_runs/docker-bad-registry-ledger.jsonl
+      COORDINATION_SERVICE_HOST: 0.0.0.0
+      COORDINATION_SERVICE_PORT: 8000
+    volumes:
+      - ./demo_runs:/app/demo_runs
+    healthcheck: *http-healthcheck
+
+  registry:
+    <<: *app-service
+    command: ["/app/.venv/bin/unified-fixture-registry"]
+    environment:
+      A2A_CARD_URLS: >-
+        http://summarizer:8000/.well-known/agent-card.json,
+        http://extractor:8000/.well-known/agent-card.json,
+        http://calculator:8000/.well-known/agent-card.json,
+        http://formatter:8000/.well-known/agent-card.json,
+        http://bad-artifact:8000/.well-known/agent-card.json,
+        http://slow-agent:8000/.well-known/agent-card.json,
+        http://control-agent:8000/.well-known/agent-card.json
+    depends_on:
+      summarizer:
+        condition: service_healthy
+      extractor:
+        condition: service_healthy
+      calculator:
+        condition: service_healthy
+      formatter:
+        condition: service_healthy
+      bad-artifact:
+        condition: service_healthy
+      slow-agent:
+        condition: service_healthy
+      control-agent:
+        condition: service_healthy
+    healthcheck: *http-healthcheck
+
+  summarizer:
+    <<: *app-service
+    command: ["/app/.venv/bin/unified-a2a-fixture-agent"]
+    environment:
+      A2A_AGENT_ID: summarizer
+      A2A_AGENT_SKILL: summarize
+      A2A_AGENT_INPUT_MODES: text
+      A2A_AGENT_OUTPUT_MODES: data
+      A2A_AGENT_BASE_URL: http://summarizer:8000
+      A2A_AGENT_ARTIFACT_NAME: summary
+      A2A_AGENT_ARTIFACT_JSON: '{"summary":"Remote fixture summary"}'
+    healthcheck: *http-healthcheck
+
+  extractor:
+    <<: *app-service
+    command: ["/app/.venv/bin/unified-a2a-fixture-agent"]
+    environment:
+      A2A_AGENT_ID: extractor
+      A2A_AGENT_SKILL: extract facts
+      A2A_AGENT_INPUT_MODES: text
+      A2A_AGENT_OUTPUT_MODES: facts
+      A2A_AGENT_BASE_URL: http://extractor:8000
+      A2A_AGENT_ARTIFACT_NAME: facts
+      A2A_AGENT_ARTIFACT_JSON: '{"facts":["alpha","beta"]}'
+    healthcheck: *http-healthcheck
+
+  calculator:
+    <<: *app-service
+    command: ["/app/.venv/bin/unified-a2a-fixture-agent"]
+    environment:
+      A2A_AGENT_ID: calculator
+      A2A_AGENT_SKILL: calculate metric
+      A2A_AGENT_INPUT_MODES: facts
+      A2A_AGENT_OUTPUT_MODES: metric
+      A2A_AGENT_BASE_URL: http://calculator:8000
+      A2A_AGENT_ARTIFACT_NAME: metric
+      A2A_AGENT_ARTIFACT_JSON: '{"metric":42}'
+    healthcheck: *http-healthcheck
+
+  formatter:
+    <<: *app-service
+    command: ["/app/.venv/bin/unified-a2a-fixture-agent"]
+    environment:
+      A2A_AGENT_ID: formatter
+      A2A_AGENT_SKILL: format report
+      A2A_AGENT_INPUT_MODES: metric
+      A2A_AGENT_OUTPUT_MODES: report
+      A2A_AGENT_BASE_URL: http://formatter:8000
+      A2A_AGENT_ARTIFACT_NAME: final_report
+      A2A_AGENT_ARTIFACT_JSON: '{"final_report":"Report complete"}'
+      A2A_AGENT_INCLUDE_COORDINATION_SUMMARY: "true"
+    healthcheck: *http-healthcheck
+
+  bad-artifact:
+    <<: *app-service
+    command: ["/app/.venv/bin/unified-a2a-fixture-agent"]
+    environment:
+      A2A_AGENT_ID: bad-artifact
+      A2A_AGENT_SKILL: produce validated artifact
+      A2A_AGENT_BASE_URL: http://bad-artifact:8000
+      A2A_AGENT_ARTIFACT_NAME: invalid
+      A2A_AGENT_ARTIFACT_JSON: '{"wrong":true}'
+    healthcheck: *http-healthcheck
+
+  slow-agent:
+    <<: *app-service
+    command: ["/app/.venv/bin/unified-a2a-fixture-agent"]
+    environment:
+      A2A_AGENT_ID: slow-agent
+      A2A_AGENT_SKILL: slow summarize
+      A2A_AGENT_BASE_URL: http://slow-agent:8000
+      A2A_AGENT_ARTIFACT_NAME: slow_summary
+      A2A_AGENT_ARTIFACT_JSON: '{"slow_summary":"late result"}'
+      A2A_AGENT_DELAY_S: 2.0
+    healthcheck: *http-healthcheck
+
+  control-agent:
+    <<: *app-service
+    command: ["/app/.venv/bin/unified-a2a-fixture-agent"]
+    environment:
+      A2A_AGENT_ID: control-agent
+      A2A_AGENT_SKILL: control actuator
+      A2A_AGENT_BASE_URL: http://control-agent:8000
+      A2A_AGENT_ARTIFACT_NAME: control_receipt
+      A2A_AGENT_ARTIFACT_JSON: '{"control_receipt":"standard trust only"}'
+    healthcheck: *http-healthcheck
+
+  system-tests:
+    <<: *app-service
+    command: ["/app/.venv/bin/unified-docker-system-tests"]
+    environment:
+      COORDINATION_BASE_URL: http://coordination-service:8000
+      BAD_REGISTRY_BASE_URL: http://coordination-bad-registry:8000
+      SYSTEM_REPORT_PATH: /app/demo_runs/docker_system_report.json
+    volumes:
+      - ./demo_runs:/app/demo_runs
+    depends_on:
+      coordination-service:
+        condition: service_healthy
+      coordination-bad-registry:
+        condition: service_healthy
