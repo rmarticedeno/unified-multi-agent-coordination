@@ -2,7 +2,9 @@ from fastapi.testclient import TestClient
 
 from unified_multi_agent_coordination import (
     CapabilityRequirement,
+    CoordinationAgent,
     CoordinationSdk,
+    InMemoryCoordinationLedger,
 )
 from unified_multi_agent_coordination.service import create_app
 
@@ -78,7 +80,41 @@ def test_coordinate_endpoint_returns_local_artifact():
     assert response.status_code == 200
     body = response.json()
     assert body["status"] == "completed"
+    assert body["session_id"]
     assert body["artifacts"] == [{"kind": "text", "text": "short summary"}]
+
+
+def test_coordinate_endpoint_accepts_session_id_and_resume_returns_terminal_result():
+    ledger = InMemoryCoordinationLedger()
+    sdk = CoordinationSdk()
+    calls = []
+    sdk.register_local_agent(
+        "Summarizer",
+        [CapabilityRequirement(name="summarize", output_modes=["text"])],
+        lambda payload: calls.append(payload.get("text", "")) or {
+            "artifacts": [{"kind": "text", "text": payload.get("text", "")}]
+        },
+    )
+    client = TestClient(create_app(sdk=sdk, agent=CoordinationAgent(sdk=sdk, ledger=ledger)))
+
+    response = client.post(
+        "/coordinate",
+        json={
+            "session_id": "api-session",
+            "problem": {
+                "user_goal": "Summarize.",
+                "requirements": [{"name": "summarize"}],
+            },
+            "payload": {"text": "first"},
+        },
+    )
+    resumed = client.post("/sessions/api-session/resume", json={})
+
+    assert response.status_code == 200
+    assert resumed.status_code == 200
+    assert resumed.json()["session_id"] == "api-session"
+    assert resumed.json()["artifacts"] == [{"kind": "text", "text": "first"}]
+    assert calls == ["first"]
 
 
 def test_coordinate_endpoint_returns_infeasible_without_agent():

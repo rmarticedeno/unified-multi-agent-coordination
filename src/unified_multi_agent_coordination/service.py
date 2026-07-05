@@ -9,6 +9,7 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 
 from .coordination_agent import CoordinationAgent
+from .coordination_ledger import JsonlCoordinationLedger, RetryPolicy
 from .coordination_sdk import CoordinationSdk, RemoteRegistryError
 from .models import (
     AgentRegistryEntry,
@@ -30,6 +31,7 @@ class CoordinateRequest(PlanRequest):
 
     payload: dict[str, Any] = Field(default_factory=dict)
     timeout_s: float = 30.0
+    session_id: str | None = None
 
 
 class FeasibilityRequest(BaseModel):
@@ -50,6 +52,21 @@ def sdk_from_env() -> CoordinationSdk:
     )
 
 
+def agent_from_env(sdk: CoordinationSdk) -> CoordinationAgent:
+    """Create the coordination agent from deployment environment variables."""
+    ledger_path = os.getenv("COORDINATION_LEDGER_PATH") or None
+    ledger = JsonlCoordinationLedger(ledger_path) if ledger_path else None
+    return CoordinationAgent(
+        sdk=sdk,
+        ledger=ledger,
+        retry_policy=RetryPolicy(
+            registry_retries=int(os.getenv("COORDINATION_REGISTRY_RETRIES", "2")),
+            task_retries=int(os.getenv("COORDINATION_TASK_RETRIES", "1")),
+            backoff_s=float(os.getenv("COORDINATION_RETRY_BACKOFF_S", "0.05")),
+        ),
+    )
+
+
 def create_app(
     sdk: CoordinationSdk | None = None,
     agent: CoordinationAgent | None = None,
@@ -60,7 +77,7 @@ def create_app(
         version="0.1.0",
     )
     app.state.sdk = sdk or sdk_from_env()
-    app.state.agent = agent or CoordinationAgent(sdk=app.state.sdk)
+    app.state.agent = agent or agent_from_env(app.state.sdk)
 
     @app.get("/health")
     async def health() -> dict[str, str]:
@@ -91,7 +108,19 @@ def create_app(
             context=request.context,
             payload=request.payload,
             timeout_s=request.timeout_s,
+            session_id=request.session_id,
         )
+
+    @app.post("/sessions/{session_id}/resume")
+    async def resume_session(session_id: str, request: CoordinateRequest | None = None):
+        try:
+            return await app.state.agent.resume_session(
+                session_id,
+                payload=request.payload if request is not None else None,
+                timeout_s=request.timeout_s if request is not None else 30.0,
+            )
+        except ValueError as exc:
+            raise HTTPException(status_code=404, detail=str(exc)) from exc
 
     @app.post("/feasibility")
     async def feasibility(request: FeasibilityRequest):

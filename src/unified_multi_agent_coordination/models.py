@@ -122,6 +122,8 @@ class FeasibilityReport(BaseModel):
 class CoordinationPlanResult(BaseModel):
     """A coordination-agent planning result before task dispatch."""
 
+    session_id: str = ""
+    plan_id: str = ""
     request: ProblemRequest
     proposal: SolutionProposal
     feasibility_report: FeasibilityReport
@@ -131,6 +133,9 @@ class CoordinationPlanResult(BaseModel):
 class TaskExecutionResult(BaseModel):
     """A normalized runtime observation for one dispatched task."""
 
+    session_id: str = ""
+    plan_id: str = ""
+    attempt_id: str = ""
     task_id: str
     agent_id: str
     agent_kind: str = "unknown"
@@ -155,6 +160,8 @@ class TraceEvent(BaseModel):
 class CoordinationRunResult(BaseModel):
     """The end-to-end result of an authorized coordination attempt."""
 
+    session_id: str = ""
+    plan_id: str = ""
     status: Literal["completed", "infeasible", "failed"] = "completed"
     plan_result: CoordinationPlanResult
     task_results: list[TaskExecutionResult] = Field(default_factory=list)

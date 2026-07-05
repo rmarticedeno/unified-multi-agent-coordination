@@ -3,7 +3,7 @@
 
 \section{Evaluation Status}
 
-At the present stage, the repository specifies the theoretical framework, implementation design, service wrapper, Docker deployment configuration, and evaluation protocol but does not contain a completed experimental dataset. Consequently, this chapter defines the exact reporting structure and acceptance criteria; it does not present fabricated measurements. Numerical tables must be populated only from preserved execution traces produced under the procedure in Chapter~\ref{chap:methodology}. Docker support improves reproducibility of a later execution environment, but it is not by itself evidence about feasibility accuracy, task success, latency, robustness, or baseline superiority.
+At the present stage, the repository specifies the theoretical framework, implementation design, service wrapper, Docker deployment configuration, and evaluation protocol. The implementation also includes unit tests, deterministic local scenarios, and a Docker real-network A2A system harness. Numerical claims in this chapter must still be populated only from preserved execution traces produced under the procedure in Chapter~\ref{chap:methodology}; passing infrastructure tests alone is not evidence of baseline superiority. Docker support improves reproducibility and supplies system-level traces, but comparative empirical conclusions require the baseline and ablation runs described below.
 
 \section{Evaluation Questions}
 
@@ -36,6 +36,30 @@ Mixed remote, local, and linguistic plan & Feasible or infeasible by contract & 
 \end{table}
 
 The last category is deliberately separated from planning infeasibility. A plan may be justified when authorized and still fail because the environment changes. Conflating these outcomes would obscure whether an error belongs to interpretation, planning, coordination, or execution.
+
+\begin{table}[htbp]
+\centering
+\caption{Docker A2A system harness checks.}
+\label{tab:docker-system-matrix}
+\begin{tabular}{p{0.32\textwidth}p{0.18\textwidth}p{0.38\textwidth}}
+\toprule
+\textbf{System check} & \textbf{Reference verdict} & \textbf{Expected decisive evidence} \\
+\midrule
+Health and registry discovery & Available & Coordinator and registry reachable; Agent Cards fetched from independent containers \\
+Remote A2A direct task & Completed & Authorized plan, A2A dispatch, valid artifact field, and trace ordering \\
+Remote A2A multi-agent task & Completed & Multiple container agents invoked through SDK with propagated prior artifacts \\
+Missing capability & Infeasible & No dispatch and explicit uncovered requirement \\
+Insufficient authority & Infeasible & Failed authorization predicate and no dispatch \\
+Mode/dependency mismatch & Infeasible & Failed compatibility predicate through \texttt{/feasibility} \\
+Invalid artifact & Runtime failure & Feasible authorization followed by SDK artifact-validation failure \\
+Slow remote agent & Runtime failure & Feasible authorization followed by timeout or failed task observation \\
+Registry outage & Infeasible & Failed registry-availability evidence \\
+Session resume & Completed & Reused recorded terminal result without changing the artifact set \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The raw Docker system report is written to \texttt{demo\_runs/docker\_system\_report.json}. It records the reference verdict, observed status, registry snapshot, predicate evidence, task results, artifacts, trace event types, latency, and whether dispatch began only after authorization. These records may be promoted into the thesis results only when the corresponding run configuration is intentionally selected and preserved.
 
 \section{Results Reporting}
 

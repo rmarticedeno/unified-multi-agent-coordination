@@ -146,9 +146,9 @@ class A2AAdapter:
         for part in parts:
             raw = self._as_dict(getattr(part, "root", part))
             kind = raw.get("kind") or raw.get("type")
-            if kind == "text":
+            if kind == "text" or "text" in raw:
                 converted.append({"kind": "text", "text": raw.get("text", "")})
-            elif kind == "data":
+            elif kind == "data" or "data" in raw:
                 converted.append({"kind": "data", "data": raw.get("data", {})})
             elif kind == "file":
                 file_data = self._as_dict(raw.get("file", {}))
@@ -158,6 +158,24 @@ class A2AAdapter:
                         "name": file_data.get("name"),
                         "mime_type": file_data.get("mime_type"),
                         "bytes": file_data.get("bytes"),
+                    }
+                )
+            elif "raw" in raw:
+                converted.append(
+                    {
+                        "kind": "file",
+                        "name": raw.get("filename"),
+                        "mime_type": raw.get("mediaType") or raw.get("media_type"),
+                        "bytes": raw.get("raw"),
+                    }
+                )
+            elif "url" in raw:
+                converted.append(
+                    {
+                        "kind": "file",
+                        "name": raw.get("filename"),
+                        "mime_type": raw.get("mediaType") or raw.get("media_type"),
+                        "url": raw.get("url"),
                     }
                 )
             else:

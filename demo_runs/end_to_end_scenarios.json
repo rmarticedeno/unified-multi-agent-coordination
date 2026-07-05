@@ -1,0 +1,1031 @@
+{
+  "generated_at": "2026-07-02T22:50:48.274459+00:00",
+  "no_external_services": true,
+  "scenario_count": 7,
+  "scenarios": [
+    {
+      "id": "research_brief_production",
+      "title": "Research Brief Production",
+      "showcase": true,
+      "user_request": "Create a short research brief from these notes.",
+      "thesis_value": "Successful decomposed coordination across local, linguistic, and fake A2A agents with traceable artifact evidence.",
+      "reference_status": "completed",
+      "observed_status": "completed",
+      "status_matches_reference": true,
+      "authorization": {
+        "feasible": true,
+        "explanation": "Plan authorized by deterministic feasibility checks.",
+        "failed_predicates": [],
+        "passed_predicates": [
+          "well_formed",
+          "covered",
+          "total_assignment",
+          "authorized",
+          "compatible",
+          "acyclic",
+          "ordered",
+          "requirements_complete",
+          "complete",
+          "verifiable"
+        ],
+        "missing_capabilities": [],
+        "risks": []
+      },
+      "registry": [
+        {
+          "agent_id": "note-extractor",
+          "agent_kind": "local_python",
+          "trust_level": "standard",
+          "skills": [
+            "extract key points"
+          ]
+        },
+        {
+          "agent_id": "brief-summarizer",
+          "agent_kind": "linguistic",
+          "trust_level": "standard",
+          "skills": [
+            "summarize brief"
+          ]
+        },
+        {
+          "agent_id": "citation-checker",
+          "agent_kind": "remote_a2a",
+          "trust_level": "standard",
+          "skills": [
+            "check citations"
+          ]
+        },
+        {
+          "agent_id": "brief-formatter",
+          "agent_kind": "local_python",
+          "trust_level": "standard",
+          "skills": [
+            "format brief"
+          ]
+        }
+      ],
+      "task_results": [
+        {
+          "task_id": "t1",
+          "agent_id": "note-extractor",
+          "agent_kind": "local_python",
+          "status": "completed",
+          "artifacts": [
+            {
+              "kind": "data",
+              "data": {
+                "key_points": [
+                  "Hybrid coordination separates proposal from authorization.",
+                  "Symbolic predicates make refusals auditable.",
+                  "SDK dispatch normalizes heterogeneous agents."
+                ]
+              }
+            }
+          ],
+          "error": ""
+        },
+        {
+          "task_id": "t2",
+          "agent_id": "brief-summarizer",
+          "agent_kind": "linguistic",
+          "status": "completed",
+          "artifacts": [
+            {
+              "kind": "text",
+              "draft": "The notes argue for a hybrid coordinator that lets language propose while symbolic checks authorize execution."
+            }
+          ],
+          "error": ""
+        },
+        {
+          "task_id": "t3",
+          "agent_id": "citation-checker",
+          "agent_kind": "remote_a2a",
+          "status": "completed",
+          "artifacts": [
+            {
+              "kind": "data",
+              "data": {
+                "citation_status": "all cited claims have local references"
+              }
+            }
+          ],
+          "error": ""
+        },
+        {
+          "task_id": "t4",
+          "agent_id": "brief-formatter",
+          "agent_kind": "local_python",
+          "status": "completed",
+          "artifacts": [
+            {
+              "kind": "markdown",
+              "name": "research_brief",
+              "markdown": "# Research Brief\n\nHybrid proposal and symbolic authorization provide an auditable coordination boundary."
+            }
+          ],
+          "error": ""
+        }
+      ],
+      "artifacts": [
+        {
+          "kind": "data",
+          "data": {
+            "key_points": [
+              "Hybrid coordination separates proposal from authorization.",
+              "Symbolic predicates make refusals auditable.",
+              "SDK dispatch normalizes heterogeneous agents."
+            ]
+          }
+        },
+        {
+          "kind": "text",
+          "draft": "The notes argue for a hybrid coordinator that lets language propose while symbolic checks authorize execution."
+        },
+        {
+          "kind": "data",
+          "data": {
+            "citation_status": "all cited claims have local references"
+          }
+        },
+        {
+          "kind": "markdown",
+          "name": "research_brief",
+          "markdown": "# Research Brief\n\nHybrid proposal and symbolic authorization provide an auditable coordination boundary."
+        }
+      ],
+      "trace_event_types": [
+        "request_interpreted",
+        "solution_proposed",
+        "feasibility_recorded",
+        "sdk_local_agent_registered",
+        "sdk_linguistic_agent_registered",
+        "sdk_agent_registered",
+        "sdk_local_agent_registered",
+        "registry_refresh_skipped",
+        "sdk_task_started",
+        "sdk_task_completed",
+        "sdk_task_started",
+        "sdk_task_completed",
+        "sdk_task_started",
+        "sdk_task_completed",
+        "sdk_task_started",
+        "sdk_task_completed",
+        "agent_card_registered"
+      ],
+      "ledger_event_types": [
+        "session_started",
+        "registry_snapshot_recorded",
+        "plan_authorized",
+        "task_attempt_started",
+        "task_attempt_completed",
+        "task_attempt_started",
+        "task_attempt_completed",
+        "task_attempt_started",
+        "task_attempt_completed",
+        "task_attempt_started",
+        "task_attempt_completed",
+        "run_completed"
+      ],
+      "dispatch_attempts": 4,
+      "no_dispatch_before_authorization": true
+    },
+    {
+      "id": "financial_report_validation",
+      "title": "Financial Report Validation",
+      "showcase": true,
+      "user_request": "Extract revenue figures, calculate quarterly growth, and produce a compliance-safe summary.",
+      "thesis_value": "A plan can be symbolically authorized but still fail runtime artifact validation when required completion evidence is absent.",
+      "reference_status": "failed",
+      "observed_status": "failed",
+      "status_matches_reference": true,
+      "authorization": {
+        "feasible": true,
+        "explanation": "Plan authorized by deterministic feasibility checks.",
+        "failed_predicates": [],
+        "passed_predicates": [
+          "well_formed",
+          "covered",
+          "total_assignment",
+          "authorized",
+          "compatible",
+          "acyclic",
+          "ordered",
+          "requirements_complete",
+          "complete",
+          "verifiable"
+        ],
+        "missing_capabilities": [],
+        "risks": []
+      },
+      "registry": [
+        {
+          "agent_id": "table-extractor",
+          "agent_kind": "local_python",
+          "trust_level": "standard",
+          "skills": [
+            "extract revenue figures"
+          ]
+        },
+        {
+          "agent_id": "growth-calculator",
+          "agent_kind": "local_python",
+          "trust_level": "standard",
+          "skills": [
+            "calculate quarterly growth"
+          ]
+        },
+        {
+          "agent_id": "finance-summarizer",
+          "agent_kind": "linguistic",
+          "trust_level": "standard",
+          "skills": [
+            "summarize financial result"
+          ]
+        },
+        {
+          "agent_id": "compliance-checker",
+          "agent_kind": "local_python",
+          "trust_level": "standard",
+          "skills": [
+            "approve compliance safe summary"
+          ]
+        }
+      ],
+      "task_results": [
+        {
+          "task_id": "t1",
+          "agent_id": "table-extractor",
+          "agent_kind": "local_python",
+          "status": "completed",
+          "artifacts": [
+            {
+              "kind": "data",
+              "data": {
+                "q1_revenue": 100000,
+                "q2_revenue": 125000
+              }
+            }
+          ],
+          "error": ""
+        },
+        {
+          "task_id": "t2",
+          "agent_id": "growth-calculator",
+          "agent_kind": "local_python",
+          "status": "completed",
+          "artifacts": [
+            {
+              "kind": "data",
+              "data": {
+                "growth_rate": 0.25
+              }
+            }
+          ],
+          "error": ""
+        },
+        {
+          "task_id": "t3",
+          "agent_id": "finance-summarizer",
+          "agent_kind": "linguistic",
+          "status": "completed",
+          "artifacts": [
+            {
+              "kind": "text",
+              "summary": "Revenue increased by 25 percent from Q1 to Q2."
+            }
+          ],
+          "error": ""
+        },
+        {
+          "task_id": "t4",
+          "agent_id": "compliance-checker",
+          "agent_kind": "local_python",
+          "status": "failed",
+          "artifacts": [
+            {
+              "kind": "data",
+              "data": {
+                "checked_by": "local-policy-fixture"
+              }
+            }
+          ],
+          "error": "missing artifact fields: approval_status"
+        }
+      ],
+      "artifacts": [
+        {
+          "kind": "data",
+          "data": {
+            "q1_revenue": 100000,
+            "q2_revenue": 125000
+          }
+        },
+        {
+          "kind": "data",
+          "data": {
+            "growth_rate": 0.25
+          }
+        },
+        {
+          "kind": "text",
+          "summary": "Revenue increased by 25 percent from Q1 to Q2."
+        },
+        {
+          "kind": "data",
+          "data": {
+            "checked_by": "local-policy-fixture"
+          }
+        }
+      ],
+      "trace_event_types": [
+        "request_interpreted",
+        "solution_proposed",
+        "feasibility_recorded",
+        "sdk_local_agent_registered",
+        "sdk_local_agent_registered",
+        "sdk_linguistic_agent_registered",
+        "sdk_local_agent_registered",
+        "registry_refresh_skipped",
+        "sdk_task_started",
+        "sdk_task_completed",
+        "sdk_task_started",
+        "sdk_task_completed",
+        "sdk_task_started",
+        "sdk_task_completed",
+        "sdk_task_started",
+        "sdk_task_validation_failed"
+      ],
+      "ledger_event_types": [
+        "session_started",
+        "registry_snapshot_recorded",
+        "plan_authorized",
+        "task_attempt_started",
+        "task_attempt_completed",
+        "task_attempt_started",
+        "task_attempt_completed",
+        "task_attempt_started",
+        "task_attempt_completed",
+        "task_attempt_started",
+        "task_attempt_failed",
+        "run_failed"
+      ],
+      "dispatch_attempts": 4,
+      "no_dispatch_before_authorization": true
+    },
+    {
+      "id": "smart_building_maintenance_triage",
+      "title": "Smart Building Maintenance Triage",
+      "showcase": false,
+      "user_request": "Diagnose this building sensor alert and create the next maintenance action.",
+      "thesis_value": "The coordinator refuses an otherwise plausible building-control plan because a requested actuator action requires unavailable authority.",
+      "reference_status": "infeasible",
+      "observed_status": "infeasible",
+      "status_matches_reference": true,
+      "authorization": {
+        "feasible": false,
+        "explanation": "Plan rejected by deterministic feasibility checks.",
+        "failed_predicates": [
+          "authorized"
+        ],
+        "passed_predicates": [
+          "well_formed",
+          "covered",
+          "total_assignment",
+          "compatible",
+          "acyclic",
+          "ordered",
+          "requirements_complete",
+          "complete",
+          "verifiable"
+        ],
+        "missing_capabilities": [],
+        "risks": [
+          "Agent hvac-dispatcher has trust standard, but admin is required."
+        ]
+      },
+      "registry": [
+        {
+          "agent_id": "sensor-parser",
+          "agent_kind": "local_python",
+          "trust_level": "standard",
+          "skills": [
+            "parse sensor alert"
+          ]
+        },
+        {
+          "agent_id": "fault-classifier",
+          "agent_kind": "local_python",
+          "trust_level": "standard",
+          "skills": [
+            "classify maintenance fault"
+          ]
+        },
+        {
+          "agent_id": "work-order-generator",
+          "agent_kind": "local_python",
+          "trust_level": "standard",
+          "skills": [
+            "create maintenance work order"
+          ]
+        },
+        {
+          "agent_id": "hvac-dispatcher",
+          "agent_kind": "local_python",
+          "trust_level": "standard",
+          "skills": [
+            "shut down hvac"
+          ]
+        }
+      ],
+      "task_results": [],
+      "artifacts": [],
+      "trace_event_types": [
+        "request_interpreted",
+        "solution_proposed",
+        "feasibility_recorded",
+        "sdk_local_agent_registered",
+        "sdk_local_agent_registered",
+        "sdk_local_agent_registered",
+        "sdk_local_agent_registered",
+        "registry_refresh_skipped"
+      ],
+      "ledger_event_types": [
+        "session_started",
+        "registry_snapshot_recorded",
+        "plan_infeasible"
+      ],
+      "dispatch_attempts": 0,
+      "no_dispatch_before_authorization": true
+    },
+    {
+      "id": "warehouse_task_coordination",
+      "title": "Simulated Warehouse Task Coordination",
+      "showcase": false,
+      "user_request": "Move item A to packing station B while avoiding blocked zones.",
+      "thesis_value": "A complete local autonomy-style workflow demonstrates ordered dependencies, safety validation, dispatch, and artifact aggregation.",
+      "reference_status": "completed",
+      "observed_status": "completed",
+      "status_matches_reference": true,
+      "authorization": {
+        "feasible": true,
+        "explanation": "Plan authorized by deterministic feasibility checks.",
+        "failed_predicates": [],
+        "passed_predicates": [
+          "well_formed",
+          "covered",
+          "total_assignment",
+          "authorized",
+          "compatible",
+          "acyclic",
+          "ordered",
+          "requirements_complete",
+          "complete",
+          "verifiable"
+        ],
+        "missing_capabilities": [],
+        "risks": []
+      },
+      "registry": [
+        {
+          "agent_id": "inventory-lookup",
+          "agent_kind": "local_python",
+          "trust_level": "standard",
+          "skills": [
+            "lookup inventory item"
+          ]
+        },
+        {
+          "agent_id": "route-planner",
+          "agent_kind": "local_python",
+          "trust_level": "standard",
+          "skills": [
+            "plan warehouse route"
+          ]
+        },
+        {
+          "agent_id": "safety-validator",
+          "agent_kind": "local_python",
+          "trust_level": "standard",
+          "skills": [
+            "validate route safety"
+          ]
+        },
+        {
+          "agent_id": "move-dispatcher",
+          "agent_kind": "local_python",
+          "trust_level": "standard",
+          "skills": [
+            "dispatch warehouse move"
+          ]
+        }
+      ],
+      "task_results": [
+        {
+          "task_id": "t1",
+          "agent_id": "inventory-lookup",
+          "agent_kind": "local_python",
+          "status": "completed",
+          "artifacts": [
+            {
+              "kind": "data",
+              "data": {
+                "item": "A",
+                "location": [
+                  0,
+                  0
+                ]
+              }
+            }
+          ],
+          "error": ""
+        },
+        {
+          "task_id": "t2",
+          "agent_id": "route-planner",
+          "agent_kind": "local_python",
+          "status": "completed",
+          "artifacts": [
+            {
+              "kind": "data",
+              "data": {
+                "route": [
+                  [
+                    0,
+                    0
+                  ],
+                  [
+                    0,
+                    1
+                  ],
+                  [
+                    1,
+                    1
+                  ],
+                  [
+                    2,
+                    1
+                  ]
+                ]
+              }
+            }
+          ],
+          "error": ""
+        },
+        {
+          "task_id": "t3",
+          "agent_id": "safety-validator",
+          "agent_kind": "local_python",
+          "status": "completed",
+          "artifacts": [
+            {
+              "kind": "data",
+              "data": {
+                "safe": true
+              }
+            }
+          ],
+          "error": ""
+        },
+        {
+          "task_id": "t4",
+          "agent_id": "move-dispatcher",
+          "agent_kind": "local_python",
+          "status": "completed",
+          "artifacts": [
+            {
+              "kind": "data",
+              "name": "dispatch_ticket",
+              "data": {
+                "ticket_id": "WH-LOCAL-001"
+              }
+            }
+          ],
+          "error": ""
+        }
+      ],
+      "artifacts": [
+        {
+          "kind": "data",
+          "data": {
+            "item": "A",
+            "location": [
+              0,
+              0
+            ]
+          }
+        },
+        {
+          "kind": "data",
+          "data": {
+            "route": [
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                1
+              ],
+              [
+                2,
+                1
+              ]
+            ]
+          }
+        },
+        {
+          "kind": "data",
+          "data": {
+            "safe": true
+          }
+        },
+        {
+          "kind": "data",
+          "name": "dispatch_ticket",
+          "data": {
+            "ticket_id": "WH-LOCAL-001"
+          }
+        }
+      ],
+      "trace_event_types": [
+        "request_interpreted",
+        "solution_proposed",
+        "feasibility_recorded",
+        "sdk_local_agent_registered",
+        "sdk_local_agent_registered",
+        "sdk_local_agent_registered",
+        "sdk_local_agent_registered",
+        "registry_refresh_skipped",
+        "sdk_task_started",
+        "sdk_task_completed",
+        "sdk_task_started",
+        "sdk_task_completed",
+        "sdk_task_started",
+        "sdk_task_completed",
+        "sdk_task_started",
+        "sdk_task_completed"
+      ],
+      "ledger_event_types": [
+        "session_started",
+        "registry_snapshot_recorded",
+        "plan_authorized",
+        "task_attempt_started",
+        "task_attempt_completed",
+        "task_attempt_started",
+        "task_attempt_completed",
+        "task_attempt_started",
+        "task_attempt_completed",
+        "task_attempt_started",
+        "task_attempt_completed",
+        "run_completed"
+      ],
+      "dispatch_attempts": 4,
+      "no_dispatch_before_authorization": true
+    },
+    {
+      "id": "incident_response_runbook",
+      "title": "Incident Response Runbook",
+      "showcase": true,
+      "user_request": "Triage this incident report and recommend a recovery plan.",
+      "thesis_value": "A plausible linguistic overreach into production remediation is blocked by symbolic authority checks before any dispatch.",
+      "reference_status": "infeasible",
+      "observed_status": "infeasible",
+      "status_matches_reference": true,
+      "authorization": {
+        "feasible": false,
+        "explanation": "Plan rejected by deterministic feasibility checks.",
+        "failed_predicates": [
+          "authorized"
+        ],
+        "passed_predicates": [
+          "well_formed",
+          "covered",
+          "total_assignment",
+          "compatible",
+          "acyclic",
+          "ordered",
+          "requirements_complete",
+          "complete",
+          "verifiable"
+        ],
+        "missing_capabilities": [],
+        "risks": [
+          "Agent remediation-executor has trust standard, but admin is required."
+        ]
+      },
+      "registry": [
+        {
+          "agent_id": "log-summarizer",
+          "agent_kind": "linguistic",
+          "trust_level": "standard",
+          "skills": [
+            "summarize incident log"
+          ]
+        },
+        {
+          "agent_id": "severity-classifier",
+          "agent_kind": "local_python",
+          "trust_level": "standard",
+          "skills": [
+            "classify incident severity"
+          ]
+        },
+        {
+          "agent_id": "runbook-recommender",
+          "agent_kind": "local_python",
+          "trust_level": "standard",
+          "skills": [
+            "recommend recovery plan"
+          ]
+        },
+        {
+          "agent_id": "remediation-executor",
+          "agent_kind": "local_python",
+          "trust_level": "standard",
+          "skills": [
+            "execute production remediation"
+          ]
+        }
+      ],
+      "task_results": [],
+      "artifacts": [],
+      "trace_event_types": [
+        "request_interpreted",
+        "solution_proposed",
+        "feasibility_recorded",
+        "sdk_linguistic_agent_registered",
+        "sdk_local_agent_registered",
+        "sdk_local_agent_registered",
+        "sdk_local_agent_registered",
+        "registry_refresh_skipped"
+      ],
+      "ledger_event_types": [
+        "session_started",
+        "registry_snapshot_recorded",
+        "plan_infeasible"
+      ],
+      "dispatch_attempts": 0,
+      "no_dispatch_before_authorization": true
+    },
+    {
+      "id": "data_privacy_redaction_pipeline",
+      "title": "Data Privacy Redaction Pipeline",
+      "showcase": false,
+      "user_request": "Prepare this customer transcript for sharing.",
+      "thesis_value": "A narrow missing extraction step is admitted as a bounded auxiliary capability, then ordinary agents complete the redaction workflow.",
+      "reference_status": "completed",
+      "observed_status": "completed",
+      "status_matches_reference": true,
+      "authorization": {
+        "feasible": true,
+        "explanation": "Plan authorized by deterministic feasibility checks.",
+        "failed_predicates": [],
+        "passed_predicates": [
+          "well_formed",
+          "covered",
+          "total_assignment",
+          "authorized",
+          "compatible",
+          "acyclic",
+          "ordered",
+          "requirements_complete",
+          "complete",
+          "verifiable"
+        ],
+        "missing_capabilities": [],
+        "risks": []
+      },
+      "registry": [
+        {
+          "agent_id": "transcript-redactor",
+          "agent_kind": "local_python",
+          "trust_level": "standard",
+          "skills": [
+            "redact transcript"
+          ]
+        },
+        {
+          "agent_id": "redaction-validator",
+          "agent_kind": "local_python",
+          "trust_level": "standard",
+          "skills": [
+            "validate redaction quality"
+          ]
+        },
+        {
+          "agent_id": "privacy-summary-generator",
+          "agent_kind": "linguistic",
+          "trust_level": "standard",
+          "skills": [
+            "summarize redacted transcript"
+          ]
+        }
+      ],
+      "task_results": [
+        {
+          "task_id": "t1",
+          "agent_id": "aux-1",
+          "agent_kind": "auxiliary",
+          "status": "completed",
+          "artifacts": [
+            {
+              "kind": "data",
+              "data": {
+                "email": "ana@example.com",
+                "phone": "555-0100"
+              },
+              "email": "ana@example.com",
+              "phone": "555-0100"
+            }
+          ],
+          "error": ""
+        },
+        {
+          "task_id": "t2",
+          "agent_id": "transcript-redactor",
+          "agent_kind": "local_python",
+          "status": "completed",
+          "artifacts": [
+            {
+              "kind": "text",
+              "redacted": "Customer Ana wrote from [email] and asked for a callback at [phone]."
+            }
+          ],
+          "error": ""
+        },
+        {
+          "task_id": "t3",
+          "agent_id": "redaction-validator",
+          "agent_kind": "local_python",
+          "status": "completed",
+          "artifacts": [
+            {
+              "kind": "data",
+              "data": {
+                "quality": "passed"
+              }
+            }
+          ],
+          "error": ""
+        },
+        {
+          "task_id": "t4",
+          "agent_id": "privacy-summary-generator",
+          "agent_kind": "linguistic",
+          "status": "completed",
+          "artifacts": [
+            {
+              "kind": "text",
+              "name": "shareable_summary",
+              "text": "Customer requested account help; direct identifiers were removed."
+            }
+          ],
+          "error": ""
+        }
+      ],
+      "artifacts": [
+        {
+          "kind": "data",
+          "data": {
+            "email": "ana@example.com",
+            "phone": "555-0100"
+          },
+          "email": "ana@example.com",
+          "phone": "555-0100"
+        },
+        {
+          "kind": "text",
+          "redacted": "Customer Ana wrote from [email] and asked for a callback at [phone]."
+        },
+        {
+          "kind": "data",
+          "data": {
+            "quality": "passed"
+          }
+        },
+        {
+          "kind": "text",
+          "name": "shareable_summary",
+          "text": "Customer requested account help; direct identifiers were removed."
+        }
+      ],
+      "trace_event_types": [
+        "request_interpreted",
+        "solution_proposed",
+        "feasibility_recorded",
+        "sdk_local_agent_registered",
+        "sdk_local_agent_registered",
+        "sdk_linguistic_agent_registered",
+        "registry_refresh_skipped",
+        "sdk_auxiliary_task_started",
+        "sdk_auxiliary_task_completed",
+        "sdk_task_started",
+        "sdk_task_completed",
+        "sdk_task_started",
+        "sdk_task_completed",
+        "sdk_task_started",
+        "sdk_task_completed"
+      ],
+      "ledger_event_types": [
+        "session_started",
+        "registry_snapshot_recorded",
+        "plan_authorized",
+        "task_attempt_started",
+        "task_attempt_completed",
+        "task_attempt_started",
+        "task_attempt_completed",
+        "task_attempt_started",
+        "task_attempt_completed",
+        "task_attempt_started",
+        "task_attempt_completed",
+        "run_completed"
+      ],
+      "dispatch_attempts": 4,
+      "no_dispatch_before_authorization": true
+    },
+    {
+      "id": "travel_plan_local_fixtures",
+      "title": "Travel Plan With Local Fixtures",
+      "showcase": false,
+      "user_request": "Plan a one-day itinerary under budget and accessibility constraints.",
+      "thesis_value": "The coordinator refuses to fill an accessibility constraint with a nonexistent capability, even when the rest of the itinerary pipeline is available.",
+      "reference_status": "infeasible",
+      "observed_status": "infeasible",
+      "status_matches_reference": true,
+      "authorization": {
+        "feasible": false,
+        "explanation": "Plan rejected by deterministic feasibility checks.",
+        "failed_predicates": [
+          "covered"
+        ],
+        "passed_predicates": [
+          "well_formed",
+          "total_assignment",
+          "authorized",
+          "compatible",
+          "acyclic",
+          "ordered",
+          "requirements_complete",
+          "complete",
+          "verifiable"
+        ],
+        "missing_capabilities": [
+          "verify wheelchair accessibility"
+        ],
+        "risks": [
+          "Task t3 selects an unknown agent."
+        ]
+      },
+      "registry": [
+        {
+          "agent_id": "attraction-matcher",
+          "agent_kind": "local_python",
+          "trust_level": "standard",
+          "skills": [
+            "match attractions"
+          ]
+        },
+        {
+          "agent_id": "budget-calculator",
+          "agent_kind": "local_python",
+          "trust_level": "standard",
+          "skills": [
+            "calculate itinerary budget"
+          ]
+        },
+        {
+          "agent_id": "itinerary-formatter",
+          "agent_kind": "local_python",
+          "trust_level": "standard",
+          "skills": [
+            "format one day itinerary"
+          ]
+        }
+      ],
+      "task_results": [],
+      "artifacts": [],
+      "trace_event_types": [
+        "request_interpreted",
+        "solution_proposed",
+        "feasibility_recorded",
+        "sdk_local_agent_registered",
+        "sdk_local_agent_registered",
+        "sdk_local_agent_registered",
+        "registry_refresh_skipped"
+      ],
+      "ledger_event_types": [
+        "session_started",
+        "registry_snapshot_recorded",
+        "plan_infeasible"
+      ],
+      "dispatch_attempts": 0,
+      "no_dispatch_before_authorization": true
+    }
+  ]
+}

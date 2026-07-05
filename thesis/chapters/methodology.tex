@@ -32,6 +32,8 @@ The primary unit of analysis is a coordination attempt: one problem request, one
 
 The scenario suite must contain feasible direct-delegation cases, feasible decomposed cases, cases requiring an approved bounded linguistic transformation, and infeasible cases caused by missing capability, incompatible modality, cyclic dependency, insufficient authority, or unavailable agents. Each scenario includes a reference feasibility label and the minimum justification required for that label. Reference labels should be reviewed independently before system outputs are examined.
 
+The executable evaluation is organized into three evidence levels. Unit and integration tests verify individual predicates, SDK adapters, service endpoints, retry behavior, and ledger recovery. Deterministic local end-to-end scenarios verify the coordination workflow without external services. Docker system scenarios then instantiate the coordinator, registry, and multiple independently deployed A2A fixture agents on a virtual network, so that registry discovery, A2A dispatch, artifact normalization, runtime failure, timeout, and trace reconstruction are exercised across process and container boundaries.
+
 \section{Baselines and Ablations}
 
 Three configurations provide the minimum comparison. The \emph{hybrid CoordinationAgent} uses \texttt{CoordinationSdk} as the only communication boundary, may invoke Lingo-backed SDK capabilities for structured interpretation and candidate decomposition, and always applies symbolic feasibility checks before dispatch. The \emph{CoordinationAgent without symbolic feasibility} variant receives the same request and registry descriptions but accepts or rejects its own proposed plan without the deterministic feasibility layer. The \emph{rule-only CoordinationAgent} variant receives a structured request and applies the same explicit predicates without LLM interpretation. The first baseline tests the contribution of symbolic authorization; the second tests the contribution of linguistic mediation. Mixed-agent scenarios must include remote protocol-mediated agents, local Python agents, and Lingo-backed linguistic agents so that all specializations are evaluated through the same SDK boundary.
@@ -53,16 +55,20 @@ Plan validity & Detection of invalid candidates & Invalid-plan rejection rate by
 Execution outcome & Required artifacts completed & Task success rate and contract-valid artifact rate \\
 Traceability & Required decision evidence recorded & Trace-field completeness and reconstructable-decision rate \\
 Efficiency & Coordination effort & End-to-end latency, planner calls, messages, and token usage \\
-Robustness & Stability under controlled variation & Performance under paraphrase, agent loss, and metadata perturbation \\
+Robustness & Stability under controlled variation & Performance under paraphrase, agent loss, metadata perturbation, and planned crash-recovery scenarios \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 Outcome metrics and process metrics are reported separately. A correct final artifact does not erase an unauthorized action or an invalid intermediate plan. Conversely, a justified refusal is a correct outcome for an infeasible request and must not be counted as task failure.
 
+For the planned crash-fault-tolerant extension, robustness evaluation should add acceptance scenarios rather than empirical claims in advance. These scenarios should cover coordinator recovery from a durable ledger, transient registry outage, bounded task retry after timeout, alternate-agent replanning after an unavailable executor, and duplicate dispatch handling through idempotent identifiers. A run should be counted as crash-resilient only if the recovered trace reconstructs the same authorized session state and does not duplicate completed work. These scenarios must not be reported as completed or measured until the ledger, retry, and standby mechanisms have been implemented.
+
 \section{Experimental Procedure}
 
 For each scenario, every applicable configuration receives semantically equivalent inputs and an identical admitted-agent snapshot. Stochastic configurations are executed repeatedly with recorded model, decoding parameters, prompt version, and random seed where supported. Each run stores the interpreted request, candidate plan, predicate outcomes, authorization decision, coordination-agent decisions, SDK method calls, agent kind, transport or runtime path, messages, status transitions, artifacts, validation results, latency, and resource use. Aggregate results are accompanied by per-category error analysis. The implementation version, coordination-agent version, SDK version, protocol version, hardware, and software environment must be fixed and reported before measurements are collected.
+
+For the Docker system phase, the simple operating model is one coordinator service, one registry service that publishes Agent Card URLs, many deterministic A2A fixture-agent containers, and one HTTP-only system-test runner. The runner must not inject Python objects into the coordinator. It calls the public service endpoints over the Docker network and writes a raw JSON report under \texttt{demo\_runs/}. No external LLM provider, vendor cloud agent, Kubernetes deployment, service mesh, or database is required for this phase.
 
 \section{Analysis Strategy}
 

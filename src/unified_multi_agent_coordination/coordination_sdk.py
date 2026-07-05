@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import asyncio
 import inspect
+import json
 from collections.abc import Awaitable, Callable, Mapping
 from typing import Any
 
@@ -492,11 +493,47 @@ class CoordinationSdk:
             )
             request = SendMessageRequest(message=message)
             chunks: list[Any] = []
+            artifacts: list[dict[str, Any]] = []
             async for chunk in client.send_message(request):
                 chunks.append(self._jsonable_output(chunk))
-            return {"chunks": chunks}
+                artifacts.extend(self._artifacts_from_a2a_stream_response(chunk))
+            output: dict[str, Any] = {"chunks": chunks}
+            if artifacts:
+                output["artifacts"] = artifacts
+            return output
         finally:
             await client.close()
+
+    def _artifacts_from_a2a_stream_response(self, chunk: Any) -> list[dict[str, Any]]:
+        artifacts: list[dict[str, Any]] = []
+        if self._has_proto_field(chunk, "task"):
+            task = getattr(chunk, "task")
+            for artifact in getattr(task, "artifacts", []):
+                artifacts.append(self._artifact_from_a2a_artifact(artifact))
+        if self._has_proto_field(chunk, "artifact_update"):
+            artifacts.append(
+                self._artifact_from_a2a_artifact(getattr(chunk.artifact_update, "artifact"))
+            )
+        if self._has_proto_field(chunk, "message"):
+            parts = self._jsonable_output(getattr(chunk.message, "parts", []))
+            artifacts.extend(self.a2a_adapter.convert_artifact_parts(parts))
+        return artifacts
+
+    def _artifact_from_a2a_artifact(self, artifact: Any) -> dict[str, Any]:
+        raw = self._jsonable_output(artifact)
+        parts = raw.get("parts", []) if isinstance(raw, dict) else []
+        converted_parts = self.a2a_adapter.convert_artifact_parts(parts)
+        name = str(raw.get("name") or raw.get("artifactId") or raw.get("artifact_id") or "")
+        if len(converted_parts) == 1:
+            result = dict(converted_parts[0])
+        else:
+            result = {"kind": "artifact", "parts": converted_parts}
+        if name and "name" not in result:
+            result["name"] = name
+        artifact_id = raw.get("artifactId") or raw.get("artifact_id")
+        if artifact_id and "artifact_id" not in result:
+            result["artifact_id"] = artifact_id
+        return result
 
     async def _entries_from_registry_payload(
         self, payload: Any
@@ -833,7 +870,17 @@ class CoordinationSdk:
             value = payload.get(key)
             if isinstance(value, str):
                 return value
-        return str(CoordinationSdk._jsonable_output(payload))
+        return json.dumps(CoordinationSdk._jsonable_output(payload), sort_keys=True)
+
+    @staticmethod
+    def _has_proto_field(value: Any, field_name: str) -> bool:
+        if hasattr(value, "HasField"):
+            try:
+                return bool(value.HasField(field_name))
+            except ValueError:
+                return False
+        field_value = getattr(value, field_name, None)
+        return field_value is not None
 
     @staticmethod
     def _capability_modes(

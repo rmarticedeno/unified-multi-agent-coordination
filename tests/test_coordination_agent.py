@@ -5,10 +5,16 @@ from lingo.mock import MockLLM
 from unified_multi_agent_coordination import (
     CapabilityRequirement,
     CoordinationAgent,
+    CoordinationPlanResult,
     CoordinationSdk,
+    InMemoryCoordinationLedger,
+    JsonlCoordinationLedger,
+    LedgerEvent,
     LingoLinguisticCoordinator,
     ProblemRequest,
+    RetryPolicy,
     SolutionProposal,
+    TaskExecutionResult,
     TaskSpec,
 )
 
@@ -36,6 +42,16 @@ class FakeHttpClient:
     async def get(self, url, **kwargs):
         self.requests.append((url, kwargs))
         return self.response
+
+
+class SequenceHttpClient:
+    def __init__(self, responses):
+        self.responses = list(responses)
+        self.requests = []
+
+    async def get(self, url, **kwargs):
+        self.requests.append((url, kwargs))
+        return self.responses.pop(0)
 
 
 def _card(name, skill="summarize"):
@@ -91,6 +107,34 @@ async def test_build_solution_plan_records_remote_registry_failure_as_infeasible
     assert not result.feasibility_report.feasible
     assert result.feasibility_report.evidence[0].name == "registry_available"
     assert "Remote registry HTTP error" in result.feasibility_report.risks[0]
+
+
+@pytest.mark.asyncio
+async def test_build_solution_plan_retries_transient_registry_failure():
+    request = ProblemRequest(
+        user_goal="Summarize.",
+        requirements=[CapabilityRequirement(name="summarize")],
+        required_artifacts=["summary"],
+    )
+    http_client = SequenceHttpClient(
+        [
+            FakeResponse(status_code=503),
+            FakeResponse({"agents": [_card("summarizer")]}),
+        ]
+    )
+    sdk = CoordinationSdk(
+        remote_registry_url="http://registry.example",
+        http_client=http_client,
+    )
+    agent = CoordinationAgent(
+        sdk=sdk,
+        retry_policy=RetryPolicy(registry_retries=1, task_retries=0, backoff_s=0),
+    )
+
+    result = await agent.build_solution_plan(request)
+
+    assert result.feasibility_report.feasible
+    assert len(http_client.requests) == 2
 
 
 @pytest.mark.asyncio
@@ -244,3 +288,159 @@ async def test_coordinate_executes_bounded_auxiliary_task():
     assert result.task_results[0].agent_kind == "auxiliary"
     assert result.artifacts[0]["data"] == {"q1_revenue": 10, "q2_revenue": 15}
     assert any(event.event_type == "sdk_auxiliary_task_completed" for event in result.trace)
+
+
+@pytest.mark.asyncio
+async def test_coordinate_retries_failed_task_and_records_attempts():
+    calls = 0
+    ledger = InMemoryCoordinationLedger()
+    sdk = CoordinationSdk(http_client=FakeHttpClient(FakeResponse({})))
+    requirement = CapabilityRequirement(name="summarize")
+
+    def handler(payload):
+        nonlocal calls
+        calls += 1
+        if calls == 1:
+            raise RuntimeError("temporary failure")
+        return {"artifacts": [{"kind": "text", "text": payload["text"]}]}
+
+    sdk.register_local_agent("Summarizer", [requirement], handler)
+    agent = CoordinationAgent(
+        sdk=sdk,
+        ledger=ledger,
+        retry_policy=RetryPolicy(registry_retries=0, task_retries=1, backoff_s=0),
+    )
+
+    result = await agent.coordinate(
+        ProblemRequest(user_goal="Summarize.", requirements=[requirement]),
+        payload={"text": "ok"},
+        session_id="session-retry",
+    )
+
+    events = ledger.events("session-retry")
+    assert result.status == "completed"
+    assert calls == 2
+    assert [event.event_type for event in events].count("task_attempt_started") == 2
+    assert any(event.event_type == "task_attempt_failed" for event in events)
+    assert any(event.event_type == "task_attempt_completed" for event in events)
+
+
+@pytest.mark.asyncio
+async def test_coordinate_with_terminal_session_id_returns_recorded_result_without_redispatch():
+    calls = 0
+    ledger = InMemoryCoordinationLedger()
+    sdk = CoordinationSdk(http_client=FakeHttpClient(FakeResponse({})))
+    requirement = CapabilityRequirement(name="summarize")
+
+    def handler(payload):
+        nonlocal calls
+        calls += 1
+        return {"artifacts": [{"kind": "text", "text": payload["text"]}]}
+
+    sdk.register_local_agent("Summarizer", [requirement], handler)
+    agent = CoordinationAgent(sdk=sdk, ledger=ledger)
+    request = ProblemRequest(user_goal="Summarize.", requirements=[requirement])
+
+    first = await agent.coordinate(request, payload={"text": "once"}, session_id="same-session")
+    second = await agent.coordinate(request, payload={"text": "twice"}, session_id="same-session")
+
+    assert first.status == "completed"
+    assert second.artifacts == first.artifacts
+    assert calls == 1
+
+
+@pytest.mark.asyncio
+async def test_resume_with_fresh_agent_skips_completed_tasks(tmp_path):
+    calls = []
+    ledger = JsonlCoordinationLedger(tmp_path / "ledger.jsonl")
+    summarize = CapabilityRequirement(name="summarize")
+    classify = CapabilityRequirement(name="classify")
+    sdk = CoordinationSdk(http_client=FakeHttpClient(FakeResponse({})))
+
+    summarizer = sdk.register_local_agent(
+        "Summarizer",
+        [summarize],
+        lambda payload: calls.append("summarize") or {"artifacts": [{"kind": "text"}]},
+    )
+    classifier = sdk.register_local_agent(
+        "Classifier",
+        [classify],
+        lambda payload: calls.append("classify") or {"artifacts": [{"kind": "data"}]},
+    )
+    request = ProblemRequest(
+        user_goal="Summarize and classify.",
+        requirements=[summarize, classify],
+    )
+    proposal = SolutionProposal(
+        tasks=[
+            TaskSpec(
+                task_id="t1",
+                requirement_name="summarize",
+                assigned_to=summarizer.agent_id,
+            ),
+            TaskSpec(
+                task_id="t2",
+                requirement_name="classify",
+                assigned_to=classifier.agent_id,
+            ),
+        ],
+        execution_order=["t1", "t2"],
+        completion_criteria=["all task validators pass"],
+    )
+    agent_report = CoordinationAgent(sdk=sdk).feasibility_analyzer.check(
+        request,
+        [summarizer, classifier],
+        proposal,
+    )
+    plan_result = CoordinationPlanResult(
+        session_id="recover-session",
+        plan_id="recover-plan",
+        request=request,
+        proposal=proposal,
+        feasibility_report=agent_report,
+        registry_snapshot=[summarizer, classifier],
+    )
+    assert agent_report.feasible
+    completed = TaskExecutionResult(
+        session_id="recover-session",
+        plan_id="recover-plan",
+        attempt_id="t1-attempt-1",
+        task_id="t1",
+        agent_id=summarizer.agent_id,
+        agent_kind="local_python",
+        status="completed",
+        artifacts=[{"kind": "text"}],
+    )
+    ledger.append(
+        LedgerEvent(
+            event_type="session_started",
+            session_id="recover-session",
+            plan_id="recover-plan",
+            payload={"payload": {"text": "payload"}},
+        )
+    )
+    ledger.append(
+        LedgerEvent(
+            event_type="plan_authorized",
+            session_id="recover-session",
+            plan_id="recover-plan",
+            payload={"plan_result": plan_result.model_dump(mode="json")},
+        )
+    )
+    ledger.append(
+        LedgerEvent(
+            event_type="task_attempt_completed",
+            session_id="recover-session",
+            plan_id="recover-plan",
+            task_id="t1",
+            attempt_id="t1-attempt-1",
+            payload={"task_result": completed.model_dump(mode="json")},
+        )
+    )
+
+    standby = CoordinationAgent(sdk=sdk, ledger=JsonlCoordinationLedger(ledger.path))
+    result = await standby.resume_session("recover-session")
+
+    assert result.status == "completed"
+    assert calls == ["classify"]
+    assert [task.task_id for task in result.task_results] == ["t1", "t2"]
