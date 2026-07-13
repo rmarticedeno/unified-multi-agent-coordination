@@ -1,13 +1,15 @@
 [project]
 name = "unified-multi-agent-coordination"
-version = "0.1.0"
-description = "Add your description here"
+version = "0.2.0"
+description = "Fail-closed neuro-symbolic coordination for heterogeneous autonomous agents"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "a2a-sdk>=0.3.0",
+    "asyncpg>=0.31.0",
     "fastapi>=0.125.0",
     "httpx>=0.28.1",
+    "jsonschema>=4.25.1",
     "lingo-ai==2.0.2",
     "pydantic>=2.12.4",
     "sse-starlette>=3.0.4",
@@ -20,8 +22,14 @@ unified-coordination-scenarios = "unified_multi_agent_coordination.end_to_end_sc
 unified-a2a-fixture-agent = "unified_multi_agent_coordination.a2a_fixture_agent:main"
 unified-fixture-registry = "unified_multi_agent_coordination.fixture_registry:main"
 unified-docker-system-tests = "unified_multi_agent_coordination.docker_system_tests:main"
+unified-distributed-system-tests = "unified_multi_agent_coordination.distributed_system_tests:main"
 unified-local-llm-reference = "unified_multi_agent_coordination.local_llm_reference:main"
+unified-baseline-evaluation = "unified_multi_agent_coordination.baseline_evaluation:main"
 unified-thesis-results = "unified_multi_agent_coordination.thesis_results:main"
+unified-coordination-store-migrate = "unified_multi_agent_coordination.coordination_store:main"
+unified-generate-defense-corpus = "unified_multi_agent_coordination.corpus:main"
+unified-defense-study = "unified_multi_agent_coordination.defense_study:main"
+unified-analyze-defense-study = "unified_multi_agent_coordination.study_analysis:main"
 
 [build-system]
 requires = ["hatchling"]
@@ -32,9 +40,29 @@ packages = ["src/unified_multi_agent_coordination"]
 
 [dependency-groups]
 dev = [
+    "mypy>=1.17.1",
     "pytest>=9.0.2",
     "pytest-asyncio>=1.3.0",
+    "pytest-cov>=6.2.1",
+    "ruff>=0.12.10",
 ]
+
+[tool.coverage.run]
+source = ["unified_multi_agent_coordination"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+
+[tool.mypy]
+python_version = "3.13"
+packages = ["unified_multi_agent_coordination"]
+ignore_missing_imports = true
+warn_unused_ignores = true
 
 [tool.pytest.ini_options]
 pythonpath = ["src"]

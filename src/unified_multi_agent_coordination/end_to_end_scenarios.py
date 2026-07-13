@@ -19,16 +19,18 @@ from pathlib import Path
 from typing import Any, Literal
 
 from .coordination_agent import CoordinationAgent
+from .admission import AgentAdmissionPolicy
 from .coordination_ledger import InMemoryCoordinationLedger, RetryPolicy
 from .coordination_sdk import CoordinationSdk
 from .models import (
     AgentRegistryEntry,
     CapabilityRequirement,
-    CoordinationRunResult,
+    ConstraintSpec,
     FeasibilityReport,
     ProblemRequest,
     SolutionProposal,
     TaskSpec,
+    ValidationContract,
 )
 
 
@@ -170,7 +172,9 @@ def scenario_definitions() -> list[ScenarioDefinition]:
 
 
 async def _run_scenario(scenario: ScenarioDefinition) -> JsonObject:
-    sdk = CoordinationSdk()
+    sdk = CoordinationSdk(
+        admission_policy=AgentAdmissionPolicy(allow_insecure_development=True)
+    )
     await scenario.setup(sdk)
     ledger = InMemoryCoordinationLedger()
     coordinator = DeterministicScenarioCoordinator(
@@ -310,7 +314,9 @@ def _research_brief_scenario() -> ScenarioDefinition:
                 requirement_name=format_brief.name,
                 assigned_to="brief-formatter",
                 depends_on=["t2", "t3"],
-                validation_contract={"required_artifacts": ["research_brief"]},
+                validation_contract=ValidationContract(
+                    required_artifacts=["research_brief"]
+                ),
             ),
         ],
         expected_artifacts=["research_brief"],
@@ -633,7 +639,9 @@ def _warehouse_scenario() -> ScenarioDefinition:
                 requirement_name=dispatch.name,
                 assigned_to="move-dispatcher",
                 depends_on=["t3"],
-                validation_contract={"required_artifacts": ["dispatch_ticket"]},
+                validation_contract=ValidationContract(
+                    required_artifacts=["dispatch_ticket"]
+                ),
             ),
         ],
         expected_artifacts=["dispatch_ticket"],
@@ -832,26 +840,42 @@ def _privacy_redaction_scenario() -> ScenarioDefinition:
                 requirement_name=summarize.name,
                 assigned_to="privacy-summary-generator",
                 depends_on=["t3"],
-                validation_contract={"required_artifacts": ["shareable_summary"]},
+                validation_contract=ValidationContract(
+                    required_artifacts=["shareable_summary"]
+                ),
             ),
         ],
         expected_artifacts=["shareable_summary"],
     )
 
     async def setup(sdk: CoordinationSdk) -> None:
-        sdk.register_local_agent(
-            "Transcript Redactor",
-            [redact],
-            lambda payload: {
+        def redact_handler(payload):
+            dependency_artifacts = (
+                payload.get("_coordination", {}).get("previous_artifacts", [])
+            )
+            extracted = next(
+                (
+                    artifact.get("data", {})
+                    for artifact in dependency_artifacts
+                    if isinstance(artifact.get("data"), dict)
+                ),
+                {},
+            )
+            return {
                 "artifacts": [
                     {
                         "kind": "text",
                         "redacted": payload["text"]
-                        .replace(payload["email"], "[email]")
-                        .replace(payload["phone"], "[phone]"),
+                        .replace(extracted["email"], "[email]")
+                        .replace(extracted["phone"], "[phone]"),
                     }
                 ]
-            },
+            }
+
+        sdk.register_local_agent(
+            "Transcript Redactor",
+            [redact],
+            redact_handler,
         )
         sdk.register_local_agent(
             "Redaction Validator",
@@ -883,8 +907,6 @@ def _privacy_redaction_scenario() -> ScenarioDefinition:
         proposal=proposal,
         payload={
             "text": "Customer Ana wrote from ana@example.com and asked for a callback at 555-0100.",
-            "email": "ana@example.com",
-            "phone": "555-0100",
         },
         setup=setup,
         reference_status="completed",
@@ -915,7 +937,10 @@ def _travel_plan_scenario() -> ScenarioDefinition:
     request = ProblemRequest(
         user_goal="Plan a one-day itinerary under budget and accessibility constraints.",
         requirements=[match, budget, accessibility, format_plan],
-        constraints=["budget <= 80", "wheelchair accessible"],
+        constraints=[
+            ConstraintSpec.from_legacy_text("budget <= 80"),
+            ConstraintSpec.from_legacy_text("wheelchair accessible"),
+        ],
         required_artifacts=["itinerary"],
     )
     proposal = _proposal(
@@ -984,7 +1009,9 @@ def _capability(
         input_modes=list(input_modes or []),
         output_modes=list(output_modes or []),
         output_schema=dict(output_schema or {}),
-        validation_contract=dict(validation_contract or {}),
+        validation_contract=ValidationContract.model_validate(
+            validation_contract or {"json_schema": {"type": "object"}}
+        ),
         auxiliary_eligible=auxiliary_eligible,
         required_trust_level=required_trust_level,
     )
@@ -1026,7 +1053,8 @@ async def _register_fake_a2a_agent(
             "url": url,
             "skills": [
                 {
-                    "id": capability.name,
+                    "id": capability.capability_id,
+                    "name": capability.name,
                     "description": capability.description,
                     "inputModes": capability.input_modes,
                     "outputModes": capability.output_modes,

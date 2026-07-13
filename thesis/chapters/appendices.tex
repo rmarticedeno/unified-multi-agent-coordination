@@ -1,0 +1,48 @@
+\appendix
+\chapter{Reproduction and Artifact Manifest}
+
+The repository root contains \texttt{REPRODUCING.md}, \texttt{evidence-manifest.json}, the locked dependency graph, Docker configurations, and the versioned corpus. Legacy reports are explicitly excluded. A final accepted manifest must contain the clean Git commit, Docker digests, corpus hash, run identifiers, and hashes of generated thesis tables.
+
+\section{Command Sequence}
+
+\begin{Verbatim}[breaklines=true,fontsize=\small]
+uv sync --locked --group dev
+uv run ruff check src tests scripts
+uv run mypy src/unified_multi_agent_coordination
+uv run pytest --cov
+uv run unified-coordination-scenarios --no-output
+docker compose -f docker-compose.system.yml up --build \
+  --abort-on-container-exit --exit-code-from system-tests
+docker compose -f docker-compose.distributed.yml up --build \
+  --abort-on-container-exit --exit-code-from distributed-system-tests
+uv run unified-defense-study --check
+\end{Verbatim}
+
+\chapter{Predicate Refinement and Claim--Evidence Matrix}
+
+\begin{longtable}{p{0.22\textwidth}p{0.35\textwidth}p{0.33\textwidth}}
+\toprule
+\textbf{Claim or predicate} & \textbf{Implementation refinement} & \textbf{Evidence required} \\
+\midrule
+Coverage & Canonical capability ID, full modes and schema coverage & Feasibility and ID-perturbation tests \\
+Authority & Local trust order and admission policy & Remote-card and credential tests \\
+Constraints & Typed source, JSON pointer, operator and expected value & Missing, type, false and unresolved cases \\
+Verifiability & Task, requirement or capability validation contract & Validatorless and nested-schema tests \\
+Dependency safety & Completed prerequisites and declared artifacts only & Failure/timeout/unknown branch tests \\
+Traceability & Persisted session, plan, task and attempt events & Ordering, restart and isolation tests \\
+Recovery & Lease, fencing, idempotency and unknown-side-effect policy & PostgreSQL crash-fault harness \\
+RQ4 comparison & Blinded 36-case paired model study & Signed labels, 540 outputs and frozen analysis \\
+\bottomrule
+\end{longtable}
+
+\chapter{Tribunal Questions and Defensible Boundaries}
+
+\begin{description}
+  \item[What is novel?] The protocol-adaptable integration and operational refinement of a linguistic proposal boundary, symbolic authorization/refusal, durable evidence, admission policy, and measured recovery. Individual mechanisms are prior art.
+  \item[Why use an LLM?] Natural-language interpretation and candidate decomposition vary semantically; a structured rule oracle assumes that work is already done. The LLM remains non-authoritative.
+  \item[What is guaranteed?] The tested implementation enforces declared predicates and ordering under its trusted-code and trusted-store assumptions. It does not guarantee semantic truth or runtime success.
+  \item[What is trusted?] The coordinator code, durable store, locally configured trust policy, admitted registry descriptions, and contract validators. Malicious admitted agents remain outside scope.
+  \item[Why is fencing not consensus?] All replicas serialize through one PostgreSQL authority; there is no replicated log or quorum protocol.
+  \item[How broad is A2A interoperability?] Controlled fixtures plus one vendored official sample. This is evidence of concrete compatibility, not universal conformance.
+  \item[Why are comparative conclusions absent?] Independent corpus approval and the complete repeated study are release gates. Reporting legacy numbers would invalidate the corrected evaluation.
+\end{description}

@@ -15,6 +15,8 @@ from typing import Any, Protocol
 
 from pydantic import BaseModel, Field
 
+from .models import TaskState
+
 
 JsonObject = dict[str, Any]
 
@@ -42,6 +44,9 @@ class CoordinationSessionState(BaseModel):
     terminal_result: JsonObject | None = None
     task_results: dict[str, JsonObject] = Field(default_factory=dict)
     task_attempt_counts: dict[str, int] = Field(default_factory=dict)
+    task_attempt_states: dict[str, TaskState] = Field(default_factory=dict)
+    task_attempts_by_task: dict[str, list[str]] = Field(default_factory=dict)
+    task_attempt_payloads: dict[str, JsonObject] = Field(default_factory=dict)
 
     @property
     def completed_task_ids(self) -> set[str]:
@@ -50,6 +55,17 @@ class CoordinationSessionState(BaseModel):
             for task_id, result in self.task_results.items()
             if result.get("status") == "completed"
         }
+
+    @property
+    def running_task_ids(self) -> set[str]:
+        running: set[str] = set()
+        for task_id, attempt_ids in self.task_attempts_by_task.items():
+            if any(
+                self.task_attempt_states.get(attempt_id) == TaskState.RUNNING
+                for attempt_id in attempt_ids
+            ):
+                running.add(task_id)
+        return running
 
 
 class CoordinationLedger(Protocol):
@@ -143,18 +159,38 @@ def _fold_session(
             "task_attempt_completed",
             "task_attempt_failed",
             "task_attempt_timeout",
+            "task_attempt_unknown",
+            "task_skipped",
         }:
             result = event.payload.get("task_result")
             if isinstance(result, dict):
                 state.task_results[event.task_id] = result
-            state.task_attempt_counts[event.task_id] = (
-                state.task_attempt_counts.get(event.task_id, 0) + 1
-            )
+            if event.event_type == "task_skipped":
+                state.task_attempt_states[f"{event.task_id}-skipped"] = TaskState.SKIPPED
+            elif event.attempt_id:
+                if event.event_type == "task_attempt_completed":
+                    state.task_attempt_states[event.attempt_id] = TaskState.COMPLETED
+                elif event.event_type == "task_attempt_timeout":
+                    state.task_attempt_states[event.attempt_id] = TaskState.TIMEOUT
+                elif event.event_type == "task_attempt_unknown":
+                    state.task_attempt_states[event.attempt_id] = TaskState.UNKNOWN
+                else:
+                    state.task_attempt_states[event.attempt_id] = TaskState.FAILED
+            if event.event_type != "task_skipped":
+                state.task_attempt_counts[event.task_id] = (
+                    state.task_attempt_counts.get(event.task_id, 0) + 1
+                )
         elif event.event_type == "task_attempt_started":
             state.task_attempt_counts[event.task_id] = max(
                 state.task_attempt_counts.get(event.task_id, 0),
                 _attempt_number(event.attempt_id),
             )
+            if event.attempt_id:
+                state.task_attempt_states[event.attempt_id] = TaskState.RUNNING
+                state.task_attempts_by_task.setdefault(event.task_id, []).append(
+                    event.attempt_id
+                )
+                state.task_attempt_payloads[event.attempt_id] = dict(event.payload)
         elif event.event_type in {"run_completed", "run_failed"}:
             state.terminal_result = event.payload.get("run_result")
     return state

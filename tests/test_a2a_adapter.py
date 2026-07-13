@@ -41,7 +41,7 @@ async def test_agent_card_ingestion_and_authorized_dispatch():
         required_artifacts=["summary"],
     )
     proposal = SolutionProposal(
-        tasks=[TaskSpec(task_id="t1", requirement_name="summarize", assigned_to="summarizer")],
+        tasks=[TaskSpec(task_id="t1", requirement_name="summarize", assigned_to="summarizer", validation_contract={"json_schema": {"type": "object"}})],
         execution_order=["t1"],
         expected_artifacts=["summary"],
         completion_criteria=["summary artifact exists"],

@@ -6,6 +6,7 @@ from unified_multi_agent_coordination import (
     ProblemRequest,
     SolutionProposal,
     TaskSpec,
+    ValidationContract,
 )
 
 
@@ -29,6 +30,14 @@ def _agent(
 
 
 def _proposal(*tasks: TaskSpec, artifacts: list[str] | None = None) -> SolutionProposal:
+    tasks = tuple(
+        task
+        if task.validation_contract.enforceable()
+        else task.model_copy(
+            update={"validation_contract": ValidationContract(json_schema={"type": "object"})}
+        )
+        for task in tasks
+    )
     return SolutionProposal(
         tasks=list(tasks),
         execution_order=[task.task_id for task in tasks],

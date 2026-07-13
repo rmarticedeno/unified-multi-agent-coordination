@@ -1,3 +1,5 @@
+import json
+
 import httpx
 import pytest
 
@@ -178,6 +180,21 @@ def test_registry_locator_aliases_and_conflicts():
         )
 
 
+def test_remote_a2a_text_payload_preserves_coordination_metadata():
+    payload = {
+        "text": "summarize this",
+        "_coordination": {
+            "session_id": "s1",
+            "task_id": "t1",
+            "idempotency_key": "s1:p1:t1:t1-attempt-1",
+        },
+    }
+
+    encoded = CoordinationSdk._payload_to_text(payload)
+
+    assert json.loads(encoded) == payload
+
+
 @pytest.mark.asyncio
 async def test_registry_snapshot_filters_self_and_indexes_capabilities():
     http_client = FakeHttpClient(
@@ -215,7 +232,7 @@ async def test_register_a2a_agent_and_reset_session_preserve_registry():
 @pytest.mark.asyncio
 async def test_register_local_agent_and_dispatch_normalizes_artifacts():
     sdk = CoordinationSdk(http_client=FakeHttpClient(FakeResponse({})))
-    requirement = CapabilityRequirement(name="summarize", output_modes=["text"])
+    requirement = CapabilityRequirement(name="summarize", output_modes=["text"], validation_contract={"json_schema": {"type": "object"}})
 
     def handler(task, payload):
         return {
@@ -255,7 +272,7 @@ async def test_register_local_agent_and_dispatch_normalizes_artifacts():
 @pytest.mark.asyncio
 async def test_register_linguistic_agent_and_dispatch_async_handler():
     sdk = CoordinationSdk(http_client=FakeHttpClient(FakeResponse({})))
-    requirement = CapabilityRequirement(name="classify", output_modes=["json"])
+    requirement = CapabilityRequirement(name="classify", output_modes=["json"], validation_contract={"json_schema": {"type": "object"}})
 
     async def handler(payload):
         return {"artifacts": [{"kind": "data", "data": {"label": payload["label"]}}]}
@@ -287,7 +304,7 @@ async def test_register_linguistic_agent_and_dispatch_async_handler():
 @pytest.mark.asyncio
 async def test_send_task_blocks_without_authorization():
     sdk = CoordinationSdk(http_client=FakeHttpClient(FakeResponse({})))
-    requirement = CapabilityRequirement(name="summarize")
+    requirement = CapabilityRequirement(name="summarize", validation_contract={"json_schema": {"type": "object"}})
     entry = sdk.register_local_agent("Summarizer", [requirement], lambda payload: {})
     task = TaskSpec(task_id="t1", requirement_name="summarize", assigned_to=entry.agent_id)
     report = FeasibilityAnalyzer().check(
@@ -305,7 +322,7 @@ async def test_send_task_blocks_without_authorization():
 @pytest.mark.asyncio
 async def test_runtime_failure_is_returned_and_traced():
     sdk = CoordinationSdk(http_client=FakeHttpClient(FakeResponse({})))
-    requirement = CapabilityRequirement(name="summarize")
+    requirement = CapabilityRequirement(name="summarize", validation_contract={"json_schema": {"type": "object"}})
 
     def handler(payload):
         raise RuntimeError("handler unavailable")

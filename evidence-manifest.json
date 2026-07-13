@@ -1,0 +1,33 @@
+{
+  "schema_version": "0.2.0",
+  "release_status": "candidate-blocked",
+  "source_commit": "UNFROZEN",
+  "dirty_state": true,
+  "accepted_evidence": [],
+  "preflight_evidence": {
+    "corpus_hash": "b9fd8b6f8398eaf33b8676e14288f0d3c4956cca5a9b915ca7b68990167c9c1d",
+    "tests": "78 passing",
+    "coverage": "55 percent overall; release threshold not met",
+    "deterministic": "7/7",
+    "docker_a2a": "demo_runs/v0.2/preflight-20260712-03/docker-system-report.json",
+    "distributed": "demo_runs/v0.2/preflight-20260712-07/distributed-system-report.json",
+    "third_party_a2a": "official vendored Hello World sample test passing",
+    "system_image": "sha256:4719ab3b6c19e1f4d99eadb80eeb0f41573508182197ce0af6715d63bb515f3a",
+    "distributed_image": "sha256:d852c6dc8dbe67e349d0f551da3d98860c621261de80631bddb62c32cd71203d"
+  },
+  "legacy_evidence": [
+    "demo_runs/end_to_end_scenarios.json",
+    "demo_runs/docker_system_report.json",
+    "demo_runs/distributed_system_report.json",
+    "demo_runs/baselines",
+    "demo_runs/local_llm",
+    "demo_runs/thesis_analysis"
+  ],
+  "open_gates": [
+    "independent corpus label sign-off",
+    "540-model-output run",
+    "coverage thresholds",
+    "final institutional metadata",
+    "clean frozen commit and Docker digests"
+  ]
+}

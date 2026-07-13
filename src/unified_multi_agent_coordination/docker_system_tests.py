@@ -172,7 +172,7 @@ async def _multi_remote_success(
             body.get("status") == "completed"
             and len(body.get("task_results", [])) == 3
             and _artifact_field_exists(body, "final_report")
-            and _received_previous_count(body) >= 2
+            and _received_previous_count(body) == 1
             and _trace_has_authorized_dispatch(body)
         ),
     )
@@ -351,7 +351,14 @@ async def _timeout_runtime_failure(
         {
             "problem": {
                 "user_goal": "Run the slow summarizer.",
-                "requirements": [{"name": "slow summarize"}],
+                "requirements": [
+                    {
+                        "name": "slow summarize",
+                        "validation_contract": {
+                            "required_artifacts": ["slow_summary"]
+                        },
+                    }
+                ],
                 "required_artifacts": ["slow_summary"],
             },
             "timeout_s": 0.25,

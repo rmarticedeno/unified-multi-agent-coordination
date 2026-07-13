@@ -1,4 +1,23 @@
-\chapter*{Abstract}
-\addcontentsline{toc}{chapter}{Abstract}
+\begin{abstractES}
 
-Large language models (LLMs) enable flexible interpretation and task decomposition, but linguistic plausibility does not establish that a multi-agent plan is executable, authorized, or complete. Conversely, symbolic artificial intelligence provides explicit constraints and verifiable state transitions but is less suited to interpreting underspecified natural-language goals. This thesis addresses the problem of coordinating heterogeneous autonomous agents without allowing an LLM proposal to substitute for an executable justification. Following a design-science methodology, it develops a protocol-independent framework that separates linguistic proposal from symbolic authorization. The framework represents agent capabilities, task dependencies, authority constraints, commitments, artifact contracts, and completion evidence explicitly. It returns either an authorized coordination plan or a structured infeasibility report. The framework is instantiated as a Python \texttt{CoordinationAgent} over \texttt{CoordinationSdk} middleware: the coordination agent owns planning and authorization, while the SDK owns communication, runtime adaptation, and normalization of remote, local, and optional Lingo-based linguistic agents. Evaluation uses unit and integration tests, seven deterministic coordination scenarios, an eleven-check Docker A2A system harness, and batched local LLM reference runs with \texttt{qwen/qwen3-1.7b} and \texttt{google/gemma-4-e2b}. The evidence supports the main boundary claim: language can propose structured candidates, but symbolic checks authorize or refuse execution and all dispatch proceeds through the SDK-managed communication surface. The work does not claim broad benchmark superiority over all possible baselines; its principal contribution is a precise and reproducible operational boundary for hybrid LLM--symbolic coordination.
+Los modelos grandes de lenguaje pueden interpretar solicitudes y proponer planes, pero la plausibilidad lingüística no establece factibilidad, autoridad ni terminación verificable. Esta tesis propone un límite de autorización y rechazo para coordinar agentes heterogéneos: los componentes lingüísticos producen solicitudes y planes tipados no autoritativos, mientras una capa simbólica resuelve identidades estables, evalúa restricciones, autoridad, dependencias y contratos, y autoriza o rechaza antes de cualquier despacho.
+
+La contribución se presenta como una integración operacional, adaptable a protocolos, de mecanismos establecidos. El prototipo incorpora restricciones tipadas que fallan de forma cerrada, validación completa con JSON Schema, contratos de terminación, ejecución segura respecto a dependencias, trazas persistentes aisladas por sesión, recuperación con arrendamientos y cercas monotónicas, y una política local de admisión A2A. Las verificaciones previas a la congelación apoyan el comportamiento del prototipo en pruebas unitarias, escenarios deterministas, contenedores A2A, una muestra oficial de interoperabilidad y fallos controlados con PostgreSQL. No demuestran verdad semántica, consenso, seguridad bizantina ni superioridad general.
+
+Se implementó además un estudio cegado de 36 casos, tres modelos locales y cinco semillas. La recolección y la puntuación permanecen bloqueadas hasta recibir aprobación independiente de las etiquetas; por ello esta versión no sustituye resultados heredados ni formula conclusiones comparativas prematuras.
+
+\noindent\textbf{Palabras clave:} sistemas multiagente; modelos grandes de lenguaje; inteligencia artificial simbólica; autorización; trazabilidad; A2A.
+
+\end{abstractES}
+
+\begin{abstractEN}
+
+Large language models can interpret requests and propose plans, but linguistic plausibility does not establish feasibility, authority, or verifiable completion. This thesis proposes an authorization/refusal boundary for heterogeneous-agent coordination: linguistic components produce typed, non-authoritative requests and plans, while a symbolic layer resolves stable identities, evaluates constraints, authority, dependencies, and contracts, and authorizes or refuses before dispatch.
+
+The contribution is framed as a protocol-adaptable operational integration of established mechanisms. The prototype implements fail-closed typed constraints, complete JSON Schema validation, completion contracts, dependency-safe execution, durable session-isolated traces, lease-and-fencing recovery, and a local A2A admission policy. Pre-freeze checks support prototype behavior in unit tests, deterministic scenarios, containerized A2A checks, one official interoperability sample, and controlled PostgreSQL crash faults. They do not establish semantic truth, consensus, Byzantine security, or general superiority.
+
+A blinded 36-case, three-local-model, five-seed study is also implemented. Collection and scoring remain blocked until independent label approval is supplied; this version therefore neither substitutes legacy results nor states a premature comparative conclusion.
+
+\noindent\textbf{Keywords:} multi-agent systems; large language models; symbolic artificial intelligence; authorization; traceability; A2A.
+
+\end{abstractEN}

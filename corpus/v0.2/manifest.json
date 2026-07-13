@@ -1,0 +1,16 @@
+{
+  "version": "0.2",
+  "generated_at": "2026-07-13T00:17:20.095594+00:00",
+  "corpus_hash": "b9fd8b6f8398eaf33b8676e14288f0d3c4956cca5a9b915ca7b68990167c9c1d",
+  "case_count": 36,
+  "base_case_count": 24,
+  "variation_count": 12,
+  "strata": [
+    "direct_feasible",
+    "decomposed_feasible",
+    "runtime_failure",
+    "missing_or_auxiliary_overreach",
+    "schema_modality_graph_invalidity",
+    "authority_constraint_registry_invalidity"
+  ]
+}

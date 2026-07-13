@@ -5,12 +5,15 @@ from __future__ import annotations
 import asyncio
 import inspect
 import json
+import re
 from collections.abc import Awaitable, Callable, Mapping
-from typing import Any
+from typing import Any, Literal, cast
 
 import httpx
+from jsonschema import Draft202012Validator
 
 from .a2a_adapter import A2AAdapter, AuthorizationError
+from .admission import AgentAdmissionPolicy, CredentialProvider
 from .models import (
     AgentRegistryEntry,
     CapabilityRequirement,
@@ -19,6 +22,7 @@ from .models import (
     TaskExecutionResult,
     TaskSpec,
     TraceEvent,
+    ValidationContract,
 )
 
 
@@ -44,6 +48,8 @@ class CoordinationSdk:
         card_fetcher: Callable[[str], Awaitable[Any]] | None = None,
         task_sender: Callable[[str, dict[str, Any]], Awaitable[Any]] | None = None,
         http_client: Any | None = None,
+        admission_policy: AgentAdmissionPolicy | None = None,
+        credential_provider: CredentialProvider | None = None,
     ) -> None:
         self.remote_registry_url = self._select_registry_url(
             remote_registry_url, registry_endpoint, registry_addr
@@ -57,9 +63,14 @@ class CoordinationSdk:
         self._remote_registry: dict[str, AgentRegistryEntry] = {}
         self._local_handlers: dict[str, Callable[..., Any]] = {}
         self._linguistic_handlers: dict[str, Callable[..., Any]] = {}
+        self._local_idempotency_cache: dict[str, TaskExecutionResult] = {}
+        self._consumed_auxiliary_lifecycles: set[str] = set()
+        self.credential_provider = credential_provider
         self.a2a_adapter = A2AAdapter(
             card_fetcher or self._fetch_agent_card,
             task_sender or self._send_remote_a2a_task,
+            admission_policy=admission_policy,
+            credential_provider=credential_provider,
         )
 
     async def refresh_registry(self) -> list[AgentRegistryEntry]:
@@ -142,7 +153,8 @@ class CoordinationSdk:
         """Admit a remote A2A agent from an Agent Card URL."""
         entry = await self.a2a_adapter.register_from_card_url(agent_card_url)
         entry.agent_kind = "remote_a2a"
-        entry.trust_level = trust_level
+        if trust_level != "standard":
+            entry.trust_level = trust_level
         entry.invocation_endpoint = entry.invocation_endpoint or entry.service_endpoint
         self._local_registry[entry.agent_id] = entry
         self._record(
@@ -228,6 +240,7 @@ class CoordinationSdk:
     ) -> TaskExecutionResult:
         """Invoke one admitted agent through its SDK-managed runtime path."""
         entry = self._agent_by_id(agent_id)
+        identity = self._coordination_identity(payload)
         if entry is None:
             result = TaskExecutionResult(
                 task_id=task.task_id,
@@ -241,8 +254,25 @@ class CoordinationSdk:
                 task_id=task.task_id,
                 agent_id=agent_id,
                 error=result.error,
+                **identity,
             )
             return result
+
+        idempotency_key = self._idempotency_key_from_payload(payload)
+        if (
+            entry.agent_kind in {"local_python", "linguistic"}
+            and idempotency_key
+            and idempotency_key in self._local_idempotency_cache
+        ):
+            self._record(
+                "sdk_duplicate_task_returned",
+                f"Task {task.task_id} returned a prior idempotent result.",
+                task_id=task.task_id,
+                agent_id=agent_id,
+                idempotency_key=idempotency_key,
+                **identity,
+            )
+            return self._local_idempotency_cache[idempotency_key]
 
         self._record(
             "sdk_task_started",
@@ -250,6 +280,7 @@ class CoordinationSdk:
             task_id=task.task_id,
             agent_id=agent_id,
             agent_kind=entry.agent_kind,
+            **identity,
         )
         try:
             output = await asyncio.wait_for(
@@ -260,6 +291,9 @@ class CoordinationSdk:
             result = TaskExecutionResult(
                 task_id=task.task_id,
                 agent_id=agent_id,
+                session_id=identity.get("session_id", ""),
+                plan_id=identity.get("plan_id", ""),
+                attempt_id=identity.get("attempt_id", ""),
                 agent_kind=entry.agent_kind,
                 status="timeout",
                 error=f"Task {task.task_id} timed out.",
@@ -278,6 +312,9 @@ class CoordinationSdk:
                 agent_kind=entry.agent_kind,
                 status="failed",
                 error=str(exc),
+                session_id=identity.get("session_id", ""),
+                plan_id=identity.get("plan_id", ""),
+                attempt_id=identity.get("attempt_id", ""),
             )
             self._record(
                 "sdk_task_failed",
@@ -307,6 +344,7 @@ class CoordinationSdk:
                 task_id=task.task_id,
                 agent_id=agent_id,
                 errors=validation_errors,
+                **identity,
             )
             return result
         self._record(
@@ -315,7 +353,14 @@ class CoordinationSdk:
             task_id=task.task_id,
             agent_id=agent_id,
             artifact_count=len(result.artifacts),
+            **identity,
         )
+        if (
+            entry.agent_kind in {"local_python", "linguistic"}
+            and idempotency_key
+            and result.status == "completed"
+        ):
+            self._local_idempotency_cache[idempotency_key] = result
         return result
 
     async def send_task(
@@ -329,7 +374,9 @@ class CoordinationSdk:
         agent_id = task.assigned_to or report.matched_agents.get(task.task_id)
         aux = self._authorized_auxiliary(report, task)
         if report.feasible and aux is not None:
-            return self._invoke_auxiliary(aux, task, payload)
+            return self._invoke_auxiliary(
+                aux, task, payload, identity=self._coordination_identity(payload)
+            )
         if not report.feasible or not agent_id:
             self._record(
                 "sdk_delegation_refused",
@@ -371,15 +418,31 @@ class CoordinationSdk:
         spec: GeneratedNlpAgentSpec,
         task: TaskSpec,
         payload: dict[str, Any],
+        *,
+        identity: dict[str, str] | None = None,
     ) -> TaskExecutionResult:
+        identity = identity or {}
+        if spec.lifecycle in self._consumed_auxiliary_lifecycles:
+            return TaskExecutionResult(
+                task_id=task.task_id,
+                agent_id=spec.spec_id,
+                agent_kind="auxiliary",
+                status="refused",
+                error="Auxiliary lifecycle has expired and cannot be reused.",
+                metadata={"lifecycle": spec.lifecycle, "expired": True},
+            )
+        self._consumed_auxiliary_lifecycles.add(spec.lifecycle)
         self._record(
             "sdk_auxiliary_task_started",
             f"Auxiliary task {task.task_id} started.",
             task_id=task.task_id,
             auxiliary_spec_id=spec.spec_id,
             method=spec.method,
+            **identity,
         )
         artifact = self._auxiliary_artifact(spec, payload)
+        if task.expected_artifacts and not artifact.get("name"):
+            artifact["name"] = task.expected_artifacts[0]
         missing = self._missing_required_fields(spec.output_schema, artifact)
         if missing:
             result = TaskExecutionResult(
@@ -398,6 +461,7 @@ class CoordinationSdk:
                 task_id=task.task_id,
                 auxiliary_spec_id=spec.spec_id,
                 missing=missing,
+                **identity,
             )
             return result
 
@@ -414,6 +478,7 @@ class CoordinationSdk:
             f"Auxiliary task {task.task_id} completed.",
             task_id=task.task_id,
             auxiliary_spec_id=spec.spec_id,
+            **identity,
         )
         return result
 
@@ -422,11 +487,17 @@ class CoordinationSdk:
         spec: GeneratedNlpAgentSpec,
         payload: dict[str, Any],
     ) -> dict[str, Any]:
-        source = payload.get("data") if isinstance(payload.get("data"), dict) else payload
+        source: dict[str, Any] = (
+            payload["data"] if isinstance(payload.get("data"), dict) else payload
+        )
         if spec.method == "schema_extraction":
             required = spec.output_schema.get("required", [])
             if isinstance(required, list) and required:
-                data = {str(key): source.get(str(key)) for key in required if str(key) in source}
+                data = {
+                    str(key): value
+                    for key in required
+                    if (value := self._derive_field(str(key), source, payload)) is not None
+                }
             else:
                 data = dict(source)
             return {"kind": "data", "data": data, **data}
@@ -436,6 +507,34 @@ class CoordinationSdk:
             return {"kind": "data", "data": {"normalized": normalized}, "normalized": normalized}
         label = payload.get("label") or payload.get("value") or payload.get("text")
         return {"kind": "data", "data": {"label": label}, "label": label}
+
+    @staticmethod
+    def _derive_field(
+        field: str,
+        source: dict[str, Any],
+        payload: dict[str, Any],
+    ) -> Any:
+        """Derive narrow fields from the admitted task input, never fixture-only evidence."""
+        if field in source:
+            return source[field]
+        text = str(payload.get("text") or source.get("text") or "")
+        lowered = field.lower()
+        if lowered == "email":
+            match = re.search(r"[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}", text, re.I)
+            return match.group(0) if match else None
+        if lowered in {"phone", "telephone"}:
+            match = re.search(r"(?<!\w)(?:\+?\d[\d .()-]{5,}\d)(?!\w)", text)
+            return match.group(0).strip() if match else None
+        label = re.escape(field.replace("_", " "))
+        match = re.search(
+            rf"\b{label}\b\s*(?:is|=|:)?\s*[$€£]?(-?\d[\d,]*(?:\.\d+)?)",
+            text,
+            re.I,
+        )
+        if not match:
+            return None
+        number = match.group(1).replace(",", "")
+        return float(number) if "." in number else int(number)
 
     @staticmethod
     def _missing_required_fields(
@@ -457,6 +556,23 @@ class CoordinationSdk:
     def trace(self) -> list[TraceEvent]:
         """Return SDK and adapter trace events."""
         return [*self._trace, *self.a2a_adapter.trace]
+
+    def trace_for_attempt(
+        self,
+        session_id: str,
+        plan_id: str,
+        task_id: str,
+        attempt_id: str,
+    ) -> list[TraceEvent]:
+        """Return only operational observations belonging to one dispatch attempt."""
+        return [
+            event
+            for event in self.trace()
+            if event.session_id == session_id
+            and event.plan_id == plan_id
+            and event.task_id == task_id
+            and event.attempt_id == attempt_id
+        ]
 
     def reset_session(self) -> None:
         """Clear trace state without unregistering admitted agents."""
@@ -482,9 +598,19 @@ class CoordinationSdk:
         except ImportError as exc:
             raise RuntimeError("A2A SDK client support is not available.") from exc
 
+        credential_headers = (
+            dict(
+                self.credential_provider.headers_for(
+                    entry.agent_id, entry.required_security_schemes
+                )
+            )
+            if self.credential_provider is not None
+            else {}
+        )
+        credential_client = httpx.AsyncClient(headers=credential_headers)
         client = await create_client(
             agent=entry.invocation_endpoint or entry.service_endpoint,
-            client_config=ClientConfig(streaming=False),
+            client_config=ClientConfig(streaming=False, httpx_client=credential_client),
         )
         try:
             message = new_text_message(
@@ -503,6 +629,7 @@ class CoordinationSdk:
             return output
         finally:
             await client.close()
+            await credential_client.aclose()
 
     def _artifacts_from_a2a_stream_response(self, chunk: Any) -> list[dict[str, Any]]:
         artifacts: list[dict[str, Any]] = []
@@ -628,16 +755,20 @@ class CoordinationSdk:
         entry = AgentRegistryEntry(
             agent_id=normalized_id,
             name=name,
-            agent_kind=agent_kind,  # type: ignore[arg-type]
+            agent_kind=cast(
+                Literal["remote_a2a", "local_python", "linguistic"], agent_kind
+            ),
             description=description,
             service_endpoint=f"{scheme}://{normalized_id}",
             invocation_endpoint=f"{scheme}://{normalized_id}",
             skills=list(capabilities),
             input_modes=self._capability_modes(capabilities, "input_modes"),
             output_modes=self._capability_modes(capabilities, "output_modes"),
-            status=status,  # type: ignore[arg-type]
+            status=cast(Literal["available", "unavailable"], status),
             trust_level=trust_level,
-            validation_contract=dict(validation_contract or {}),
+            validation_contract=ValidationContract.model_validate(
+                validation_contract or {}
+            ),
             source_card={"handler": self._handler_name(handler)},
         )
         self._local_registry[entry.agent_id] = entry
@@ -711,12 +842,19 @@ class CoordinationSdk:
         result: TaskExecutionResult,
     ) -> list[str]:
         contract = self._validation_contract_for(entry, task)
-        if not contract:
+        if not contract.enforceable():
             return []
 
         errors: list[str] = []
-        required_kinds = contract.get("artifact_kinds", [])
-        if isinstance(required_kinds, list):
+        if contract.json_schema:
+            errors.extend(
+                f"json schema: {error.message}"
+                for error in Draft202012Validator(contract.json_schema).iter_errors(
+                    result.output
+                )
+            )
+        required_kinds = contract.artifact_kinds
+        if required_kinds:
             available_kinds = {str(artifact.get("kind")) for artifact in result.artifacts}
             missing_kinds = [
                 str(kind) for kind in required_kinds if str(kind) not in available_kinds
@@ -724,8 +862,8 @@ class CoordinationSdk:
             if missing_kinds:
                 errors.append(f"missing artifact kinds: {', '.join(missing_kinds)}")
 
-        required_artifacts = contract.get("required_artifacts", [])
-        if isinstance(required_artifacts, list):
+        required_artifacts = contract.required_artifacts
+        if required_artifacts:
             missing_artifacts = [
                 str(name)
                 for name in required_artifacts
@@ -734,8 +872,8 @@ class CoordinationSdk:
             if missing_artifacts:
                 errors.append(f"missing artifacts: {', '.join(missing_artifacts)}")
 
-        required_fields = contract.get("required_fields", [])
-        if isinstance(required_fields, list):
+        required_fields = contract.required_fields
+        if required_fields:
             missing_fields = [
                 str(field)
                 for field in required_fields
@@ -744,23 +882,37 @@ class CoordinationSdk:
             if missing_fields:
                 errors.append(f"missing artifact fields: {', '.join(missing_fields)}")
 
+        if contract.evidence_types:
+            observed = {
+                str(artifact.get("evidence_type") or artifact.get("kind") or "")
+                for artifact in result.artifacts
+            }
+            missing_evidence = [
+                item for item in contract.evidence_types if item not in observed
+            ]
+            if missing_evidence:
+                errors.append(f"missing evidence types: {', '.join(missing_evidence)}")
         return errors
 
     def _validation_contract_for(
         self,
         entry: AgentRegistryEntry,
         task: TaskSpec,
-    ) -> dict[str, Any]:
+    ) -> ValidationContract:
         contract: dict[str, Any] = {}
-        contract.update(entry.validation_contract)
+
+        def overlay(candidate: ValidationContract) -> None:
+            for key, value in candidate.model_dump(mode="json").items():
+                if value not in ({}, [], "", None):
+                    contract[key] = value
+
+        overlay(entry.validation_contract)
         for skill in entry.skills:
-            if self._normalize_agent_id(skill.name) == self._normalize_agent_id(
-                task.requirement_name
-            ):
-                contract.update(skill.validation_contract)
+            if skill.capability_id == task.capability_id:
+                overlay(skill.validation_contract)
                 break
-        contract.update(task.validation_contract)
-        return contract
+        overlay(task.validation_contract)
+        return ValidationContract.model_validate(contract)
 
     @staticmethod
     def _artifact_named(artifacts: list[dict[str, Any]], name: str) -> bool:
@@ -815,9 +967,32 @@ class CoordinationSdk:
         return {"kind": "value", "value": self._jsonable_output(value)}
 
     def _record(self, event_type: str, message: str, **data: Any) -> TraceEvent:
-        event = TraceEvent(event_type=event_type, message=message, data=data)
+        identity = {
+            key: str(data.pop(key, "") or "")
+            for key in ("session_id", "plan_id", "task_id", "attempt_id")
+        }
+        event = TraceEvent(
+            event_type=event_type,
+            message=message,
+            source="sdk" if identity["session_id"] else "system",
+            data=data,
+            session_id=identity["session_id"],
+            plan_id=identity["plan_id"],
+            task_id=identity["task_id"],
+            attempt_id=identity["attempt_id"],
+        )
         self._trace.append(event)
         return event
+
+    @staticmethod
+    def _coordination_identity(payload: dict[str, Any]) -> dict[str, str]:
+        metadata = payload.get("_coordination")
+        if not isinstance(metadata, dict):
+            return {}
+        return {
+            key: str(metadata.get(key) or "")
+            for key in ("session_id", "plan_id", "attempt_id")
+        }
 
     @staticmethod
     def _select_registry_url(*values: str | None) -> str | None:
@@ -853,7 +1028,7 @@ class CoordinationSdk:
             from google.protobuf.json_format import MessageToDict
             from google.protobuf.message import Message as ProtobufMessage
         except ImportError:
-            ProtobufMessage = None  # type: ignore[assignment]
+            ProtobufMessage = None
         if ProtobufMessage is not None and isinstance(value, ProtobufMessage):
             return MessageToDict(value, preserving_proto_field_name=True)
         if hasattr(value, "__dict__"):
@@ -866,11 +1041,20 @@ class CoordinationSdk:
 
     @staticmethod
     def _payload_to_text(payload: dict[str, Any]) -> str:
+        if "_coordination" in payload:
+            return json.dumps(CoordinationSdk._jsonable_output(payload), sort_keys=True)
         for key in ("input", "text", "message", "prompt"):
             value = payload.get(key)
             if isinstance(value, str):
                 return value
         return json.dumps(CoordinationSdk._jsonable_output(payload), sort_keys=True)
+
+    @staticmethod
+    def _idempotency_key_from_payload(payload: dict[str, Any]) -> str:
+        coordination = payload.get("_coordination")
+        if not isinstance(coordination, dict):
+            return ""
+        return str(coordination.get("idempotency_key") or "")
 
     @staticmethod
     def _has_proto_field(value: Any, field_name: str) -> bool:

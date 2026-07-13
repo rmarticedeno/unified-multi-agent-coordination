@@ -68,7 +68,7 @@ def _card(name, skill="summarize"):
 async def test_build_solution_plan_refreshes_registry_filters_self_and_authorizes_direct_plan():
     request = ProblemRequest(
         user_goal="Summarize the report.",
-        requirements=[CapabilityRequirement(name="summarize")],
+        requirements=[CapabilityRequirement(name="summarize", validation_contract={"json_schema": {"type": "object"}})],
         required_artifacts=["summary"],
     )
     sdk = CoordinationSdk(
@@ -100,7 +100,7 @@ async def test_build_solution_plan_records_remote_registry_failure_as_infeasible
     result = await agent.build_solution_plan(
         ProblemRequest(
             user_goal="Summarize.",
-            requirements=[CapabilityRequirement(name="summarize")],
+            requirements=[CapabilityRequirement(name="summarize", validation_contract={"json_schema": {"type": "object"}})],
         )
     )
 
@@ -113,7 +113,7 @@ async def test_build_solution_plan_records_remote_registry_failure_as_infeasible
 async def test_build_solution_plan_retries_transient_registry_failure():
     request = ProblemRequest(
         user_goal="Summarize.",
-        requirements=[CapabilityRequirement(name="summarize")],
+        requirements=[CapabilityRequirement(name="summarize", validation_contract={"json_schema": {"type": "object"}})],
         required_artifacts=["summary"],
     )
     http_client = SequenceHttpClient(
@@ -141,7 +141,7 @@ async def test_build_solution_plan_retries_transient_registry_failure():
 async def test_build_solution_plan_uses_linguistic_planner_when_direct_match_is_missing():
     request = ProblemRequest(
         user_goal="Summarize the report.",
-        requirements=[CapabilityRequirement(name="summarize")],
+        requirements=[CapabilityRequirement(name="summarize", validation_contract={"json_schema": {"type": "object"}})],
         required_artifacts=["summary"],
     )
     sdk = CoordinationSdk(
@@ -178,17 +178,17 @@ async def test_build_solution_plan_uses_linguistic_planner_when_direct_match_is_
 @pytest.mark.asyncio
 async def test_coordinate_dispatches_authorized_tasks_in_execution_order_and_aggregates():
     calls = []
-    summarize = CapabilityRequirement(name="summarize", output_modes=["text"])
-    classify = CapabilityRequirement(name="classify", input_modes=["text"], output_modes=["json"])
+    summarize = CapabilityRequirement(name="summarize", output_modes=["text"], validation_contract={"json_schema": {"type": "object"}})
+    classify = CapabilityRequirement(name="classify", input_modes=["text"], output_modes=["json"], validation_contract={"json_schema": {"type": "object"}})
     sdk = CoordinationSdk(http_client=FakeHttpClient(FakeResponse({})))
 
     def summarize_handler(payload):
         calls.append("summarize")
-        return {"artifacts": [{"kind": "text", "text": payload["document"][:7]}]}
+        return {"artifacts": [{"name": "summary", "kind": "text", "text": payload["document"][:7]}]}
 
     def classify_handler(payload):
         calls.append("classify")
-        return {"artifacts": [{"kind": "data", "data": {"label": "brief"}}]}
+        return {"artifacts": [{"name": "label", "kind": "data", "data": {"label": "brief"}}]}
 
     summarizer = sdk.register_local_agent("Summarizer", [summarize], summarize_handler)
     classifier = sdk.register_local_agent("Classifier", [classify], classify_handler)
@@ -208,8 +208,8 @@ async def test_coordinate_dispatches_authorized_tasks_in_execution_order_and_agg
         classifier.agent_id,
     ]
     assert result.artifacts == [
-        {"kind": "text", "text": "hello w"},
-        {"kind": "data", "data": {"label": "brief"}},
+        {"name": "summary", "kind": "text", "text": "hello w"},
+        {"name": "label", "kind": "data", "data": {"label": "brief"}},
     ]
     assert any(event.event_type == "sdk_task_completed" for event in result.trace)
 
@@ -295,7 +295,7 @@ async def test_coordinate_retries_failed_task_and_records_attempts():
     calls = 0
     ledger = InMemoryCoordinationLedger()
     sdk = CoordinationSdk(http_client=FakeHttpClient(FakeResponse({})))
-    requirement = CapabilityRequirement(name="summarize")
+    requirement = CapabilityRequirement(name="summarize", side_effect_class="idempotent", validation_contract={"json_schema": {"type": "object"}})
 
     def handler(payload):
         nonlocal calls
@@ -330,7 +330,7 @@ async def test_coordinate_with_terminal_session_id_returns_recorded_result_witho
     calls = 0
     ledger = InMemoryCoordinationLedger()
     sdk = CoordinationSdk(http_client=FakeHttpClient(FakeResponse({})))
-    requirement = CapabilityRequirement(name="summarize")
+    requirement = CapabilityRequirement(name="summarize", validation_contract={"json_schema": {"type": "object"}})
 
     def handler(payload):
         nonlocal calls
@@ -353,8 +353,8 @@ async def test_coordinate_with_terminal_session_id_returns_recorded_result_witho
 async def test_resume_with_fresh_agent_skips_completed_tasks(tmp_path):
     calls = []
     ledger = JsonlCoordinationLedger(tmp_path / "ledger.jsonl")
-    summarize = CapabilityRequirement(name="summarize")
-    classify = CapabilityRequirement(name="classify")
+    summarize = CapabilityRequirement(name="summarize", validation_contract={"json_schema": {"type": "object"}})
+    classify = CapabilityRequirement(name="classify", validation_contract={"json_schema": {"type": "object"}})
     sdk = CoordinationSdk(http_client=FakeHttpClient(FakeResponse({})))
 
     summarizer = sdk.register_local_agent(
@@ -444,3 +444,80 @@ async def test_resume_with_fresh_agent_skips_completed_tasks(tmp_path):
     assert result.status == "completed"
     assert calls == ["classify"]
     assert [task.task_id for task in result.task_results] == ["t1", "t2"]
+
+
+@pytest.mark.asyncio
+async def test_resume_marks_unknown_in_flight_unsafe_attempt_without_redispatch(tmp_path):
+    calls = []
+    ledger = JsonlCoordinationLedger(tmp_path / "ledger.jsonl")
+    requirement = CapabilityRequirement(name="control actuator", side_effect_class="unsafe")
+    sdk = CoordinationSdk(http_client=FakeHttpClient(FakeResponse({})))
+    actuator = sdk.register_local_agent(
+        "Actuator",
+        [requirement],
+        lambda payload: calls.append("control") or {"artifacts": [{"kind": "data"}]},
+    )
+    request = ProblemRequest(
+        user_goal="Control actuator.",
+        requirements=[requirement],
+    )
+    proposal = SolutionProposal(
+        tasks=[
+            TaskSpec(
+                task_id="t1",
+                requirement_name=requirement.name,
+                assigned_to=actuator.agent_id,
+            )
+        ],
+        execution_order=["t1"],
+    )
+    report = CoordinationAgent(sdk=sdk).feasibility_analyzer.check(
+        request,
+        [actuator],
+        proposal,
+    )
+    plan_result = CoordinationPlanResult(
+        session_id="unsafe-recover-session",
+        plan_id="unsafe-recover-plan",
+        request=request,
+        proposal=proposal,
+        feasibility_report=report,
+        registry_snapshot=[actuator],
+    )
+
+    ledger.append(
+        LedgerEvent(
+            event_type="session_started",
+            session_id=plan_result.session_id,
+            plan_id=plan_result.plan_id,
+            payload={"payload": {"command": "open"}},
+        )
+    )
+    ledger.append(
+        LedgerEvent(
+            event_type="plan_authorized",
+            session_id=plan_result.session_id,
+            plan_id=plan_result.plan_id,
+            payload={"plan_result": plan_result.model_dump(mode="json")},
+        )
+    )
+    ledger.append(
+        LedgerEvent(
+            event_type="task_attempt_started",
+            session_id=plan_result.session_id,
+            plan_id=plan_result.plan_id,
+            task_id="t1",
+            attempt_id="t1-attempt-1",
+            payload={
+                "idempotency_key": "unsafe-recover-session:unsafe-recover-plan:t1:t1-attempt-1"
+            },
+        )
+    )
+
+    standby = CoordinationAgent(sdk=sdk, ledger=JsonlCoordinationLedger(ledger.path))
+    result = await standby.resume_session(plan_result.session_id)
+
+    assert result.status == "failed"
+    assert result.task_results[0].status == "unknown"
+    assert "refusing blind duplicate dispatch" in result.task_results[0].error
+    assert calls == []

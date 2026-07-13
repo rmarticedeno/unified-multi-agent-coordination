@@ -1,0 +1,9 @@
+cff-version: 1.2.0
+message: "If you use this prototype, cite the thesis and archived release."
+title: "Unified Multi-Agent Coordination: Bridging Large Language Models and Symbolic AI for Autonomous Systems"
+type: software
+version: 0.2.0
+license: Apache-2.0
+authors:
+  - family-names: "Marti Cedeno"
+    given-names: "Roberto"

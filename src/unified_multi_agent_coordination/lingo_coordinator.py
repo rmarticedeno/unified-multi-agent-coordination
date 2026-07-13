@@ -18,7 +18,7 @@ class CoordinatorState(State):
     """Lingo session state for the coordinator's linguistic ledger."""
 
     def __init__(self, **kwargs) -> None:
-        data = {
+        data: dict[str, object] = {
             "registry_snapshot": [],
             "interpreted_request": None,
             "candidate_plan": None,
@@ -37,10 +37,51 @@ class CoordinatorState(State):
 class LingoLinguisticCoordinator:
     """Produce typed requests and candidate plans without authorizing them."""
 
-    def __init__(self, llm: LLM | None = None) -> None:
+    def __init__(
+        self,
+        llm: LLM | None = None,
+        *,
+        max_candidates: int = 1,
+        model_id: str = "",
+        endpoint: str = "",
+        temperature: float = 0.0,
+        seed: int | None = None,
+    ) -> None:
         self.llm = llm or LLM()
         self.engine = Engine(self.llm)
         self.state = CoordinatorState()
+        self.max_candidates = max(1, min(max_candidates, 3))
+        self.model_id = model_id
+        self.endpoint = endpoint
+        self.temperature = temperature
+        self.seed = seed
+
+    @classmethod
+    def for_lm_studio(
+        cls,
+        model_id: str,
+        *,
+        endpoint: str = "http://127.0.0.1:1234/v1",
+        temperature: float = 0.0,
+        seed: int = 11,
+        max_candidates: int = 3,
+    ) -> "LingoLinguisticCoordinator":
+        """Create the explicitly configured local linguistic boundary."""
+        llm = LLM(
+            model=model_id,
+            api_key="lm-studio-local",
+            base_url=endpoint,
+            temperature=temperature,
+            seed=seed,
+        )
+        return cls(
+            llm,
+            max_candidates=max_candidates,
+            model_id=model_id,
+            endpoint=endpoint,
+            temperature=temperature,
+            seed=seed,
+        )
 
     async def interpret_request(
         self, user_text: str, registry: list[AgentRegistryEntry]
@@ -88,6 +129,25 @@ class LingoLinguisticCoordinator:
         self.state.candidate_plan = proposal.model_dump(mode="json")
         self.state.record("solution_proposed", "Candidate SolutionProposal produced.")
         return proposal
+
+    async def propose_solutions(
+        self, request: ProblemRequest, registry: list[AgentRegistryEntry]
+    ) -> list[SolutionProposal]:
+        """Request a bounded set of typed, non-authoritative candidates."""
+        proposals = [
+            await self.propose_solution(request, registry)
+            for _ in range(self.max_candidates)
+        ]
+        self.state.record(
+            "candidate_set_proposed",
+            "Bounded candidate set produced.",
+            candidate_count=len(proposals),
+            model_id=self.model_id,
+            endpoint=self.endpoint,
+            temperature=self.temperature,
+            seed=self.seed,
+        )
+        return proposals
 
     def record_feasibility(self, report: FeasibilityReport) -> None:
         self.state.feasibility_evidence = [

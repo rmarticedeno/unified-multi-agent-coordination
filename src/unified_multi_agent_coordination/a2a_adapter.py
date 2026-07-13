@@ -4,8 +4,9 @@ from __future__ import annotations
 
 import asyncio
 from collections.abc import Awaitable, Callable
-from typing import Any
+from typing import Any, Literal, cast
 
+from .admission import AgentAdmissionPolicy, CredentialProvider
 from .models import AgentRegistryEntry, CapabilityRequirement, FeasibilityReport, TaskSpec, TraceEvent
 
 
@@ -20,9 +21,14 @@ class A2AAdapter:
         self,
         card_fetcher: Callable[[str], Awaitable[Any]],
         task_sender: Callable[[str, dict[str, Any]], Awaitable[Any]],
+        *,
+        admission_policy: AgentAdmissionPolicy | None = None,
+        credential_provider: CredentialProvider | None = None,
     ) -> None:
         self.card_fetcher = card_fetcher
         self.task_sender = task_sender
+        self.admission_policy = admission_policy or AgentAdmissionPolicy()
+        self.credential_provider = credential_provider
         self.trace: list[TraceEvent] = []
 
     async def register_from_card_url(self, url: str) -> AgentRegistryEntry:
@@ -75,6 +81,14 @@ class A2AAdapter:
         status = raw.get("status")
         if status not in {"available", "unavailable"}:
             status = "available"
+        security_schemes = self._as_dict(
+            raw.get("securitySchemes") or raw.get("security_schemes") or {}
+        )
+        required_security_schemes = self._required_security_schemes(raw)
+        trust_level = self.admission_policy.admit_endpoint(endpoint)
+        self.admission_policy.require_credentials(
+            required_security_schemes, self.credential_provider
+        )
         return AgentRegistryEntry(
             agent_id=agent_id,
             name=name,
@@ -84,8 +98,10 @@ class A2AAdapter:
             skills=skills,
             input_modes=input_modes,
             output_modes=output_modes,
-            status=status,
-            trust_level=str(raw.get("trust_level") or raw.get("trustLevel") or "standard"),
+            status=cast(Literal["available", "unavailable"], status),
+            trust_level=trust_level,
+            security_schemes=security_schemes,
+            required_security_schemes=required_security_schemes,
             source_card=raw,
         )
 
@@ -192,6 +208,9 @@ class A2AAdapter:
         )
         return CapabilityRequirement(
             name=name,
+            capability_id=str(
+                raw.get("id") or raw.get("skill_id") or raw.get("skillId") or name
+            ),
             description=str(raw.get("description") or ""),
             input_modes=self._string_list(raw.get("inputModes") or raw.get("input_modes")),
             output_modes=self._string_list(raw.get("outputModes") or raw.get("output_modes")),
@@ -208,7 +227,7 @@ class A2AAdapter:
             from google.protobuf.json_format import MessageToDict
             from google.protobuf.message import Message as ProtobufMessage
         except ImportError:
-            ProtobufMessage = None  # type: ignore[assignment]
+            ProtobufMessage = None
         if ProtobufMessage is not None and isinstance(value, ProtobufMessage):
             return MessageToDict(value, preserving_proto_field_name=True)
         if hasattr(value, "__dict__"):
@@ -234,3 +253,15 @@ class A2AAdapter:
             if url:
                 return str(url)
         return ""
+
+    @staticmethod
+    def _required_security_schemes(raw: dict[str, Any]) -> list[str]:
+        requirements = raw.get("security") or raw.get("security_requirements") or []
+        if isinstance(requirements, dict):
+            requirements = [requirements]
+        names: set[str] = set()
+        if isinstance(requirements, list):
+            for requirement in requirements:
+                if isinstance(requirement, dict):
+                    names.update(str(name) for name in requirement)
+        return sorted(names)

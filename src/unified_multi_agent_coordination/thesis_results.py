@@ -19,11 +19,15 @@ def build_summary(
     *,
     scenarios_path: Path,
     docker_path: Path,
+    distributed_path: Path,
     local_llm_root: Path,
+    baselines_path: Path,
 ) -> JsonObject:
     """Read preserved reports and return one normalized thesis summary."""
     deterministic = _load_json(scenarios_path)
     docker = _load_optional_json(docker_path)
+    distributed = _load_optional_json(distributed_path)
+    baselines = _load_optional_json(baselines_path)
     llm_reports = {
         model_id: _load_latest_llm_report(local_llm_root, model_id)
         for model_id in ALLOWED_MODELS
@@ -32,10 +36,14 @@ def build_summary(
         "source_files": {
             "deterministic_scenarios": str(scenarios_path),
             "docker_system": str(docker_path) if docker_path.exists() else "",
+            "distributed_system": str(distributed_path) if distributed_path.exists() else "",
             "local_llm_root": str(local_llm_root),
+            "baselines": str(baselines_path) if baselines_path.exists() else "",
         },
         "deterministic": _summarize_deterministic(deterministic),
         "docker": _summarize_docker(docker) if docker else None,
+        "distributed": _summarize_distributed(distributed) if distributed else None,
+        "baselines": _summarize_baselines(baselines) if baselines else None,
         "local_llm": {
             model_id: _summarize_llm(report)
             for model_id, report in llm_reports.items()
@@ -206,6 +214,71 @@ def _summarize_llm(report: JsonObject) -> JsonObject:
     }
 
 
+def _summarize_distributed(report: JsonObject) -> JsonObject:
+    scenarios = list(report.get("scenarios", []))
+    metrics = dict(report.get("metrics") or {})
+    latencies = [
+        float(item.get("latency_ms", 0))
+        for item in scenarios
+        if isinstance(item.get("latency_ms"), int | float)
+    ]
+    return {
+        "scenario_count": int(report.get("scenario_count") or len(scenarios)),
+        "passed": bool(report.get("passed")),
+        "passed_rows": sum(1 for item in scenarios if item.get("passed") is True),
+        "median_latency_ms": round(median(latencies), 2) if latencies else 0,
+        "lease_conflicts_observed": int(metrics.get("lease_conflicts_observed") or 0),
+        "stale_write_rejections": int(metrics.get("stale_write_rejections") or 0),
+        "duplicate_dispatch_count": int(metrics.get("duplicate_dispatch_count") or 0),
+        "agent_side_duplicate_idempotency_key_requests": int(
+            metrics.get("agent_side_duplicate_idempotency_key_requests") or 0
+        ),
+        "agent_side_repeated_session_task_effectful_executions": int(
+            metrics.get("agent_side_repeated_session_task_effectful_executions") or 0
+        ),
+        "recovery_time_ms": metrics.get("recovery_time_ms"),
+        "terminal_correctness": bool(metrics.get("terminal_correctness")),
+        "rows": [
+            {
+                "id": item.get("scenario_id", item.get("id", "")),
+                "passed": bool(item.get("passed")),
+                "latency_ms": item.get("latency_ms", 0),
+                "error": item.get("error", ""),
+            }
+            for item in scenarios
+        ],
+    }
+
+
+def _summarize_baselines(report: JsonObject) -> JsonObject:
+    rows: list[JsonObject] = []
+    configurations = report.get("configurations", {})
+    for key, label in (
+        ("hybrid", "Hybrid CoordinationAgent"),
+        ("rule_only", "Rule-only baseline"),
+    ):
+        config = configurations.get(key)
+        if config:
+            summary = dict(config.get("summary") or {})
+            summary["configuration"] = label
+            summary["model_id"] = ""
+            rows.append(summary)
+
+    for model_id, config in (
+        configurations.get("llm_only", {}).get("models", {}) or {}
+    ).items():
+        summary = dict(config.get("summary") or {})
+        summary["configuration"] = "LLM-only baseline"
+        summary["model_id"] = model_id
+        rows.append(summary)
+
+    return {
+        "generated_at": report.get("generated_at", ""),
+        "scenario_count": int(report.get("scenario_count") or 0),
+        "rows": rows,
+    }
+
+
 def _markdown_tables(summary: JsonObject) -> str:
     parts = [
         "# Thesis Evidence Summary",
@@ -238,6 +311,61 @@ def _markdown_tables(summary: JsonObject) -> str:
                 "{latency_ms} |".format(**row)
             )
 
+    distributed = summary.get("distributed")
+    if distributed:
+        parts.extend(
+            [
+                "",
+                "## Distributed Coordinator Harness",
+                "",
+                "| Check | Passed | Latency ms | Error |",
+                "|---|---:|---:|---|",
+            ]
+        )
+        for row in distributed["rows"]:
+            parts.append(
+                "| {id} | {passed} | {latency_ms} | {error} |".format(**row)
+            )
+        parts.extend(
+            [
+                "",
+                "| Metric | Value |",
+                "|---|---:|",
+                f"| Lease conflicts observed | {distributed['lease_conflicts_observed']} |",
+                f"| Stale write rejections | {distributed['stale_write_rejections']} |",
+                f"| Duplicate dispatch count | {distributed['duplicate_dispatch_count']} |",
+                "| Agent-side duplicate idempotency-key requests | "
+                f"{distributed['agent_side_duplicate_idempotency_key_requests']} |",
+                "| Agent-side repeated task effects | "
+                f"{distributed['agent_side_repeated_session_task_effectful_executions']} |",
+                f"| Recovery time ms | {distributed['recovery_time_ms']} |",
+                f"| Terminal correctness | {distributed['terminal_correctness']} |",
+            ]
+        )
+
+    baselines = summary.get("baselines")
+    if baselines:
+        parts.extend(
+            [
+                "",
+                "## Paired Baseline Evaluation",
+                "",
+                "| Configuration | Model | Status match | Decision match | False accept | False refuse | Unauthorized dispatch rows | Resolved reqs | Unresolved reqs | Raw exact names | Resolved expected | Tokens |",
+                "|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|",
+            ]
+        )
+        for row in baselines["rows"]:
+            parts.append(
+                "| {configuration} | {model_id} | {status_matches_reference}/{scenario_count} | "
+                "{decision_matches_reference}/{scenario_count} | {false_accepts} | "
+                "{false_refusals} | {dispatch_without_symbolic_authorization} | "
+                "{resolved_requirements} | {unresolved_requirements} | "
+                "{exact_requirement_name_matches} | {resolved_expected_names} | "
+                "{llm_tokens} |".format(
+                    **row
+                )
+            )
+
     parts.extend(
         [
             "",
@@ -263,6 +391,7 @@ def _markdown_tables(summary: JsonObject) -> str:
 def _latex_tables(summary: JsonObject) -> str:
     deterministic = summary["deterministic"]
     docker = summary.get("docker") or {}
+    distributed = summary.get("distributed") or {}
     local_llm = summary.get("local_llm", {})
     lines = [
         "% Generated by unified-thesis-results.",
@@ -284,6 +413,12 @@ def _latex_tables(summary: JsonObject) -> str:
             f"{docker['scenario_count']} & {docker['passed_rows']} & "
             f"{docker['median_latency_ms']} \\\\"
         )
+    if distributed:
+        lines.append(
+            "Distributed coordinator checks & "
+            f"{distributed['scenario_count']} & {distributed['passed_rows']} & "
+            f"{distributed['median_latency_ms']} \\\\"
+        )
     for model_id, row in local_llm.items():
         lines.append(
             f"{_latex_escape(model_id)} local LLM references & "
@@ -291,6 +426,83 @@ def _latex_tables(summary: JsonObject) -> str:
             f"{row['median_latency_ms']} \\\\"
         )
     lines.extend(["\\bottomrule", "\\end{tabular}", "\\end{table}", ""])
+    if local_llm:
+        lines.extend(
+            [
+                "\\begin{table}[htbp]",
+                "\\centering",
+                "\\caption{Local LLM reference batch summary.}",
+                "\\label{tab:local-llm-reference-summary}",
+                "\\begingroup",
+                "\\scriptsize",
+                "\\setlength{\\tabcolsep}{3pt}",
+                "\\resizebox{\\textwidth}{!}{%",
+                "\\begin{tabular}{@{}lrrrrrrr@{}}",
+                "\\toprule",
+                "Model & Parsed & Req. names & Artifacts & Verdict & Agents & Tokens & Median ms \\\\",
+                "\\midrule",
+            ]
+        )
+        for model_id, row in local_llm.items():
+            lines.append(
+                f"{_latex_escape(model_id)} & "
+                f"{row['parse_ok']}/{row['scenario_count']} & "
+                f"{row['requirements_all_matched']}/{row['scenario_count']} & "
+                f"{row['artifacts_all_matched']}/{row['scenario_count']} & "
+                f"{row['planning_verdict_matches']}/{row['scenario_count']} & "
+                f"{row['uses_only_registered_agents']}/{row['scenario_count']} & "
+                f"{row['total_tokens']} & {row['median_latency_ms']} \\\\"
+            )
+        lines.extend(
+            [
+                "\\bottomrule",
+                "\\end{tabular}",
+                "}",
+                "\\endgroup",
+                "\\end{table}",
+                "",
+            ]
+        )
+    baselines = summary.get("baselines")
+    if baselines:
+        lines.extend(
+            [
+                "\\begin{table}[htbp]",
+                "\\centering",
+                "\\caption{Paired baseline evaluation summary.}",
+                "\\label{tab:baseline-summary}",
+                "\\begingroup",
+                "\\scriptsize",
+                "\\setlength{\\tabcolsep}{3pt}",
+                "\\resizebox{\\textwidth}{!}{%",
+                "\\begin{tabular}{@{}llrrrrrrrrrr@{}}",
+                "\\toprule",
+                "Configuration & Model & Status & Decision & False accept & False refuse & Unauth. dispatch & Resolved & Unresolved & Raw exact & Resolved expected & Tokens \\\\",
+                "\\midrule",
+            ]
+        )
+        for row in baselines["rows"]:
+            lines.append(
+                f"{_latex_escape(str(row['configuration']))} & "
+                f"{_latex_escape(str(row.get('model_id') or '--'))} & "
+                f"{row['status_matches_reference']}/{row['scenario_count']} & "
+                f"{row['decision_matches_reference']}/{row['scenario_count']} & "
+                f"{row['false_accepts']} & {row['false_refusals']} & "
+                f"{row['dispatch_without_symbolic_authorization']} & "
+                f"{row['resolved_requirements']} & {row['unresolved_requirements']} & "
+                f"{row['exact_requirement_name_matches']} & "
+                f"{row['resolved_expected_names']} & {row['llm_tokens']} \\\\"
+            )
+        lines.extend(
+            [
+                "\\bottomrule",
+                "\\end{tabular}",
+                "}",
+                "\\endgroup",
+                "\\end{table}",
+                "",
+            ]
+        )
     return "\n".join(lines)
 
 
@@ -317,9 +529,19 @@ def main(argv: list[str] | None = None) -> None:
         default=Path("demo_runs/docker_system_report.json"),
     )
     parser.add_argument(
+        "--distributed",
+        type=Path,
+        default=Path("demo_runs/distributed_system_report.json"),
+    )
+    parser.add_argument(
         "--local-llm-root",
         type=Path,
         default=Path("demo_runs/local_llm"),
+    )
+    parser.add_argument(
+        "--baselines",
+        type=Path,
+        default=Path("demo_runs/baselines/baseline_report.json"),
     )
     parser.add_argument(
         "--output-dir",
@@ -331,7 +553,9 @@ def main(argv: list[str] | None = None) -> None:
     summary = build_summary(
         scenarios_path=args.scenarios,
         docker_path=args.docker,
+        distributed_path=args.distributed,
         local_llm_root=args.local_llm_root,
+        baselines_path=args.baselines,
     )
     write_outputs(summary, args.output_dir)
     print(f"Wrote thesis analysis to {args.output_dir}")

@@ -13,20 +13,24 @@ A2A remains the default wire model for independently deployed agents. Remote age
 
 The prototype also uses Lingo as an optional linguistic and context-engineering substrate \cite{lingo2026}. Lingo is not hidden inside the SDK as a coordinator. Instead, Lingo-backed interpretation, extraction, classification, or candidate-planning behavior is exposed as SDK-registered linguistic capabilities. Non-linguistic local agents can use the SDK without depending on Lingo. The prototype dependency set pins \texttt{lingo-ai==2.0.2} and uses \texttt{a2a-sdk}, \texttt{pydantic}, \texttt{httpx}, \texttt{FastAPI}, \texttt{Uvicorn}, \texttt{pytest}, and \texttt{pytest-asyncio} for the executable implementation, service wrapper, and tests.
 
-For deployment and reproducibility, the repository includes a thin HTTP service and Docker configuration around the same \texttt{CoordinationAgent} and \texttt{CoordinationSdk} objects. The service exposes health, registry, plan, coordinate, and feasibility endpoints. It does not introduce a second coordinator, bypass the SDK boundary, or change the theoretical ownership of planning and authorization. Docker support is therefore an execution environment wrapper for later verification, not evidence that the evaluation protocol has already been run.
+For deployment and reproducibility, the repository includes a thin HTTP service and Docker configuration around the same \texttt{CoordinationAgent} and \texttt{CoordinationSdk} objects. The service exposes health, registry, plan, coordinate, resume, and feasibility endpoints. It does not bypass the SDK boundary or change the theoretical ownership of planning and authorization. The implementation can run with the JSONL-backed local store used by simple tests, or with a PostgreSQL-backed shared coordination store selected through \texttt{COORDINATION\_STORE\_URL}. The PostgreSQL mode supports replicated coordinator processes by combining per-session leases, fencing tokens, idempotency keys, and durable terminal-result constraints.
 
 The mapping between formal objects and implementation records is direct. The records defined in Section~\ref{sec:data-structures} materialize the formal objects of Chapter~\ref{chap:theoretical-solution} as follows.
 
 \begin{itemize}
   \item \texttt{CoordinationAgent} materializes the central coordinating authority. It owns interpretation workflow, direct matching, decomposition, feasibility checks, auxiliary decisions, authorization, and final result construction.
   \item \texttt{CoordinationSdk} materializes the communication abstraction. It owns registry admission, A2A gateway behavior, local and Lingo runtimes, task dispatch, artifact normalization, runtime failure recording, and communication trace access.
+  \item \texttt{CoordinationStore} materializes durable coordination state. Its JSONL adapter preserves the local testing backend; its PostgreSQL adapter stores sessions, events, leases, registry snapshots, plan generations, commitments, attempts, artifacts, and terminal results.
   \item \texttt{AgentRegistryEntry} materializes an agent $a$ (Definition~\ref{def:agent}), supplying $\mathit{id}$, declared capabilities $C(a)$, input modes $M_{\mathrm{in}}(a)$, output modes $M_{\mathrm{out}}(a)$, local admission policy $\tau(a)$, observable status $\sigma(a)$, and the invocation endpoint used by the SDK.
   \item \texttt{CapabilityRequirement} materializes a required capability descriptor $q \in \mathcal{Q}$ with modalities, schemas, constraints, trust level, and auxiliary eligibility.
+  \item \texttt{ConstraintSpec} materializes one deterministic predicate with a stable identifier, declared evidence source, JSON-pointer path, typed operator, expected value, and optional requirement/task scope. Legacy prose is readable but unresolved and therefore cannot authorize.
+  \item \texttt{ValidationContract} combines complete JSON Schema validation, required artifacts, kinds, fields, evidence types, and an optional registered validator. \texttt{CompletionContract} defines required terminal task states, final artifacts, and validator success.
   \item \texttt{ProblemRequest} materializes the request $P = (g, \mathcal{Q}, \chi, \mathcal{O}, \Gamma)$ from Definition~\ref{def:problem-request}.
   \item \texttt{SolutionProposal} materializes the coordination plan $\Pi$ from Definition~\ref{def:coordination-plan}, including task requirements, assignments, dependencies, auxiliary specifications, expected artifacts, and completion criteria.
   \item \texttt{FeasibilityReport} records the verdict and predicate evidence from Definition~\ref{def:feasibility}. It is produced by the \texttt{FeasibilityAnalyzer} at the \texttt{CoordinationAgent} layer.
   \item \texttt{GeneratedNlpAgentSpec} materializes the auxiliary capability specification from Definition~\ref{def:auxiliary}, bounded by Rules~\ref{rule:approved-construction}--\ref{rule:lifecycle}.
   \item \texttt{CoordinatorState} is the coordination agent's session state containing the registry snapshot, interpreted request, candidate plan, feasibility evidence, and trace.
+  \item The recovery records make durable state explicit: \texttt{SessionState}, \texttt{TaskState}, \texttt{PlanGeneration}, and \texttt{TaskCommitment} describe coordination progress, while \texttt{TaskAttemptRecord}, \texttt{LeaseRecord}, and \texttt{TerminalResultRecord} support invariant checks.
   \item \texttt{TraceEvent} records auditable observations across interpretation, authorization, delegation, and artifact handling.
 \end{itemize}
 
@@ -57,13 +61,14 @@ Lingo Agent Runtime & Wraps optional Lingo apps, flows, tools, state machines, a
 SDK Trace Store & Tracks communication events, runtime failures, task status, and artifact observations. \\
 Artifact Normalizer & Converts remote, local, and linguistic outputs into records usable by validators and aggregators. \\
 Auxiliary Capability Factory & Used by the \texttt{CoordinationAgent} to specify temporary lightweight linguistic agents when justified. \\
+Coordination Store & Persists session events, leases, fencing tokens, plan generations, task commitments, attempts, artifacts, terminal results, and recovery state. \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 \section{Agent Registration and Communication Boundary}
 
-The SDK admits three kinds of agents through one communication boundary. A remote A2A agent is registered with \texttt{register\_a2a\_agent(agent\_card\_url, trust\_level=...)}. The SDK fetches the Agent Card, validates the metadata, extracts identity, service endpoint, skills, modalities, and security requirements, and converts them into an internal registry entry. Because the external representation remains A2A-compatible, other conforming A2A implementations can participate without custom glue.
+The SDK admits three kinds of agents through one communication boundary. A remote A2A agent is registered from an Agent Card URL. \texttt{AgentAdmissionPolicy} checks allowed origin, HTTPS policy, locally assigned trust, required credential schemes, and the explicit development-only HTTP exception. Effective trust is never accepted from the remote card. A credential provider supplies ephemeral request headers, while reports retain only scheme names. The SDK preserves card security schemes, canonical skill identifiers, endpoints, and modes in the internal registry entry.
 
 A local agent is registered with \texttt{register\_local\_agent(name, capabilities, handler, ...)}. The handler may be a Python function, script wrapper, class, symbolic planner, or deterministic tool. The local agent does not need to know about A2A. The SDK supplies the same identity, capability, modality, authority, invocation, and validation metadata that a remote Agent Card would otherwise provide. During dispatch, the SDK invokes the local handler through the Local Agent Runtime and records the result as a normal task observation.
 
@@ -109,7 +114,10 @@ AgentRegistryEntry:
 
 CapabilityRequirement:
   name
+  requirement_id
+  capability_id
   description
+  side_effect_class
   input_schema
   output_schema
   input_modes
@@ -117,6 +125,29 @@ CapabilityRequirement:
   constraints
   auxiliary_eligible
   required_trust_level
+  validation_contract
+
+ConstraintSpec:
+  constraint_id
+  source
+  path
+  operator
+  expected
+  requirement_id
+  task_id
+
+ValidationContract:
+  json_schema
+  required_artifacts
+  artifact_kinds
+  required_fields
+  evidence_types
+  validator_id
+
+CompletionContract:
+  required_task_states
+  required_artifacts
+  require_all_task_validators
 
 ProblemRequest:
   user_goal
@@ -128,10 +159,13 @@ ProblemRequest:
 TaskSpec:
   task_id
   requirement_name
+  requirement_id
+  capability_id
   assigned_to
   auxiliary_spec_id
   depends_on
   expected_artifacts
+  validation_contract
 
 FeasibilityReport:
   feasible
@@ -149,6 +183,8 @@ SolutionProposal:
   execution_order
   expected_artifacts
   completion_criteria
+  completion_contract
+  constraint_evidence
 
 GeneratedNlpAgentSpec:
   purpose
@@ -170,8 +206,38 @@ CoordinatorState:
 TraceEvent:
   event_type
   message
+  session_id
+  plan_id
+  task_id
+  attempt_id
+  source
   data
   timestamp
+
+SessionState:
+  new | planning | authorized | dispatching
+  recovering | completed | failed | infeasible
+
+TaskState:
+  pending | running | completed | failed
+  timeout | skipped | unknown
+
+LeaseRecord:
+  session_id
+  holder_id
+  fencing_token
+  expires_at
+  heartbeat_at
+
+TaskAttemptRecord:
+  session_id
+  plan_id
+  task_id
+  attempt_id
+  idempotency_key
+  coordinator_id
+  fencing_token
+  state
 
 TaskExecutionResult:
   task_id
@@ -322,17 +388,35 @@ The implementation treats infeasibility as a first-class coordination-agent resu
 
 The SDK normalizes runtime failures rather than planning failures. A2A transport failures, local handler exceptions, Lingo execution failures, invalid artifacts, cancellations, and timeouts are recorded as structured observations linked to the relevant task and agent. This behavior is essential for simplicity and trust. The system should not create complex plans merely to appear capable. It should coordinate only when the available and generated capabilities justify the solution. Otherwise, the coordination agent should explain the boundary clearly. Lingo guardrails may detect obvious unsafe, irrelevant, or ambiguous inputs early, but such reflexes are treated as advisory preprocessing rather than as replacements for the feasibility verdict.
 
-\section{Crash-Fault-Tolerance Extension}
+\section{Lease-Backed Replicated Coordinator Execution}
 
-The current prototype records failures as structured results and includes a small JSONL coordination ledger for session recovery. A fault-tolerant implementation should preserve the same logical coordination authority while removing the coordinator process as the sole availability point. The extension is therefore limited to crash fault tolerance: it addresses coordinator process failure, transient registry failure, task timeout, and duplicate dispatch risk. It does not claim Byzantine fault tolerance or agreement among mutually suspicious coordinators.
+The implemented crash-fault-tolerance path preserves the same logical coordination authority while allowing several coordinator processes to serve different sessions and to recover a session after the previous owner stops making progress. The key design point is that replication applies to the coordinator process, not to the authorization role. Each session still has one current lease holder, one authorized plan state per generation, one task-attempt history, and at most one terminal result.
 
-The first extension is a bounded retry policy. Registry refresh and task dispatch should be retried only when the failure class is transient and the retry budget has not been exhausted. Retry attempts must be recorded as task or registry observations rather than hidden inside the transport layer. When retries are exhausted, the coordinator records the condition as a registry failure, timeout, unavailable agent, or failed commitment. If another compatible agent exists in the same authorized registry snapshot, the coordinator may construct a new candidate plan and submit it to the feasibility analyzer before dispatching replacement work. If no replacement satisfies the same capability, trust, modality, and validation constraints, the run terminates with an explicit failure state.
+\begin{table}[htbp]
+\centering
+\caption{Scope of implemented coordination evidence.}
+\label{tab:implementation-scope}
+\small
+\begin{tabular}{p{0.26\textwidth}p{0.30\textwidth}p{0.32\textwidth}}
+\toprule
+\textbf{Level} & \textbf{Implemented evidence} & \textbf{Claim boundary} \\
+\midrule
+Local prototype & JSONL-backed sessions, deterministic feasibility checks, SDK dispatch, trace reconstruction, and resume from stored events. & Shows the language--symbolic boundary and recovery for simple local sessions. \\
+Replicated coordinator & PostgreSQL store, leases, fencing tokens, idempotency keys, per-attempt provenance, stale-write rejection, HTTP \texttt{409} lease conflict responses, and Docker failover evidence. & Supports crash-fault-tolerant replicated coordinator execution for the measured cases. \\
+Decentralized or adversarial coordination & Not implemented: no consensus protocol, adversarial registry defense, malicious Agent Card validation, or Byzantine coordinator tests. & Remains outside scope and is not claimed. \\
+\bottomrule
+\end{tabular}
+\end{table}
 
-The second extension is a durable coordination ledger. Each coordination attempt is assigned a stable session identifier. Authorized plans receive a stable plan identifier, and delegated tasks carry stable task identifiers and attempt identifiers. The current JSONL ledger stores the admitted request, registry snapshot used for authorization, candidate proposal, feasibility report, authorization decision, task attempts, runtime results, artifacts, and terminal result. This ledger becomes the authoritative recovery source for simple session resume; natural-language explanations remain derived views rather than the state used for recovery. A fuller implementation should add explicit commitment-state records, lease ownership, and cross-process duplicate-dispatch handling.
+The \texttt{CoordinationStore} interface separates durable coordination state from the coordination algorithm. The JSONL adapter keeps local tests and simple demonstrations lightweight. The PostgreSQL adapter uses transactional tables for sessions, leases, append-only events, registry snapshots, plan generations, task commitments, task attempts, artifacts, and terminal results. Its schema enforces key invariants: a session has at most one terminal result, task results require a prior attempt record, stale fencing tokens are rejected, and idempotency keys can be resolved before retrying a dispatch.
 
-The third extension is hot standby recovery. Multiple coordinator processes may be deployed, but only one process should hold the active lease for a given session. If the active coordinator fails, a standby coordinator reads the durable ledger, reconstructs the last authorized plan and commitment states, and resumes only the work that is not already terminal. The prototype can resume from a ledger and skip completed tasks, but it does not yet implement lease management or container/process failover. Completed or failed task attempts must not be blindly repeated. This requires idempotent dispatch semantics: each outbound delegation includes the session, plan, task, and attempt identifiers, and the SDK or receiving agent must be able to detect duplicate requests or return the already recorded result when repetition is unsafe.
+Coordinator replicas identify themselves with \texttt{COORDINATION\_COORDINATOR\_ID}. Before planning, authorization, dispatch, recovery, or terminal writes, \texttt{coordinate} and \texttt{resume\_session} acquire a session lease. The store assigns a monotonically increasing fencing token whenever a lease is acquired after expiry or release. Every fenced write carries the lease token, and the PostgreSQL backend rejects stale tokens after takeover. Service endpoints translate live lease conflicts into HTTP \texttt{409}, making ownership contention visible to clients rather than silently reassigning the session.
 
-This extension keeps the theory's centralized authorization semantics intact. The system may have several coordinator processes, but the session still has one logical authorization record and one current commitment state. Fault tolerance is therefore an implementation property of state durability, retry discipline, and failover, not a shift to decentralized consensus.
+Dispatch is idempotency-aware. Each attempt uses the key \texttt{session\_id + plan\_id + task\_id + attempt\_id}; the key is persisted before SDK dispatch and is included in the task payload's \texttt{\_coordination} metadata together with the coordinator id, fencing token, and plan generation. The SDK caches completed local and linguistic results by idempotency key, and the deterministic A2A fixture agent returns a prior result when the same key is observed again. The \texttt{CapabilityRequirement.side\_effect\_class} field distinguishes \texttt{read\_only}, \texttt{idempotent}, \texttt{unsafe}, and \texttt{unknown} work. Automatic redispatch is limited to read-only or idempotent attempts. When takeover observes an expired in-flight task whose side effects are unknown or unsafe, the coordinator records an \texttt{unknown} task result and fails explicitly rather than blindly repeating external work.
+
+Recovery reconstructs session state from the store. Completed tasks are skipped, pending tasks whose dependencies are satisfied can resume, and terminal results are returned without replanning. Replanning is deliberately conservative: a new plan generation must be recorded rather than silently mutating the old authorized plan, and it is only justified when the prior task lacks a terminal result, the original executor is unavailable, a compatible replacement exists in a fresh registry snapshot, and the feasibility analyzer accepts the new proposal. The implemented Docker evidence covers lease conflict, takeover after an abandoned attempt, process exit after external dispatch of unknown-side-effect work, stale fencing rejection, and PostgreSQL invariant checks; broader dynamic-registry replanning remains a future evaluation case.
+
+This design keeps the theory's centralized authorization semantics intact. The system may have several coordinator processes, but the session still has one logical authorization record and one current commitment state. Fault tolerance is therefore an implementation property of state durability, lease ownership, retry discipline, idempotency, and failover. It is not a shift to decentralized consensus and does not address Byzantine coordinators or malicious registries.
 
 \section{Chapter Synthesis}
 

@@ -22,10 +22,11 @@ services:
     environment:
       COORDINATION_REGISTRY_URL: http://registry:8000/agents
       COORDINATION_REQUEST_TIMEOUT_S: 2.0
+      COORDINATION_ALLOW_INSECURE_A2A: "true"
       COORDINATION_REGISTRY_RETRIES: 1
       COORDINATION_TASK_RETRIES: 0
       COORDINATION_RETRY_BACKOFF_S: 0.05
-      COORDINATION_LEDGER_PATH: /app/demo_runs/docker-ledger.jsonl
+      COORDINATION_LEDGER_PATH: /app/demo_runs/v0.2/preflight-20260712-03/docker-ledger.jsonl
       COORDINATION_SERVICE_HOST: 0.0.0.0
       COORDINATION_SERVICE_PORT: 8000
     ports:
@@ -42,9 +43,10 @@ services:
     environment:
       COORDINATION_REGISTRY_URL: http://registry-outage:8000/agents
       COORDINATION_REQUEST_TIMEOUT_S: 0.2
+      COORDINATION_ALLOW_INSECURE_A2A: "true"
       COORDINATION_REGISTRY_RETRIES: 0
       COORDINATION_TASK_RETRIES: 0
-      COORDINATION_LEDGER_PATH: /app/demo_runs/docker-bad-registry-ledger.jsonl
+      COORDINATION_LEDGER_PATH: /app/demo_runs/v0.2/preflight-20260712-03/docker-bad-registry-ledger.jsonl
       COORDINATION_SERVICE_HOST: 0.0.0.0
       COORDINATION_SERVICE_PORT: 8000
     volumes:
@@ -173,7 +175,7 @@ services:
     environment:
       COORDINATION_BASE_URL: http://coordination-service:8000
       BAD_REGISTRY_BASE_URL: http://coordination-bad-registry:8000
-      SYSTEM_REPORT_PATH: /app/demo_runs/docker_system_report.json
+      SYSTEM_REPORT_PATH: /app/demo_runs/v0.2/preflight-20260712-03/docker-system-report.json
     volumes:
       - ./demo_runs:/app/demo_runs
     depends_on:

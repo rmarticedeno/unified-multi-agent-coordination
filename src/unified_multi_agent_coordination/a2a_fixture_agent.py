@@ -30,6 +30,8 @@ from a2a.types.a2a_pb2 import (
 )
 from a2a.utils.constants import PROTOCOL_VERSION_CURRENT, TransportProtocol
 
+from .models import stable_identifier
+
 
 JsonObject = dict[str, Any]
 
@@ -80,16 +82,61 @@ class FixtureAgentExecutor(AgentExecutor):
 
     def __init__(self, config: FixtureConfig) -> None:
         self.config = config
+        self._completed_by_idempotency_key: dict[str, Any] = {}
+        self._request_count_by_idempotency_key: dict[str, int] = {}
+        self._effectful_count_by_idempotency_key: dict[str, int] = {}
+        self._request_count_by_session_task: dict[str, int] = {}
+        self._effectful_count_by_session_task: dict[str, int] = {}
 
     async def execute(
         self,
         context: RequestContext,
         event_queue: EventQueue,
     ) -> None:
+        payload = _payload_from_context(context)
+        idempotency_key = _idempotency_key(payload)
+        session_task_key = _session_task_key(payload)
+        if idempotency_key:
+            self._request_count_by_idempotency_key[idempotency_key] = (
+                self._request_count_by_idempotency_key.get(idempotency_key, 0) + 1
+            )
+        if session_task_key:
+            self._request_count_by_session_task[session_task_key] = (
+                self._request_count_by_session_task.get(session_task_key, 0) + 1
+            )
+        if idempotency_key and idempotency_key in self._completed_by_idempotency_key:
+            artifact = self._completed_by_idempotency_key[idempotency_key]
+            updater = TaskUpdater(
+                event_queue,
+                task_id=str(context.task_id),
+                context_id=str(context.context_id),
+            )
+            await updater.add_artifact(
+                list(artifact.parts),
+                name=artifact.name,
+                artifact_id=artifact.artifact_id,
+            )
+            await updater.complete(
+                new_text_message(
+                    f"{self.config.agent_id} returned duplicate-safe result.",
+                    task_id=context.task_id,
+                    context_id=context.context_id,
+                )
+            )
+            return
+
         if self.config.delay_s > 0:
             await asyncio.sleep(self.config.delay_s)
         if self.config.failure_mode == "exception":
             raise RuntimeError(f"{self.config.agent_id} fixture exception")
+        if idempotency_key:
+            self._effectful_count_by_idempotency_key[idempotency_key] = (
+                self._effectful_count_by_idempotency_key.get(idempotency_key, 0) + 1
+            )
+        if session_task_key:
+            self._effectful_count_by_session_task[session_task_key] = (
+                self._effectful_count_by_session_task.get(session_task_key, 0) + 1
+            )
 
         updater = TaskUpdater(
             event_queue,
@@ -106,7 +153,9 @@ class FixtureAgentExecutor(AgentExecutor):
             )
             return
 
-        artifact = self._artifact(context)
+        artifact = self._artifact(payload)
+        if idempotency_key:
+            self._completed_by_idempotency_key[idempotency_key] = artifact
         await updater.add_artifact(
             list(artifact.parts),
             name=artifact.name,
@@ -141,8 +190,35 @@ class FixtureAgentExecutor(AgentExecutor):
         )
         await updater.update_status(TaskState.TASK_STATE_CANCELED)
 
-    def _artifact(self, context: RequestContext):
-        payload = _payload_from_context(context)
+    def stats(self) -> JsonObject:
+        """Return agent-side invocation counters for harness assertions."""
+        duplicate_idempotency_requests = sum(
+            max(count - 1, 0)
+            for count in self._request_count_by_idempotency_key.values()
+        )
+        repeated_task_executions = sum(
+            max(count - 1, 0)
+            for count in self._effectful_count_by_session_task.values()
+        )
+        return {
+            "agent_id": self.config.agent_id,
+            "total_requests": sum(self._request_count_by_session_task.values()),
+            "total_effectful_executions": sum(
+                self._effectful_count_by_session_task.values()
+            ),
+            "duplicate_idempotency_key_requests": duplicate_idempotency_requests,
+            "repeated_session_task_effectful_executions": repeated_task_executions,
+            "requests_by_idempotency_key": dict(self._request_count_by_idempotency_key),
+            "effectful_executions_by_idempotency_key": dict(
+                self._effectful_count_by_idempotency_key
+            ),
+            "requests_by_session_task": dict(self._request_count_by_session_task),
+            "effectful_executions_by_session_task": dict(
+                self._effectful_count_by_session_task
+            ),
+        }
+
+    def _artifact(self, payload: JsonObject):
         if self.config.artifact_kind == "text":
             text = self.config.artifact_text or json.dumps(
                 self.config.artifact_data, sort_keys=True
@@ -169,8 +245,9 @@ def create_app(config: FixtureConfig | None = None) -> FastAPI:
     config = config or FixtureConfig.from_env()
     app = FastAPI(title=f"A2A Fixture Agent: {config.agent_id}")
     card = _agent_card(config)
+    executor = FixtureAgentExecutor(config)
     handler = DefaultRequestHandler(
-        agent_executor=FixtureAgentExecutor(config),
+        agent_executor=executor,
         task_store=InMemoryTaskStore(),
         agent_card=card,
     )
@@ -183,6 +260,10 @@ def create_app(config: FixtureConfig | None = None) -> FastAPI:
     @app.get("/health")
     async def health() -> JsonObject:
         return {"status": "ok", "agent_id": config.agent_id, "skill": config.skill}
+
+    @app.get("/fixture-stats")
+    async def fixture_stats() -> JsonObject:
+        return executor.stats()
 
     return app
 
@@ -204,7 +285,7 @@ def _agent_card(config: FixtureConfig) -> AgentCard:
         default_output_modes=config.output_modes,
         skills=[
             AgentSkill(
-                id=config.skill,
+                id=stable_identifier(config.skill),
                 name=config.skill,
                 description=config.description,
                 input_modes=config.input_modes,
@@ -220,6 +301,24 @@ def _payload_from_context(context: RequestContext) -> JsonObject:
     except json.JSONDecodeError:
         return {"text": context.get_user_input()}
     return value if isinstance(value, dict) else {"value": value}
+
+
+def _idempotency_key(payload: JsonObject) -> str:
+    coordination = payload.get("_coordination")
+    if not isinstance(coordination, dict):
+        return ""
+    return str(coordination.get("idempotency_key") or "")
+
+
+def _session_task_key(payload: JsonObject) -> str:
+    coordination = payload.get("_coordination")
+    if not isinstance(coordination, dict):
+        return ""
+    session_id = str(coordination.get("session_id") or "")
+    task_id = str(coordination.get("task_id") or "")
+    if not session_id or not task_id:
+        return ""
+    return f"{session_id}:{task_id}"
 
 
 def _csv(name: str, default: list[str]) -> list[str]:

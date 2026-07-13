@@ -34,36 +34,29 @@ The runner writes `demo_runs/end_to_end_scenarios.json` by default. Each scenari
 uv run --with-editable . unified-coordination-scenarios --showcase
 ```
 
-## Thesis Evidence Analysis
+## Version 0.2 Defense Study
 
-Generate thesis-ready summaries from the preserved deterministic, Docker, and local-LLM reports:
-
-```powershell
-uv run --with-editable . unified-thesis-results
-```
-
-The command writes `demo_runs/thesis_analysis/summary.json`,
-`demo_runs/thesis_analysis/tables.md`, and
-`demo_runs/thesis_analysis/tables.tex`.
-
-Local LLM reference checks use the OpenAI-compatible local endpoint at
-`http://127.0.0.1:1234` and are deliberately run one model at a time. Only
-`qwen/qwen3-1.7b` and `google/gemma-4-e2b` are accepted:
+Reports outside `demo_runs/v0.2/` are legacy evidence and cannot supply final
+thesis numbers. Generate and validate the blinded 36-case corpus with:
 
 ```powershell
-lms unload --all
-lms load qwen/qwen3-1.7b --identifier qwen/qwen3-1.7b -y
-uv run --with-editable . unified-local-llm-reference --model qwen/qwen3-1.7b
-
-lms unload --all
-lms load google/gemma-4-e2b --identifier google/gemma-4-e2b -y
-uv run --with-editable . unified-local-llm-reference --model google/gemma-4-e2b
+uv run unified-generate-defense-corpus --output corpus/v0.2
+uv run unified-defense-study --check
 ```
 
-Each model batch writes a model-specific report under `demo_runs/local_llm/`.
-The runner verifies that the endpoint advertises the requested model and that
-the completion response identifies the requested model before preserving
-outputs.
+Collection is fail-closed until a qualified independent reviewer completes
+`corpus/v0.2/label-signoff.json` for the exact corpus hash. After sign-off,
+`uv run unified-defense-study --collect` runs 36 cases at five seeds for each of
+`qwen/qwen3-1.7b`, `google/gemma-4-e2b`, and `qwen/qwen3-8b`. Raw outputs are
+written to a new immutable run-ID directory. Hidden labels are not placed in
+prompts. Scoring is a separate command:
+
+```powershell
+uv run unified-analyze-defense-study demo_runs/v0.2/<run-id> `
+  --output demo_runs/v0.2/<run-id>/analysis.json
+```
+
+See `REPRODUCING.md` and `evidence-manifest.json` for the complete gates.
 
 ## Service
 
@@ -79,8 +72,13 @@ Useful environment variables:
 - `COORDINATION_SELF_AGENT_ID`: optional coordinator agent id to filter from snapshots.
 - `COORDINATION_REQUEST_TIMEOUT_S`: registry request timeout in seconds.
 - `COORDINATION_LEDGER_PATH`: optional JSONL ledger path for crash recovery.
+- `COORDINATION_STORE_URL`: optional coordination store URL. PostgreSQL URLs enable the shared durable store; omitted values keep the JSONL/testing backend.
+- `COORDINATION_COORDINATOR_ID`: optional stable id for a coordinator replica. A generated id is used when omitted.
+- `COORDINATION_LEASE_TTL_S`: session lease TTL in seconds, default `30.0`.
+- `COORDINATION_LEASE_RENEW_INTERVAL_S`: in-flight dispatch renewal interval in seconds, default half the lease TTL.
 - `COORDINATION_REGISTRY_RETRIES`: registry refresh retries, default `2`.
 - `COORDINATION_TASK_RETRIES`: task dispatch retries, default `1`.
+- `COORDINATION_ALLOW_INSECURE_A2A`: explicit development/test exception for HTTP Agent Cards; production admission requires HTTPS by default.
 - `COORDINATION_RETRY_BACKOFF_S`: retry backoff in seconds, default `0.05`.
 - `COORDINATION_SERVICE_HOST`: service bind host, default `0.0.0.0`.
 - `COORDINATION_SERVICE_PORT`: service bind port, default `8000`.
@@ -94,6 +92,18 @@ Endpoints:
 - `POST /sessions/{session_id}/resume`
 - `POST /feasibility`
 
+When a live lease is held by another coordinator replica, `POST /coordinate` and
+`POST /sessions/{session_id}/resume` return HTTP `409` instead of silently
+taking over the session.
+
+Run the PostgreSQL store migration explicitly when using an externally managed
+database:
+
+```powershell
+$env:COORDINATION_STORE_URL = "postgresql://postgres:postgres@localhost:5432/coordination"
+uv run --with-editable . unified-coordination-store-migrate
+```
+
 Example plan request:
 
 ```powershell
@@ -104,7 +114,10 @@ Invoke-RestMethod `
   -Body '{
     "problem": {
       "user_goal": "Summarize the report.",
-      "requirements": [{"name": "summarize"}],
+      "requirements": [{
+        "name": "summarize",
+        "validation_contract": {"required_artifacts": ["summary"]}
+      }],
       "required_artifacts": ["summary"]
     }
   }'
@@ -132,6 +145,20 @@ Acceptance command:
 docker compose -f docker-compose.system.yml up --build --abort-on-container-exit --exit-code-from system-tests
 ```
 
-The test runner writes `demo_runs/docker_system_report.json`. The harness is
+The test runner writes to the configured immutable version 0.2 preflight path. The harness is
 deliberately deterministic: it uses local fixture services, no external LLM or
-vendor cloud calls, and no Kubernetes, service mesh, or database.
+vendor cloud calls, and no Kubernetes or service mesh.
+
+The distributed coordinator harness adds PostgreSQL as a shared coordination
+store, three coordinator replicas with distinct coordinator ids, and controlled
+lease/fencing recovery checks:
+
+```powershell
+docker compose -f docker-compose.distributed.yml up --build --abort-on-container-exit --exit-code-from distributed-system-tests
+```
+
+The runner writes to the configured immutable version 0.2 preflight path with lease
+conflicts, process-exit recovery, stale-fence rejection, PostgreSQL invariant
+checks, fixture-agent duplicate-dispatch counters, recovery latency, and
+terminal correctness. It targets crash-fault-tolerant replicated execution; it
+does not claim Byzantine consensus or malicious-registry tolerance.

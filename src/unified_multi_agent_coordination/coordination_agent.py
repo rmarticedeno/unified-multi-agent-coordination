@@ -3,7 +3,10 @@
 from __future__ import annotations
 
 import asyncio
-from typing import Any
+import hashlib
+import os
+from contextlib import suppress
+from typing import Any, Literal
 from uuid import uuid4
 
 from .auxiliary import BoundedAuxiliaryCapabilityFactory
@@ -14,6 +17,7 @@ from .coordination_ledger import (
     RetryPolicy,
 )
 from .coordination_sdk import CoordinationSdk, RemoteRegistryError
+from .coordination_store import CoordinationStore, JsonlCoordinationStore
 from .feasibility import FeasibilityAnalyzer
 from .lingo_coordinator import LingoLinguisticCoordinator
 from .models import (
@@ -21,6 +25,7 @@ from .models import (
     CoordinationPlanResult,
     CoordinationRunResult,
     FeasibilityReport,
+    LeaseRecord,
     PredicateEvidence,
     ProblemRequest,
     SolutionProposal,
@@ -41,16 +46,28 @@ class CoordinationAgent:
         linguistic_coordinator: LingoLinguisticCoordinator | None = None,
         auxiliary_factory: BoundedAuxiliaryCapabilityFactory | None = None,
         ledger: CoordinationLedger | None = None,
+        store: CoordinationStore | None = None,
         retry_policy: RetryPolicy | None = None,
         self_agent_id: str | None = None,
+        coordinator_id: str | None = None,
+        lease_ttl_s: float = 30.0,
+        lease_renew_interval_s: float | None = None,
     ) -> None:
         self.sdk = sdk
         self.feasibility_analyzer = feasibility_analyzer or FeasibilityAnalyzer()
         self._linguistic_coordinator = linguistic_coordinator
         self.auxiliary_factory = auxiliary_factory or BoundedAuxiliaryCapabilityFactory()
-        self.ledger = ledger or InMemoryCoordinationLedger()
+        self.store = store or JsonlCoordinationStore(ledger or InMemoryCoordinationLedger())
+        self.ledger = getattr(self.store, "ledger", ledger or InMemoryCoordinationLedger())
         self.retry_policy = retry_policy or RetryPolicy()
         self.self_agent_id = self_agent_id or sdk.self_agent_id
+        self.coordinator_id = coordinator_id or self._new_id("coordinator")
+        self.lease_ttl_s = lease_ttl_s
+        self.lease_renew_interval_s = lease_renew_interval_s or max(
+            lease_ttl_s / 2,
+            0.1,
+        )
+        self._abandon_current_lease = False
 
     async def build_solution_plan(
         self,
@@ -70,18 +87,50 @@ class CoordinationAgent:
 
         registry = self._without_self(registry)
         request = await self._admit_request(user_request, registry, context)
-        proposal = self._direct_solution_plan(request, registry)
-        if proposal is None:
-            if isinstance(user_request, ProblemRequest) and self._linguistic_coordinator is None:
-                proposal = self._unassigned_solution_plan(request)
+        candidates: list[tuple[SolutionProposal, FeasibilityReport]] = []
+        direct = self._direct_solution_plan(request, registry)
+        if direct is not None:
+            direct_report = self.feasibility_analyzer.check(request, registry, direct)
+            if direct_report.feasible:
+                proposal, report = direct, direct_report
+                candidates.append((proposal, report))
             else:
-                proposal = await self._linguistic().propose_solution(
-                    request, registry
+                candidates.append((direct, direct_report))
+
+        if not candidates or not candidates[0][1].feasible:
+            if isinstance(user_request, ProblemRequest) and self._linguistic_coordinator is None:
+                linguistic_candidates = [self._unassigned_solution_plan(request)]
+            else:
+                linguistic = self._linguistic()
+                if hasattr(linguistic, "propose_solutions"):
+                    linguistic_candidates = await linguistic.propose_solutions(
+                        request, registry
+                    )
+                else:
+                    linguistic_candidates = [
+                        await linguistic.propose_solution(request, registry)
+                    ]
+            for candidate in linguistic_candidates:
+                candidate_report = self.feasibility_analyzer.check(
+                    request, registry, candidate
                 )
-        report = self.feasibility_analyzer.check(request, registry, proposal)
-        if not report.feasible:
-            proposal = self._with_auxiliary_specs(request, proposal, report)
-            report = self.feasibility_analyzer.check(request, registry, proposal)
+                if not candidate_report.feasible:
+                    candidate = self._with_auxiliary_specs(
+                        request, candidate, candidate_report, lifecycle_scope=plan_id
+                    )
+                    candidate_report = self.feasibility_analyzer.check(
+                        request, registry, candidate
+                    )
+                candidates.append((candidate, candidate_report))
+
+        feasible_candidates = [item for item in candidates if item[1].feasible]
+        if feasible_candidates:
+            proposal, report = min(
+                feasible_candidates,
+                key=lambda item: self._candidate_rank(item[0]),
+            )
+        else:
+            proposal, report = min(candidates, key=lambda item: self._candidate_rank(item[0]))
         if self._linguistic_coordinator is not None:
             self._linguistic_coordinator.record_feasibility(report)
         return CoordinationPlanResult(
@@ -91,6 +140,34 @@ class CoordinationAgent:
             proposal=proposal,
             feasibility_report=report,
             registry_snapshot=registry,
+        )
+
+    @staticmethod
+    def _candidate_rank(proposal: SolutionProposal) -> tuple[int, int, int, str]:
+        """Deterministic ranking applied only after feasibility is established."""
+        depths: dict[str, int] = {}
+        by_id = {task.task_id: task for task in proposal.tasks}
+
+        def depth(task_id: str, visiting: set[str] | None = None) -> int:
+            if task_id in depths:
+                return depths[task_id]
+            visiting = set(visiting or ())
+            if task_id in visiting:
+                return len(proposal.tasks) + 1
+            visiting.add(task_id)
+            task = by_id.get(task_id)
+            value = 1 if not task or not task.depends_on else 1 + max(
+                depth(item, visiting) for item in task.depends_on
+            )
+            depths[task_id] = value
+            return value
+
+        plan_key = "|".join(task.task_id for task in proposal.tasks)
+        return (
+            len(proposal.tasks),
+            len(proposal.generated_nlp_agents),
+            max((depth(task.task_id) for task in proposal.tasks), default=0),
+            plan_key,
         )
 
     async def coordinate(
@@ -103,85 +180,105 @@ class CoordinationAgent:
     ) -> CoordinationRunResult:
         """Plan, authorize, dispatch, and aggregate one coordination attempt."""
         session_id = session_id or self._new_id("session")
-        state = self.ledger.session_state(session_id)
-        if state.terminal_result is not None:
-            return self._with_recovered_trace(
-                CoordinationRunResult.model_validate(state.terminal_result),
-                session_id,
-            )
-
-        plan_result: CoordinationPlanResult
-        if state.plan_result is not None:
-            plan_result = CoordinationPlanResult.model_validate(state.plan_result)
-            plan_id = plan_result.plan_id or self._new_id("plan")
-        else:
-            plan_id = self._new_id("plan")
-            payload = dict(payload or {})
-            context = dict(context or {})
-            self._append(
-                "session_started",
-                session_id=session_id,
-                plan_id=plan_id,
-                payload={
-                    "user_request": self._jsonable(user_request),
-                    "context": context,
-                    "payload": payload,
-                },
-            )
-            plan_result = await self.build_solution_plan(
-                user_request,
-                context=context,
-                session_id=session_id,
-                plan_id=plan_id,
-            )
-            self._append(
-                "registry_snapshot_recorded",
-                session_id=session_id,
-                plan_id=plan_id,
-                payload={
-                    "registry_snapshot": [
-                        agent.model_dump(mode="json")
-                        for agent in plan_result.registry_snapshot
-                    ]
-                },
-            )
-
-        report = plan_result.feasibility_report
-        if not report.feasible:
-            result = CoordinationRunResult(
-                session_id=session_id,
-                plan_id=plan_result.plan_id,
-                status="infeasible",
-                plan_result=plan_result,
-                explanation=report.explanation,
-                trace=[],
-            )
-            self._append(
-                "plan_infeasible",
-                session_id=session_id,
-                plan_id=plan_result.plan_id,
-                payload={
-                    "plan_result": plan_result.model_dump(mode="json"),
-                    "run_result": result.model_dump(mode="json"),
-                },
-            )
-            return result.model_copy(update={"trace": self._session_trace(session_id)})
-
-        if state.plan_result is None:
-            self._append(
-                "plan_authorized",
-                session_id=session_id,
-                plan_id=plan_result.plan_id,
-                payload={"plan_result": plan_result.model_dump(mode="json")},
-            )
-            state = self.ledger.session_state(session_id)
-
-        return await self._execute_authorized_plan(
-            plan_result,
-            payload=payload if payload is not None else state.payload,
-            timeout_s=timeout_s,
-            recovered_state=state,
+        lease = await self.store.acquire_lease(
+            session_id,
+            self.coordinator_id,
+            self.lease_ttl_s,
         )
+        self._abandon_current_lease = False
+        try:
+            state = await self.store.session_state(session_id)
+            if state.terminal_result is not None:
+                return await self._with_recovered_trace(
+                    CoordinationRunResult.model_validate(state.terminal_result),
+                    session_id,
+                )
+
+            plan_result: CoordinationPlanResult
+            if state.plan_result is not None:
+                plan_result = CoordinationPlanResult.model_validate(state.plan_result)
+                plan_id = plan_result.plan_id or self._new_id("plan")
+            else:
+                plan_id = self._new_id("plan")
+                payload = dict(payload or {})
+                context = dict(context or {})
+                await self._append(
+                    "session_started",
+                    session_id=session_id,
+                    plan_id=plan_id,
+                    payload={
+                        "user_request": self._jsonable(user_request),
+                        "context": context,
+                        "payload": payload,
+                    },
+                    lease=lease,
+                )
+                plan_result = await self.build_solution_plan(
+                    user_request,
+                    context=context,
+                    session_id=session_id,
+                    plan_id=plan_id,
+                )
+                await self._append(
+                    "registry_snapshot_recorded",
+                    session_id=session_id,
+                    plan_id=plan_id,
+                    payload={
+                        "registry_snapshot": [
+                            agent.model_dump(mode="json")
+                            for agent in plan_result.registry_snapshot
+                        ]
+                    },
+                    lease=lease,
+                )
+
+            report = plan_result.feasibility_report
+            if not report.feasible:
+                result = CoordinationRunResult(
+                    session_id=session_id,
+                    plan_id=plan_result.plan_id,
+                    status="infeasible",
+                    plan_result=plan_result,
+                    explanation=report.explanation,
+                    trace=[],
+                )
+                await self._append(
+                    "plan_infeasible",
+                    session_id=session_id,
+                    plan_id=plan_result.plan_id,
+                    payload={
+                        "plan_result": plan_result.model_dump(mode="json"),
+                        "run_result": result.model_dump(mode="json"),
+                    },
+                    lease=lease,
+                )
+                return result.model_copy(
+                    update={"trace": await self._session_trace(session_id)}
+                )
+
+            if state.plan_result is None:
+                self._inject_fault("before_plan_authorization_write")
+                await self._append(
+                    "plan_authorized",
+                    session_id=session_id,
+                    plan_id=plan_result.plan_id,
+                    payload={"plan_result": plan_result.model_dump(mode="json")},
+                    lease=lease,
+                )
+                self._inject_fault("after_plan_authorization_write")
+                state = await self.store.session_state(session_id)
+
+            return await self._execute_authorized_plan(
+                plan_result,
+                payload=payload if payload is not None else state.payload,
+                timeout_s=timeout_s,
+                recovered_state=state,
+                lease=lease,
+            )
+        finally:
+            if not self._abandon_current_lease:
+                await self.store.release_lease(lease)
+            self._abandon_current_lease = False
 
     async def resume_session(
         self,
@@ -191,21 +288,33 @@ class CoordinationAgent:
         timeout_s: float = 30.0,
     ) -> CoordinationRunResult:
         """Resume a previously authorized session from the ledger."""
-        state = self.ledger.session_state(session_id)
-        if state.terminal_result is not None:
-            return self._with_recovered_trace(
-                CoordinationRunResult.model_validate(state.terminal_result),
-                session_id,
-            )
-        if state.plan_result is None:
-            raise ValueError(f"Session {session_id} has no authorized plan to resume.")
-        plan_result = CoordinationPlanResult.model_validate(state.plan_result)
-        return await self._execute_authorized_plan(
-            plan_result,
-            payload=payload if payload is not None else state.payload,
-            timeout_s=timeout_s,
-            recovered_state=state,
+        lease = await self.store.acquire_lease(
+            session_id,
+            self.coordinator_id,
+            self.lease_ttl_s,
         )
+        self._abandon_current_lease = False
+        try:
+            state = await self.store.session_state(session_id)
+            if state.terminal_result is not None:
+                return await self._with_recovered_trace(
+                    CoordinationRunResult.model_validate(state.terminal_result),
+                    session_id,
+                )
+            if state.plan_result is None:
+                raise ValueError(f"Session {session_id} has no authorized plan to resume.")
+            plan_result = CoordinationPlanResult.model_validate(state.plan_result)
+            return await self._execute_authorized_plan(
+                plan_result,
+                payload=payload if payload is not None else state.payload,
+                timeout_s=timeout_s,
+                recovered_state=state,
+                lease=lease,
+            )
+        finally:
+            if not self._abandon_current_lease:
+                await self.store.release_lease(lease)
+            self._abandon_current_lease = False
 
     async def _execute_authorized_plan(
         self,
@@ -214,38 +323,102 @@ class CoordinationAgent:
         payload: dict[str, Any] | None,
         timeout_s: float,
         recovered_state,
+        lease: LeaseRecord,
     ) -> CoordinationRunResult:
         report = plan_result.feasibility_report
         session_id = plan_result.session_id
         plan_id = plan_result.plan_id
 
         task_results: list[TaskExecutionResult] = []
+        results_by_task: dict[str, TaskExecutionResult] = {}
         artifacts_by_task: dict[str, list[dict[str, Any]]] = {}
         for task in self._ordered_tasks(plan_result.proposal):
+            lease = await self.store.renew_lease(lease, self.lease_ttl_s)
+            blocked_by = [
+                dependency
+                for dependency in task.depends_on
+                if dependency not in results_by_task
+                or results_by_task[dependency].status != "completed"
+            ]
+            if blocked_by:
+                skipped = TaskExecutionResult(
+                    session_id=session_id,
+                    plan_id=plan_id,
+                    task_id=task.task_id,
+                    agent_id=task.assigned_to or "",
+                    status="skipped",
+                    error=(
+                        "Dependency did not complete successfully: "
+                        + ", ".join(blocked_by)
+                    ),
+                    metadata={"blocked_by": blocked_by},
+                )
+                await self._append(
+                    "task_skipped",
+                    session_id=session_id,
+                    plan_id=plan_id,
+                    task_id=task.task_id,
+                    payload={"task_result": skipped.model_dump(mode="json")},
+                    lease=lease,
+                )
+                task_results.append(skipped)
+                results_by_task[task.task_id] = skipped
+                continue
             recovered_result = recovered_state.task_results.get(task.task_id)
             if recovered_result and recovered_result.get("status") == "completed":
                 recovered_task_result = TaskExecutionResult.model_validate(recovered_result)
                 task_results.append(recovered_task_result)
+                results_by_task[task.task_id] = recovered_task_result
                 artifacts_by_task[task.task_id] = list(recovered_task_result.artifacts)
                 continue
 
             prior_attempts = recovered_state.task_attempt_counts.get(task.task_id, 0)
+            if task.task_id in recovered_state.running_task_ids:
+                side_effect_class = self._side_effect_class(plan_result, task)
+                if side_effect_class not in {"read_only", "idempotent"}:
+                    unknown = self._unknown_attempt_result(
+                        plan_result,
+                        task,
+                        recovered_state,
+                    )
+                    await self._append(
+                        "task_attempt_unknown",
+                        session_id=session_id,
+                        plan_id=plan_id,
+                        task_id=task.task_id,
+                        attempt_id=unknown.attempt_id,
+                        payload={"task_result": unknown.model_dump(mode="json")},
+                        lease=lease,
+                    )
+                    task_results.append(unknown)
+                    results_by_task[task.task_id] = unknown
+                    continue
+
             max_attempts = self.retry_policy.task_retries + 1
+            if self._side_effect_class(plan_result, task) not in {
+                "read_only",
+                "idempotent",
+            }:
+                max_attempts = max(prior_attempts + 1, 1)
             if recovered_result and prior_attempts >= max_attempts:
                 task_results.append(TaskExecutionResult.model_validate(recovered_result))
+                results_by_task[task.task_id] = task_results[-1]
                 continue
 
             task_result = await self._dispatch_with_retry(
                 report,
                 task,
+                plan_result,
                 self._with_dependency_artifacts(payload or {}, task, artifacts_by_task),
                 timeout_s=timeout_s,
                 session_id=session_id,
                 plan_id=plan_id,
                 starting_attempt=prior_attempts + 1,
                 max_attempts=max_attempts,
+                lease=lease,
             )
             task_results.append(task_result)
+            results_by_task[task.task_id] = task_result
             if task_result.status == "completed":
                 artifacts_by_task[task.task_id] = list(task_result.artifacts)
 
@@ -254,9 +427,11 @@ class CoordinationAgent:
             for task_result in task_results
             for artifact in task_result.artifacts
         ]
-        status = (
+        status: Literal["completed", "failed"] = (
             "completed"
-            if all(result.status == "completed" for result in task_results)
+            if self._completion_contract_satisfied(
+                plan_result.proposal, task_results, artifacts
+            )
             else "failed"
         )
         explanation = (
@@ -274,18 +449,21 @@ class CoordinationAgent:
             explanation=explanation,
             trace=[],
         )
-        self._append(
+        self._inject_fault("during_aggregation")
+        await self._append(
             "run_completed" if status == "completed" else "run_failed",
             session_id=session_id,
             plan_id=plan_id,
             payload={"run_result": result.model_dump(mode="json")},
+            lease=lease,
         )
-        return result.model_copy(update={"trace": self._session_trace(session_id)})
+        return result.model_copy(update={"trace": await self._session_trace(session_id)})
 
     async def _dispatch_with_retry(
         self,
         report: FeasibilityReport,
         task: TaskSpec,
+        plan_result: CoordinationPlanResult,
         payload: dict[str, Any],
         *,
         timeout_s: float,
@@ -293,20 +471,40 @@ class CoordinationAgent:
         plan_id: str,
         starting_attempt: int,
         max_attempts: int,
+        lease: LeaseRecord,
     ) -> TaskExecutionResult:
         result: TaskExecutionResult | None = None
         for attempt_number in range(starting_attempt, max_attempts + 1):
             attempt_id = f"{task.task_id}-attempt-{attempt_number}"
-            self._append(
+            idempotency_key = self._idempotency_key(
+                session_id,
+                plan_id,
+                task.task_id,
+                attempt_id,
+            )
+            prior_result = await self.store.task_result_by_idempotency_key(
+                idempotency_key
+            )
+            if prior_result is not None:
+                return TaskExecutionResult.model_validate(prior_result)
+
+            await self._append(
                 "task_attempt_started",
                 session_id=session_id,
                 plan_id=plan_id,
                 task_id=task.task_id,
                 attempt_id=attempt_id,
-                payload={"task": task.model_dump(mode="json")},
+                payload={
+                    "task": task.model_dump(mode="json"),
+                    "coordinator_id": self.coordinator_id,
+                    "fencing_token": lease.fencing_token,
+                    "idempotency_key": idempotency_key,
+                },
+                lease=lease,
             )
+            self._inject_fault("after_task_attempt_start")
             try:
-                result = await self.sdk.send_task(
+                result = await self._send_task_with_lease_renewal(
                     report,
                     task,
                     self._payload_for_task(
@@ -314,12 +512,17 @@ class CoordinationAgent:
                             payload,
                             session_id=session_id,
                             plan_id=plan_id,
+                            plan_generation=plan_result.plan_generation,
                             task_id=task.task_id,
                             attempt_id=attempt_id,
+                            coordinator_id=self.coordinator_id,
+                            fencing_token=lease.fencing_token,
+                            idempotency_key=idempotency_key,
                         ),
                         task,
                     ),
                     timeout_s=timeout_s,
+                    lease=lease,
                 )
             except Exception as exc:
                 agent_id = task.assigned_to or report.matched_agents.get(task.task_id) or ""
@@ -333,27 +536,122 @@ class CoordinationAgent:
                     error=str(exc),
                 )
 
+            self._inject_fault("after_external_dispatch")
             result = result.model_copy(
                 update={
                     "session_id": session_id,
                     "plan_id": plan_id,
                     "attempt_id": attempt_id,
+                    "metadata": {
+                        **result.metadata,
+                        "coordinator_id": self.coordinator_id,
+                        "fencing_token": lease.fencing_token,
+                        "plan_generation": plan_result.plan_generation,
+                        "idempotency_key": idempotency_key,
+                    },
                 }
             )
-            self._append(
+            await self._append(
+                "sdk_observation",
+                session_id=session_id,
+                plan_id=plan_id,
+                task_id=task.task_id,
+                attempt_id=attempt_id,
+                payload={
+                    "status": result.status,
+                    "agent_id": result.agent_id,
+                    "agent_kind": result.agent_kind,
+                    "error": result.error,
+                    "metadata": result.metadata,
+                },
+                lease=lease,
+            )
+            for sdk_event in self.sdk.trace_for_attempt(
+                session_id, plan_id, task.task_id, attempt_id
+            ):
+                await self._append(
+                    sdk_event.event_type,
+                    session_id=session_id,
+                    plan_id=plan_id,
+                    task_id=task.task_id,
+                    attempt_id=attempt_id,
+                    payload={
+                        "message": sdk_event.message,
+                        "source": sdk_event.source,
+                        "data": sdk_event.data,
+                    },
+                    lease=lease,
+                )
+            await self._append(
                 self._task_event_type(result),
                 session_id=session_id,
                 plan_id=plan_id,
                 task_id=task.task_id,
                 attempt_id=attempt_id,
                 payload={"task_result": result.model_dump(mode="json")},
+                lease=lease,
             )
             if result.status == "completed":
                 return result
-            if attempt_number < max_attempts:
+            if (
+                attempt_number < max_attempts
+                and self._side_effect_class(plan_result, task)
+                in {"read_only", "idempotent"}
+            ):
                 await asyncio.sleep(self.retry_policy.backoff_s)
+            else:
+                break
         assert result is not None
         return result
+
+    async def _send_task_with_lease_renewal(
+        self,
+        report: FeasibilityReport,
+        task: TaskSpec,
+        payload: dict[str, Any],
+        *,
+        timeout_s: float,
+        lease: LeaseRecord,
+    ) -> TaskExecutionResult:
+        dispatch_task = asyncio.create_task(
+            self.sdk.send_task(report, task, payload, timeout_s=timeout_s)
+        )
+        renewal_task = asyncio.create_task(self._lease_renewal_loop(lease))
+        try:
+            while True:
+                done, _ = await asyncio.wait(
+                    {dispatch_task, renewal_task},
+                    return_when=asyncio.FIRST_COMPLETED,
+                )
+                if dispatch_task in done:
+                    return await dispatch_task
+                if renewal_task in done:
+                    exc = renewal_task.exception()
+                    if exc is not None:
+                        dispatch_task.cancel()
+                        with suppress(asyncio.CancelledError):
+                            await dispatch_task
+                        raise exc
+        finally:
+            renewal_task.cancel()
+            with suppress(asyncio.CancelledError):
+                await renewal_task
+
+    async def _lease_renewal_loop(self, lease: LeaseRecord) -> None:
+        interval = max(self.lease_renew_interval_s, 0.05)
+        while True:
+            await asyncio.sleep(interval)
+            await self.store.renew_lease(lease, self.lease_ttl_s)
+
+    def _inject_fault(self, point: str) -> None:
+        if os.getenv("COORDINATION_FAULT_AT") != point:
+            return
+        mode = os.getenv("COORDINATION_FAULT_MODE", "raise")
+        if mode == "exit":
+            os._exit(int(os.getenv("COORDINATION_FAULT_EXIT_CODE", "137")))
+        if mode == "abandon_lease":
+            self._abandon_current_lease = True
+        raise RuntimeError(f"Injected coordinator fault at {point}.")
 
     def trace(self) -> list[TraceEvent]:
         """Return linguistic and SDK trace events for the current session."""
@@ -365,11 +663,21 @@ class CoordinationAgent:
             ]
         return [*linguistic_events, *self.sdk.trace()]
 
-    def _session_trace(self, session_id: str) -> list[TraceEvent]:
+    async def _session_trace(self, session_id: str) -> list[TraceEvent]:
         ledger_events = [
             TraceEvent(
                 event_type=event.event_type,
                 message=f"Ledger event {event.event_type}.",
+                session_id=event.session_id,
+                plan_id=event.plan_id,
+                task_id=event.task_id,
+                attempt_id=event.attempt_id,
+                source=(
+                    "sdk"
+                    if event.event_type == "sdk_observation"
+                    or event.payload.get("source") == "sdk"
+                    else "store"
+                ),
                 data={
                     "session_id": event.session_id,
                     "plan_id": event.plan_id,
@@ -379,16 +687,16 @@ class CoordinationAgent:
                 },
                 timestamp=event.timestamp,
             )
-            for event in self.ledger.events(session_id)
+            for event in await self.store.events(session_id)
         ]
-        return [*ledger_events, *self.trace()]
+        return ledger_events
 
-    def _with_recovered_trace(
+    async def _with_recovered_trace(
         self,
         result: CoordinationRunResult,
         session_id: str,
     ) -> CoordinationRunResult:
-        return result.model_copy(update={"trace": self._session_trace(session_id)})
+        return result.model_copy(update={"trace": await self._session_trace(session_id)})
 
     async def _registry_snapshot_with_retry(self) -> list[AgentRegistryEntry]:
         attempts = self.retry_policy.registry_retries + 1
@@ -403,7 +711,7 @@ class CoordinationAgent:
         assert last_error is not None
         raise last_error
 
-    def _append(
+    async def _append(
         self,
         event_type: str,
         *,
@@ -412,8 +720,9 @@ class CoordinationAgent:
         task_id: str = "",
         attempt_id: str = "",
         payload: dict[str, Any] | None = None,
+        lease: LeaseRecord | None = None,
     ) -> LedgerEvent:
-        return self.ledger.append(
+        return await self.store.append_event(
             LedgerEvent(
                 event_type=event_type,
                 session_id=session_id,
@@ -421,16 +730,68 @@ class CoordinationAgent:
                 task_id=task_id,
                 attempt_id=attempt_id,
                 payload=payload or {},
-            )
+            ),
+            lease=lease,
         )
 
     @staticmethod
     def _task_event_type(result: TaskExecutionResult) -> str:
+        if result.status == "unknown":
+            return "task_attempt_unknown"
         if result.status == "completed":
             return "task_attempt_completed"
         if result.status == "timeout":
             return "task_attempt_timeout"
         return "task_attempt_failed"
+
+    def _unknown_attempt_result(
+        self,
+        plan_result: CoordinationPlanResult,
+        task: TaskSpec,
+        recovered_state,
+    ) -> TaskExecutionResult:
+        attempts = recovered_state.task_attempts_by_task.get(task.task_id, [])
+        attempt_id = attempts[-1] if attempts else f"{task.task_id}-attempt-unknown"
+        agent_id = task.assigned_to or plan_result.feasibility_report.matched_agents.get(
+            task.task_id,
+            "",
+        )
+        return TaskExecutionResult(
+            session_id=plan_result.session_id,
+            plan_id=plan_result.plan_id,
+            attempt_id=attempt_id,
+            task_id=task.task_id,
+            agent_id=agent_id,
+            status="unknown",
+            error=(
+                "Recovered an in-flight attempt with unknown side effects; "
+                "refusing blind duplicate dispatch."
+            ),
+            metadata={
+                "coordinator_id": self.coordinator_id,
+                "recovery_policy": "no_blind_duplicate_dispatch",
+            },
+        )
+
+    def _side_effect_class(
+        self,
+        plan_result: CoordinationPlanResult,
+        task: TaskSpec,
+    ) -> str:
+        wanted = self._norm(task.requirement_name)
+        for requirement in plan_result.request.requirements:
+            if self._norm(requirement.name) == wanted:
+                return requirement.side_effect_class
+        return "unknown"
+
+    @staticmethod
+    def _idempotency_key(
+        session_id: str,
+        plan_id: str,
+        task_id: str,
+        attempt_id: str,
+    ) -> str:
+        return f"{session_id}:{plan_id}:{task_id}:{attempt_id}"
 
     @staticmethod
     def _with_coordination_metadata(
@@ -438,8 +799,12 @@ class CoordinationAgent:
         *,
         session_id: str,
         plan_id: str,
+        plan_generation: int,
         task_id: str,
         attempt_id: str,
+        coordinator_id: str,
+        fencing_token: int,
+        idempotency_key: str,
     ) -> dict[str, Any]:
         enriched = dict(payload)
         metadata = dict(enriched.get("_coordination") or {})
@@ -447,8 +812,12 @@ class CoordinationAgent:
             {
                 "session_id": session_id,
                 "plan_id": plan_id,
+                "plan_generation": plan_generation,
                 "task_id": task_id,
                 "attempt_id": attempt_id,
+                "coordinator_id": coordinator_id,
+                "fencing_token": fencing_token,
+                "idempotency_key": idempotency_key,
             }
         )
         enriched["_coordination"] = metadata
@@ -468,8 +837,8 @@ class CoordinationAgent:
         }
         previous_artifacts = [
             artifact
-            for artifacts in artifacts_by_task.values()
-            for artifact in artifacts
+            for dependency in task.depends_on
+            for artifact in artifacts_by_task.get(dependency, [])
         ]
         metadata.update(
             {
@@ -479,6 +848,39 @@ class CoordinationAgent:
         )
         enriched["_coordination"] = metadata
         return enriched
+
+    @classmethod
+    def _completion_contract_satisfied(
+        cls,
+        proposal: SolutionProposal,
+        task_results: list[TaskExecutionResult],
+        artifacts: list[dict[str, Any]],
+    ) -> bool:
+        allowed_states = set(proposal.completion_contract.required_task_states)
+        if not task_results or any(result.status not in allowed_states for result in task_results):
+            return False
+        return all(
+            cls._artifact_named(artifacts, name)
+            for name in proposal.completion_contract.required_artifacts
+        )
+
+    @staticmethod
+    def _artifact_named(artifacts: list[dict[str, Any]], name: str) -> bool:
+        wanted = name.strip().lower()
+        for artifact in artifacts:
+            values = [
+                artifact.get("artifact_id"),
+                artifact.get("id"),
+                artifact.get("name"),
+                artifact.get("kind"),
+                artifact.get("type"),
+            ]
+            if any(str(value).strip().lower() == wanted for value in values if value):
+                return True
+            data = artifact.get("data")
+            if isinstance(data, dict) and wanted in {str(key).lower() for key in data}:
+                return True
+        return False
 
     @staticmethod
     def _new_id(prefix: str) -> str:
@@ -522,13 +924,21 @@ class CoordinationAgent:
             if agent is None:
                 return None
             task_id = f"t{index}"
+            dependencies = [
+                prior_task.task_id
+                for prior_task, prior_requirement in zip(
+                    tasks, request.requirements[: index - 1], strict=True
+                )
+                if set(prior_requirement.output_modes) & set(requirement.input_modes)
+            ]
             tasks.append(
                 TaskSpec(
                     task_id=task_id,
                     requirement_name=requirement.name,
                     assigned_to=agent.agent_id,
+                    depends_on=dependencies,
                     expected_artifacts=self._task_expected_artifacts(requirement, request),
-                    validation_contract=dict(requirement.validation_contract),
+                    validation_contract=requirement.validation_contract,
                 )
             )
             selected_agents[task_id] = agent.agent_id
@@ -547,7 +957,7 @@ class CoordinationAgent:
                 task_id=f"t{index}",
                 requirement_name=requirement.name,
                 expected_artifacts=self._task_expected_artifacts(requirement, request),
-                validation_contract=dict(requirement.validation_contract),
+                validation_contract=requirement.validation_contract,
             )
             for index, requirement in enumerate(request.requirements, start=1)
         ]
@@ -583,6 +993,8 @@ class CoordinationAgent:
         request: ProblemRequest,
         proposal: SolutionProposal,
         report: FeasibilityReport,
+        *,
+        lifecycle_scope: str = "",
     ) -> SolutionProposal:
         if not report.missing_capabilities:
             return proposal
@@ -591,7 +1003,9 @@ class CoordinationAgent:
         generated = list(proposal.generated_nlp_agents)
         changed_tasks: list[TaskSpec] = []
         changed = False
-        lifecycle = f"plan:{abs(hash(request.user_goal))}"
+        scope = lifecycle_scope or hashlib.sha256(
+            request.model_dump_json().encode("utf-8")
+        ).hexdigest()[:16]
 
         for task in proposal.tasks:
             if task.assigned_to or task.auxiliary_spec_id:
@@ -601,6 +1015,7 @@ class CoordinationAgent:
             if requirement is None or requirement.name not in report.missing_capabilities:
                 changed_tasks.append(task)
                 continue
+            lifecycle = f"plan:{scope}:task:{task.task_id}"
             spec = self.auxiliary_factory.specify(requirement, lifecycle=lifecycle)
             if spec is None:
                 changed_tasks.append(task)

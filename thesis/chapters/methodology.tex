@@ -1,85 +1,42 @@
 \chapter{Research Methodology}
 \label{chap:methodology}
 
-\section{Research Paradigm and Study Type}
+\section{Study Design}
 
-This thesis adopts a design-science paradigm because its central research output is an artifact: a coordination framework with explicit constructs, decision rules, an architectural instantiation, and an evaluation method. The study combines exploratory and analytical work in the literature review, formal and architectural design in the construction phase, and quantitative and qualitative analysis over preserved prototype traces. Quantitative measures assess classification, task execution, latency, and overhead; qualitative trace analysis examines whether authorization and refusal decisions are intelligible and supported by recorded evidence.
+The thesis follows design science: it constructs a protocol-adaptable coordination boundary and evaluates whether the implementation exhibits the declared authorization, refusal, execution, and recovery behavior. The unit of analysis is one coordination attempt, comprising the natural-language request, admitted registry snapshot, typed request, non-authoritative proposal, symbolic predicates, authorization decision, task attempts, artifacts, and persisted trace. Outcome correctness and process correctness are analyzed separately.
 
-\section{Research Process}
+The evaluation is staged. Unit and integration tests exercise individual contracts and transitions. Seven deterministic cases exercise the complete in-process workflow. Container harnesses exercise A2A admission and dispatch across processes and lease-backed recovery through PostgreSQL. The main comparative study uses a versioned corpus of 36 cases and local LLM proposals. Results from an earlier implementation are classified as legacy and cannot supply numerical claims for version 0.2.
 
-The research process contains five linked stages. First, a critical literature review identifies the strengths and unresolved limitations of classical multi-agent coordination, symbolic reasoning, LLM agents, and interoperability protocols. Second, the research gap is translated into requirements for openness, interoperability, bounded authority, traceability, and explicit refusal. Third, these requirements are formalized as a protocol-independent framework. Fourth, the framework is mapped to a Python \texttt{CoordinationAgent} design over SDK middleware with protocol-specific communication handled as an implementation adapter. Fifth, controlled scenarios, Docker system checks, and local LLM reference batches evaluate whether the implementation preserves the proposed boundary. Each stage produces evidence for one or more specific objectives rather than serving as an independent implementation activity.
+\section{Versioned and Blinded Corpus}
 
-\begin{table}[htbp]
-\centering
-\caption{Alignment of objectives, methods, and evidence.}
-\label{tab:method-alignment}
-\begin{tabular}{p{0.12\textwidth}p{0.38\textwidth}p{0.38\textwidth}}
-\toprule
-\textbf{Objective} & \textbf{Method} & \textbf{Evidence} \\
-\midrule
-1 & Critical thematic literature synthesis & Comparison criteria and explicit research gap \\
-2 & Formal and conceptual modeling & Definitions, rules, feasibility predicates, and stated properties \\
-3 & Architectural design and protocol mapping & Components, records, workflows, and theory-to-implementation traceability \\
-4 & Controlled scenario evaluation & Baseline comparisons, ablations, metrics, and execution traces \\
-5 & Analytical discussion & Scope analysis, failure cases, limitations, and validity threats \\
-\bottomrule
-\end{tabular}
-\end{table}
+The version 0.2 corpus contains 24 base cases, four in each of six strata: direct feasible execution; decomposed feasible execution; feasible planning followed by runtime failure; missing capability or auxiliary overreach; schema, modality, graph, or ordering invalidity; and authority, typed-constraint, availability, or registry invalidity. Twelve controlled variations add four paraphrases, four availability changes, and four capability-alias perturbations. Public requests, registry snapshots, payloads, and shared proposals are stored separately from hidden reference labels.
 
-\section{Unit of Analysis and Scenario Design}
+The corpus generator computes a SHA-256 digest over public cases and hidden labels. A tutor or other qualified independent reviewer must approve the labels and minimum justifications before scoring. The signed record identifies reviewer role, review date, and corpus hash. Reference labels are never included in model prompts. If the corpus changes after sign-off, generation fails rather than silently reusing the old approval.
 
-The primary unit of analysis is a coordination attempt: one problem request, one admitted registry snapshot, the candidate plan or refusal produced for that request, and the resulting execution trace when a plan is authorized. Scenarios are constructed by varying four factors: capability coverage, artifact compatibility, authority constraints, and runtime availability. This factorial view prevents evaluation from relying only on successful demonstrations.
+\section{Configurations and Fairness}
 
-The scenario suite must contain feasible direct-delegation cases, feasible decomposed cases, cases requiring an approved bounded linguistic transformation, and infeasible cases caused by missing capability, incompatible modality, cyclic dependency, insufficient authority, or unavailable agents. Each scenario includes a reference feasibility label and the minimum justification required for that label. Reference labels should be reviewed independently before system outputs are examined.
+Each applicable raw proposal is evaluated under: the full hybrid coordinator; a natural-language rule matcher; a structured-request rule-only oracle, explicitly interpreted as an upper bound; an LLM-only tool-aware baseline without a plan-level symbolic gate; and six hybrid ablations removing typed constraints, authority, contract validation, dependency gating, bounded auxiliary rules, or durable trace recording. Configurations receive the same request, registry snapshot, payload, and raw linguistic output where applicable. A baseline is not granted additional agents, credentials, hidden labels, or privileged registry information.
 
-The executable evaluation is organized into three evidence levels. Unit and integration tests verify individual predicates, SDK adapters, service endpoints, retry behavior, and ledger recovery. Deterministic local end-to-end scenarios verify the coordination workflow without external services. Docker system scenarios then instantiate the coordinator, registry, and multiple independently deployed A2A fixture agents on a virtual network, so that registry discovery, A2A dispatch, artifact normalization, runtime failure, timeout, and trace reconstruction are exercised across process and container boundaries.
+Planning-only decisions and runtime compliance are not conflated. Dependency-gating and durable-trace ablations may leave the planning decision unchanged while altering execution safety or observability. Those mechanisms are therefore scored through dispatch, skip, duplicate-effect, and trace-completeness measures rather than through feasibility accuracy alone.
 
-\section{Baselines and Ablations}
+\section{Local Model Protocol}
 
-The implemented configuration is the \emph{hybrid CoordinationAgent}: it uses \texttt{CoordinationSdk} as the only communication boundary, may consume structured linguistic proposals, and always applies symbolic feasibility checks before dispatch. The present evaluation also records local LLM reference batches to characterize linguistic interpretation and candidate-plan behavior. These batches do not replace the coordinator and are not allowed to authorize execution.
+The fixed local models are \texttt{qwen/qwen3-1.7b}, \texttt{google/gemma-4-e2b}, and \texttt{qwen/qwen3-8b}. Qwen 14B is excluded because its installed nine-gigabyte quantization does not leave a reproducible operating margin on the 16~GB host. LM Studio is addressed at \url{http://127.0.0.1:1234/v1} with a non-secret local API-key value. Temperature is zero and seeds are 11, 22, 33, 44, and 55.
 
-Two comparative configurations remain useful for a larger follow-up study. A \emph{CoordinationAgent without symbolic feasibility} would receive the same request and registry descriptions but accept or reject its own proposed plan without the deterministic feasibility layer. A \emph{rule-only CoordinationAgent} would receive a structured request and apply the same explicit predicates without LLM interpretation. These variants would isolate the contribution of symbolic authorization and linguistic mediation, respectively. The current thesis therefore reports implemented prototype evidence and local LLM reference evidence, while avoiding unsupported claims of broad baseline superiority.
+All other models are unloaded before a batch. The runner loads one exact identifier, verifies the model catalog, sends a sentinel request, and then runs all 36 cases for each seed before changing models. The prompt requests a typed request and between one and three typed candidate plans. Every response preserves the prompt, raw response, parsed object, returned model identifier, token metadata, latency, seed, and decoding parameters. This yields 540 immutable model outputs. Repeated identical outputs remain in the evidence set.
 
-Additional ablations can remove one mechanism at a time: contract validation, explicit authority checks, trace recording, or bounded-auxiliary rules. These ablations should be evaluated only where the removed mechanism is relevant to the scenario. They are not treated as independent general-purpose systems.
+\section{Metrics and Statistical Analysis}
 
-\section{Evaluation Dimensions and Metrics}
+Decision measures include accuracy, precision, recall, F1, false acceptance, false refusal, status agreement, and category-level errors. Boundary measures include constraint, authority, schema, modality, dependency, and evidence rejection; artifact-contract validity; required-artifact completion; authorization-before-dispatch; dependent-task skipping; capability-ID resolution; unresolved references; and trace completeness and isolation. Efficiency measures include messages, planner calls, tokens, median and interquartile latency, and coordination overhead. Recovery measures include duplicate dispatch, repeated effect, stale-write rejection, recovery latency, and terminal correctness.
 
-\begin{table}[htbp]
-\centering
-\caption{Evaluation dimensions, indicators, and evidence.}
-\label{tab:method-metrics}
-\begin{tabular}{p{0.24\textwidth}p{0.30\textwidth}p{0.34\textwidth}}
-\toprule
-\textbf{Dimension} & \textbf{Indicator} & \textbf{Metric or evidence} \\
-\midrule
-Feasibility judgment & Correct authorization or refusal & Accuracy, precision, recall, and F1 for feasible-plan classification \\
-Plan validity & Detection of invalid candidates & Invalid-plan rejection rate by failure category \\
-Execution outcome & Required artifacts completed & Task success rate and contract-valid artifact rate \\
-Traceability & Required decision evidence recorded & Trace-field completeness and reconstructable-decision rate \\
-Efficiency & Coordination effort & End-to-end latency, planner calls, messages, and token usage \\
-Robustness & Stability under controlled variation & Performance under paraphrase, agent loss, metadata perturbation, and planned crash-recovery scenarios \\
-\bottomrule
-\end{tabular}
-\end{table}
+Results are stratified by model and seed. Exact paired McNemar tests compare decision errors. Difference in proportions reports effect magnitude, and fixed-seed bootstrap intervals report 95\% uncertainty for accuracy. No general superiority claim is made when the designed sample or statistical assumptions do not justify it.
 
-Outcome metrics and process metrics are reported separately. A correct final artifact does not erase an unauthorized action or an invalid intermediate plan. Conversely, a justified refusal is a correct outcome for an infeasible request and must not be counted as task failure.
+\section{Provenance and Reproducibility}
 
-For the planned crash-fault-tolerant extension, robustness evaluation should add acceptance scenarios rather than empirical claims in advance. These scenarios should cover coordinator recovery from a durable ledger, transient registry outage, bounded task retry after timeout, alternate-agent replanning after an unavailable executor, and duplicate dispatch handling through idempotent identifiers. A run should be counted as crash-resilient only if the recovered trace reconstructs the same authorized session state and does not duplicate completed work. These scenarios must not be reported as completed or measured until the ledger, retry, and standby mechanisms have been implemented.
+Each run directory records Git SHA, dirty-state flag, corpus hash, model ID, prompt/schema version, seed, dependency-lock hash, Docker image digest, Python, PostgreSQL, A2A and LM Studio versions, operating system, CPU, RAM, and available accelerator information. Reports are written to new run-ID directories; convenience summaries are derived and may be regenerated, but the only copy of a raw run is never overwritten.
 
-\section{Experimental Procedure}
+The release gates require all unit and integration tests, static lint and type checks, the seven deterministic cases, eleven Docker A2A checks, five distributed checks, the third-party A2A check, evidence-schema checks, and LuaLaTeX/BibTeX compilation. Coverage thresholds are 85\% overall, 90\% for feasibility, coordination execution, and trace code, and 80\% for the PostgreSQL store and evaluation runners. A release cannot be frozen while any threshold, independent sign-off, institutional metadata, or final-commit field is open.
 
-For each scenario, every applicable configuration receives semantically equivalent inputs and an identical admitted-agent snapshot. Each run stores the interpreted request, candidate plan, predicate outcomes, authorization decision, coordination-agent decisions, SDK method calls, agent kind, transport or runtime path, messages, status transitions, artifacts, validation results, latency, and resource use. Aggregate results are accompanied by per-category error analysis. The implementation version, coordination-agent version, SDK version, protocol version, hardware, and software environment are fixed by the repository state and preserved reports used for the run.
+\section{Validity Boundaries}
 
-The local LLM reference phase uses only models served locally at \url{http://127.0.0.1:1234}. The allowed model identifiers are \texttt{qwen/qwen3-1.7b} and \texttt{google/gemma-4-e2b}. No cloud LLM provider is used for submitted evidence. Because switching local models is expensive, the reference phase is batched: all checks are run for \texttt{qwen/qwen3-1.7b}, the model is switched once, and then all checks are run for \texttt{google/gemma-4-e2b}. The runner aborts if the endpoint does not advertise the requested model or if the completion response does not identify the requested model. Each batch records endpoint, model ID, prompt version, decoding settings, token usage, latency, and a model-specific run identifier.
-
-For the Docker system phase, the simple operating model is one coordinator service, one registry service that publishes Agent Card URLs, many deterministic A2A fixture-agent containers, and one HTTP-only system-test runner. The runner must not inject Python objects into the coordinator. It calls the public service endpoints over the Docker network and writes a raw JSON report under \texttt{demo\_runs/}. No external LLM provider, vendor cloud agent, Kubernetes deployment, service mesh, or database is required for this phase.
-
-\section{Analysis Strategy}
-
-Feasibility decisions are compared with reference labels through a confusion matrix and category-level error rates. Paired scenario results are used for comparisons because configurations face the same requests. Descriptive statistics include central tendency and dispersion rather than averages alone. Where the sample size and distribution justify inference, paired statistical tests and effect sizes are reported. Qualitative analysis classifies false acceptance, false refusal, invalid decomposition, unsupported auxiliary synthesis, authority violation, artifact mismatch, and incomplete evidence.
-
-\section{Validity and Reproducibility}
-
-Construct validity depends on whether the metrics capture justified coordination rather than surface task completion. This threat is mitigated by separating plan validity, execution success, communication-boundary compliance, coordination-ownership compliance, and trace completeness. Internal validity may be affected by unequal prompts, model nondeterminism, or baseline implementation quality; shared inputs, repeated runs, versioned configurations, and paired comparisons reduce these effects. External validity is limited by the selected scenarios, admitted agents, SDK adapters, and protocol-specific implementation choices. The theoretical framework is protocol-independent, but empirical findings may not generalize to decentralized authorization, physical robots, adversarial registries, or other protocols. Conclusion validity depends on scenario count and variance and must therefore be assessed after data collection.
-
-Reproducibility requires publication of scenario specifications, reference labels, registry snapshots, configuration files, prompts, raw traces, analysis scripts, exact dependency versions, and the service deployment configuration used for a run. Docker configuration can help fix the software environment for later replication, but it does not replace the preserved traces and scenario data required for empirical claims. Sensitive credentials and private agent endpoints are excluded, but their interfaces and response fixtures should be represented by reproducible substitutes.
+The corpus is designed rather than sampled from a deployment population. The agents are mostly controlled fixtures, and the local models are small. Contract validity does not establish semantic truth. Lease and fencing evidence concerns measured crash faults, not consensus or Byzantine tolerance. A2A admission establishes local origin, transport, trust, and credential policy; it does not establish cryptographic identity or malicious-agent resistance. These boundaries constrain every answer to the research questions.

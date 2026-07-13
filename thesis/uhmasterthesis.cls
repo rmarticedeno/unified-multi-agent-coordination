@@ -36,22 +36,26 @@
 \newcommand{\university}[1]{\def\@university{#1}}
 \newcommand{\advisor}[1]{\def\@advisor{#1}}
 \newcommand{\coadvisor}[1]{\def\@coadvisor{#1}}
+\newcommand{\tribunal}[1]{\def\@tribunal{#1}}
 \newcommand{\degree}[1]{\def\@degree{#1}}
 \newcommand{\faculty}[1]{\def\@faculty{#1}}
 \newcommand{\worktype}[1]{\def\@worktype{#1}}
 \newcommand{\logo}[1]{\def\@logo{#1}}
 \newcommand{\qrlogo}[1]{\def\@qrlogo{#1}}
 \newcommand{\repositoryurl}[1]{\def\@repositoryurl{#1}}
+\newcommand{\repositorycommit}[1]{\def\@repositorycommit{#1}}
 
 \university{Universidad de La Habana}
 \advisor{}
 \coadvisor{}
+\tribunal{}
 \degree{Máster en Ciencia de la Computación}
 \faculty{Facultad de Matemática y Computación}
 \worktype{Tesis de Maestría}
 \logo{Graphics/uhlogo}
 \qrlogo{}
 \repositoryurl{}
+\repositorycommit{}
 
 % -----------------------------
 % Header and footer
@@ -166,6 +170,7 @@
     {\Large Autor: \textbf{\@author}\par}
     \ifdefempty{\@advisor}{}{\vspace{0.5cm}{\Large Tutor: \textbf{\@advisor}\par}}
     \ifdefempty{\@coadvisor}{}{\vspace{0.2cm}{\Large Cotutor: \textbf{\@coadvisor}\par}}
+    \ifdefempty{\@tribunal}{}{\vspace{0.2cm}{\Large Tribunal: \textbf{\@tribunal}\par}}
     \vfill
     {\large \@worktype\par presentada en opción al título de\par \@degree\par}
     \ifstrempty{\@qrlogo}{}{\vspace{0.25cm}\includeIfExists{\@qrlogo}{width=2.3cm}\par}
@@ -173,6 +178,9 @@
       \vspace{0.25cm}%
       \qrcode[height=2.3cm]{\@repositoryurl}\par
       \vspace{0.1cm}{\footnotesize Repositorio de la tesis\par}%
+    }
+    \ifstrempty{\@repositorycommit}{}{%
+      \vspace{0.1cm}{\footnotesize Commit: \@repositorycommit\par}%
     }
     \vspace{0.35cm}
     {\large \@date\par}

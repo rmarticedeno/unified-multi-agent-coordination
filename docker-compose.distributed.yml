@@ -1,0 +1,146 @@
+x-app-service: &app-service
+  build:
+    context: .
+  image: unified-multi-agent-coordination:distributed
+
+x-http-healthcheck: &http-healthcheck
+  test:
+    [
+      "CMD",
+      "python",
+      "-c",
+      "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=2).read()",
+    ]
+  interval: 2s
+  timeout: 3s
+  retries: 30
+  start_period: 5s
+
+x-coordination-env: &coordination-env
+  COORDINATION_REGISTRY_URL: http://registry:8000/agents
+  COORDINATION_STORE_URL: postgresql://postgres:postgres@coordination-db:5432/coordination
+  COORDINATION_REQUEST_TIMEOUT_S: 2.0
+  COORDINATION_ALLOW_INSECURE_A2A: "true"
+  COORDINATION_REGISTRY_RETRIES: 1
+  COORDINATION_TASK_RETRIES: 1
+  COORDINATION_RETRY_BACKOFF_S: 0.05
+  COORDINATION_LEASE_TTL_S: 3.0
+  COORDINATION_LEASE_RENEW_INTERVAL_S: 1.0
+  COORDINATION_SERVICE_HOST: 0.0.0.0
+  COORDINATION_SERVICE_PORT: 8000
+
+services:
+  coordination-db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: coordination
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d coordination"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  coordination-a:
+    <<: *app-service
+    environment:
+      <<: *coordination-env
+      COORDINATION_COORDINATOR_ID: coordinator-a
+      COORDINATION_FAULT_AT: after_task_attempt_start
+      COORDINATION_FAULT_MODE: abandon_lease
+    depends_on:
+      coordination-db:
+        condition: service_healthy
+      registry:
+        condition: service_healthy
+    healthcheck: *http-healthcheck
+
+  coordination-b:
+    <<: *app-service
+    environment:
+      <<: *coordination-env
+      COORDINATION_COORDINATOR_ID: coordinator-b
+    depends_on:
+      coordination-db:
+        condition: service_healthy
+      registry:
+        condition: service_healthy
+    healthcheck: *http-healthcheck
+
+  coordination-c:
+    <<: *app-service
+    environment:
+      <<: *coordination-env
+      COORDINATION_COORDINATOR_ID: coordinator-c
+    depends_on:
+      coordination-db:
+        condition: service_healthy
+      registry:
+        condition: service_healthy
+    healthcheck: *http-healthcheck
+
+  registry:
+    <<: *app-service
+    command: ["/app/.venv/bin/unified-fixture-registry"]
+    environment:
+      A2A_CARD_URLS: >-
+        http://summarizer:8000/.well-known/agent-card.json,
+        http://slow-agent:8000/.well-known/agent-card.json
+    depends_on:
+      summarizer:
+        condition: service_healthy
+      slow-agent:
+        condition: service_healthy
+    healthcheck: *http-healthcheck
+
+  summarizer:
+    <<: *app-service
+    command: ["/app/.venv/bin/unified-a2a-fixture-agent"]
+    environment:
+      A2A_AGENT_ID: summarizer
+      A2A_AGENT_SKILL: summarize
+      A2A_AGENT_INPUT_MODES: text
+      A2A_AGENT_OUTPUT_MODES: data
+      A2A_AGENT_BASE_URL: http://summarizer:8000
+      A2A_AGENT_ARTIFACT_NAME: summary
+      A2A_AGENT_ARTIFACT_JSON: '{"summary":"Distributed fixture summary"}'
+    healthcheck: *http-healthcheck
+
+  slow-agent:
+    <<: *app-service
+    command: ["/app/.venv/bin/unified-a2a-fixture-agent"]
+    environment:
+      A2A_AGENT_ID: slow-agent
+      A2A_AGENT_SKILL: slow summarize
+      A2A_AGENT_INPUT_MODES: text
+      A2A_AGENT_OUTPUT_MODES: data
+      A2A_AGENT_BASE_URL: http://slow-agent:8000
+      A2A_AGENT_ARTIFACT_NAME: slow_summary
+      A2A_AGENT_ARTIFACT_JSON: '{"slow_summary":"Distributed slow summary"}'
+      A2A_AGENT_DELAY_S: 1.0
+      A2A_AGENT_INCLUDE_COORDINATION_SUMMARY: "true"
+    healthcheck: *http-healthcheck
+
+  distributed-system-tests:
+    <<: *app-service
+    command: ["/app/.venv/bin/unified-distributed-system-tests"]
+    environment:
+      COORDINATION_A_URL: http://coordination-a:8000
+      COORDINATION_B_URL: http://coordination-b:8000
+      COORDINATION_C_URL: http://coordination-c:8000
+      COORDINATION_REGISTRY_URL: http://registry:8000/agents
+      COORDINATION_STORE_URL: postgresql://postgres:postgres@coordination-db:5432/coordination
+      SLOW_AGENT_URL: http://slow-agent:8000
+      DISTRIBUTED_REPORT_PATH: /app/demo_runs/v0.2/preflight-20260712-07/distributed-system-report.json
+      DISTRIBUTED_RECOVERY_WAIT_S: 3.5
+      DISTRIBUTED_EXIT_RECOVERY_WAIT_S: 2.5
+    volumes:
+      - ./demo_runs:/app/demo_runs
+    depends_on:
+      coordination-a:
+        condition: service_healthy
+      coordination-b:
+        condition: service_healthy
+      coordination-c:
+        condition: service_healthy

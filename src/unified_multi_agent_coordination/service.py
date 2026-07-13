@@ -11,6 +11,7 @@ from pydantic import BaseModel, Field
 from .coordination_agent import CoordinationAgent
 from .coordination_ledger import JsonlCoordinationLedger, RetryPolicy
 from .coordination_sdk import CoordinationSdk, RemoteRegistryError
+from .coordination_store import LeaseConflictError, StaleFenceError, store_from_url
 from .models import (
     AgentRegistryEntry,
     ProblemRequest,
@@ -55,15 +56,28 @@ def sdk_from_env() -> CoordinationSdk:
 def agent_from_env(sdk: CoordinationSdk) -> CoordinationAgent:
     """Create the coordination agent from deployment environment variables."""
     ledger_path = os.getenv("COORDINATION_LEDGER_PATH") or None
-    ledger = JsonlCoordinationLedger(ledger_path) if ledger_path else None
+    store_url = os.getenv("COORDINATION_STORE_URL") or None
+    store = store_from_url(store_url, ledger_path)
+    ledger = JsonlCoordinationLedger(ledger_path) if ledger_path and not store_url else None
+    lease_ttl_s = float(os.getenv("COORDINATION_LEASE_TTL_S", "30.0"))
+    lease_renew_interval_s = float(
+        os.getenv(
+            "COORDINATION_LEASE_RENEW_INTERVAL_S",
+            str(max(lease_ttl_s / 2, 0.1)),
+        )
+    )
     return CoordinationAgent(
         sdk=sdk,
         ledger=ledger,
+        store=store,
         retry_policy=RetryPolicy(
             registry_retries=int(os.getenv("COORDINATION_REGISTRY_RETRIES", "2")),
             task_retries=int(os.getenv("COORDINATION_TASK_RETRIES", "1")),
             backoff_s=float(os.getenv("COORDINATION_RETRY_BACKOFF_S", "0.05")),
         ),
+        coordinator_id=os.getenv("COORDINATION_COORDINATOR_ID") or None,
+        lease_ttl_s=lease_ttl_s,
+        lease_renew_interval_s=lease_renew_interval_s,
     )
 
 
@@ -103,13 +117,16 @@ def create_app(
 
     @app.post("/coordinate")
     async def coordinate(request: CoordinateRequest):
-        return await app.state.agent.coordinate(
-            _request_input(request),
-            context=request.context,
-            payload=request.payload,
-            timeout_s=request.timeout_s,
-            session_id=request.session_id,
-        )
+        try:
+            return await app.state.agent.coordinate(
+                _request_input(request),
+                context=request.context,
+                payload=request.payload,
+                timeout_s=request.timeout_s,
+                session_id=request.session_id,
+            )
+        except (LeaseConflictError, StaleFenceError) as exc:
+            raise HTTPException(status_code=409, detail=str(exc)) from exc
 
     @app.post("/sessions/{session_id}/resume")
     async def resume_session(session_id: str, request: CoordinateRequest | None = None):
@@ -119,6 +136,8 @@ def create_app(
                 payload=request.payload if request is not None else None,
                 timeout_s=request.timeout_s if request is not None else 30.0,
             )
+        except (LeaseConflictError, StaleFenceError) as exc:
+            raise HTTPException(status_code=409, detail=str(exc)) from exc
         except ValueError as exc:
             raise HTTPException(status_code=404, detail=str(exc)) from exc
 

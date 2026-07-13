@@ -17,7 +17,7 @@ The scientific problem addressed by this thesis is therefore:
 \emph{How can a heterogeneous multi-agent system use LLM-based interpretation and decomposition while ensuring, through explicit symbolic criteria, that an accepted coordination plan is supported by available capabilities, compatible artifacts, applicable authority, and verifiable completion conditions?}
 \end{quote}
 
-The problem is not merely the construction of another agent platform. It is the absence of a precise operational boundary between a linguistically plausible proposal and a plan that the current system is justified in authorizing.
+The problem is not merely the construction of another agent platform. It is the absence of a precise operational boundary between a linguistically plausible proposal and a plan that the current system is justified in authorizing. Existing orchestration frameworks, agent protocols, schemas, validators, and tool registries provide important building blocks; the novelty sought here is the enforced combination of those pieces into a coordination boundary where candidate plans, authority checks, artifact contracts, commitments, refusals, and execution traces are all explicit before dispatch.
 
 \section{Object of Study and Field of Action}
 
@@ -33,7 +33,7 @@ The specific objectives are:
   \item Critically synthesize classical multi-agent coordination, symbolic AI, LLM-agent architectures, and interoperability protocols to identify the unresolved integration gap.
   \item Define a protocol-independent theoretical framework for capabilities, tasks, authority, commitments, artifact compatibility, bounded auxiliary capabilities, and feasibility.
   \item Instantiate the framework as an implementable Python coordination agent over middleware SDK that preserves protocol-mediated interoperability while supporting remote, local, and Lingo-authored agents without coupling the theoretical contribution to a particular model provider, agent framework, or communication protocol.
-  \item Evaluate the implemented prototype with reproducible outcome and process evidence, including deterministic scenarios, Docker A2A system checks, and local LLM reference batches, while identifying the additional baseline work required for broader comparative claims.
+  \item Evaluate the corrected prototype with a blinded, repeated 36-case study, paired controls and ablations, deterministic scenarios, containerized A2A checks, and measured PostgreSQL crash recovery.
   \item Analyze the scope, limitations, validity threats, and practical implications of the proposed framework.
 \end{enumerate}
 
@@ -45,16 +45,16 @@ The thesis is guided by the following questions:
   \item[RQ1] Which coordination information must be represented explicitly to distinguish an executable multi-agent plan from a linguistically plausible one?
   \item[RQ2] How should responsibility be divided between LLM-based reasoning and symbolic validation in a heterogeneous coordination workflow?
   \item[RQ3] How can missing narrow linguistic capabilities be introduced without granting unbounded new competence or authority?
-  \item[RQ4] Which outcome and process measures can determine whether the proposed framework improves justified plan acceptance, explicit refusal, traceability, communication-boundary discipline, and coordination-ownership discipline relative to LLM-only and rule-only baselines?
+  \item[RQ4] What do the measured outcome and process results show about justified acceptance, explicit refusal, traceability, dependency discipline, and recovery relative to paired controls and ablations?
 \end{description}
 
 \section{Scope and Contributions}
 
-The thesis focuses on plan-level coordination under a trusted central authorization role and distributed execution. It does not claim to verify the internal reasoning of participating agents, solve Byzantine coordination, or guarantee runtime success after a plan is authorized. Within this scope, its contributions are: a formal separation between linguistic proposal and symbolic authorization; an explicit feasibility model; rules for bounded task-local auxiliary capabilities; a mapping from the theory to a protocol-adaptable coordination-agent design over SDK middleware; and an evaluation protocol that measures both final outcomes and the validity of the process that produced them.
+The thesis focuses on plan-level coordination under a trusted central authorization role and distributed execution. It does not claim to verify the internal reasoning of participating agents, solve Byzantine coordination, or guarantee runtime success after authorization. Its contribution is integrative: a formal separation between linguistic proposal and symbolic authorization; typed, fail-closed feasibility and completion contracts; bounded task-local auxiliary capabilities; durable trace and measured crash recovery; a local A2A admission boundary; and a reproducible method for comparing the integration with paired controls. Established component mechanisms, the new operational integration, prototype evidence, and unproven properties are kept distinct.
 
 \section{Methodological Approach}
 
-The research follows a design-science approach. It combines a critical literature synthesis, formal and architectural modeling, implementation-oriented specification, and controlled scenario-based evaluation. The evaluation distinguishes planning feasibility from runtime success, records local LLM reference behavior separately from symbolic authorization, and identifies the additional ablations and baselines needed for broader comparative claims. Chapter~\ref{chap:methodology} explains this design in detail.
+The research follows a design-science approach. It combines critical literature synthesis, formal and architectural modeling, implementation-oriented specification, and controlled evaluation. The evaluation separates planning feasibility from runtime success, uses blinded labels and repeated local-model runs, tests mechanism ablations, and measures replicated-coordinator ownership through a shared durable store. Chapter~\ref{chap:methodology} explains the executed and gated stages.
 
 \section{Thesis Organization}
 

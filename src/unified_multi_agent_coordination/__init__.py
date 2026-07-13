@@ -1,6 +1,12 @@
 """Prototype interfaces for the thesis coordination framework."""
 
 from .a2a_adapter import A2AAdapter, AuthorizationError
+from .admission import (
+    AgentAdmissionError,
+    AgentAdmissionPolicy,
+    CredentialProvider,
+    StaticCredentialProvider,
+)
 from .auxiliary import BoundedAuxiliaryCapabilityFactory
 from .coordination_agent import CoordinationAgent
 from .coordination_ledger import (
@@ -11,48 +17,89 @@ from .coordination_ledger import (
     RetryPolicy,
 )
 from .coordination_sdk import CoordinationSdk, RemoteRegistryError
+from .coordination_store import (
+    CoordinationStoreError,
+    JsonlCoordinationStore,
+    LeaseConflictError,
+    PostgresCoordinationStore,
+    StaleFenceError,
+    StoreInvariantError,
+)
 from .feasibility import FeasibilityAnalyzer
 from .lingo_coordinator import CoordinatorState, LingoLinguisticCoordinator
+from .trace_validation import TraceValidationReport, validate_trace
 from .models import (
     AgentRegistryEntry,
     CapabilityRequirement,
+    CompletionContract,
+    ConstraintSpec,
     CoordinationPlanResult,
     CoordinationRunResult,
     FeasibilityReport,
     GeneratedNlpAgentSpec,
+    LeaseRecord,
+    PlanGeneration,
     PredicateEvidence,
     ProblemRequest,
     SolutionProposal,
+    SessionState,
+    TaskAttemptRecord,
+    TaskCommitment,
     TaskExecutionResult,
+    TaskState,
+    TerminalResultRecord,
     TaskSpec,
     TraceEvent,
+    ValidationContract,
 )
 
 __all__ = [
     "A2AAdapter",
+    "AgentAdmissionError",
+    "AgentAdmissionPolicy",
     "AgentRegistryEntry",
     "AuthorizationError",
     "BoundedAuxiliaryCapabilityFactory",
     "CapabilityRequirement",
+    "CompletionContract",
+    "ConstraintSpec",
     "CoordinationAgent",
     "CoordinationSessionState",
     "CoordinationPlanResult",
     "CoordinationRunResult",
     "CoordinationSdk",
     "CoordinatorState",
+    "CoordinationStoreError",
+    "CredentialProvider",
     "FeasibilityAnalyzer",
     "FeasibilityReport",
     "GeneratedNlpAgentSpec",
     "InMemoryCoordinationLedger",
     "JsonlCoordinationLedger",
+    "JsonlCoordinationStore",
     "LedgerEvent",
+    "LeaseConflictError",
+    "LeaseRecord",
     "LingoLinguisticCoordinator",
+    "PlanGeneration",
     "PredicateEvidence",
     "ProblemRequest",
+    "PostgresCoordinationStore",
     "RemoteRegistryError",
     "RetryPolicy",
+    "SessionState",
     "SolutionProposal",
+    "StaleFenceError",
+    "StaticCredentialProvider",
+    "StoreInvariantError",
+    "TaskAttemptRecord",
+    "TaskCommitment",
     "TaskExecutionResult",
+    "TaskState",
     "TaskSpec",
+    "TerminalResultRecord",
     "TraceEvent",
+    "TraceValidationReport",
+    "ValidationContract",
+    "validate_trace",
 ]

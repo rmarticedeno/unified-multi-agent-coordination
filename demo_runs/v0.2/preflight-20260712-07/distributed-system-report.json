@@ -1,0 +1,2020 @@
+{
+  "coordinators": {
+    "a": "http://coordination-a:8000",
+    "b": "http://coordination-b:8000",
+    "c": "http://coordination-c:8000"
+  },
+  "fixture_stats": {
+    "agent_id": "slow-agent",
+    "duplicate_idempotency_key_requests": 0,
+    "effectful_executions_by_idempotency_key": {
+      "distributed-abandoned-attempt-ee2a8ecb:plan-88b90eff742b430aae9d2eb44a5f516c:t1:t1-attempt-2": 1,
+      "distributed-exit-after-dispatch-ee2a8ecb:plan-c1e2c6db5b394e9b9c1d9b27d580e255:t1:t1-attempt-1": 1,
+      "distributed-live-lease-conflict-ee2a8ecb:plan-756502150d014527be9a90c4e1396f07:t1:t1-attempt-1": 1
+    },
+    "effectful_executions_by_session_task": {
+      "distributed-abandoned-attempt-ee2a8ecb:t1": 1,
+      "distributed-exit-after-dispatch-ee2a8ecb:t1": 1,
+      "distributed-live-lease-conflict-ee2a8ecb:t1": 1
+    },
+    "repeated_session_task_effectful_executions": 0,
+    "requests_by_idempotency_key": {
+      "distributed-abandoned-attempt-ee2a8ecb:plan-88b90eff742b430aae9d2eb44a5f516c:t1:t1-attempt-2": 1,
+      "distributed-exit-after-dispatch-ee2a8ecb:plan-c1e2c6db5b394e9b9c1d9b27d580e255:t1:t1-attempt-1": 1,
+      "distributed-live-lease-conflict-ee2a8ecb:plan-756502150d014527be9a90c4e1396f07:t1:t1-attempt-1": 1
+    },
+    "requests_by_session_task": {
+      "distributed-abandoned-attempt-ee2a8ecb:t1": 1,
+      "distributed-exit-after-dispatch-ee2a8ecb:t1": 1,
+      "distributed-live-lease-conflict-ee2a8ecb:t1": 1
+    },
+    "total_effectful_executions": 3,
+    "total_requests": 3
+  },
+  "generated_at_unix": 1783903649.895987,
+  "metrics": {
+    "agent_side_duplicate_idempotency_key_requests": 0,
+    "agent_side_repeated_session_task_effectful_executions": 0,
+    "duplicate_dispatch_count": 0,
+    "lease_conflicts_observed": 1,
+    "recovery_time_ms": 4865.175840999655,
+    "stale_write_rejections": 1,
+    "terminal_correctness": true
+  },
+  "passed": true,
+  "scenario_count": 5,
+  "scenarios": [
+    {
+      "error": "",
+      "latency_ms": 1666.425,
+      "passed": true,
+      "response": {
+        "contender_body": {
+          "detail": "Session distributed-live-lease-conflict-ee2a8ecb is leased by coordinator-b."
+        },
+        "contender_status_code": 409,
+        "owner_status": "completed",
+        "owner_status_code": 200
+      },
+      "scenario_id": "live_lease_conflict"
+    },
+    {
+      "error": "",
+      "latency_ms": 4865.176,
+      "passed": true,
+      "response": {
+        "agent_effectful_executions_for_session_task": 1,
+        "agent_session_task_key": "distributed-abandoned-attempt-ee2a8ecb:t1",
+        "fault_body": {
+          "text": "Internal Server Error"
+        },
+        "fault_status_code": 500,
+        "recovered_body": {
+          "artifacts": [
+            {
+              "artifact_id": "8baa052d-7d60-4909-8775-285d1974ef05",
+              "data": {
+                "received_dependency_task_count": 0.0,
+                "received_previous_artifact_count": 0.0,
+                "slow_summary": "Distributed slow summary"
+              },
+              "kind": "data",
+              "name": "slow_summary"
+            }
+          ],
+          "explanation": "Authorized coordination completed.",
+          "plan_id": "plan-88b90eff742b430aae9d2eb44a5f516c",
+          "plan_result": {
+            "feasibility_report": {
+              "capability_resolution": [
+                {
+                  "agent_id": "slow-agent",
+                  "requested_capability_id": "slow-summarize",
+                  "requirement_id": "slow-summarize",
+                  "resolved": true,
+                  "resolved_capability_id": "slow-summarize",
+                  "task_id": "t1"
+                }
+              ],
+              "constraint_violations": [],
+              "evidence": [
+                {
+                  "details": {},
+                  "name": "well_formed",
+                  "passed": true
+                },
+                {
+                  "details": {},
+                  "name": "covered",
+                  "passed": true
+                },
+                {
+                  "details": {},
+                  "name": "total_assignment",
+                  "passed": true
+                },
+                {
+                  "details": {},
+                  "name": "authorized",
+                  "passed": true
+                },
+                {
+                  "details": {},
+                  "name": "compatible",
+                  "passed": true
+                },
+                {
+                  "details": {},
+                  "name": "acyclic",
+                  "passed": true
+                },
+                {
+                  "details": {},
+                  "name": "ordered",
+                  "passed": true
+                },
+                {
+                  "details": {},
+                  "name": "requirements_complete",
+                  "passed": true
+                },
+                {
+                  "details": {},
+                  "name": "complete",
+                  "passed": true
+                },
+                {
+                  "details": {},
+                  "name": "verifiable",
+                  "passed": true
+                },
+                {
+                  "details": {
+                    "violations": []
+                  },
+                  "name": "constraints_satisfied",
+                  "passed": true
+                }
+              ],
+              "explanation": "Plan authorized by deterministic feasibility checks.",
+              "feasible": true,
+              "generated_nlp_agents": [],
+              "matched_agents": {
+                "t1": "slow-agent"
+              },
+              "missing_capabilities": [],
+              "risks": [],
+              "schema_violations": [],
+              "validation_gaps": []
+            },
+            "plan_generation": 1,
+            "plan_id": "plan-88b90eff742b430aae9d2eb44a5f516c",
+            "proposal": {
+              "completion_contract": {
+                "require_all_task_validators": true,
+                "required_artifacts": [
+                  "slow_summary"
+                ],
+                "required_task_states": [
+                  "completed"
+                ]
+              },
+              "completion_criteria": [
+                "slow_summary artifact exists"
+              ],
+              "constraint_evidence": {},
+              "execution_order": [
+                "t1"
+              ],
+              "expected_artifacts": [
+                "slow_summary"
+              ],
+              "generated_nlp_agents": [],
+              "selected_agents": {
+                "t1": "slow-agent"
+              },
+              "tasks": [
+                {
+                  "assigned_to": "slow-agent",
+                  "auxiliary_spec_id": null,
+                  "capability_id": "slow-summarize",
+                  "depends_on": [],
+                  "description": "",
+                  "expected_artifacts": [
+                    "slow_summary"
+                  ],
+                  "requirement_id": "slow-summarize",
+                  "requirement_name": "slow summarize",
+                  "task_id": "t1",
+                  "validation_contract": {
+                    "artifact_kinds": [],
+                    "evidence_types": [],
+                    "json_schema": {},
+                    "required_artifacts": [
+                      "slow_summary"
+                    ],
+                    "required_fields": [],
+                    "validator_id": ""
+                  }
+                }
+              ]
+            },
+            "registry_snapshot": [
+              {
+                "agent_id": "summarizer",
+                "agent_kind": "remote_a2a",
+                "description": "Fixture agent for summarize.",
+                "input_modes": [
+                  "text"
+                ],
+                "invocation_endpoint": "http://summarizer:8000/",
+                "name": "summarizer",
+                "output_modes": [
+                  "data"
+                ],
+                "required_security_schemes": [],
+                "security_schemes": {},
+                "service_endpoint": "http://summarizer:8000/",
+                "skills": [
+                  {
+                    "auxiliary_eligible": false,
+                    "capability_id": "summarize",
+                    "constraints": [],
+                    "description": "Fixture agent for summarize.",
+                    "expected_evidence": [],
+                    "input_modes": [
+                      "text"
+                    ],
+                    "input_schema": {},
+                    "name": "summarize",
+                    "output_modes": [
+                      "data"
+                    ],
+                    "output_schema": {},
+                    "required_trust_level": "standard",
+                    "requirement_id": "summarize",
+                    "side_effect_class": "unknown",
+                    "validation_contract": {
+                      "artifact_kinds": [],
+                      "evidence_types": [],
+                      "json_schema": {},
+                      "required_artifacts": [],
+                      "required_fields": [],
+                      "validator_id": ""
+                    }
+                  }
+                ],
+                "source_card": {
+                  "capabilities": {
+                    "streaming": false
+                  },
+                  "defaultInputModes": [
+                    "text"
+                  ],
+                  "defaultOutputModes": [
+                    "data"
+                  ],
+                  "description": "Fixture agent for summarize.",
+                  "name": "summarizer",
+                  "skills": [
+                    {
+                      "description": "Fixture agent for summarize.",
+                      "id": "summarize",
+                      "inputModes": [
+                        "text"
+                      ],
+                      "name": "summarize",
+                      "outputModes": [
+                        "data"
+                      ]
+                    }
+                  ],
+                  "supportedInterfaces": [
+                    {
+                      "protocolBinding": "JSONRPC",
+                      "protocolVersion": "1.0",
+                      "url": "http://summarizer:8000/"
+                    }
+                  ],
+                  "version": "1.0.0"
+                },
+                "status": "available",
+                "trust_level": "standard",
+                "validation_contract": {
+                  "artifact_kinds": [],
+                  "evidence_types": [],
+                  "json_schema": {},
+                  "required_artifacts": [],
+                  "required_fields": [],
+                  "validator_id": ""
+                }
+              },
+              {
+                "agent_id": "slow-agent",
+                "agent_kind": "remote_a2a",
+                "description": "Fixture agent for slow summarize.",
+                "input_modes": [
+                  "text"
+                ],
+                "invocation_endpoint": "http://slow-agent:8000/",
+                "name": "slow-agent",
+                "output_modes": [
+                  "data"
+                ],
+                "required_security_schemes": [],
+                "security_schemes": {},
+                "service_endpoint": "http://slow-agent:8000/",
+                "skills": [
+                  {
+                    "auxiliary_eligible": false,
+                    "capability_id": "slow-summarize",
+                    "constraints": [],
+                    "description": "Fixture agent for slow summarize.",
+                    "expected_evidence": [],
+                    "input_modes": [
+                      "text"
+                    ],
+                    "input_schema": {},
+                    "name": "slow summarize",
+                    "output_modes": [
+                      "data"
+                    ],
+                    "output_schema": {},
+                    "required_trust_level": "standard",
+                    "requirement_id": "slow-summarize",
+                    "side_effect_class": "unknown",
+                    "validation_contract": {
+                      "artifact_kinds": [],
+                      "evidence_types": [],
+                      "json_schema": {},
+                      "required_artifacts": [],
+                      "required_fields": [],
+                      "validator_id": ""
+                    }
+                  }
+                ],
+                "source_card": {
+                  "capabilities": {
+                    "streaming": false
+                  },
+                  "defaultInputModes": [
+                    "text"
+                  ],
+                  "defaultOutputModes": [
+                    "data"
+                  ],
+                  "description": "Fixture agent for slow summarize.",
+                  "name": "slow-agent",
+                  "skills": [
+                    {
+                      "description": "Fixture agent for slow summarize.",
+                      "id": "slow-summarize",
+                      "inputModes": [
+                        "text"
+                      ],
+                      "name": "slow summarize",
+                      "outputModes": [
+                        "data"
+                      ]
+                    }
+                  ],
+                  "supportedInterfaces": [
+                    {
+                      "protocolBinding": "JSONRPC",
+                      "protocolVersion": "1.0",
+                      "url": "http://slow-agent:8000/"
+                    }
+                  ],
+                  "version": "1.0.0"
+                },
+                "status": "available",
+                "trust_level": "standard",
+                "validation_contract": {
+                  "artifact_kinds": [],
+                  "evidence_types": [],
+                  "json_schema": {},
+                  "required_artifacts": [],
+                  "required_fields": [],
+                  "validator_id": ""
+                }
+              }
+            ],
+            "request": {
+              "constraints": [],
+              "context": {},
+              "required_artifacts": [
+                "slow_summary"
+              ],
+              "requirements": [
+                {
+                  "auxiliary_eligible": false,
+                  "capability_id": "slow-summarize",
+                  "constraints": [],
+                  "description": "",
+                  "expected_evidence": [],
+                  "input_modes": [],
+                  "input_schema": {},
+                  "name": "slow summarize",
+                  "output_modes": [],
+                  "output_schema": {},
+                  "required_trust_level": "standard",
+                  "requirement_id": "slow-summarize",
+                  "side_effect_class": "read_only",
+                  "validation_contract": {
+                    "artifact_kinds": [],
+                    "evidence_types": [],
+                    "json_schema": {},
+                    "required_artifacts": [
+                      "slow_summary"
+                    ],
+                    "required_fields": [],
+                    "validator_id": ""
+                  }
+                }
+              ],
+              "user_goal": "Slow summarize with coordinator failover."
+            },
+            "session_id": "distributed-abandoned-attempt-ee2a8ecb"
+          },
+          "session_id": "distributed-abandoned-attempt-ee2a8ecb",
+          "status": "completed",
+          "task_results": [
+            {
+              "agent_id": "slow-agent",
+              "agent_kind": "remote_a2a",
+              "artifacts": [
+                {
+                  "artifact_id": "8baa052d-7d60-4909-8775-285d1974ef05",
+                  "data": {
+                    "received_dependency_task_count": 0.0,
+                    "received_previous_artifact_count": 0.0,
+                    "slow_summary": "Distributed slow summary"
+                  },
+                  "kind": "data",
+                  "name": "slow_summary"
+                }
+              ],
+              "attempt_id": "t1-attempt-2",
+              "error": "",
+              "metadata": {
+                "coordinator_id": "coordinator-b",
+                "fencing_token": 2,
+                "idempotency_key": "distributed-abandoned-attempt-ee2a8ecb:plan-88b90eff742b430aae9d2eb44a5f516c:t1:t1-attempt-2",
+                "invocation_endpoint": "http://slow-agent:8000/",
+                "plan_generation": 1
+              },
+              "output": {
+                "artifacts": [
+                  {
+                    "artifact_id": "8baa052d-7d60-4909-8775-285d1974ef05",
+                    "data": {
+                      "received_dependency_task_count": 0.0,
+                      "received_previous_artifact_count": 0.0,
+                      "slow_summary": "Distributed slow summary"
+                    },
+                    "kind": "data",
+                    "name": "slow_summary"
+                  }
+                ],
+                "chunks": [
+                  {
+                    "task": {
+                      "artifacts": [
+                        {
+                          "artifact_id": "8baa052d-7d60-4909-8775-285d1974ef05",
+                          "name": "slow_summary",
+                          "parts": [
+                            {
+                              "data": {
+                                "received_dependency_task_count": 0.0,
+                                "received_previous_artifact_count": 0.0,
+                                "slow_summary": "Distributed slow summary"
+                              }
+                            }
+                          ]
+                        }
+                      ],
+                      "context_id": "ff7c93c7-aa5e-4686-9cd0-15548e6df6be",
+                      "history": [
+                        {
+                          "context_id": "ff7c93c7-aa5e-4686-9cd0-15548e6df6be",
+                          "message_id": "f7d2e2ec-ba72-48fd-be65-f748f71181ec",
+                          "parts": [
+                            {
+                              "text": "{\"_coordination\": {\"attempt_id\": \"t1-attempt-2\", \"coordinator_id\": \"coordinator-b\", \"fencing_token\": 2, \"idempotency_key\": \"distributed-abandoned-attempt-ee2a8ecb:plan-88b90eff742b430aae9d2eb44a5f516c:t1:t1-attempt-2\", \"inputs_by_task\": {}, \"plan_generation\": 1, \"plan_id\": \"plan-88b90eff742b430aae9d2eb44a5f516c\", \"previous_artifacts\": [], \"session_id\": \"distributed-abandoned-attempt-ee2a8ecb\", \"task_id\": \"t1\"}}"
+                            }
+                          ],
+                          "role": "ROLE_USER",
+                          "task_id": "37072407-c60d-40be-b7ff-e05f717a6647"
+                        }
+                      ],
+                      "id": "37072407-c60d-40be-b7ff-e05f717a6647",
+                      "status": {
+                        "message": {
+                          "context_id": "ff7c93c7-aa5e-4686-9cd0-15548e6df6be",
+                          "message_id": "f3305095-f3c5-4b00-806c-ee98a3422009",
+                          "parts": [
+                            {
+                              "text": "slow-agent completed."
+                            }
+                          ],
+                          "role": "ROLE_AGENT",
+                          "task_id": "37072407-c60d-40be-b7ff-e05f717a6647"
+                        },
+                        "state": "TASK_STATE_COMPLETED",
+                        "timestamp": "2026-07-13T00:47:23.838901Z"
+                      }
+                    }
+                  }
+                ]
+              },
+              "plan_id": "plan-88b90eff742b430aae9d2eb44a5f516c",
+              "session_id": "distributed-abandoned-attempt-ee2a8ecb",
+              "status": "completed",
+              "task_id": "t1"
+            }
+          ],
+          "trace": [
+            {
+              "attempt_id": "",
+              "data": {
+                "attempt_id": "",
+                "payload": {
+                  "expires_at": "2026-07-13T00:47:22.233947+00:00",
+                  "fencing_token": 1,
+                  "holder_id": "coordinator-a"
+                },
+                "plan_id": "",
+                "session_id": "distributed-abandoned-attempt-ee2a8ecb",
+                "task_id": ""
+              },
+              "event_type": "lease_acquired",
+              "message": "Ledger event lease_acquired.",
+              "plan_id": "",
+              "session_id": "distributed-abandoned-attempt-ee2a8ecb",
+              "source": "store",
+              "task_id": "",
+              "timestamp": "2026-07-13T00:47:19.235472Z"
+            },
+            {
+              "attempt_id": "",
+              "data": {
+                "attempt_id": "",
+                "payload": {
+                  "context": {},
+                  "payload": {
+                    "text": "recover this"
+                  },
+                  "user_request": {
+                    "constraints": [],
+                    "context": {},
+                    "required_artifacts": [
+                      "slow_summary"
+                    ],
+                    "requirements": [
+                      {
+                        "auxiliary_eligible": false,
+                        "capability_id": "slow-summarize",
+                        "constraints": [],
+                        "description": "",
+                        "expected_evidence": [],
+                        "input_modes": [],
+                        "input_schema": {},
+                        "name": "slow summarize",
+                        "output_modes": [],
+                        "output_schema": {},
+                        "required_trust_level": "standard",
+                        "requirement_id": "slow-summarize",
+                        "side_effect_class": "read_only",
+                        "validation_contract": {
+                          "artifact_kinds": [],
+                          "evidence_types": [],
+                          "json_schema": {},
+                          "required_artifacts": [
+                            "slow_summary"
+                          ],
+                          "required_fields": [],
+                          "validator_id": ""
+                        }
+                      }
+                    ],
+                    "user_goal": "Slow summarize with coordinator failover."
+                  }
+                },
+                "plan_id": "plan-88b90eff742b430aae9d2eb44a5f516c",
+                "session_id": "distributed-abandoned-attempt-ee2a8ecb",
+                "task_id": ""
+              },
+              "event_type": "session_started",
+              "message": "Ledger event session_started.",
+              "plan_id": "plan-88b90eff742b430aae9d2eb44a5f516c",
+              "session_id": "distributed-abandoned-attempt-ee2a8ecb",
+              "source": "store",
+              "task_id": "",
+              "timestamp": "2026-07-13T00:47:19.238275Z"
+            },
+            {
+              "attempt_id": "",
+              "data": {
+                "attempt_id": "",
+                "payload": {
+                  "registry_snapshot": [
+                    {
+                      "agent_id": "summarizer",
+                      "agent_kind": "remote_a2a",
+                      "description": "Fixture agent for summarize.",
+                      "input_modes": [
+                        "text"
+                      ],
+                      "invocation_endpoint": "http://summarizer:8000/",
+                      "name": "summarizer",
+                      "output_modes": [
+                        "data"
+                      ],
+                      "required_security_schemes": [],
+                      "security_schemes": {},
+                      "service_endpoint": "http://summarizer:8000/",
+                      "skills": [
+                        {
+                          "auxiliary_eligible": false,
+                          "capability_id": "summarize",
+                          "constraints": [],
+                          "description": "Fixture agent for summarize.",
+                          "expected_evidence": [],
+                          "input_modes": [
+                            "text"
+                          ],
+                          "input_schema": {},
+                          "name": "summarize",
+                          "output_modes": [
+                            "data"
+                          ],
+                          "output_schema": {},
+                          "required_trust_level": "standard",
+                          "requirement_id": "summarize",
+                          "side_effect_class": "unknown",
+                          "validation_contract": {
+                            "artifact_kinds": [],
+                            "evidence_types": [],
+                            "json_schema": {},
+                            "required_artifacts": [],
+                            "required_fields": [],
+                            "validator_id": ""
+                          }
+                        }
+                      ],
+                      "source_card": {
+                        "capabilities": {
+                          "streaming": false
+                        },
+                        "defaultInputModes": [
+                          "text"
+                        ],
+                        "defaultOutputModes": [
+                          "data"
+                        ],
+                        "description": "Fixture agent for summarize.",
+                        "name": "summarizer",
+                        "skills": [
+                          {
+                            "description": "Fixture agent for summarize.",
+                            "id": "summarize",
+                            "inputModes": [
+                              "text"
+                            ],
+                            "name": "summarize",
+                            "outputModes": [
+                              "data"
+                            ]
+                          }
+                        ],
+                        "supportedInterfaces": [
+                          {
+                            "protocolBinding": "JSONRPC",
+                            "protocolVersion": "1.0",
+                            "url": "http://summarizer:8000/"
+                          }
+                        ],
+                        "version": "1.0.0"
+                      },
+                      "status": "available",
+                      "trust_level": "standard",
+                      "validation_contract": {
+                        "artifact_kinds": [],
+                        "evidence_types": [],
+                        "json_schema": {},
+                        "required_artifacts": [],
+                        "required_fields": [],
+                        "validator_id": ""
+                      }
+                    },
+                    {
+                      "agent_id": "slow-agent",
+                      "agent_kind": "remote_a2a",
+                      "description": "Fixture agent for slow summarize.",
+                      "input_modes": [
+                        "text"
+                      ],
+                      "invocation_endpoint": "http://slow-agent:8000/",
+                      "name": "slow-agent",
+                      "output_modes": [
+                        "data"
+                      ],
+                      "required_security_schemes": [],
+                      "security_schemes": {},
+                      "service_endpoint": "http://slow-agent:8000/",
+                      "skills": [
+                        {
+                          "auxiliary_eligible": false,
+                          "capability_id": "slow-summarize",
+                          "constraints": [],
+                          "description": "Fixture agent for slow summarize.",
+                          "expected_evidence": [],
+                          "input_modes": [
+                            "text"
+                          ],
+                          "input_schema": {},
+                          "name": "slow summarize",
+                          "output_modes": [
+                            "data"
+                          ],
+                          "output_schema": {},
+                          "required_trust_level": "standard",
+                          "requirement_id": "slow-summarize",
+                          "side_effect_class": "unknown",
+                          "validation_contract": {
+                            "artifact_kinds": [],
+                            "evidence_types": [],
+                            "json_schema": {},
+                            "required_artifacts": [],
+                            "required_fields": [],
+                            "validator_id": ""
+                          }
+                        }
+                      ],
+                      "source_card": {
+                        "capabilities": {
+                          "streaming": false
+                        },
+                        "defaultInputModes": [
+                          "text"
+                        ],
+                        "defaultOutputModes": [
+                          "data"
+                        ],
+                        "description": "Fixture agent for slow summarize.",
+                        "name": "slow-agent",
+                        "skills": [
+                          {
+                            "description": "Fixture agent for slow summarize.",
+                            "id": "slow-summarize",
+                            "inputModes": [
+                              "text"
+                            ],
+                            "name": "slow summarize",
+                            "outputModes": [
+                              "data"
+                            ]
+                          }
+                        ],
+                        "supportedInterfaces": [
+                          {
+                            "protocolBinding": "JSONRPC",
+                            "protocolVersion": "1.0",
+                            "url": "http://slow-agent:8000/"
+                          }
+                        ],
+                        "version": "1.0.0"
+                      },
+                      "status": "available",
+                      "trust_level": "standard",
+                      "validation_contract": {
+                        "artifact_kinds": [],
+                        "evidence_types": [],
+                        "json_schema": {},
+                        "required_artifacts": [],
+                        "required_fields": [],
+                        "validator_id": ""
+                      }
+                    }
+                  ]
+                },
+                "plan_id": "plan-88b90eff742b430aae9d2eb44a5f516c",
+                "session_id": "distributed-abandoned-attempt-ee2a8ecb",
+                "task_id": ""
+              },
+              "event_type": "registry_snapshot_recorded",
+              "message": "Ledger event registry_snapshot_recorded.",
+              "plan_id": "plan-88b90eff742b430aae9d2eb44a5f516c",
+              "session_id": "distributed-abandoned-attempt-ee2a8ecb",
+              "source": "store",
+              "task_id": "",
+              "timestamp": "2026-07-13T00:47:19.270423Z"
+            },
+            {
+              "attempt_id": "",
+              "data": {
+                "attempt_id": "",
+                "payload": {
+                  "plan_result": {
+                    "feasibility_report": {
+                      "capability_resolution": [
+                        {
+                          "agent_id": "slow-agent",
+                          "requested_capability_id": "slow-summarize",
+                          "requirement_id": "slow-summarize",
+                          "resolved": true,
+                          "resolved_capability_id": "slow-summarize",
+                          "task_id": "t1"
+                        }
+                      ],
+                      "constraint_violations": [],
+                      "evidence": [
+                        {
+                          "details": {},
+                          "name": "well_formed",
+                          "passed": true
+                        },
+                        {
+                          "details": {},
+                          "name": "covered",
+                          "passed": true
+                        },
+                        {
+                          "details": {},
+                          "name": "total_assignment",
+                          "passed": true
+                        },
+                        {
+                          "details": {},
+                          "name": "authorized",
+                          "passed": true
+                        },
+                        {
+                          "details": {},
+                          "name": "compatible",
+                          "passed": true
+                        },
+                        {
+                          "details": {},
+                          "name": "acyclic",
+                          "passed": true
+                        },
+                        {
+                          "details": {},
+                          "name": "ordered",
+                          "passed": true
+                        },
+                        {
+                          "details": {},
+                          "name": "requirements_complete",
+                          "passed": true
+                        },
+                        {
+                          "details": {},
+                          "name": "complete",
+                          "passed": true
+                        },
+                        {
+                          "details": {},
+                          "name": "verifiable",
+                          "passed": true
+                        },
+                        {
+                          "details": {
+                            "violations": []
+                          },
+                          "name": "constraints_satisfied",
+                          "passed": true
+                        }
+                      ],
+                      "explanation": "Plan authorized by deterministic feasibility checks.",
+                      "feasible": true,
+                      "generated_nlp_agents": [],
+                      "matched_agents": {
+                        "t1": "slow-agent"
+                      },
+                      "missing_capabilities": [],
+                      "risks": [],
+                      "schema_violations": [],
+                      "validation_gaps": []
+                    },
+                    "plan_generation": 1,
+                    "plan_id": "plan-88b90eff742b430aae9d2eb44a5f516c",
+                    "proposal": {
+                      "completion_contract": {
+                        "require_all_task_validators": true,
+                        "required_artifacts": [
+                          "slow_summary"
+                        ],
+                        "required_task_states": [
+                          "completed"
+                        ]
+                      },
+                      "completion_criteria": [
+                        "slow_summary artifact exists"
+                      ],
+                      "constraint_evidence": {},
+                      "execution_order": [
+                        "t1"
+                      ],
+                      "expected_artifacts": [
+                        "slow_summary"
+                      ],
+                      "generated_nlp_agents": [],
+                      "selected_agents": {
+                        "t1": "slow-agent"
+                      },
+                      "tasks": [
+                        {
+                          "assigned_to": "slow-agent",
+                          "auxiliary_spec_id": null,
+                          "capability_id": "slow-summarize",
+                          "depends_on": [],
+                          "description": "",
+                          "expected_artifacts": [
+                            "slow_summary"
+                          ],
+                          "requirement_id": "slow-summarize",
+                          "requirement_name": "slow summarize",
+                          "task_id": "t1",
+                          "validation_contract": {
+                            "artifact_kinds": [],
+                            "evidence_types": [],
+                            "json_schema": {},
+                            "required_artifacts": [
+                              "slow_summary"
+                            ],
+                            "required_fields": [],
+                            "validator_id": ""
+                          }
+                        }
+                      ]
+                    },
+                    "registry_snapshot": [
+                      {
+                        "agent_id": "summarizer",
+                        "agent_kind": "remote_a2a",
+                        "description": "Fixture agent for summarize.",
+                        "input_modes": [
+                          "text"
+                        ],
+                        "invocation_endpoint": "http://summarizer:8000/",
+                        "name": "summarizer",
+                        "output_modes": [
+                          "data"
+                        ],
+                        "required_security_schemes": [],
+                        "security_schemes": {},
+                        "service_endpoint": "http://summarizer:8000/",
+                        "skills": [
+                          {
+                            "auxiliary_eligible": false,
+                            "capability_id": "summarize",
+                            "constraints": [],
+                            "description": "Fixture agent for summarize.",
+                            "expected_evidence": [],
+                            "input_modes": [
+                              "text"
+                            ],
+                            "input_schema": {},
+                            "name": "summarize",
+                            "output_modes": [
+                              "data"
+                            ],
+                            "output_schema": {},
+                            "required_trust_level": "standard",
+                            "requirement_id": "summarize",
+                            "side_effect_class": "unknown",
+                            "validation_contract": {
+                              "artifact_kinds": [],
+                              "evidence_types": [],
+                              "json_schema": {},
+                              "required_artifacts": [],
+                              "required_fields": [],
+                              "validator_id": ""
+                            }
+                          }
+                        ],
+                        "source_card": {
+                          "capabilities": {
+                            "streaming": false
+                          },
+                          "defaultInputModes": [
+                            "text"
+                          ],
+                          "defaultOutputModes": [
+                            "data"
+                          ],
+                          "description": "Fixture agent for summarize.",
+                          "name": "summarizer",
+                          "skills": [
+                            {
+                              "description": "Fixture agent for summarize.",
+                              "id": "summarize",
+                              "inputModes": [
+                                "text"
+                              ],
+                              "name": "summarize",
+                              "outputModes": [
+                                "data"
+                              ]
+                            }
+                          ],
+                          "supportedInterfaces": [
+                            {
+                              "protocolBinding": "JSONRPC",
+                              "protocolVersion": "1.0",
+                              "url": "http://summarizer:8000/"
+                            }
+                          ],
+                          "version": "1.0.0"
+                        },
+                        "status": "available",
+                        "trust_level": "standard",
+                        "validation_contract": {
+                          "artifact_kinds": [],
+                          "evidence_types": [],
+                          "json_schema": {},
+                          "required_artifacts": [],
+                          "required_fields": [],
+                          "validator_id": ""
+                        }
+                      },
+                      {
+                        "agent_id": "slow-agent",
+                        "agent_kind": "remote_a2a",
+                        "description": "Fixture agent for slow summarize.",
+                        "input_modes": [
+                          "text"
+                        ],
+                        "invocation_endpoint": "http://slow-agent:8000/",
+                        "name": "slow-agent",
+                        "output_modes": [
+                          "data"
+                        ],
+                        "required_security_schemes": [],
+                        "security_schemes": {},
+                        "service_endpoint": "http://slow-agent:8000/",
+                        "skills": [
+                          {
+                            "auxiliary_eligible": false,
+                            "capability_id": "slow-summarize",
+                            "constraints": [],
+                            "description": "Fixture agent for slow summarize.",
+                            "expected_evidence": [],
+                            "input_modes": [
+                              "text"
+                            ],
+                            "input_schema": {},
+                            "name": "slow summarize",
+                            "output_modes": [
+                              "data"
+                            ],
+                            "output_schema": {},
+                            "required_trust_level": "standard",
+                            "requirement_id": "slow-summarize",
+                            "side_effect_class": "unknown",
+                            "validation_contract": {
+                              "artifact_kinds": [],
+                              "evidence_types": [],
+                              "json_schema": {},
+                              "required_artifacts": [],
+                              "required_fields": [],
+                              "validator_id": ""
+                            }
+                          }
+                        ],
+                        "source_card": {
+                          "capabilities": {
+                            "streaming": false
+                          },
+                          "defaultInputModes": [
+                            "text"
+                          ],
+                          "defaultOutputModes": [
+                            "data"
+                          ],
+                          "description": "Fixture agent for slow summarize.",
+                          "name": "slow-agent",
+                          "skills": [
+                            {
+                              "description": "Fixture agent for slow summarize.",
+                              "id": "slow-summarize",
+                              "inputModes": [
+                                "text"
+                              ],
+                              "name": "slow summarize",
+                              "outputModes": [
+                                "data"
+                              ]
+                            }
+                          ],
+                          "supportedInterfaces": [
+                            {
+                              "protocolBinding": "JSONRPC",
+                              "protocolVersion": "1.0",
+                              "url": "http://slow-agent:8000/"
+                            }
+                          ],
+                          "version": "1.0.0"
+                        },
+                        "status": "available",
+                        "trust_level": "standard",
+                        "validation_contract": {
+                          "artifact_kinds": [],
+                          "evidence_types": [],
+                          "json_schema": {},
+                          "required_artifacts": [],
+                          "required_fields": [],
+                          "validator_id": ""
+                        }
+                      }
+                    ],
+                    "request": {
+                      "constraints": [],
+                      "context": {},
+                      "required_artifacts": [
+                        "slow_summary"
+                      ],
+                      "requirements": [
+                        {
+                          "auxiliary_eligible": false,
+                          "capability_id": "slow-summarize",
+                          "constraints": [],
+                          "description": "",
+                          "expected_evidence": [],
+                          "input_modes": [],
+                          "input_schema": {},
+                          "name": "slow summarize",
+                          "output_modes": [],
+                          "output_schema": {},
+                          "required_trust_level": "standard",
+                          "requirement_id": "slow-summarize",
+                          "side_effect_class": "read_only",
+                          "validation_contract": {
+                            "artifact_kinds": [],
+                            "evidence_types": [],
+                            "json_schema": {},
+                            "required_artifacts": [
+                              "slow_summary"
+                            ],
+                            "required_fields": [],
+                            "validator_id": ""
+                          }
+                        }
+                      ],
+                      "user_goal": "Slow summarize with coordinator failover."
+                    },
+                    "session_id": "distributed-abandoned-attempt-ee2a8ecb"
+                  }
+                },
+                "plan_id": "plan-88b90eff742b430aae9d2eb44a5f516c",
+                "session_id": "distributed-abandoned-attempt-ee2a8ecb",
+                "task_id": ""
+              },
+              "event_type": "plan_authorized",
+              "message": "Ledger event plan_authorized.",
+              "plan_id": "plan-88b90eff742b430aae9d2eb44a5f516c",
+              "session_id": "distributed-abandoned-attempt-ee2a8ecb",
+              "source": "store",
+              "task_id": "",
+              "timestamp": "2026-07-13T00:47:19.273925Z"
+            },
+            {
+              "attempt_id": "t1-attempt-1",
+              "data": {
+                "attempt_id": "t1-attempt-1",
+                "payload": {
+                  "coordinator_id": "coordinator-a",
+                  "fencing_token": 1,
+                  "idempotency_key": "distributed-abandoned-attempt-ee2a8ecb:plan-88b90eff742b430aae9d2eb44a5f516c:t1:t1-attempt-1",
+                  "task": {
+                    "assigned_to": "slow-agent",
+                    "auxiliary_spec_id": null,
+                    "capability_id": "slow-summarize",
+                    "depends_on": [],
+                    "description": "",
+                    "expected_artifacts": [
+                      "slow_summary"
+                    ],
+                    "requirement_id": "slow-summarize",
+                    "requirement_name": "slow summarize",
+                    "task_id": "t1",
+                    "validation_contract": {
+                      "artifact_kinds": [],
+                      "evidence_types": [],
+                      "json_schema": {},
+                      "required_artifacts": [
+                        "slow_summary"
+                      ],
+                      "required_fields": [],
+                      "validator_id": ""
+                    }
+                  }
+                },
+                "plan_id": "plan-88b90eff742b430aae9d2eb44a5f516c",
+                "session_id": "distributed-abandoned-attempt-ee2a8ecb",
+                "task_id": "t1"
+              },
+              "event_type": "task_attempt_started",
+              "message": "Ledger event task_attempt_started.",
+              "plan_id": "plan-88b90eff742b430aae9d2eb44a5f516c",
+              "session_id": "distributed-abandoned-attempt-ee2a8ecb",
+              "source": "store",
+              "task_id": "t1",
+              "timestamp": "2026-07-13T00:47:19.281932Z"
+            },
+            {
+              "attempt_id": "",
+              "data": {
+                "attempt_id": "",
+                "payload": {
+                  "expires_at": "2026-07-13T00:47:25.790245+00:00",
+                  "fencing_token": 2,
+                  "holder_id": "coordinator-b"
+                },
+                "plan_id": "",
+                "session_id": "distributed-abandoned-attempt-ee2a8ecb",
+                "task_id": ""
+              },
+              "event_type": "lease_acquired",
+              "message": "Ledger event lease_acquired.",
+              "plan_id": "",
+              "session_id": "distributed-abandoned-attempt-ee2a8ecb",
+              "source": "store",
+              "task_id": "",
+              "timestamp": "2026-07-13T00:47:22.792229Z"
+            },
+            {
+              "attempt_id": "t1-attempt-2",
+              "data": {
+                "attempt_id": "t1-attempt-2",
+                "payload": {
+                  "coordinator_id": "coordinator-b",
+                  "fencing_token": 2,
+                  "idempotency_key": "distributed-abandoned-attempt-ee2a8ecb:plan-88b90eff742b430aae9d2eb44a5f516c:t1:t1-attempt-2",
+                  "task": {
+                    "assigned_to": "slow-agent",
+                    "auxiliary_spec_id": null,
+                    "capability_id": "slow-summarize",
+                    "depends_on": [],
+                    "description": "",
+                    "expected_artifacts": [
+                      "slow_summary"
+                    ],
+                    "requirement_id": "slow-summarize",
+                    "requirement_name": "slow summarize",
+                    "task_id": "t1",
+                    "validation_contract": {
+                      "artifact_kinds": [],
+                      "evidence_types": [],
+                      "json_schema": {},
+                      "required_artifacts": [
+                        "slow_summary"
+                      ],
+                      "required_fields": [],
+                      "validator_id": ""
+                    }
+                  }
+                },
+                "plan_id": "plan-88b90eff742b430aae9d2eb44a5f516c",
+                "session_id": "distributed-abandoned-attempt-ee2a8ecb",
+                "task_id": "t1"
+              },
+              "event_type": "task_attempt_started",
+              "message": "Ledger event task_attempt_started.",
+              "plan_id": "plan-88b90eff742b430aae9d2eb44a5f516c",
+              "session_id": "distributed-abandoned-attempt-ee2a8ecb",
+              "source": "store",
+              "task_id": "t1",
+              "timestamp": "2026-07-13T00:47:22.809009Z"
+            },
+            {
+              "attempt_id": "t1-attempt-2",
+              "data": {
+                "attempt_id": "t1-attempt-2",
+                "payload": {
+                  "agent_id": "slow-agent",
+                  "agent_kind": "remote_a2a",
+                  "error": "",
+                  "metadata": {
+                    "coordinator_id": "coordinator-b",
+                    "fencing_token": 2,
+                    "idempotency_key": "distributed-abandoned-attempt-ee2a8ecb:plan-88b90eff742b430aae9d2eb44a5f516c:t1:t1-attempt-2",
+                    "invocation_endpoint": "http://slow-agent:8000/",
+                    "plan_generation": 1
+                  },
+                  "status": "completed"
+                },
+                "plan_id": "plan-88b90eff742b430aae9d2eb44a5f516c",
+                "session_id": "distributed-abandoned-attempt-ee2a8ecb",
+                "task_id": "t1"
+              },
+              "event_type": "sdk_observation",
+              "message": "Ledger event sdk_observation.",
+              "plan_id": "plan-88b90eff742b430aae9d2eb44a5f516c",
+              "session_id": "distributed-abandoned-attempt-ee2a8ecb",
+              "source": "sdk",
+              "task_id": "t1",
+              "timestamp": "2026-07-13T00:47:23.842720Z"
+            },
+            {
+              "attempt_id": "t1-attempt-2",
+              "data": {
+                "attempt_id": "t1-attempt-2",
+                "payload": {
+                  "data": {
+                    "agent_id": "slow-agent",
+                    "agent_kind": "remote_a2a"
+                  },
+                  "message": "Task t1 started.",
+                  "source": "sdk"
+                },
+                "plan_id": "plan-88b90eff742b430aae9d2eb44a5f516c",
+                "session_id": "distributed-abandoned-attempt-ee2a8ecb",
+                "task_id": "t1"
+              },
+              "event_type": "sdk_task_started",
+              "message": "Ledger event sdk_task_started.",
+              "plan_id": "plan-88b90eff742b430aae9d2eb44a5f516c",
+              "session_id": "distributed-abandoned-attempt-ee2a8ecb",
+              "source": "sdk",
+              "task_id": "t1",
+              "timestamp": "2026-07-13T00:47:23.844761Z"
+            },
+            {
+              "attempt_id": "t1-attempt-2",
+              "data": {
+                "attempt_id": "t1-attempt-2",
+                "payload": {
+                  "data": {
+                    "agent_id": "slow-agent",
+                    "artifact_count": 1
+                  },
+                  "message": "Task t1 completed.",
+                  "source": "sdk"
+                },
+                "plan_id": "plan-88b90eff742b430aae9d2eb44a5f516c",
+                "session_id": "distributed-abandoned-attempt-ee2a8ecb",
+                "task_id": "t1"
+              },
+              "event_type": "sdk_task_completed",
+              "message": "Ledger event sdk_task_completed.",
+              "plan_id": "plan-88b90eff742b430aae9d2eb44a5f516c",
+              "session_id": "distributed-abandoned-attempt-ee2a8ecb",
+              "source": "sdk",
+              "task_id": "t1",
+              "timestamp": "2026-07-13T00:47:23.846173Z"
+            },
+            {
+              "attempt_id": "t1-attempt-2",
+              "data": {
+                "attempt_id": "t1-attempt-2",
+                "payload": {
+                  "task_result": {
+                    "agent_id": "slow-agent",
+                    "agent_kind": "remote_a2a",
+                    "artifacts": [
+                      {
+                        "artifact_id": "8baa052d-7d60-4909-8775-285d1974ef05",
+                        "data": {
+                          "received_dependency_task_count": 0.0,
+                          "received_previous_artifact_count": 0.0,
+                          "slow_summary": "Distributed slow summary"
+                        },
+                        "kind": "data",
+                        "name": "slow_summary"
+                      }
+                    ],
+                    "attempt_id": "t1-attempt-2",
+                    "error": "",
+                    "metadata": {
+                      "coordinator_id": "coordinator-b",
+                      "fencing_token": 2,
+                      "idempotency_key": "distributed-abandoned-attempt-ee2a8ecb:plan-88b90eff742b430aae9d2eb44a5f516c:t1:t1-attempt-2",
+                      "invocation_endpoint": "http://slow-agent:8000/",
+                      "plan_generation": 1
+                    },
+                    "output": {
+                      "artifacts": [
+                        {
+                          "artifact_id": "8baa052d-7d60-4909-8775-285d1974ef05",
+                          "data": {
+                            "received_dependency_task_count": 0.0,
+                            "received_previous_artifact_count": 0.0,
+                            "slow_summary": "Distributed slow summary"
+                          },
+                          "kind": "data",
+                          "name": "slow_summary"
+                        }
+                      ],
+                      "chunks": [
+                        {
+                          "task": {
+                            "artifacts": [
+                              {
+                                "artifact_id": "8baa052d-7d60-4909-8775-285d1974ef05",
+                                "name": "slow_summary",
+                                "parts": [
+                                  {
+                                    "data": {
+                                      "received_dependency_task_count": 0.0,
+                                      "received_previous_artifact_count": 0.0,
+                                      "slow_summary": "Distributed slow summary"
+                                    }
+                                  }
+                                ]
+                              }
+                            ],
+                            "context_id": "ff7c93c7-aa5e-4686-9cd0-15548e6df6be",
+                            "history": [
+                              {
+                                "context_id": "ff7c93c7-aa5e-4686-9cd0-15548e6df6be",
+                                "message_id": "f7d2e2ec-ba72-48fd-be65-f748f71181ec",
+                                "parts": [
+                                  {
+                                    "text": "{\"_coordination\": {\"attempt_id\": \"t1-attempt-2\", \"coordinator_id\": \"coordinator-b\", \"fencing_token\": 2, \"idempotency_key\": \"distributed-abandoned-attempt-ee2a8ecb:plan-88b90eff742b430aae9d2eb44a5f516c:t1:t1-attempt-2\", \"inputs_by_task\": {}, \"plan_generation\": 1, \"plan_id\": \"plan-88b90eff742b430aae9d2eb44a5f516c\", \"previous_artifacts\": [], \"session_id\": \"distributed-abandoned-attempt-ee2a8ecb\", \"task_id\": \"t1\"}}"
+                                  }
+                                ],
+                                "role": "ROLE_USER",
+                                "task_id": "37072407-c60d-40be-b7ff-e05f717a6647"
+                              }
+                            ],
+                            "id": "37072407-c60d-40be-b7ff-e05f717a6647",
+                            "status": {
+                              "message": {
+                                "context_id": "ff7c93c7-aa5e-4686-9cd0-15548e6df6be",
+                                "message_id": "f3305095-f3c5-4b00-806c-ee98a3422009",
+                                "parts": [
+                                  {
+                                    "text": "slow-agent completed."
+                                  }
+                                ],
+                                "role": "ROLE_AGENT",
+                                "task_id": "37072407-c60d-40be-b7ff-e05f717a6647"
+                              },
+                              "state": "TASK_STATE_COMPLETED",
+                              "timestamp": "2026-07-13T00:47:23.838901Z"
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "plan_id": "plan-88b90eff742b430aae9d2eb44a5f516c",
+                    "session_id": "distributed-abandoned-attempt-ee2a8ecb",
+                    "status": "completed",
+                    "task_id": "t1"
+                  }
+                },
+                "plan_id": "plan-88b90eff742b430aae9d2eb44a5f516c",
+                "session_id": "distributed-abandoned-attempt-ee2a8ecb",
+                "task_id": "t1"
+              },
+              "event_type": "task_attempt_completed",
+              "message": "Ledger event task_attempt_completed.",
+              "plan_id": "plan-88b90eff742b430aae9d2eb44a5f516c",
+              "session_id": "distributed-abandoned-attempt-ee2a8ecb",
+              "source": "store",
+              "task_id": "t1",
+              "timestamp": "2026-07-13T00:47:23.847995Z"
+            },
+            {
+              "attempt_id": "",
+              "data": {
+                "attempt_id": "",
+                "payload": {
+                  "run_result": {
+                    "artifacts": [
+                      {
+                        "artifact_id": "8baa052d-7d60-4909-8775-285d1974ef05",
+                        "data": {
+                          "received_dependency_task_count": 0.0,
+                          "received_previous_artifact_count": 0.0,
+                          "slow_summary": "Distributed slow summary"
+                        },
+                        "kind": "data",
+                        "name": "slow_summary"
+                      }
+                    ],
+                    "explanation": "Authorized coordination completed.",
+                    "plan_id": "plan-88b90eff742b430aae9d2eb44a5f516c",
+                    "plan_result": {
+                      "feasibility_report": {
+                        "capability_resolution": [
+                          {
+                            "agent_id": "slow-agent",
+                            "requested_capability_id": "slow-summarize",
+                            "requirement_id": "slow-summarize",
+                            "resolved": true,
+                            "resolved_capability_id": "slow-summarize",
+                            "task_id": "t1"
+                          }
+                        ],
+                        "constraint_violations": [],
+                        "evidence": [
+                          {
+                            "details": {},
+                            "name": "well_formed",
+                            "passed": true
+                          },
+                          {
+                            "details": {},
+                            "name": "covered",
+                            "passed": true
+                          },
+                          {
+                            "details": {},
+                            "name": "total_assignment",
+                            "passed": true
+                          },
+                          {
+                            "details": {},
+                            "name": "authorized",
+                            "passed": true
+                          },
+                          {
+                            "details": {},
+                            "name": "compatible",
+                            "passed": true
+                          },
+                          {
+                            "details": {},
+                            "name": "acyclic",
+                            "passed": true
+                          },
+                          {
+                            "details": {},
+                            "name": "ordered",
+                            "passed": true
+                          },
+                          {
+                            "details": {},
+                            "name": "requirements_complete",
+                            "passed": true
+                          },
+                          {
+                            "details": {},
+                            "name": "complete",
+                            "passed": true
+                          },
+                          {
+                            "details": {},
+                            "name": "verifiable",
+                            "passed": true
+                          },
+                          {
+                            "details": {
+                              "violations": []
+                            },
+                            "name": "constraints_satisfied",
+                            "passed": true
+                          }
+                        ],
+                        "explanation": "Plan authorized by deterministic feasibility checks.",
+                        "feasible": true,
+                        "generated_nlp_agents": [],
+                        "matched_agents": {
+                          "t1": "slow-agent"
+                        },
+                        "missing_capabilities": [],
+                        "risks": [],
+                        "schema_violations": [],
+                        "validation_gaps": []
+                      },
+                      "plan_generation": 1,
+                      "plan_id": "plan-88b90eff742b430aae9d2eb44a5f516c",
+                      "proposal": {
+                        "completion_contract": {
+                          "require_all_task_validators": true,
+                          "required_artifacts": [
+                            "slow_summary"
+                          ],
+                          "required_task_states": [
+                            "completed"
+                          ]
+                        },
+                        "completion_criteria": [
+                          "slow_summary artifact exists"
+                        ],
+                        "constraint_evidence": {},
+                        "execution_order": [
+                          "t1"
+                        ],
+                        "expected_artifacts": [
+                          "slow_summary"
+                        ],
+                        "generated_nlp_agents": [],
+                        "selected_agents": {
+                          "t1": "slow-agent"
+                        },
+                        "tasks": [
+                          {
+                            "assigned_to": "slow-agent",
+                            "auxiliary_spec_id": null,
+                            "capability_id": "slow-summarize",
+                            "depends_on": [],
+                            "description": "",
+                            "expected_artifacts": [
+                              "slow_summary"
+                            ],
+                            "requirement_id": "slow-summarize",
+                            "requirement_name": "slow summarize",
+                            "task_id": "t1",
+                            "validation_contract": {
+                              "artifact_kinds": [],
+                              "evidence_types": [],
+                              "json_schema": {},
+                              "required_artifacts": [
+                                "slow_summary"
+                              ],
+                              "required_fields": [],
+                              "validator_id": ""
+                            }
+                          }
+                        ]
+                      },
+                      "registry_snapshot": [
+                        {
+                          "agent_id": "summarizer",
+                          "agent_kind": "remote_a2a",
+                          "description": "Fixture agent for summarize.",
+                          "input_modes": [
+                            "text"
+                          ],
+                          "invocation_endpoint": "http://summarizer:8000/",
+                          "name": "summarizer",
+                          "output_modes": [
+                            "data"
+                          ],
+                          "required_security_schemes": [],
+                          "security_schemes": {},
+                          "service_endpoint": "http://summarizer:8000/",
+                          "skills": [
+                            {
+                              "auxiliary_eligible": false,
+                              "capability_id": "summarize",
+                              "constraints": [],
+                              "description": "Fixture agent for summarize.",
+                              "expected_evidence": [],
+                              "input_modes": [
+                                "text"
+                              ],
+                              "input_schema": {},
+                              "name": "summarize",
+                              "output_modes": [
+                                "data"
+                              ],
+                              "output_schema": {},
+                              "required_trust_level": "standard",
+                              "requirement_id": "summarize",
+                              "side_effect_class": "unknown",
+                              "validation_contract": {
+                                "artifact_kinds": [],
+                                "evidence_types": [],
+                                "json_schema": {},
+                                "required_artifacts": [],
+                                "required_fields": [],
+                                "validator_id": ""
+                              }
+                            }
+                          ],
+                          "source_card": {
+                            "capabilities": {
+                              "streaming": false
+                            },
+                            "defaultInputModes": [
+                              "text"
+                            ],
+                            "defaultOutputModes": [
+                              "data"
+                            ],
+                            "description": "Fixture agent for summarize.",
+                            "name": "summarizer",
+                            "skills": [
+                              {
+                                "description": "Fixture agent for summarize.",
+                                "id": "summarize",
+                                "inputModes": [
+                                  "text"
+                                ],
+                                "name": "summarize",
+                                "outputModes": [
+                                  "data"
+                                ]
+                              }
+                            ],
+                            "supportedInterfaces": [
+                              {
+                                "protocolBinding": "JSONRPC",
+                                "protocolVersion": "1.0",
+                                "url": "http://summarizer:8000/"
+                              }
+                            ],
+                            "version": "1.0.0"
+                          },
+                          "status": "available",
+                          "trust_level": "standard",
+                          "validation_contract": {
+                            "artifact_kinds": [],
+                            "evidence_types": [],
+                            "json_schema": {},
+                            "required_artifacts": [],
+                            "required_fields": [],
+                            "validator_id": ""
+                          }
+                        },
+                        {
+                          "agent_id": "slow-agent",
+                          "agent_kind": "remote_a2a",
+                          "description": "Fixture agent for slow summarize.",
+                          "input_modes": [
+                            "text"
+                          ],
+                          "invocation_endpoint": "http://slow-agent:8000/",
+                          "name": "slow-agent",
+                          "output_modes": [
+                            "data"
+                          ],
+                          "required_security_schemes": [],
+                          "security_schemes": {},
+                          "service_endpoint": "http://slow-agent:8000/",
+                          "skills": [
+                            {
+                              "auxiliary_eligible": false,
+                              "capability_id": "slow-summarize",
+                              "constraints": [],
+                              "description": "Fixture agent for slow summarize.",
+                              "expected_evidence": [],
+                              "input_modes": [
+                                "text"
+                              ],
+                              "input_schema": {},
+                              "name": "slow summarize",
+                              "output_modes": [
+                                "data"
+                              ],
+                              "output_schema": {},
+                              "required_trust_level": "standard",
+                              "requirement_id": "slow-summarize",
+                              "side_effect_class": "unknown",
+                              "validation_contract": {
+                                "artifact_kinds": [],
+                                "evidence_types": [],
+                                "json_schema": {},
+                                "required_artifacts": [],
+                                "required_fields": [],
+                                "validator_id": ""
+                              }
+                            }
+                          ],
+                          "source_card": {
+                            "capabilities": {
+                              "streaming": false
+                            },
+                            "defaultInputModes": [
+                              "text"
+                            ],
+                            "defaultOutputModes": [
+                              "data"
+                            ],
+                            "description": "Fixture agent for slow summarize.",
+                            "name": "slow-agent",
+                            "skills": [
+                              {
+                                "description": "Fixture agent for slow summarize.",
+                                "id": "slow-summarize",
+                                "inputModes": [
+                                  "text"
+                                ],
+                                "name": "slow summarize",
+                                "outputModes": [
+                                  "data"
+                                ]
+                              }
+                            ],
+                            "supportedInterfaces": [
+                              {
+                                "protocolBinding": "JSONRPC",
+                                "protocolVersion": "1.0",
+                                "url": "http://slow-agent:8000/"
+                              }
+                            ],
+                            "version": "1.0.0"
+                          },
+                          "status": "available",
+                          "trust_level": "standard",
+                          "validation_contract": {
+                            "artifact_kinds": [],
+                            "evidence_types": [],
+                            "json_schema": {},
+                            "required_artifacts": [],
+                            "required_fields": [],
+                            "validator_id": ""
+                          }
+                        }
+                      ],
+                      "request": {
+                        "constraints": [],
+                        "context": {},
+                        "required_artifacts": [
+                          "slow_summary"
+                        ],
+                        "requirements": [
+                          {
+                            "auxiliary_eligible": false,
+                            "capability_id": "slow-summarize",
+                            "constraints": [],
+                            "description": "",
+                            "expected_evidence": [],
+                            "input_modes": [],
+                            "input_schema": {},
+                            "name": "slow summarize",
+                            "output_modes": [],
+                            "output_schema": {},
+                            "required_trust_level": "standard",
+                            "requirement_id": "slow-summarize",
+                            "side_effect_class": "read_only",
+                            "validation_contract": {
+                              "artifact_kinds": [],
+                              "evidence_types": [],
+                              "json_schema": {},
+                              "required_artifacts": [
+                                "slow_summary"
+                              ],
+                              "required_fields": [],
+                              "validator_id": ""
+                            }
+                          }
+                        ],
+                        "user_goal": "Slow summarize with coordinator failover."
+                      },
+                      "session_id": "distributed-abandoned-attempt-ee2a8ecb"
+                    },
+                    "session_id": "distributed-abandoned-attempt-ee2a8ecb",
+                    "status": "completed",
+                    "task_results": [
+                      {
+                        "agent_id": "slow-agent",
+                        "agent_kind": "remote_a2a",
+                        "artifacts": [
+                          {
+                            "artifact_id": "8baa052d-7d60-4909-8775-285d1974ef05",
+                            "data": {
+                              "received_dependency_task_count": 0.0,
+                              "received_previous_artifact_count": 0.0,
+                              "slow_summary": "Distributed slow summary"
+                            },
+                            "kind": "data",
+                            "name": "slow_summary"
+                          }
+                        ],
+                        "attempt_id": "t1-attempt-2",
+                        "error": "",
+                        "metadata": {
+                          "coordinator_id": "coordinator-b",
+                          "fencing_token": 2,
+                          "idempotency_key": "distributed-abandoned-attempt-ee2a8ecb:plan-88b90eff742b430aae9d2eb44a5f516c:t1:t1-attempt-2",
+                          "invocation_endpoint": "http://slow-agent:8000/",
+                          "plan_generation": 1
+                        },
+                        "output": {
+                          "artifacts": [
+                            {
+                              "artifact_id": "8baa052d-7d60-4909-8775-285d1974ef05",
+                              "data": {
+                                "received_dependency_task_count": 0.0,
+                                "received_previous_artifact_count": 0.0,
+                                "slow_summary": "Distributed slow summary"
+                              },
+                              "kind": "data",
+                              "name": "slow_summary"
+                            }
+                          ],
+                          "chunks": [
+                            {
+                              "task": {
+                                "artifacts": [
+                                  {
+                                    "artifact_id": "8baa052d-7d60-4909-8775-285d1974ef05",
+                                    "name": "slow_summary",
+                                    "parts": [
+                                      {
+                                        "data": {
+                                          "received_dependency_task_count": 0.0,
+                                          "received_previous_artifact_count": 0.0,
+                                          "slow_summary": "Distributed slow summary"
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ],
+                                "context_id": "ff7c93c7-aa5e-4686-9cd0-15548e6df6be",
+                                "history": [
+                                  {
+                                    "context_id": "ff7c93c7-aa5e-4686-9cd0-15548e6df6be",
+                                    "message_id": "f7d2e2ec-ba72-48fd-be65-f748f71181ec",
+                                    "parts": [
+                                      {
+                                        "text": "{\"_coordination\": {\"attempt_id\": \"t1-attempt-2\", \"coordinator_id\": \"coordinator-b\", \"fencing_token\": 2, \"idempotency_key\": \"distributed-abandoned-attempt-ee2a8ecb:plan-88b90eff742b430aae9d2eb44a5f516c:t1:t1-attempt-2\", \"inputs_by_task\": {}, \"plan_generation\": 1, \"plan_id\": \"plan-88b90eff742b430aae9d2eb44a5f516c\", \"previous_artifacts\": [], \"session_id\": \"distributed-abandoned-attempt-ee2a8ecb\", \"task_id\": \"t1\"}}"
+                                      }
+                                    ],
+                                    "role": "ROLE_USER",
+                                    "task_id": "37072407-c60d-40be-b7ff-e05f717a6647"
+                                  }
+                                ],
+                                "id": "37072407-c60d-40be-b7ff-e05f717a6647",
+                                "status": {
+                                  "message": {
+                                    "context_id": "ff7c93c7-aa5e-4686-9cd0-15548e6df6be",
+                                    "message_id": "f3305095-f3c5-4b00-806c-ee98a3422009",
+                                    "parts": [
+                                      {
+                                        "text": "slow-agent completed."
+                                      }
+                                    ],
+                                    "role": "ROLE_AGENT",
+                                    "task_id": "37072407-c60d-40be-b7ff-e05f717a6647"
+                                  },
+                                  "state": "TASK_STATE_COMPLETED",
+                                  "timestamp": "2026-07-13T00:47:23.838901Z"
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        "plan_id": "plan-88b90eff742b430aae9d2eb44a5f516c",
+                        "session_id": "distributed-abandoned-attempt-ee2a8ecb",
+                        "status": "completed",
+                        "task_id": "t1"
+                      }
+                    ],
+                    "trace": []
+                  }
+                },
+                "plan_id": "plan-88b90eff742b430aae9d2eb44a5f516c",
+                "session_id": "distributed-abandoned-attempt-ee2a8ecb",
+                "task_id": ""
+              },
+              "event_type": "run_completed",
+              "message": "Ledger event run_completed.",
+              "plan_id": "plan-88b90eff742b430aae9d2eb44a5f516c",
+              "session_id": "distributed-abandoned-attempt-ee2a8ecb",
+              "source": "store",
+              "task_id": "",
+              "timestamp": "2026-07-13T00:47:23.851225Z"
+            }
+          ]
+        },
+        "recovered_status_code": 200
+      },
+      "scenario_id": "recover_after_abandoned_attempt"
+    },
+    {
+      "error": "",
+      "latency_ms": 5380.447,
+      "passed": true,
+      "response": {
+        "agent_effectful_executions_for_session_task": 1,
+        "agent_session_task_key": "distributed-exit-after-dispatch-ee2a8ecb:t1",
+        "child_exit_code": 91,
+        "child_stderr_tail": "INFO:     Started server process [10]\nINFO:     Waiting for application startup.\nINFO:     Application startup complete.\nINFO:     Uvicorn running on http://127.0.0.1:8011 (Press CTRL+C to quit)\n",
+        "fault_body": {
+          "error": "Server disconnected without sending a response."
+        },
+        "fault_status_code": 0,
+        "recovered_status": "failed",
+        "recovered_status_code": 200,
+        "recovered_task_statuses": [
+          "unknown"
+        ]
+      },
+      "scenario_id": "process_exit_after_external_dispatch_unknown"
+    },
+    {
+      "error": "",
+      "latency_ms": 404.532,
+      "passed": true,
+      "response": {
+        "first_token": 1,
+        "second_token": 2,
+        "stale_write_rejected": true
+      },
+      "scenario_id": "stale_fence_rejection"
+    },
+    {
+      "error": "",
+      "latency_ms": 231.708,
+      "passed": true,
+      "response": {
+        "duplicate_terminal_rejected": true,
+        "idempotency_lookup_ok": true,
+        "missing_attempt_rejected": true,
+        "release_token_incremented": true,
+        "stale_after_release_rejected": true
+      },
+      "scenario_id": "postgres_invariant_probe"
+    }
+  ],
+  "store_url_present": true
+}

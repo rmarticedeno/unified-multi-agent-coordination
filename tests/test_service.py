@@ -5,6 +5,7 @@ from unified_multi_agent_coordination import (
     CoordinationAgent,
     CoordinationSdk,
     InMemoryCoordinationLedger,
+    JsonlCoordinationStore,
 )
 from unified_multi_agent_coordination.service import create_app
 
@@ -13,10 +14,11 @@ def _client_with_local_summarizer() -> TestClient:
     sdk = CoordinationSdk()
     sdk.register_local_agent(
         "Summarizer",
-        [CapabilityRequirement(name="summarize", output_modes=["text"])],
+        [CapabilityRequirement(name="summarize", output_modes=["text"], validation_contract={"json_schema": {"type": "object"}})],
         lambda payload: {
             "artifacts": [
                 {
+                    "name": "summary",
                     "kind": "text",
                     "text": payload.get("text", ""),
                 }
@@ -81,7 +83,7 @@ def test_coordinate_endpoint_returns_local_artifact():
     body = response.json()
     assert body["status"] == "completed"
     assert body["session_id"]
-    assert body["artifacts"] == [{"kind": "text", "text": "short summary"}]
+    assert body["artifacts"] == [{"name": "summary", "kind": "text", "text": "short summary"}]
 
 
 def test_coordinate_endpoint_accepts_session_id_and_resume_returns_terminal_result():
@@ -90,7 +92,7 @@ def test_coordinate_endpoint_accepts_session_id_and_resume_returns_terminal_resu
     calls = []
     sdk.register_local_agent(
         "Summarizer",
-        [CapabilityRequirement(name="summarize", output_modes=["text"])],
+        [CapabilityRequirement(name="summarize", output_modes=["text"], validation_contract={"json_schema": {"type": "object"}})],
         lambda payload: calls.append(payload.get("text", "")) or {
             "artifacts": [{"kind": "text", "text": payload.get("text", "")}]
         },
@@ -133,6 +135,29 @@ def test_coordinate_endpoint_returns_infeasible_without_agent():
 
     assert response.status_code == 200
     assert response.json()["status"] == "infeasible"
+
+
+def test_coordinate_endpoint_returns_conflict_for_live_foreign_lease():
+    store = JsonlCoordinationStore()
+    import asyncio
+
+    asyncio.run(store.acquire_lease("locked-session", "other-coordinator", ttl_s=30))
+    sdk = CoordinationSdk()
+    agent = CoordinationAgent(sdk=sdk, store=store, coordinator_id="api-coordinator")
+    client = TestClient(create_app(sdk=sdk, agent=agent))
+
+    response = client.post(
+        "/coordinate",
+        json={
+            "session_id": "locked-session",
+            "problem": {
+                "user_goal": "Summarize.",
+                "requirements": [{"name": "summarize"}],
+            },
+        },
+    )
+
+    assert response.status_code == 409
 
 
 def test_feasibility_endpoint_checks_explicit_plan():

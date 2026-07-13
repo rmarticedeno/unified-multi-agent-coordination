@@ -33,18 +33,23 @@ root's `demo_runs/` directory:
 
 - `end_to_end_scenarios.json`: deterministic local coordination scenarios.
 - `docker_system_report.json`: Docker A2A system harness report.
+- `distributed_system_report.json`: PostgreSQL-backed replicated-coordinator
+  harness report.
 - `local_llm/`: batched local LLM reference reports for `qwen/qwen3-1.7b`
   and `google/gemma-4-e2b`.
+- `baselines/baseline_report.json`: paired hybrid, rule-only, and LLM-only
+  baseline comparison report.
 - `thesis_analysis/`: generated summaries and thesis-ready table drafts.
 
 Regenerate the analysis from the repository root with:
 
 ```powershell
+uv run --with-editable . unified-baseline-evaluation
 uv run --with-editable . unified-thesis-results
 ```
 
 ## Argument structure
 
-The thesis follows this research sequence: introduction and problem formulation; critical state of the art; research methodology; proposed protocol-independent theoretical framework; protocol-adaptable system design; evaluation and results; discussion; and conclusions. The evaluation chapter reports the implemented prototype evidence and distinguishes those measured results from broader future baseline and ablation studies.
+The thesis follows this research sequence: introduction and problem formulation; critical state of the art; research methodology; proposed protocol-independent theoretical framework; protocol-adaptable system design; evaluation and results; discussion; and conclusions. The evaluation chapter reports the implemented prototype evidence, including the lease-backed replicated-coordinator harness and paired baselines, and distinguishes those measured results from broader adversarial and Byzantine-tolerance studies.
 
 The cover follows the University of Havana and Faculty of Mathematics and Computer Science branding supplied in the curated template. Its QR code is generated at compile time from the repository URL declared with `\repositoryurl{...}` in `main.tex`; no separately generated QR image is required.
