@@ -1,0 +1,169 @@
+{
+  "case_id": "variation-02",
+  "model_id": "google/gemma-4-e2b",
+  "seed": 33,
+  "temperature": 0,
+  "backend_seed_honored": "not_verifiable_from_response",
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Interpret the request and return one to three typed candidate plans. Plans are non-authoritative. Use only exact capability_id and agent_id values from the registry. Do not infer trust or authorization."
+    },
+    {
+      "role": "user",
+      "content": "{\"request\":\"Please complete defense corpus task decomposed_feasible 2.\",\"registry_snapshot\":[{\"agent_id\":\"agent-2\",\"name\":\"Agent 2\",\"service_endpoint\":\"https://agent-2.example/a2a\",\"trust_level\":\"standard\",\"skills\":[{\"name\":\"Capability 2\",\"capability_id\":\"decomposed_feasible-capability-2\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"}}}],\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"]},{\"agent_id\":\"finisher-2\",\"name\":\"Finisher 2\",\"service_endpoint\":\"https://finisher-2.example/a2a\",\"trust_level\":\"standard\",\"skills\":[{\"name\":\"Finish Capability 2\",\"capability_id\":\"decomposed_feasible-capability-2-finish\",\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"validation_contract\":{\"required_artifacts\":[\"artifact-2\"]}}],\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"]}]}"
+    }
+  ],
+  "raw_response": {
+    "id": "chatcmpl-hdmixur5hub4e1nuw5jve",
+    "object": "chat.completion",
+    "created": 1783907728,
+    "model": "google/gemma-4-e2b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\n  \"interpreted_request\": {\n    \"user_goal\": \"complete defense corpus task decomposed_feasible 2\",\n    \"required_artifacts\": [\n      \"artifact-2\"\n    ]\n  },\n  \"candidate_plans\": [\n    {\n      \"tasks\": [\n        {\n          \"task_id\": \"decomposed_feasible\",\n          \"requirement_name\": \"complete defense corpus task decomposed_feasible 2\",\n          \"assigned_to\": \"agent-2\",\n          \"depends_on\": []\n        }\n      ],\n      \"execution_order\": [\n        \"decomposed_feasible\"\n      ],\n      \"expected_artifacts\": [\n        \"artifact-2\"\n      ],\n      \"completion_criteria\": [\n        \"agent-2 successfully executes decomposed_feasible-capability-2 and produces an intermediate result that can be finished by finisher-2.\"\n      ],\n      \"constraint_evidence\": {\n        \"agent-2\": {\n          \"capability_used\": \"decomposed_feasible-capability-2\",\n          \"input_modes\": [\n            \"text\"\n          ],\n          \"output_modes\": [\n            \"intermediate\"\n          ]\n        },\n        \"finisher-2\": {\n          \"capability_used\": \"decomposed_feasible-capability-2-finish\",\n          \"input_modes\": [\n            \"intermediate\"\n          ],\n          \"output_modes\": [\n            \"json\"\n          ],\n          \"required_artifacts\": [\n            \"artifact-2\"\n          ]\n        }\n      }\n    },\n    {\n      \"tasks\": [\n        {\n          \"task_id\": \"decomposed_feasible\",\n          \"requirement_name\": \"complete defense corpus task decomposed_feasible 2\",\n          \"assigned_to\": \"agent-2\"\n        }\n      ],\n      \"execution_order\": [\n        \"decomposed_feasible\"\n      ],\n      \"expected_artifacts\": [\n        \"artifact-2\"\n      ]\n    }\n  ]\n}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 273,
+      "completion_tokens": 472,
+      "total_tokens": 745,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "google/gemma-4-e2b"
+  },
+  "parsed_object": {
+    "interpreted_request": {
+      "user_goal": "complete defense corpus task decomposed_feasible 2",
+      "requirements": [],
+      "constraints": [],
+      "required_artifacts": [
+        "artifact-2"
+      ],
+      "context": {}
+    },
+    "candidate_plans": [
+      {
+        "tasks": [
+          {
+            "task_id": "decomposed_feasible",
+            "requirement_name": "complete defense corpus task decomposed_feasible 2",
+            "requirement_id": "complete-defense-corpus-task-decomposed-feasible-2",
+            "capability_id": "complete-defense-corpus-task-decomposed-feasible-2",
+            "description": "",
+            "assigned_to": "agent-2",
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [],
+            "validation_contract": {
+              "json_schema": {},
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [
+          "decomposed_feasible"
+        ],
+        "expected_artifacts": [
+          "artifact-2"
+        ],
+        "completion_criteria": [
+          "agent-2 successfully executes decomposed_feasible-capability-2 and produces an intermediate result that can be finished by finisher-2."
+        ],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [
+            "artifact-2"
+          ],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {
+          "agent-2": {
+            "capability_used": "decomposed_feasible-capability-2",
+            "input_modes": [
+              "text"
+            ],
+            "output_modes": [
+              "intermediate"
+            ]
+          },
+          "finisher-2": {
+            "capability_used": "decomposed_feasible-capability-2-finish",
+            "input_modes": [
+              "intermediate"
+            ],
+            "output_modes": [
+              "json"
+            ],
+            "required_artifacts": [
+              "artifact-2"
+            ]
+          }
+        }
+      },
+      {
+        "tasks": [
+          {
+            "task_id": "decomposed_feasible",
+            "requirement_name": "complete defense corpus task decomposed_feasible 2",
+            "requirement_id": "complete-defense-corpus-task-decomposed-feasible-2",
+            "capability_id": "complete-defense-corpus-task-decomposed-feasible-2",
+            "description": "",
+            "assigned_to": "agent-2",
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [],
+            "validation_contract": {
+              "json_schema": {},
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [
+          "decomposed_feasible"
+        ],
+        "expected_artifacts": [
+          "artifact-2"
+        ],
+        "completion_criteria": [],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [
+            "artifact-2"
+          ],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      }
+    ]
+  },
+  "latency_ms": 6638.491299934685,
+  "evaluation_status": "raw_output_collected_not_scored"
+}

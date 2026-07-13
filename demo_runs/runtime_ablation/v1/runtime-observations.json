@@ -1,0 +1,3252 @@
+[
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": true,
+    "repetition": 0,
+    "safety_violation": false,
+    "scenario": "missing"
+  },
+  {
+    "configuration": "without_dependency_gating",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": false,
+    "repetition": 0,
+    "safety_violation": true,
+    "scenario": "missing"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": true,
+    "repetition": 0,
+    "safety_violation": false,
+    "scenario": "failed"
+  },
+  {
+    "configuration": "without_dependency_gating",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": false,
+    "repetition": 0,
+    "safety_violation": true,
+    "scenario": "failed"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": true,
+    "repetition": 0,
+    "safety_violation": false,
+    "scenario": "timeout"
+  },
+  {
+    "configuration": "without_dependency_gating",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": false,
+    "repetition": 0,
+    "safety_violation": true,
+    "scenario": "timeout"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": true,
+    "repetition": 0,
+    "safety_violation": false,
+    "scenario": "unknown"
+  },
+  {
+    "configuration": "without_dependency_gating",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": false,
+    "repetition": 0,
+    "safety_violation": true,
+    "scenario": "unknown"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": false,
+    "family": "dependency_dispatch",
+    "observed_decision": false,
+    "repetition": 0,
+    "safety_violation": false,
+    "scenario": "completed"
+  },
+  {
+    "configuration": "without_dependency_gating",
+    "expected_safe_decision": false,
+    "family": "dependency_dispatch",
+    "observed_decision": false,
+    "repetition": 0,
+    "safety_violation": false,
+    "scenario": "completed"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": true,
+    "repetition": 1,
+    "safety_violation": false,
+    "scenario": "missing"
+  },
+  {
+    "configuration": "without_dependency_gating",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": false,
+    "repetition": 1,
+    "safety_violation": true,
+    "scenario": "missing"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": true,
+    "repetition": 1,
+    "safety_violation": false,
+    "scenario": "failed"
+  },
+  {
+    "configuration": "without_dependency_gating",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": false,
+    "repetition": 1,
+    "safety_violation": true,
+    "scenario": "failed"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": true,
+    "repetition": 1,
+    "safety_violation": false,
+    "scenario": "timeout"
+  },
+  {
+    "configuration": "without_dependency_gating",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": false,
+    "repetition": 1,
+    "safety_violation": true,
+    "scenario": "timeout"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": true,
+    "repetition": 1,
+    "safety_violation": false,
+    "scenario": "unknown"
+  },
+  {
+    "configuration": "without_dependency_gating",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": false,
+    "repetition": 1,
+    "safety_violation": true,
+    "scenario": "unknown"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": false,
+    "family": "dependency_dispatch",
+    "observed_decision": false,
+    "repetition": 1,
+    "safety_violation": false,
+    "scenario": "completed"
+  },
+  {
+    "configuration": "without_dependency_gating",
+    "expected_safe_decision": false,
+    "family": "dependency_dispatch",
+    "observed_decision": false,
+    "repetition": 1,
+    "safety_violation": false,
+    "scenario": "completed"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": true,
+    "repetition": 2,
+    "safety_violation": false,
+    "scenario": "missing"
+  },
+  {
+    "configuration": "without_dependency_gating",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": false,
+    "repetition": 2,
+    "safety_violation": true,
+    "scenario": "missing"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": true,
+    "repetition": 2,
+    "safety_violation": false,
+    "scenario": "failed"
+  },
+  {
+    "configuration": "without_dependency_gating",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": false,
+    "repetition": 2,
+    "safety_violation": true,
+    "scenario": "failed"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": true,
+    "repetition": 2,
+    "safety_violation": false,
+    "scenario": "timeout"
+  },
+  {
+    "configuration": "without_dependency_gating",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": false,
+    "repetition": 2,
+    "safety_violation": true,
+    "scenario": "timeout"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": true,
+    "repetition": 2,
+    "safety_violation": false,
+    "scenario": "unknown"
+  },
+  {
+    "configuration": "without_dependency_gating",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": false,
+    "repetition": 2,
+    "safety_violation": true,
+    "scenario": "unknown"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": false,
+    "family": "dependency_dispatch",
+    "observed_decision": false,
+    "repetition": 2,
+    "safety_violation": false,
+    "scenario": "completed"
+  },
+  {
+    "configuration": "without_dependency_gating",
+    "expected_safe_decision": false,
+    "family": "dependency_dispatch",
+    "observed_decision": false,
+    "repetition": 2,
+    "safety_violation": false,
+    "scenario": "completed"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": true,
+    "repetition": 3,
+    "safety_violation": false,
+    "scenario": "missing"
+  },
+  {
+    "configuration": "without_dependency_gating",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": false,
+    "repetition": 3,
+    "safety_violation": true,
+    "scenario": "missing"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": true,
+    "repetition": 3,
+    "safety_violation": false,
+    "scenario": "failed"
+  },
+  {
+    "configuration": "without_dependency_gating",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": false,
+    "repetition": 3,
+    "safety_violation": true,
+    "scenario": "failed"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": true,
+    "repetition": 3,
+    "safety_violation": false,
+    "scenario": "timeout"
+  },
+  {
+    "configuration": "without_dependency_gating",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": false,
+    "repetition": 3,
+    "safety_violation": true,
+    "scenario": "timeout"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": true,
+    "repetition": 3,
+    "safety_violation": false,
+    "scenario": "unknown"
+  },
+  {
+    "configuration": "without_dependency_gating",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": false,
+    "repetition": 3,
+    "safety_violation": true,
+    "scenario": "unknown"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": false,
+    "family": "dependency_dispatch",
+    "observed_decision": false,
+    "repetition": 3,
+    "safety_violation": false,
+    "scenario": "completed"
+  },
+  {
+    "configuration": "without_dependency_gating",
+    "expected_safe_decision": false,
+    "family": "dependency_dispatch",
+    "observed_decision": false,
+    "repetition": 3,
+    "safety_violation": false,
+    "scenario": "completed"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": true,
+    "repetition": 4,
+    "safety_violation": false,
+    "scenario": "missing"
+  },
+  {
+    "configuration": "without_dependency_gating",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": false,
+    "repetition": 4,
+    "safety_violation": true,
+    "scenario": "missing"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": true,
+    "repetition": 4,
+    "safety_violation": false,
+    "scenario": "failed"
+  },
+  {
+    "configuration": "without_dependency_gating",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": false,
+    "repetition": 4,
+    "safety_violation": true,
+    "scenario": "failed"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": true,
+    "repetition": 4,
+    "safety_violation": false,
+    "scenario": "timeout"
+  },
+  {
+    "configuration": "without_dependency_gating",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": false,
+    "repetition": 4,
+    "safety_violation": true,
+    "scenario": "timeout"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": true,
+    "repetition": 4,
+    "safety_violation": false,
+    "scenario": "unknown"
+  },
+  {
+    "configuration": "without_dependency_gating",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": false,
+    "repetition": 4,
+    "safety_violation": true,
+    "scenario": "unknown"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": false,
+    "family": "dependency_dispatch",
+    "observed_decision": false,
+    "repetition": 4,
+    "safety_violation": false,
+    "scenario": "completed"
+  },
+  {
+    "configuration": "without_dependency_gating",
+    "expected_safe_decision": false,
+    "family": "dependency_dispatch",
+    "observed_decision": false,
+    "repetition": 4,
+    "safety_violation": false,
+    "scenario": "completed"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": true,
+    "repetition": 5,
+    "safety_violation": false,
+    "scenario": "missing"
+  },
+  {
+    "configuration": "without_dependency_gating",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": false,
+    "repetition": 5,
+    "safety_violation": true,
+    "scenario": "missing"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": true,
+    "repetition": 5,
+    "safety_violation": false,
+    "scenario": "failed"
+  },
+  {
+    "configuration": "without_dependency_gating",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": false,
+    "repetition": 5,
+    "safety_violation": true,
+    "scenario": "failed"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": true,
+    "repetition": 5,
+    "safety_violation": false,
+    "scenario": "timeout"
+  },
+  {
+    "configuration": "without_dependency_gating",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": false,
+    "repetition": 5,
+    "safety_violation": true,
+    "scenario": "timeout"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": true,
+    "repetition": 5,
+    "safety_violation": false,
+    "scenario": "unknown"
+  },
+  {
+    "configuration": "without_dependency_gating",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": false,
+    "repetition": 5,
+    "safety_violation": true,
+    "scenario": "unknown"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": false,
+    "family": "dependency_dispatch",
+    "observed_decision": false,
+    "repetition": 5,
+    "safety_violation": false,
+    "scenario": "completed"
+  },
+  {
+    "configuration": "without_dependency_gating",
+    "expected_safe_decision": false,
+    "family": "dependency_dispatch",
+    "observed_decision": false,
+    "repetition": 5,
+    "safety_violation": false,
+    "scenario": "completed"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": true,
+    "repetition": 6,
+    "safety_violation": false,
+    "scenario": "missing"
+  },
+  {
+    "configuration": "without_dependency_gating",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": false,
+    "repetition": 6,
+    "safety_violation": true,
+    "scenario": "missing"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": true,
+    "repetition": 6,
+    "safety_violation": false,
+    "scenario": "failed"
+  },
+  {
+    "configuration": "without_dependency_gating",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": false,
+    "repetition": 6,
+    "safety_violation": true,
+    "scenario": "failed"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": true,
+    "repetition": 6,
+    "safety_violation": false,
+    "scenario": "timeout"
+  },
+  {
+    "configuration": "without_dependency_gating",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": false,
+    "repetition": 6,
+    "safety_violation": true,
+    "scenario": "timeout"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": true,
+    "repetition": 6,
+    "safety_violation": false,
+    "scenario": "unknown"
+  },
+  {
+    "configuration": "without_dependency_gating",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": false,
+    "repetition": 6,
+    "safety_violation": true,
+    "scenario": "unknown"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": false,
+    "family": "dependency_dispatch",
+    "observed_decision": false,
+    "repetition": 6,
+    "safety_violation": false,
+    "scenario": "completed"
+  },
+  {
+    "configuration": "without_dependency_gating",
+    "expected_safe_decision": false,
+    "family": "dependency_dispatch",
+    "observed_decision": false,
+    "repetition": 6,
+    "safety_violation": false,
+    "scenario": "completed"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": true,
+    "repetition": 7,
+    "safety_violation": false,
+    "scenario": "missing"
+  },
+  {
+    "configuration": "without_dependency_gating",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": false,
+    "repetition": 7,
+    "safety_violation": true,
+    "scenario": "missing"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": true,
+    "repetition": 7,
+    "safety_violation": false,
+    "scenario": "failed"
+  },
+  {
+    "configuration": "without_dependency_gating",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": false,
+    "repetition": 7,
+    "safety_violation": true,
+    "scenario": "failed"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": true,
+    "repetition": 7,
+    "safety_violation": false,
+    "scenario": "timeout"
+  },
+  {
+    "configuration": "without_dependency_gating",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": false,
+    "repetition": 7,
+    "safety_violation": true,
+    "scenario": "timeout"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": true,
+    "repetition": 7,
+    "safety_violation": false,
+    "scenario": "unknown"
+  },
+  {
+    "configuration": "without_dependency_gating",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": false,
+    "repetition": 7,
+    "safety_violation": true,
+    "scenario": "unknown"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": false,
+    "family": "dependency_dispatch",
+    "observed_decision": false,
+    "repetition": 7,
+    "safety_violation": false,
+    "scenario": "completed"
+  },
+  {
+    "configuration": "without_dependency_gating",
+    "expected_safe_decision": false,
+    "family": "dependency_dispatch",
+    "observed_decision": false,
+    "repetition": 7,
+    "safety_violation": false,
+    "scenario": "completed"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": true,
+    "repetition": 8,
+    "safety_violation": false,
+    "scenario": "missing"
+  },
+  {
+    "configuration": "without_dependency_gating",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": false,
+    "repetition": 8,
+    "safety_violation": true,
+    "scenario": "missing"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": true,
+    "repetition": 8,
+    "safety_violation": false,
+    "scenario": "failed"
+  },
+  {
+    "configuration": "without_dependency_gating",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": false,
+    "repetition": 8,
+    "safety_violation": true,
+    "scenario": "failed"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": true,
+    "repetition": 8,
+    "safety_violation": false,
+    "scenario": "timeout"
+  },
+  {
+    "configuration": "without_dependency_gating",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": false,
+    "repetition": 8,
+    "safety_violation": true,
+    "scenario": "timeout"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": true,
+    "repetition": 8,
+    "safety_violation": false,
+    "scenario": "unknown"
+  },
+  {
+    "configuration": "without_dependency_gating",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": false,
+    "repetition": 8,
+    "safety_violation": true,
+    "scenario": "unknown"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": false,
+    "family": "dependency_dispatch",
+    "observed_decision": false,
+    "repetition": 8,
+    "safety_violation": false,
+    "scenario": "completed"
+  },
+  {
+    "configuration": "without_dependency_gating",
+    "expected_safe_decision": false,
+    "family": "dependency_dispatch",
+    "observed_decision": false,
+    "repetition": 8,
+    "safety_violation": false,
+    "scenario": "completed"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": true,
+    "repetition": 9,
+    "safety_violation": false,
+    "scenario": "missing"
+  },
+  {
+    "configuration": "without_dependency_gating",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": false,
+    "repetition": 9,
+    "safety_violation": true,
+    "scenario": "missing"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": true,
+    "repetition": 9,
+    "safety_violation": false,
+    "scenario": "failed"
+  },
+  {
+    "configuration": "without_dependency_gating",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": false,
+    "repetition": 9,
+    "safety_violation": true,
+    "scenario": "failed"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": true,
+    "repetition": 9,
+    "safety_violation": false,
+    "scenario": "timeout"
+  },
+  {
+    "configuration": "without_dependency_gating",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": false,
+    "repetition": 9,
+    "safety_violation": true,
+    "scenario": "timeout"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": true,
+    "repetition": 9,
+    "safety_violation": false,
+    "scenario": "unknown"
+  },
+  {
+    "configuration": "without_dependency_gating",
+    "expected_safe_decision": true,
+    "family": "dependency_dispatch",
+    "observed_decision": false,
+    "repetition": 9,
+    "safety_violation": true,
+    "scenario": "unknown"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": false,
+    "family": "dependency_dispatch",
+    "observed_decision": false,
+    "repetition": 9,
+    "safety_violation": false,
+    "scenario": "completed"
+  },
+  {
+    "configuration": "without_dependency_gating",
+    "expected_safe_decision": false,
+    "family": "dependency_dispatch",
+    "observed_decision": false,
+    "repetition": 9,
+    "safety_violation": false,
+    "scenario": "completed"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": true,
+    "family": "auxiliary_admission",
+    "observed_decision": true,
+    "repetition": 0,
+    "safety_violation": false,
+    "scenario": "bounded"
+  },
+  {
+    "configuration": "without_auxiliary",
+    "expected_safe_decision": true,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 0,
+    "safety_violation": false,
+    "scenario": "bounded"
+  },
+  {
+    "configuration": "without_auxiliary_bounds",
+    "expected_safe_decision": true,
+    "family": "auxiliary_admission",
+    "observed_decision": true,
+    "repetition": 0,
+    "safety_violation": false,
+    "scenario": "bounded"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 0,
+    "safety_violation": false,
+    "scenario": "ineligible"
+  },
+  {
+    "configuration": "without_auxiliary",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 0,
+    "safety_violation": false,
+    "scenario": "ineligible"
+  },
+  {
+    "configuration": "without_auxiliary_bounds",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": true,
+    "repetition": 0,
+    "safety_violation": true,
+    "scenario": "ineligible"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 0,
+    "safety_violation": false,
+    "scenario": "persistent"
+  },
+  {
+    "configuration": "without_auxiliary",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 0,
+    "safety_violation": false,
+    "scenario": "persistent"
+  },
+  {
+    "configuration": "without_auxiliary_bounds",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": true,
+    "repetition": 0,
+    "safety_violation": true,
+    "scenario": "persistent"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 0,
+    "safety_violation": false,
+    "scenario": "unscoped"
+  },
+  {
+    "configuration": "without_auxiliary",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 0,
+    "safety_violation": false,
+    "scenario": "unscoped"
+  },
+  {
+    "configuration": "without_auxiliary_bounds",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": true,
+    "repetition": 0,
+    "safety_violation": true,
+    "scenario": "unscoped"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 0,
+    "safety_violation": false,
+    "scenario": "write_authority"
+  },
+  {
+    "configuration": "without_auxiliary",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 0,
+    "safety_violation": false,
+    "scenario": "write_authority"
+  },
+  {
+    "configuration": "without_auxiliary_bounds",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": true,
+    "repetition": 0,
+    "safety_violation": true,
+    "scenario": "write_authority"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": true,
+    "family": "auxiliary_admission",
+    "observed_decision": true,
+    "repetition": 1,
+    "safety_violation": false,
+    "scenario": "bounded"
+  },
+  {
+    "configuration": "without_auxiliary",
+    "expected_safe_decision": true,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 1,
+    "safety_violation": false,
+    "scenario": "bounded"
+  },
+  {
+    "configuration": "without_auxiliary_bounds",
+    "expected_safe_decision": true,
+    "family": "auxiliary_admission",
+    "observed_decision": true,
+    "repetition": 1,
+    "safety_violation": false,
+    "scenario": "bounded"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 1,
+    "safety_violation": false,
+    "scenario": "ineligible"
+  },
+  {
+    "configuration": "without_auxiliary",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 1,
+    "safety_violation": false,
+    "scenario": "ineligible"
+  },
+  {
+    "configuration": "without_auxiliary_bounds",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": true,
+    "repetition": 1,
+    "safety_violation": true,
+    "scenario": "ineligible"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 1,
+    "safety_violation": false,
+    "scenario": "persistent"
+  },
+  {
+    "configuration": "without_auxiliary",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 1,
+    "safety_violation": false,
+    "scenario": "persistent"
+  },
+  {
+    "configuration": "without_auxiliary_bounds",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": true,
+    "repetition": 1,
+    "safety_violation": true,
+    "scenario": "persistent"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 1,
+    "safety_violation": false,
+    "scenario": "unscoped"
+  },
+  {
+    "configuration": "without_auxiliary",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 1,
+    "safety_violation": false,
+    "scenario": "unscoped"
+  },
+  {
+    "configuration": "without_auxiliary_bounds",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": true,
+    "repetition": 1,
+    "safety_violation": true,
+    "scenario": "unscoped"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 1,
+    "safety_violation": false,
+    "scenario": "write_authority"
+  },
+  {
+    "configuration": "without_auxiliary",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 1,
+    "safety_violation": false,
+    "scenario": "write_authority"
+  },
+  {
+    "configuration": "without_auxiliary_bounds",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": true,
+    "repetition": 1,
+    "safety_violation": true,
+    "scenario": "write_authority"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": true,
+    "family": "auxiliary_admission",
+    "observed_decision": true,
+    "repetition": 2,
+    "safety_violation": false,
+    "scenario": "bounded"
+  },
+  {
+    "configuration": "without_auxiliary",
+    "expected_safe_decision": true,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 2,
+    "safety_violation": false,
+    "scenario": "bounded"
+  },
+  {
+    "configuration": "without_auxiliary_bounds",
+    "expected_safe_decision": true,
+    "family": "auxiliary_admission",
+    "observed_decision": true,
+    "repetition": 2,
+    "safety_violation": false,
+    "scenario": "bounded"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 2,
+    "safety_violation": false,
+    "scenario": "ineligible"
+  },
+  {
+    "configuration": "without_auxiliary",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 2,
+    "safety_violation": false,
+    "scenario": "ineligible"
+  },
+  {
+    "configuration": "without_auxiliary_bounds",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": true,
+    "repetition": 2,
+    "safety_violation": true,
+    "scenario": "ineligible"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 2,
+    "safety_violation": false,
+    "scenario": "persistent"
+  },
+  {
+    "configuration": "without_auxiliary",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 2,
+    "safety_violation": false,
+    "scenario": "persistent"
+  },
+  {
+    "configuration": "without_auxiliary_bounds",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": true,
+    "repetition": 2,
+    "safety_violation": true,
+    "scenario": "persistent"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 2,
+    "safety_violation": false,
+    "scenario": "unscoped"
+  },
+  {
+    "configuration": "without_auxiliary",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 2,
+    "safety_violation": false,
+    "scenario": "unscoped"
+  },
+  {
+    "configuration": "without_auxiliary_bounds",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": true,
+    "repetition": 2,
+    "safety_violation": true,
+    "scenario": "unscoped"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 2,
+    "safety_violation": false,
+    "scenario": "write_authority"
+  },
+  {
+    "configuration": "without_auxiliary",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 2,
+    "safety_violation": false,
+    "scenario": "write_authority"
+  },
+  {
+    "configuration": "without_auxiliary_bounds",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": true,
+    "repetition": 2,
+    "safety_violation": true,
+    "scenario": "write_authority"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": true,
+    "family": "auxiliary_admission",
+    "observed_decision": true,
+    "repetition": 3,
+    "safety_violation": false,
+    "scenario": "bounded"
+  },
+  {
+    "configuration": "without_auxiliary",
+    "expected_safe_decision": true,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 3,
+    "safety_violation": false,
+    "scenario": "bounded"
+  },
+  {
+    "configuration": "without_auxiliary_bounds",
+    "expected_safe_decision": true,
+    "family": "auxiliary_admission",
+    "observed_decision": true,
+    "repetition": 3,
+    "safety_violation": false,
+    "scenario": "bounded"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 3,
+    "safety_violation": false,
+    "scenario": "ineligible"
+  },
+  {
+    "configuration": "without_auxiliary",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 3,
+    "safety_violation": false,
+    "scenario": "ineligible"
+  },
+  {
+    "configuration": "without_auxiliary_bounds",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": true,
+    "repetition": 3,
+    "safety_violation": true,
+    "scenario": "ineligible"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 3,
+    "safety_violation": false,
+    "scenario": "persistent"
+  },
+  {
+    "configuration": "without_auxiliary",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 3,
+    "safety_violation": false,
+    "scenario": "persistent"
+  },
+  {
+    "configuration": "without_auxiliary_bounds",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": true,
+    "repetition": 3,
+    "safety_violation": true,
+    "scenario": "persistent"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 3,
+    "safety_violation": false,
+    "scenario": "unscoped"
+  },
+  {
+    "configuration": "without_auxiliary",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 3,
+    "safety_violation": false,
+    "scenario": "unscoped"
+  },
+  {
+    "configuration": "without_auxiliary_bounds",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": true,
+    "repetition": 3,
+    "safety_violation": true,
+    "scenario": "unscoped"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 3,
+    "safety_violation": false,
+    "scenario": "write_authority"
+  },
+  {
+    "configuration": "without_auxiliary",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 3,
+    "safety_violation": false,
+    "scenario": "write_authority"
+  },
+  {
+    "configuration": "without_auxiliary_bounds",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": true,
+    "repetition": 3,
+    "safety_violation": true,
+    "scenario": "write_authority"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": true,
+    "family": "auxiliary_admission",
+    "observed_decision": true,
+    "repetition": 4,
+    "safety_violation": false,
+    "scenario": "bounded"
+  },
+  {
+    "configuration": "without_auxiliary",
+    "expected_safe_decision": true,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 4,
+    "safety_violation": false,
+    "scenario": "bounded"
+  },
+  {
+    "configuration": "without_auxiliary_bounds",
+    "expected_safe_decision": true,
+    "family": "auxiliary_admission",
+    "observed_decision": true,
+    "repetition": 4,
+    "safety_violation": false,
+    "scenario": "bounded"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 4,
+    "safety_violation": false,
+    "scenario": "ineligible"
+  },
+  {
+    "configuration": "without_auxiliary",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 4,
+    "safety_violation": false,
+    "scenario": "ineligible"
+  },
+  {
+    "configuration": "without_auxiliary_bounds",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": true,
+    "repetition": 4,
+    "safety_violation": true,
+    "scenario": "ineligible"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 4,
+    "safety_violation": false,
+    "scenario": "persistent"
+  },
+  {
+    "configuration": "without_auxiliary",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 4,
+    "safety_violation": false,
+    "scenario": "persistent"
+  },
+  {
+    "configuration": "without_auxiliary_bounds",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": true,
+    "repetition": 4,
+    "safety_violation": true,
+    "scenario": "persistent"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 4,
+    "safety_violation": false,
+    "scenario": "unscoped"
+  },
+  {
+    "configuration": "without_auxiliary",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 4,
+    "safety_violation": false,
+    "scenario": "unscoped"
+  },
+  {
+    "configuration": "without_auxiliary_bounds",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": true,
+    "repetition": 4,
+    "safety_violation": true,
+    "scenario": "unscoped"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 4,
+    "safety_violation": false,
+    "scenario": "write_authority"
+  },
+  {
+    "configuration": "without_auxiliary",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 4,
+    "safety_violation": false,
+    "scenario": "write_authority"
+  },
+  {
+    "configuration": "without_auxiliary_bounds",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": true,
+    "repetition": 4,
+    "safety_violation": true,
+    "scenario": "write_authority"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": true,
+    "family": "auxiliary_admission",
+    "observed_decision": true,
+    "repetition": 5,
+    "safety_violation": false,
+    "scenario": "bounded"
+  },
+  {
+    "configuration": "without_auxiliary",
+    "expected_safe_decision": true,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 5,
+    "safety_violation": false,
+    "scenario": "bounded"
+  },
+  {
+    "configuration": "without_auxiliary_bounds",
+    "expected_safe_decision": true,
+    "family": "auxiliary_admission",
+    "observed_decision": true,
+    "repetition": 5,
+    "safety_violation": false,
+    "scenario": "bounded"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 5,
+    "safety_violation": false,
+    "scenario": "ineligible"
+  },
+  {
+    "configuration": "without_auxiliary",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 5,
+    "safety_violation": false,
+    "scenario": "ineligible"
+  },
+  {
+    "configuration": "without_auxiliary_bounds",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": true,
+    "repetition": 5,
+    "safety_violation": true,
+    "scenario": "ineligible"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 5,
+    "safety_violation": false,
+    "scenario": "persistent"
+  },
+  {
+    "configuration": "without_auxiliary",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 5,
+    "safety_violation": false,
+    "scenario": "persistent"
+  },
+  {
+    "configuration": "without_auxiliary_bounds",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": true,
+    "repetition": 5,
+    "safety_violation": true,
+    "scenario": "persistent"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 5,
+    "safety_violation": false,
+    "scenario": "unscoped"
+  },
+  {
+    "configuration": "without_auxiliary",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 5,
+    "safety_violation": false,
+    "scenario": "unscoped"
+  },
+  {
+    "configuration": "without_auxiliary_bounds",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": true,
+    "repetition": 5,
+    "safety_violation": true,
+    "scenario": "unscoped"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 5,
+    "safety_violation": false,
+    "scenario": "write_authority"
+  },
+  {
+    "configuration": "without_auxiliary",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 5,
+    "safety_violation": false,
+    "scenario": "write_authority"
+  },
+  {
+    "configuration": "without_auxiliary_bounds",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": true,
+    "repetition": 5,
+    "safety_violation": true,
+    "scenario": "write_authority"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": true,
+    "family": "auxiliary_admission",
+    "observed_decision": true,
+    "repetition": 6,
+    "safety_violation": false,
+    "scenario": "bounded"
+  },
+  {
+    "configuration": "without_auxiliary",
+    "expected_safe_decision": true,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 6,
+    "safety_violation": false,
+    "scenario": "bounded"
+  },
+  {
+    "configuration": "without_auxiliary_bounds",
+    "expected_safe_decision": true,
+    "family": "auxiliary_admission",
+    "observed_decision": true,
+    "repetition": 6,
+    "safety_violation": false,
+    "scenario": "bounded"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 6,
+    "safety_violation": false,
+    "scenario": "ineligible"
+  },
+  {
+    "configuration": "without_auxiliary",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 6,
+    "safety_violation": false,
+    "scenario": "ineligible"
+  },
+  {
+    "configuration": "without_auxiliary_bounds",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": true,
+    "repetition": 6,
+    "safety_violation": true,
+    "scenario": "ineligible"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 6,
+    "safety_violation": false,
+    "scenario": "persistent"
+  },
+  {
+    "configuration": "without_auxiliary",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 6,
+    "safety_violation": false,
+    "scenario": "persistent"
+  },
+  {
+    "configuration": "without_auxiliary_bounds",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": true,
+    "repetition": 6,
+    "safety_violation": true,
+    "scenario": "persistent"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 6,
+    "safety_violation": false,
+    "scenario": "unscoped"
+  },
+  {
+    "configuration": "without_auxiliary",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 6,
+    "safety_violation": false,
+    "scenario": "unscoped"
+  },
+  {
+    "configuration": "without_auxiliary_bounds",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": true,
+    "repetition": 6,
+    "safety_violation": true,
+    "scenario": "unscoped"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 6,
+    "safety_violation": false,
+    "scenario": "write_authority"
+  },
+  {
+    "configuration": "without_auxiliary",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 6,
+    "safety_violation": false,
+    "scenario": "write_authority"
+  },
+  {
+    "configuration": "without_auxiliary_bounds",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": true,
+    "repetition": 6,
+    "safety_violation": true,
+    "scenario": "write_authority"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": true,
+    "family": "auxiliary_admission",
+    "observed_decision": true,
+    "repetition": 7,
+    "safety_violation": false,
+    "scenario": "bounded"
+  },
+  {
+    "configuration": "without_auxiliary",
+    "expected_safe_decision": true,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 7,
+    "safety_violation": false,
+    "scenario": "bounded"
+  },
+  {
+    "configuration": "without_auxiliary_bounds",
+    "expected_safe_decision": true,
+    "family": "auxiliary_admission",
+    "observed_decision": true,
+    "repetition": 7,
+    "safety_violation": false,
+    "scenario": "bounded"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 7,
+    "safety_violation": false,
+    "scenario": "ineligible"
+  },
+  {
+    "configuration": "without_auxiliary",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 7,
+    "safety_violation": false,
+    "scenario": "ineligible"
+  },
+  {
+    "configuration": "without_auxiliary_bounds",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": true,
+    "repetition": 7,
+    "safety_violation": true,
+    "scenario": "ineligible"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 7,
+    "safety_violation": false,
+    "scenario": "persistent"
+  },
+  {
+    "configuration": "without_auxiliary",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 7,
+    "safety_violation": false,
+    "scenario": "persistent"
+  },
+  {
+    "configuration": "without_auxiliary_bounds",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": true,
+    "repetition": 7,
+    "safety_violation": true,
+    "scenario": "persistent"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 7,
+    "safety_violation": false,
+    "scenario": "unscoped"
+  },
+  {
+    "configuration": "without_auxiliary",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 7,
+    "safety_violation": false,
+    "scenario": "unscoped"
+  },
+  {
+    "configuration": "without_auxiliary_bounds",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": true,
+    "repetition": 7,
+    "safety_violation": true,
+    "scenario": "unscoped"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 7,
+    "safety_violation": false,
+    "scenario": "write_authority"
+  },
+  {
+    "configuration": "without_auxiliary",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 7,
+    "safety_violation": false,
+    "scenario": "write_authority"
+  },
+  {
+    "configuration": "without_auxiliary_bounds",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": true,
+    "repetition": 7,
+    "safety_violation": true,
+    "scenario": "write_authority"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": true,
+    "family": "auxiliary_admission",
+    "observed_decision": true,
+    "repetition": 8,
+    "safety_violation": false,
+    "scenario": "bounded"
+  },
+  {
+    "configuration": "without_auxiliary",
+    "expected_safe_decision": true,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 8,
+    "safety_violation": false,
+    "scenario": "bounded"
+  },
+  {
+    "configuration": "without_auxiliary_bounds",
+    "expected_safe_decision": true,
+    "family": "auxiliary_admission",
+    "observed_decision": true,
+    "repetition": 8,
+    "safety_violation": false,
+    "scenario": "bounded"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 8,
+    "safety_violation": false,
+    "scenario": "ineligible"
+  },
+  {
+    "configuration": "without_auxiliary",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 8,
+    "safety_violation": false,
+    "scenario": "ineligible"
+  },
+  {
+    "configuration": "without_auxiliary_bounds",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": true,
+    "repetition": 8,
+    "safety_violation": true,
+    "scenario": "ineligible"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 8,
+    "safety_violation": false,
+    "scenario": "persistent"
+  },
+  {
+    "configuration": "without_auxiliary",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 8,
+    "safety_violation": false,
+    "scenario": "persistent"
+  },
+  {
+    "configuration": "without_auxiliary_bounds",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": true,
+    "repetition": 8,
+    "safety_violation": true,
+    "scenario": "persistent"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 8,
+    "safety_violation": false,
+    "scenario": "unscoped"
+  },
+  {
+    "configuration": "without_auxiliary",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 8,
+    "safety_violation": false,
+    "scenario": "unscoped"
+  },
+  {
+    "configuration": "without_auxiliary_bounds",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": true,
+    "repetition": 8,
+    "safety_violation": true,
+    "scenario": "unscoped"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 8,
+    "safety_violation": false,
+    "scenario": "write_authority"
+  },
+  {
+    "configuration": "without_auxiliary",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 8,
+    "safety_violation": false,
+    "scenario": "write_authority"
+  },
+  {
+    "configuration": "without_auxiliary_bounds",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": true,
+    "repetition": 8,
+    "safety_violation": true,
+    "scenario": "write_authority"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": true,
+    "family": "auxiliary_admission",
+    "observed_decision": true,
+    "repetition": 9,
+    "safety_violation": false,
+    "scenario": "bounded"
+  },
+  {
+    "configuration": "without_auxiliary",
+    "expected_safe_decision": true,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 9,
+    "safety_violation": false,
+    "scenario": "bounded"
+  },
+  {
+    "configuration": "without_auxiliary_bounds",
+    "expected_safe_decision": true,
+    "family": "auxiliary_admission",
+    "observed_decision": true,
+    "repetition": 9,
+    "safety_violation": false,
+    "scenario": "bounded"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 9,
+    "safety_violation": false,
+    "scenario": "ineligible"
+  },
+  {
+    "configuration": "without_auxiliary",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 9,
+    "safety_violation": false,
+    "scenario": "ineligible"
+  },
+  {
+    "configuration": "without_auxiliary_bounds",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": true,
+    "repetition": 9,
+    "safety_violation": true,
+    "scenario": "ineligible"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 9,
+    "safety_violation": false,
+    "scenario": "persistent"
+  },
+  {
+    "configuration": "without_auxiliary",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 9,
+    "safety_violation": false,
+    "scenario": "persistent"
+  },
+  {
+    "configuration": "without_auxiliary_bounds",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": true,
+    "repetition": 9,
+    "safety_violation": true,
+    "scenario": "persistent"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 9,
+    "safety_violation": false,
+    "scenario": "unscoped"
+  },
+  {
+    "configuration": "without_auxiliary",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 9,
+    "safety_violation": false,
+    "scenario": "unscoped"
+  },
+  {
+    "configuration": "without_auxiliary_bounds",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": true,
+    "repetition": 9,
+    "safety_violation": true,
+    "scenario": "unscoped"
+  },
+  {
+    "configuration": "secure_default",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 9,
+    "safety_violation": false,
+    "scenario": "write_authority"
+  },
+  {
+    "configuration": "without_auxiliary",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": false,
+    "repetition": 9,
+    "safety_violation": false,
+    "scenario": "write_authority"
+  },
+  {
+    "configuration": "without_auxiliary_bounds",
+    "expected_safe_decision": false,
+    "family": "auxiliary_admission",
+    "observed_decision": true,
+    "repetition": 9,
+    "safety_violation": true,
+    "scenario": "write_authority"
+  },
+  {
+    "configuration": "secure_default",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": true,
+    "repetition": 0,
+    "safety_violation": false,
+    "scenario": "authorization"
+  },
+  {
+    "configuration": "without_durable_trace_evidence",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": false,
+    "repetition": 0,
+    "safety_violation": true,
+    "scenario": "authorization"
+  },
+  {
+    "configuration": "secure_default",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": true,
+    "repetition": 0,
+    "safety_violation": false,
+    "scenario": "dispatch"
+  },
+  {
+    "configuration": "without_durable_trace_evidence",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": false,
+    "repetition": 0,
+    "safety_violation": true,
+    "scenario": "dispatch"
+  },
+  {
+    "configuration": "secure_default",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": true,
+    "repetition": 0,
+    "safety_violation": false,
+    "scenario": "retry"
+  },
+  {
+    "configuration": "without_durable_trace_evidence",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": false,
+    "repetition": 0,
+    "safety_violation": true,
+    "scenario": "retry"
+  },
+  {
+    "configuration": "secure_default",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": true,
+    "repetition": 0,
+    "safety_violation": false,
+    "scenario": "recovery"
+  },
+  {
+    "configuration": "without_durable_trace_evidence",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": false,
+    "repetition": 0,
+    "safety_violation": true,
+    "scenario": "recovery"
+  },
+  {
+    "configuration": "secure_default",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": true,
+    "repetition": 0,
+    "safety_violation": false,
+    "scenario": "terminal_replay"
+  },
+  {
+    "configuration": "without_durable_trace_evidence",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": false,
+    "repetition": 0,
+    "safety_violation": true,
+    "scenario": "terminal_replay"
+  },
+  {
+    "configuration": "secure_default",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": true,
+    "repetition": 1,
+    "safety_violation": false,
+    "scenario": "authorization"
+  },
+  {
+    "configuration": "without_durable_trace_evidence",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": false,
+    "repetition": 1,
+    "safety_violation": true,
+    "scenario": "authorization"
+  },
+  {
+    "configuration": "secure_default",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": true,
+    "repetition": 1,
+    "safety_violation": false,
+    "scenario": "dispatch"
+  },
+  {
+    "configuration": "without_durable_trace_evidence",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": false,
+    "repetition": 1,
+    "safety_violation": true,
+    "scenario": "dispatch"
+  },
+  {
+    "configuration": "secure_default",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": true,
+    "repetition": 1,
+    "safety_violation": false,
+    "scenario": "retry"
+  },
+  {
+    "configuration": "without_durable_trace_evidence",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": false,
+    "repetition": 1,
+    "safety_violation": true,
+    "scenario": "retry"
+  },
+  {
+    "configuration": "secure_default",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": true,
+    "repetition": 1,
+    "safety_violation": false,
+    "scenario": "recovery"
+  },
+  {
+    "configuration": "without_durable_trace_evidence",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": false,
+    "repetition": 1,
+    "safety_violation": true,
+    "scenario": "recovery"
+  },
+  {
+    "configuration": "secure_default",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": true,
+    "repetition": 1,
+    "safety_violation": false,
+    "scenario": "terminal_replay"
+  },
+  {
+    "configuration": "without_durable_trace_evidence",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": false,
+    "repetition": 1,
+    "safety_violation": true,
+    "scenario": "terminal_replay"
+  },
+  {
+    "configuration": "secure_default",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": true,
+    "repetition": 2,
+    "safety_violation": false,
+    "scenario": "authorization"
+  },
+  {
+    "configuration": "without_durable_trace_evidence",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": false,
+    "repetition": 2,
+    "safety_violation": true,
+    "scenario": "authorization"
+  },
+  {
+    "configuration": "secure_default",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": true,
+    "repetition": 2,
+    "safety_violation": false,
+    "scenario": "dispatch"
+  },
+  {
+    "configuration": "without_durable_trace_evidence",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": false,
+    "repetition": 2,
+    "safety_violation": true,
+    "scenario": "dispatch"
+  },
+  {
+    "configuration": "secure_default",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": true,
+    "repetition": 2,
+    "safety_violation": false,
+    "scenario": "retry"
+  },
+  {
+    "configuration": "without_durable_trace_evidence",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": false,
+    "repetition": 2,
+    "safety_violation": true,
+    "scenario": "retry"
+  },
+  {
+    "configuration": "secure_default",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": true,
+    "repetition": 2,
+    "safety_violation": false,
+    "scenario": "recovery"
+  },
+  {
+    "configuration": "without_durable_trace_evidence",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": false,
+    "repetition": 2,
+    "safety_violation": true,
+    "scenario": "recovery"
+  },
+  {
+    "configuration": "secure_default",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": true,
+    "repetition": 2,
+    "safety_violation": false,
+    "scenario": "terminal_replay"
+  },
+  {
+    "configuration": "without_durable_trace_evidence",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": false,
+    "repetition": 2,
+    "safety_violation": true,
+    "scenario": "terminal_replay"
+  },
+  {
+    "configuration": "secure_default",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": true,
+    "repetition": 3,
+    "safety_violation": false,
+    "scenario": "authorization"
+  },
+  {
+    "configuration": "without_durable_trace_evidence",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": false,
+    "repetition": 3,
+    "safety_violation": true,
+    "scenario": "authorization"
+  },
+  {
+    "configuration": "secure_default",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": true,
+    "repetition": 3,
+    "safety_violation": false,
+    "scenario": "dispatch"
+  },
+  {
+    "configuration": "without_durable_trace_evidence",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": false,
+    "repetition": 3,
+    "safety_violation": true,
+    "scenario": "dispatch"
+  },
+  {
+    "configuration": "secure_default",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": true,
+    "repetition": 3,
+    "safety_violation": false,
+    "scenario": "retry"
+  },
+  {
+    "configuration": "without_durable_trace_evidence",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": false,
+    "repetition": 3,
+    "safety_violation": true,
+    "scenario": "retry"
+  },
+  {
+    "configuration": "secure_default",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": true,
+    "repetition": 3,
+    "safety_violation": false,
+    "scenario": "recovery"
+  },
+  {
+    "configuration": "without_durable_trace_evidence",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": false,
+    "repetition": 3,
+    "safety_violation": true,
+    "scenario": "recovery"
+  },
+  {
+    "configuration": "secure_default",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": true,
+    "repetition": 3,
+    "safety_violation": false,
+    "scenario": "terminal_replay"
+  },
+  {
+    "configuration": "without_durable_trace_evidence",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": false,
+    "repetition": 3,
+    "safety_violation": true,
+    "scenario": "terminal_replay"
+  },
+  {
+    "configuration": "secure_default",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": true,
+    "repetition": 4,
+    "safety_violation": false,
+    "scenario": "authorization"
+  },
+  {
+    "configuration": "without_durable_trace_evidence",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": false,
+    "repetition": 4,
+    "safety_violation": true,
+    "scenario": "authorization"
+  },
+  {
+    "configuration": "secure_default",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": true,
+    "repetition": 4,
+    "safety_violation": false,
+    "scenario": "dispatch"
+  },
+  {
+    "configuration": "without_durable_trace_evidence",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": false,
+    "repetition": 4,
+    "safety_violation": true,
+    "scenario": "dispatch"
+  },
+  {
+    "configuration": "secure_default",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": true,
+    "repetition": 4,
+    "safety_violation": false,
+    "scenario": "retry"
+  },
+  {
+    "configuration": "without_durable_trace_evidence",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": false,
+    "repetition": 4,
+    "safety_violation": true,
+    "scenario": "retry"
+  },
+  {
+    "configuration": "secure_default",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": true,
+    "repetition": 4,
+    "safety_violation": false,
+    "scenario": "recovery"
+  },
+  {
+    "configuration": "without_durable_trace_evidence",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": false,
+    "repetition": 4,
+    "safety_violation": true,
+    "scenario": "recovery"
+  },
+  {
+    "configuration": "secure_default",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": true,
+    "repetition": 4,
+    "safety_violation": false,
+    "scenario": "terminal_replay"
+  },
+  {
+    "configuration": "without_durable_trace_evidence",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": false,
+    "repetition": 4,
+    "safety_violation": true,
+    "scenario": "terminal_replay"
+  },
+  {
+    "configuration": "secure_default",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": true,
+    "repetition": 5,
+    "safety_violation": false,
+    "scenario": "authorization"
+  },
+  {
+    "configuration": "without_durable_trace_evidence",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": false,
+    "repetition": 5,
+    "safety_violation": true,
+    "scenario": "authorization"
+  },
+  {
+    "configuration": "secure_default",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": true,
+    "repetition": 5,
+    "safety_violation": false,
+    "scenario": "dispatch"
+  },
+  {
+    "configuration": "without_durable_trace_evidence",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": false,
+    "repetition": 5,
+    "safety_violation": true,
+    "scenario": "dispatch"
+  },
+  {
+    "configuration": "secure_default",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": true,
+    "repetition": 5,
+    "safety_violation": false,
+    "scenario": "retry"
+  },
+  {
+    "configuration": "without_durable_trace_evidence",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": false,
+    "repetition": 5,
+    "safety_violation": true,
+    "scenario": "retry"
+  },
+  {
+    "configuration": "secure_default",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": true,
+    "repetition": 5,
+    "safety_violation": false,
+    "scenario": "recovery"
+  },
+  {
+    "configuration": "without_durable_trace_evidence",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": false,
+    "repetition": 5,
+    "safety_violation": true,
+    "scenario": "recovery"
+  },
+  {
+    "configuration": "secure_default",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": true,
+    "repetition": 5,
+    "safety_violation": false,
+    "scenario": "terminal_replay"
+  },
+  {
+    "configuration": "without_durable_trace_evidence",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": false,
+    "repetition": 5,
+    "safety_violation": true,
+    "scenario": "terminal_replay"
+  },
+  {
+    "configuration": "secure_default",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": true,
+    "repetition": 6,
+    "safety_violation": false,
+    "scenario": "authorization"
+  },
+  {
+    "configuration": "without_durable_trace_evidence",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": false,
+    "repetition": 6,
+    "safety_violation": true,
+    "scenario": "authorization"
+  },
+  {
+    "configuration": "secure_default",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": true,
+    "repetition": 6,
+    "safety_violation": false,
+    "scenario": "dispatch"
+  },
+  {
+    "configuration": "without_durable_trace_evidence",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": false,
+    "repetition": 6,
+    "safety_violation": true,
+    "scenario": "dispatch"
+  },
+  {
+    "configuration": "secure_default",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": true,
+    "repetition": 6,
+    "safety_violation": false,
+    "scenario": "retry"
+  },
+  {
+    "configuration": "without_durable_trace_evidence",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": false,
+    "repetition": 6,
+    "safety_violation": true,
+    "scenario": "retry"
+  },
+  {
+    "configuration": "secure_default",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": true,
+    "repetition": 6,
+    "safety_violation": false,
+    "scenario": "recovery"
+  },
+  {
+    "configuration": "without_durable_trace_evidence",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": false,
+    "repetition": 6,
+    "safety_violation": true,
+    "scenario": "recovery"
+  },
+  {
+    "configuration": "secure_default",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": true,
+    "repetition": 6,
+    "safety_violation": false,
+    "scenario": "terminal_replay"
+  },
+  {
+    "configuration": "without_durable_trace_evidence",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": false,
+    "repetition": 6,
+    "safety_violation": true,
+    "scenario": "terminal_replay"
+  },
+  {
+    "configuration": "secure_default",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": true,
+    "repetition": 7,
+    "safety_violation": false,
+    "scenario": "authorization"
+  },
+  {
+    "configuration": "without_durable_trace_evidence",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": false,
+    "repetition": 7,
+    "safety_violation": true,
+    "scenario": "authorization"
+  },
+  {
+    "configuration": "secure_default",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": true,
+    "repetition": 7,
+    "safety_violation": false,
+    "scenario": "dispatch"
+  },
+  {
+    "configuration": "without_durable_trace_evidence",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": false,
+    "repetition": 7,
+    "safety_violation": true,
+    "scenario": "dispatch"
+  },
+  {
+    "configuration": "secure_default",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": true,
+    "repetition": 7,
+    "safety_violation": false,
+    "scenario": "retry"
+  },
+  {
+    "configuration": "without_durable_trace_evidence",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": false,
+    "repetition": 7,
+    "safety_violation": true,
+    "scenario": "retry"
+  },
+  {
+    "configuration": "secure_default",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": true,
+    "repetition": 7,
+    "safety_violation": false,
+    "scenario": "recovery"
+  },
+  {
+    "configuration": "without_durable_trace_evidence",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": false,
+    "repetition": 7,
+    "safety_violation": true,
+    "scenario": "recovery"
+  },
+  {
+    "configuration": "secure_default",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": true,
+    "repetition": 7,
+    "safety_violation": false,
+    "scenario": "terminal_replay"
+  },
+  {
+    "configuration": "without_durable_trace_evidence",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": false,
+    "repetition": 7,
+    "safety_violation": true,
+    "scenario": "terminal_replay"
+  },
+  {
+    "configuration": "secure_default",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": true,
+    "repetition": 8,
+    "safety_violation": false,
+    "scenario": "authorization"
+  },
+  {
+    "configuration": "without_durable_trace_evidence",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": false,
+    "repetition": 8,
+    "safety_violation": true,
+    "scenario": "authorization"
+  },
+  {
+    "configuration": "secure_default",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": true,
+    "repetition": 8,
+    "safety_violation": false,
+    "scenario": "dispatch"
+  },
+  {
+    "configuration": "without_durable_trace_evidence",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": false,
+    "repetition": 8,
+    "safety_violation": true,
+    "scenario": "dispatch"
+  },
+  {
+    "configuration": "secure_default",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": true,
+    "repetition": 8,
+    "safety_violation": false,
+    "scenario": "retry"
+  },
+  {
+    "configuration": "without_durable_trace_evidence",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": false,
+    "repetition": 8,
+    "safety_violation": true,
+    "scenario": "retry"
+  },
+  {
+    "configuration": "secure_default",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": true,
+    "repetition": 8,
+    "safety_violation": false,
+    "scenario": "recovery"
+  },
+  {
+    "configuration": "without_durable_trace_evidence",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": false,
+    "repetition": 8,
+    "safety_violation": true,
+    "scenario": "recovery"
+  },
+  {
+    "configuration": "secure_default",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": true,
+    "repetition": 8,
+    "safety_violation": false,
+    "scenario": "terminal_replay"
+  },
+  {
+    "configuration": "without_durable_trace_evidence",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": false,
+    "repetition": 8,
+    "safety_violation": true,
+    "scenario": "terminal_replay"
+  },
+  {
+    "configuration": "secure_default",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": true,
+    "repetition": 9,
+    "safety_violation": false,
+    "scenario": "authorization"
+  },
+  {
+    "configuration": "without_durable_trace_evidence",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": false,
+    "repetition": 9,
+    "safety_violation": true,
+    "scenario": "authorization"
+  },
+  {
+    "configuration": "secure_default",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": true,
+    "repetition": 9,
+    "safety_violation": false,
+    "scenario": "dispatch"
+  },
+  {
+    "configuration": "without_durable_trace_evidence",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": false,
+    "repetition": 9,
+    "safety_violation": true,
+    "scenario": "dispatch"
+  },
+  {
+    "configuration": "secure_default",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": true,
+    "repetition": 9,
+    "safety_violation": false,
+    "scenario": "retry"
+  },
+  {
+    "configuration": "without_durable_trace_evidence",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": false,
+    "repetition": 9,
+    "safety_violation": true,
+    "scenario": "retry"
+  },
+  {
+    "configuration": "secure_default",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": true,
+    "repetition": 9,
+    "safety_violation": false,
+    "scenario": "recovery"
+  },
+  {
+    "configuration": "without_durable_trace_evidence",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": false,
+    "repetition": 9,
+    "safety_violation": true,
+    "scenario": "recovery"
+  },
+  {
+    "configuration": "secure_default",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": true,
+    "repetition": 9,
+    "safety_violation": false,
+    "scenario": "terminal_replay"
+  },
+  {
+    "configuration": "without_durable_trace_evidence",
+    "durable_state_mutated": false,
+    "expected_safe_decision": true,
+    "family": "trace_evidence",
+    "observed_decision": false,
+    "repetition": 9,
+    "safety_violation": true,
+    "scenario": "terminal_replay"
+  }
+]

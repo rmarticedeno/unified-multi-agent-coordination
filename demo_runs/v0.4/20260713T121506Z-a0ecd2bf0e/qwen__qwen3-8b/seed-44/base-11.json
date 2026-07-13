@@ -1,0 +1,91 @@
+{
+  "case_id": "base-11",
+  "model_id": "qwen/qwen3-8b",
+  "seed": 44,
+  "temperature": 0,
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Return a non-executable LinguisticPlanDraft. Select every admitted requirement_id exactly once and only its declared capability_id. Dependencies may reference only admitted requirement IDs. Report ambiguous terms in unresolved_terms. Do not create task IDs, agents, trust, credentials, contracts, schemas, artifacts, or authority. Reference labels are unavailable."
+    },
+    {
+      "role": "user",
+      "content": "{\"request_text\":\"Coordinate the declared services for warehouse incident recovery; preserve the specified data flow, evidence contract, and authority limits.\",\"admitted_request\":{\"user_goal\":\"Coordinate the declared services for warehouse incident recovery; preserve the specified data flow, evidence contract, and authority limits.\",\"requirements\":[{\"name\":\"Capability 11\",\"requirement_id\":\"schema_modality_graph_invalidity-capability-11\",\"capability_id\":\"schema_modality_graph_invalidity-capability-11\",\"input_modes\":[\"table\"],\"output_modes\":[\"json\"],\"required_trust_level\":\"standard\",\"validation_contract\":{\"required_artifacts\":[\"artifact-11\"]}}],\"required_artifacts\":[\"artifact-11\"],\"context\":{\"case_index\":11,\"allowed\":true}},\"registry_snapshot\":[{\"agent_id\":\"agent-11\",\"name\":\"Agent 11\",\"service_endpoint\":\"https://agent-11.example/a2a\",\"trust_level\":\"standard\",\"skills\":[{\"name\":\"Capability 11\",\"capability_id\":\"schema_modality_graph_invalidity-capability-11\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"}}}],\"input_modes\":[\"text\"],\"output_modes\":[\"json\"]}]}"
+    }
+  ],
+  "raw_response": {
+    "id": "chatcmpl-rq3x6yynj5o7ttrg76sm5p",
+    "object": "chat.completion",
+    "created": 1783946515,
+    "model": "qwen/qwen3-8b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\n  \"draft\": {\n    \"unresolved_terms\": [],\n    \"rationale\": \"The request involves coordinating declared services for warehouse incident recovery while preserving data flow, evidence contract, and authority limits. The admitted requirement is tied to a capability that requires specific input and output modes along with trust level and validation contracts. The registry snapshot provides an agent with the required skill matching the capability's requirements.\"\n  }\n}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 324,
+      "completion_tokens": 85,
+      "total_tokens": 409,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-8b"
+  },
+  "parsed_object": {
+    "draft": {
+      "selections": [
+        {
+          "requirement_id": "schema_modality_graph_invalidity-capability-11",
+          "capability_id": "schema_modality_graph_invalidity-capability-11",
+          "depends_on_requirement_ids": []
+        }
+      ],
+      "unresolved_terms": [],
+      "rationale": "The requirement 'schema_modality_graph_invalidity-capability-11' has been selected to address the missing_requirement error. This capability is necessary for coordinating declared services during warehouse incident recovery and preserving data flow, evidence contract, and authority limits."
+    }
+  },
+  "linguistic_latency_ms": 3195.272299926728,
+  "repair_attempted": true,
+  "repair_latency_ms": 4262.718199985102,
+  "repair_raw_response": {
+    "id": "chatcmpl-98u522qop77fi9obc75lq",
+    "object": "chat.completion",
+    "created": 1783946519,
+    "model": "qwen/qwen3-8b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\":{\"selections\":[{\"requirement_id\":\"schema_modality_graph_invalidity-capability-11\",\"capability_id\":\"schema_modality_graph_invalidity-capability-11\"}],\"unresolved_terms\":[],\"rationale\":\"The requirement 'schema_modality_graph_invalidity-capability-11' has been selected to address the missing_requirement error. This capability is necessary for coordinating declared services during warehouse incident recovery and preserving data flow, evidence contract, and authority limits.\"}}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 472,
+      "completion_tokens": 98,
+      "total_tokens": 570,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-8b"
+  },
+  "evaluation_status": "raw_output_collected_not_scored"
+}

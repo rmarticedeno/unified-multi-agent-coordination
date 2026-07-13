@@ -1,0 +1,91 @@
+{
+  "case_id": "variation-03",
+  "model_id": "google/gemma-4-e2b",
+  "seed": 33,
+  "temperature": 0,
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Return a non-executable LinguisticPlanDraft. Select every admitted requirement_id exactly once and only its declared capability_id. Dependencies may reference only admitted requirement IDs. Report ambiguous terms in unresolved_terms. Do not create task IDs, agents, trust, credentials, contracts, schemas, artifacts, or authority. Reference labels are unavailable."
+    },
+    {
+      "role": "user",
+      "content": "{\"request_text\":\"Using only the listed providers, coordinate the declared services for wildfire sensor triage; preserve the specified data flow, evidence contract, and authority limits.\",\"admitted_request\":{\"user_goal\":\"Coordinate the declared services for wildfire sensor triage; preserve the specified data flow, evidence contract, and authority limits.\",\"requirements\":[{\"name\":\"Capability 3\",\"requirement_id\":\"runtime_failure-capability-3\",\"capability_id\":\"runtime_failure-capability-3\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"required_trust_level\":\"standard\",\"validation_contract\":{\"required_artifacts\":[\"artifact-3\"]}}],\"required_artifacts\":[\"artifact-3\"],\"context\":{\"case_index\":3,\"allowed\":true}},\"registry_snapshot\":[{\"agent_id\":\"agent-3\",\"name\":\"Agent 3\",\"service_endpoint\":\"https://agent-3.example/a2a\",\"trust_level\":\"standard\",\"skills\":[{\"name\":\"Capability 3\",\"capability_id\":\"runtime_failure-capability-3\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"}}}],\"input_modes\":[\"text\"],\"output_modes\":[\"json\"]}]}"
+    }
+  ],
+  "raw_response": {
+    "id": "chatcmpl-36rgxr821sborjgu9hbfra",
+    "object": "chat.completion",
+    "created": 1783945372,
+    "model": "google/gemma-4-e2b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\": {\"rationale\": \"The user requests coordination of services for wildfire sensor triage while preserving data flow, evidence contract, and authority limits. The only admitted requirement is 'runtime_failure-capability-3', which has a capability 'runtime_failure-capability-3'. This capability is associated with Agent 3, which possesses the required skill. Therefore, the service coordination is mapped to this single capability. No ambiguous terms were found in unresolved_terms as all requirements were directly linked to admitted capabilities and artifacts. The data flow, evidence contract, and authority limits are preserved by adhering strictly to the constraints of the admitted requirement and context provided.\"}}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 335,
+      "completion_tokens": 136,
+      "total_tokens": 471,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "google/gemma-4-e2b"
+  },
+  "parsed_object": {
+    "draft": {
+      "selections": [
+        {
+          "requirement_id": "runtime_failure-capability-3",
+          "capability_id": "runtime_failure-capability-3",
+          "depends_on_requirement_ids": []
+        }
+      ],
+      "unresolved_terms": [],
+      "rationale": "The previous step identified the requirement 'runtime_failure-capability-3' as admitted. The current instruction explicitly states that one repair is allowed and points out that the draft omitted this requirement, implying it should be selected. This selection ensures all admitted requirements are accounted for."
+    }
+  },
+  "linguistic_latency_ms": 2708.197799976915,
+  "repair_attempted": true,
+  "repair_latency_ms": 1120.2964999247342,
+  "repair_raw_response": {
+    "id": "chatcmpl-ayagq9qlt3c7jagpjzmmhc",
+    "object": "chat.completion",
+    "created": 1783945375,
+    "model": "google/gemma-4-e2b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\":{\"selections\":[{\"requirement_id\":\"runtime_failure-capability-3\",\"capability_id\":\"runtime_failure-capability-3\"}],\"unresolved_terms\":[],\"rationale\":\"The previous step identified the requirement 'runtime_failure-capability-3' as admitted. The current instruction explicitly states that one repair is allowed and points out that the draft omitted this requirement, implying it should be selected. This selection ensures all admitted requirements are accounted for.\"}}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 538,
+      "completion_tokens": 96,
+      "total_tokens": 634,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "google/gemma-4-e2b"
+  },
+  "evaluation_status": "raw_output_collected_not_scored"
+}

@@ -1,0 +1,261 @@
+{
+  "case_id": "variation-11",
+  "model_id": "qwen/qwen3-8b",
+  "seed": 55,
+  "temperature": 0,
+  "backend_seed_honored": "not_verifiable_from_response",
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Interpret the request and return one to three typed candidate plans. Plans are non-authoritative. Use only exact capability_id and agent_id values from the registry. Do not infer trust or authorization."
+    },
+    {
+      "role": "user",
+      "content": "{\"request\":\"Complete defense corpus task schema_modality_graph_invalidity 11.\",\"registry_snapshot\":[{\"agent_id\":\"agent-11\",\"name\":\"Agent 11\",\"service_endpoint\":\"https://agent-11.example/a2a\",\"trust_level\":\"standard\",\"skills\":[{\"name\":\"Friendly alias that is not an identity\",\"capability_id\":\"schema_modality_graph_invalidity-capability-11-mismatch\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"}}}],\"input_modes\":[\"text\"],\"output_modes\":[\"json\"]}]}"
+    }
+  ],
+  "raw_response": {
+    "id": "chatcmpl-azki20te9lmqf7349w0ot",
+    "object": "chat.completion",
+    "created": 1783913242,
+    "model": "qwen/qwen3-8b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\n  \"interpreted_request\": {\n    \"user_goal\": \"Complete the defense corpus task schema_modality_graph_invalidity 11.\",\n    \"required_artifacts\": [\n      \"schema_modality_graph_invalidity-capability-11-mismatch\"\n    ],\n    \"context\": {\n      \"agent_id\": \"agent-11\",\n      \"name\": \"Agent 11\",\n      \"service_endpoint\": \"https://agent-11.example/a2a\",\n      \"trust_level\": \"standard\",\n      \"input_modes\": [\"text\"],\n      \"output_modes\": [\"json\"]\n    }\n  },\n  \"candidate_plans\": [\n    {\n      \"tasks\": [\n        {\n          \"task_id\": \"schema_modality_graph_invalidity-11-validate\",\n          \"requirement_name\": \"schema_modality_graph_invalidity-capability-11-mismatch\",\n          \"description\": \"Validate the schema modality graph for invalidity using capability 11.\",\n          \"expected_artifacts\": [\"json_schema_validation_result\"],\n          \"validation_contract\": {\n            \"json_schema\": {\n              \"type\": \"object\"\n            }\n          }\n        },\n        {\n          \"task_id\": \"schema_modality_graph_invalidity-11-report\",\n          \"requirement_name\": \"schema_modality_graph_invalidity-capability-11-mismatch\",\n          \"description\": \"Generate a report on the invalidities found in the schema modality graph.\",\n          \"expected_artifacts\": [\"invalidity_report\"],\n          \"validation_contract\": {\n            \"json_schema\": {\n              \"type\": \"object\"\n            }\n          }\n        }\n      ]\n    },\n    {\n      \"tasks\": [\n        {\n          \"task_id\": \"schema_modality_graph_invalidity-11-validate\",\n          \"requirement_name\": \"schema_modality_graph_invalidity-capability-11-mismatch\",\n          \"description\": \"Validate the schema modality graph for invalidity using capability 11.\",\n          \"expected_artifacts\": [\"json_schema_validation_result\"],\n          \"validation_contract\": {\n            \"json_schema\": {\n              \"type\": \"object\"\n            }\n          }\n        },\n        {\n          \"task_id\": \"schema_modality_graph_invalidy-11-correct\",\n          \"requirement_name\": \"schema_modality_graph_invalidity-capability-11-mismatch\",\n          \"description\": \"Correct the schema modality graph based on validation results.\",\n          \"expected_artifacts\": [\"corrected_schema_modality_graph\"],\n          \"validation_contract\": {\n            \"json_schema\": {\n              \"type\": \"object\"\n            }\n          }\n        }\n      ]\n    },\n    {\n      \"tasks\": [\n        {\n          \"task_id\": \"schema_modality_graph_invalidity-11-validate\",\n          \"requirement_name\": \"schema_modality_graph_invalidity-capability-11-mismatch\",\n          \"description\": \"Validate the schema modality graph for invalidity using capability 11.\",\n          \"expected_artifacts\": [\"json_schema_validation_result\"],\n          \"validation_contract\": {\n            \"json_schema\": {\n              \"type\": \"object\"\n            }\n          }\n        },\n        {\n          \"task_id\": \"schema_modality_graph_invalidity-11-verify\",\n          \"requirement_name\": \"schema_modality_graph_invalidity-capability-11-mismatch\",\n          \"description\": \"Verify the corrected schema modality graph for validity.\",\n          \"expected_artifacts\": [\"verification_result\"],\n          \"validation_contract\": {\n            \"json_schema\": {\n              \"type\": \"object\"\n            }\n          }\n        }\n      ]\n    }\n  ]\n}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 172,
+      "completion_tokens": 753,
+      "total_tokens": 925,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-8b"
+  },
+  "parsed_object": {
+    "interpreted_request": {
+      "user_goal": "Complete the defense corpus task schema_modality_graph_invalidity 11.",
+      "requirements": [],
+      "constraints": [],
+      "required_artifacts": [
+        "schema_modality_graph_invalidity-capability-11-mismatch"
+      ],
+      "context": {
+        "agent_id": "agent-11",
+        "name": "Agent 11",
+        "service_endpoint": "https://agent-11.example/a2a",
+        "trust_level": "standard",
+        "input_modes": [
+          "text"
+        ],
+        "output_modes": [
+          "json"
+        ]
+      }
+    },
+    "candidate_plans": [
+      {
+        "tasks": [
+          {
+            "task_id": "schema_modality_graph_invalidity-11-validate",
+            "requirement_name": "schema_modality_graph_invalidity-capability-11-mismatch",
+            "requirement_id": "schema-modality-graph-invalidity-capability-11-mismatch",
+            "capability_id": "schema-modality-graph-invalidity-capability-11-mismatch",
+            "description": "Validate the schema modality graph for invalidity using capability 11.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "json_schema_validation_result"
+            ],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              },
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          },
+          {
+            "task_id": "schema_modality_graph_invalidity-11-report",
+            "requirement_name": "schema_modality_graph_invalidity-capability-11-mismatch",
+            "requirement_id": "schema-modality-graph-invalidity-capability-11-mismatch",
+            "capability_id": "schema-modality-graph-invalidity-capability-11-mismatch",
+            "description": "Generate a report on the invalidities found in the schema modality graph.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "invalidity_report"
+            ],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              },
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [],
+        "expected_artifacts": [],
+        "completion_criteria": [],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      },
+      {
+        "tasks": [
+          {
+            "task_id": "schema_modality_graph_invalidity-11-validate",
+            "requirement_name": "schema_modality_graph_invalidity-capability-11-mismatch",
+            "requirement_id": "schema-modality-graph-invalidity-capability-11-mismatch",
+            "capability_id": "schema-modality-graph-invalidity-capability-11-mismatch",
+            "description": "Validate the schema modality graph for invalidity using capability 11.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "json_schema_validation_result"
+            ],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              },
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          },
+          {
+            "task_id": "schema_modality_graph_invalidy-11-correct",
+            "requirement_name": "schema_modality_graph_invalidity-capability-11-mismatch",
+            "requirement_id": "schema-modality-graph-invalidity-capability-11-mismatch",
+            "capability_id": "schema-modality-graph-invalidity-capability-11-mismatch",
+            "description": "Correct the schema modality graph based on validation results.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "corrected_schema_modality_graph"
+            ],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              },
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [],
+        "expected_artifacts": [],
+        "completion_criteria": [],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      },
+      {
+        "tasks": [
+          {
+            "task_id": "schema_modality_graph_invalidity-11-validate",
+            "requirement_name": "schema_modality_graph_invalidity-capability-11-mismatch",
+            "requirement_id": "schema-modality-graph-invalidity-capability-11-mismatch",
+            "capability_id": "schema-modality-graph-invalidity-capability-11-mismatch",
+            "description": "Validate the schema modality graph for invalidity using capability 11.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "json_schema_validation_result"
+            ],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              },
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          },
+          {
+            "task_id": "schema_modality_graph_invalidity-11-verify",
+            "requirement_name": "schema_modality_graph_invalidity-capability-11-mismatch",
+            "requirement_id": "schema-modality-graph-invalidity-capability-11-mismatch",
+            "capability_id": "schema-modality-graph-invalidity-capability-11-mismatch",
+            "description": "Verify the corrected schema modality graph for validity.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "verification_result"
+            ],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              },
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [],
+        "expected_artifacts": [],
+        "completion_criteria": [],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      }
+    ]
+  },
+  "latency_ms": 42347.10450004786,
+  "evaluation_status": "raw_output_collected_not_scored"
+}

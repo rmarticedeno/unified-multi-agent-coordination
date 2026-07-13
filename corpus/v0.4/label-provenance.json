@@ -1,0 +1,12 @@
+{
+  "annotation_type": "author_labeled",
+  "author": "Roberto Marti Cedeno",
+  "annotation_date": "2026-07-13T12:14:45.961985+00:00",
+  "labeling_protocol_version": "author-conformance-bridge-v2",
+  "corpus_version": "0.4",
+  "corpus_hash": "a0ecd2bf0ebc6740a205108e45385eb1e2e7d7ae00dacab38bc123c8ca49aa2d",
+  "frozen": true,
+  "label_hidden_during_inference": true,
+  "independent_adjudication": false,
+  "limitation": "No independent adjudicator; labels encode author-declared conformance."
+}

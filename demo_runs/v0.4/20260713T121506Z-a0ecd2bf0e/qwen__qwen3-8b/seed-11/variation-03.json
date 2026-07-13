@@ -1,0 +1,91 @@
+{
+  "case_id": "variation-03",
+  "model_id": "qwen/qwen3-8b",
+  "seed": 11,
+  "temperature": 0,
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Return a non-executable LinguisticPlanDraft. Select every admitted requirement_id exactly once and only its declared capability_id. Dependencies may reference only admitted requirement IDs. Report ambiguous terms in unresolved_terms. Do not create task IDs, agents, trust, credentials, contracts, schemas, artifacts, or authority. Reference labels are unavailable."
+    },
+    {
+      "role": "user",
+      "content": "{\"request_text\":\"Using only the listed providers, coordinate the declared services for wildfire sensor triage; preserve the specified data flow, evidence contract, and authority limits.\",\"admitted_request\":{\"user_goal\":\"Coordinate the declared services for wildfire sensor triage; preserve the specified data flow, evidence contract, and authority limits.\",\"requirements\":[{\"name\":\"Capability 3\",\"requirement_id\":\"runtime_failure-capability-3\",\"capability_id\":\"runtime_failure-capability-3\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"required_trust_level\":\"standard\",\"validation_contract\":{\"required_artifacts\":[\"artifact-3\"]}}],\"required_artifacts\":[\"artifact-3\"],\"context\":{\"case_index\":3,\"allowed\":true}},\"registry_snapshot\":[{\"agent_id\":\"agent-3\",\"name\":\"Agent 3\",\"service_endpoint\":\"https://agent-3.example/a2a\",\"trust_level\":\"standard\",\"skills\":[{\"name\":\"Capability 3\",\"capability_id\":\"runtime_failure-capability-3\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"}}}],\"input_modes\":[\"text\"],\"output_modes\":[\"json\"]}]}"
+    }
+  ],
+  "raw_response": {
+    "id": "chatcmpl-wu42e7ocbntqswq0nbhdj",
+    "object": "chat.completion",
+    "created": 1783945785,
+    "model": "qwen/qwen3-8b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\n  \"draft\": {\n    \"unresolved_terms\": [],\n    \"rationale\": \"The request requires coordination of services for wildfire sensor triage, with preservation of data flow, evidence contract, and authority limits. The only admitted requirement is 'Capability 3', which has a declared capability_id of 'runtime_failure-capability-3'. This capability must be used to fulfill the user goal as no other requirements or capabilities are admitted. Dependencies may reference only admitted requirement IDs, but there are none in this case. No task IDs, agents, trust levels, credentials, contracts, schemas, artifacts, or authority are created.\"\n  }\n}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 309,
+      "completion_tokens": 131,
+      "total_tokens": 440,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-8b"
+  },
+  "parsed_object": {
+    "draft": {
+      "selections": [
+        {
+          "requirement_id": "runtime_failure-capability-3",
+          "capability_id": "runtime_failure-capability-3",
+          "depends_on_requirement_ids": []
+        }
+      ],
+      "unresolved_terms": [],
+      "rationale": "The requirement 'runtime_failure-capability-3' was omitted in the previous draft. This repair selects the admitted requirement exactly once, referencing its declared capability_id. No other requirements or capabilities are admitted, so no additional selections are made. Dependencies may reference only admitted requirement IDs, but there are none in this case. No task IDs, agents, trust levels, credentials, contracts, schemas, artifacts, or authority are created."
+    }
+  },
+  "linguistic_latency_ms": 5618.276299908757,
+  "repair_attempted": true,
+  "repair_latency_ms": 5300.574399996549,
+  "repair_raw_response": {
+    "id": "chatcmpl-v4r8jspo0wh33802hd7abw",
+    "object": "chat.completion",
+    "created": 1783945791,
+    "model": "qwen/qwen3-8b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\":{\"selections\":[{\"requirement_id\":\"runtime_failure-capability-3\",\"capability_id\":\"runtime_failure-capability-3\"}],\"unresolved_terms\":[],\"rationale\":\"The requirement 'runtime_failure-capability-3' was omitted in the previous draft. This repair selects the admitted requirement exactly once, referencing its declared capability_id. No other requirements or capabilities are admitted, so no additional selections are made. Dependencies may reference only admitted requirement IDs, but there are none in this case. No task IDs, agents, trust levels, credentials, contracts, schemas, artifacts, or authority are created.\"}}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 493,
+      "completion_tokens": 123,
+      "total_tokens": 616,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-8b"
+  },
+  "evaluation_status": "raw_output_collected_not_scored"
+}

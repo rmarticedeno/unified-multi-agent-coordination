@@ -1,0 +1,305 @@
+{
+  "case_id": "base-05",
+  "model_id": "qwen/qwen3-8b",
+  "seed": 11,
+  "temperature": 0,
+  "backend_seed_honored": "not_verifiable_from_response",
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Interpret the request and return one to three typed candidate plans. Plans are non-authoritative. Use only exact capability_id and agent_id values from the registry. Do not infer trust or authorization."
+    },
+    {
+      "role": "user",
+      "content": "{\"request\":\"Complete defense corpus task schema_modality_graph_invalidity 5.\",\"registry_snapshot\":[{\"agent_id\":\"agent-5\",\"name\":\"Agent 5\",\"service_endpoint\":\"https://agent-5.example/a2a\",\"trust_level\":\"standard\",\"skills\":[{\"name\":\"Capability 5\",\"capability_id\":\"schema_modality_graph_invalidity-capability-5\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"}},\"input_schema\":{\"type\":\"string\"}}],\"input_modes\":[\"text\"],\"output_modes\":[\"json\"]}]}"
+    }
+  ],
+  "raw_response": {
+    "id": "chatcmpl-4ydllpp54dq89ueaybdbrb",
+    "object": "chat.completion",
+    "created": 1783908233,
+    "model": "qwen/qwen3-8b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\n  \"interpreted_request\": {\n    \"user_goal\": \"Complete the defense corpus task schema_modality_graph_invalidity with a specific level of difficulty (level 5).\",\n    \"required_artifacts\": [\n      \"A text-based input describing the graph structure and its modality schema.\",\n      \"A JSON-formatted output validating the invalidity of the schema-modality graph.\"\n    ],\n    \"context\": {\n      \"agent_id\": \"agent-5\",\n      \"capability_id\": \"schema_modality_graph_invalidity-capability-5\"\n    }\n  },\n  \"candidate_plans\": [\n    {\n      \"tasks\": [\n        {\n          \"task_id\": \"task-1\",\n          \"requirement_name\": \"Input Validation\",\n          \"description\": \"Ensure the input is in text format and conforms to the schema_modality_graph_invalidity structure.\",\n          \"expected_artifacts\": [\"text-based graph description\"]\n        },\n        {\n          \"task_id\": \"task-2\",\n          \"requirement_name\": \"Schema Analysis\",\n          \"description\": \"Analyze the provided modality schema for inconsistencies or invalid structures within the graph context.\",\n          \"expected_artifacts\": [\"analysis of schema validity\"]\n        },\n        {\n          \"task_id\": \"task-3\",\n          \"requirement_name\": \"Output Generation\",\n          \"description\": \"Generate a JSON-formatted response that confirms the invalidity of the schema-modality graph, adhering to the validation contract.\",\n          \"expected_artifacts\": [\"JSON output with validity confirmation\"]\n        }\n      ]\n    },\n    {\n      \"tasks\": [\n        {\n          \"task_id\": \"task-1\",\n          \"requirement_name\": \"Input Parsing\",\n          \"description\": \"Parse the text input to extract graph structure and modality schema details.\",\n          \"expected_artifacts\": [\"parsed graph data\"]\n        },\n        {\n          \"task_id\": \"task-2\",\n          \"requirement_name\": \"Invalidity Detection\",\n          \"description\": \"Detect any invalidities in the schema-modality mapping within the graph context using defined rules.\",\n          \"expected_artifacts\": [\"list of detected invalidities\"]\n        },\n        {\n          \"task_id\": \"task-3\",\n          \"requirement_name\": \"Structured Output\",\n          \"description\": \"Format the results into a JSON structure that meets the validation contract for schema_modality_graph_invalidity.\",\n          \"expected_artifacts\": [\"structured JSON output with validity status\"]\n        }\n      ]\n    },\n    {\n      \"tasks\": [\n        {\n          \"task_id\": \"task-1\",\n          \"requirement_name\": \"Input Processing\",\n          \"description\": \"Process the text input to identify and extract relevant graph schema components.\",\n          \"expected_artifacts\": [\"processed graph schema data\"]\n        },\n        {\n          \"task_id\": \"task-2\",\n          \"requirement_name\": \"Schema Validation\",\n          \"description\": \"Validate the modality schema against the graph structure for any inconsistencies or invalid configurations.\",\n          \"expected_artifacts\": [\"validation report on schema validity\"]\n        },\n        {\n          \"task_id\": \"task-3\",\n          \"requirement_name\": \"Final Output\",\n          \"description\": \"Generate a JSON-formatted output that confirms whether the schema-modality graph is valid or not, as per the task requirements.\",\n          \"expected_artifacts\": [\"final JSON output with validity confirmation\"]\n        }\n      ]\n    }\n  ]\n}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 168,
+      "completion_tokens": 718,
+      "total_tokens": 886,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-8b"
+  },
+  "parsed_object": {
+    "interpreted_request": {
+      "user_goal": "Complete the defense corpus task schema_modality_graph_invalidity with a specific level of difficulty (level 5).",
+      "requirements": [],
+      "constraints": [],
+      "required_artifacts": [
+        "A text-based input describing the graph structure and its modality schema.",
+        "A JSON-formatted output validating the invalidity of the schema-modality graph."
+      ],
+      "context": {
+        "agent_id": "agent-5",
+        "capability_id": "schema_modality_graph_invalidity-capability-5"
+      }
+    },
+    "candidate_plans": [
+      {
+        "tasks": [
+          {
+            "task_id": "task-1",
+            "requirement_name": "Input Validation",
+            "requirement_id": "input-validation",
+            "capability_id": "input-validation",
+            "description": "Ensure the input is in text format and conforms to the schema_modality_graph_invalidity structure.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "text-based graph description"
+            ],
+            "validation_contract": {
+              "json_schema": {},
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          },
+          {
+            "task_id": "task-2",
+            "requirement_name": "Schema Analysis",
+            "requirement_id": "schema-analysis",
+            "capability_id": "schema-analysis",
+            "description": "Analyze the provided modality schema for inconsistencies or invalid structures within the graph context.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "analysis of schema validity"
+            ],
+            "validation_contract": {
+              "json_schema": {},
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          },
+          {
+            "task_id": "task-3",
+            "requirement_name": "Output Generation",
+            "requirement_id": "output-generation",
+            "capability_id": "output-generation",
+            "description": "Generate a JSON-formatted response that confirms the invalidity of the schema-modality graph, adhering to the validation contract.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "JSON output with validity confirmation"
+            ],
+            "validation_contract": {
+              "json_schema": {},
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [],
+        "expected_artifacts": [],
+        "completion_criteria": [],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      },
+      {
+        "tasks": [
+          {
+            "task_id": "task-1",
+            "requirement_name": "Input Parsing",
+            "requirement_id": "input-parsing",
+            "capability_id": "input-parsing",
+            "description": "Parse the text input to extract graph structure and modality schema details.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "parsed graph data"
+            ],
+            "validation_contract": {
+              "json_schema": {},
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          },
+          {
+            "task_id": "task-2",
+            "requirement_name": "Invalidity Detection",
+            "requirement_id": "invalidity-detection",
+            "capability_id": "invalidity-detection",
+            "description": "Detect any invalidities in the schema-modality mapping within the graph context using defined rules.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "list of detected invalidities"
+            ],
+            "validation_contract": {
+              "json_schema": {},
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          },
+          {
+            "task_id": "task-3",
+            "requirement_name": "Structured Output",
+            "requirement_id": "structured-output",
+            "capability_id": "structured-output",
+            "description": "Format the results into a JSON structure that meets the validation contract for schema_modality_graph_invalidity.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "structured JSON output with validity status"
+            ],
+            "validation_contract": {
+              "json_schema": {},
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [],
+        "expected_artifacts": [],
+        "completion_criteria": [],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      },
+      {
+        "tasks": [
+          {
+            "task_id": "task-1",
+            "requirement_name": "Input Processing",
+            "requirement_id": "input-processing",
+            "capability_id": "input-processing",
+            "description": "Process the text input to identify and extract relevant graph schema components.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "processed graph schema data"
+            ],
+            "validation_contract": {
+              "json_schema": {},
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          },
+          {
+            "task_id": "task-2",
+            "requirement_name": "Schema Validation",
+            "requirement_id": "schema-validation",
+            "capability_id": "schema-validation",
+            "description": "Validate the modality schema against the graph structure for any inconsistencies or invalid configurations.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "validation report on schema validity"
+            ],
+            "validation_contract": {
+              "json_schema": {},
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          },
+          {
+            "task_id": "task-3",
+            "requirement_name": "Final Output",
+            "requirement_id": "final-output",
+            "capability_id": "final-output",
+            "description": "Generate a JSON-formatted output that confirms whether the schema-modality graph is valid or not, as per the task requirements.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "final JSON output with validity confirmation"
+            ],
+            "validation_contract": {
+              "json_schema": {},
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [],
+        "expected_artifacts": [],
+        "completion_criteria": [],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      }
+    ]
+  },
+  "latency_ms": 25917.745699873194,
+  "evaluation_status": "raw_output_collected_not_scored"
+}

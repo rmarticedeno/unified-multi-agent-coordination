@@ -1,0 +1,137 @@
+{
+  "case_id": "base-05",
+  "model_id": "google/gemma-4-e2b",
+  "seed": 44,
+  "temperature": 0,
+  "backend_seed_honored": "not_verifiable_from_response",
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Interpret the request and return one to three typed candidate plans. Plans are non-authoritative. Use only exact capability_id and agent_id values from the registry. Do not infer trust or authorization."
+    },
+    {
+      "role": "user",
+      "content": "{\"request\":\"Complete defense corpus task schema_modality_graph_invalidity 5.\",\"registry_snapshot\":[{\"agent_id\":\"agent-5\",\"name\":\"Agent 5\",\"service_endpoint\":\"https://agent-5.example/a2a\",\"trust_level\":\"standard\",\"skills\":[{\"name\":\"Capability 5\",\"capability_id\":\"schema_modality_graph_invalidity-capability-5\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"}},\"input_schema\":{\"type\":\"string\"}}],\"input_modes\":[\"text\"],\"output_modes\":[\"json\"]}]}"
+    }
+  ],
+  "raw_response": {
+    "id": "chatcmpl-cy5eyzvmdb8ll6qp1z994",
+    "object": "chat.completion",
+    "created": 1783907809,
+    "model": "google/gemma-4-e2b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\n  \"interpreted_request\": {\n    \"user_goal\": \"Complete defense corpus task schema_modality_graph_invalidity 5.\",\n    \"required_artifacts\": [\n      \"schema_modality_graph_invalidity-capability-5\"\n    ]\n  },\n  \"candidate_plans\": [\n    {\n      \"tasks\": [\n        {\n          \"task_id\": \"schema_modality_graph_invalidity-capability-5\",\n          \"requirement_name\": \"Complete defense corpus task schema_modality_graph_invalidity 5.\",\n          \"description\": \"Execute the capability 'schema_modality_graph_invalidity-capability-5' to fulfill the request.\"\n        }\n      ],\n      \"execution_order\": [\n        \"schema_modality_graph_invalidity-capability-5\"\n      ]\n    },\n    {\n      \"tasks\": [\n        {\n          \"task_id\": \"agent-5\",\n          \"requirement_name\": \"Complete defense corpus task schema_modality_graph_invalidity 5.\",\n          \"description\": \"Invoke Agent 5 to perform the requested task, utilizing its available capability.\"\n        }\n      ],\n      \"execution_order\": [\n        \"agent-5\"\n      ]\n    }\n  ]\n}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 191,
+      "completion_tokens": 309,
+      "total_tokens": 500,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "google/gemma-4-e2b"
+  },
+  "parsed_object": {
+    "interpreted_request": {
+      "user_goal": "Complete defense corpus task schema_modality_graph_invalidity 5.",
+      "requirements": [],
+      "constraints": [],
+      "required_artifacts": [
+        "schema_modality_graph_invalidity-capability-5"
+      ],
+      "context": {}
+    },
+    "candidate_plans": [
+      {
+        "tasks": [
+          {
+            "task_id": "schema_modality_graph_invalidity-capability-5",
+            "requirement_name": "Complete defense corpus task schema_modality_graph_invalidity 5.",
+            "requirement_id": "complete-defense-corpus-task-schema-modality-graph-invalidity-5",
+            "capability_id": "complete-defense-corpus-task-schema-modality-graph-invalidity-5",
+            "description": "Execute the capability 'schema_modality_graph_invalidity-capability-5' to fulfill the request.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [],
+            "validation_contract": {
+              "json_schema": {},
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [
+          "schema_modality_graph_invalidity-capability-5"
+        ],
+        "expected_artifacts": [],
+        "completion_criteria": [],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      },
+      {
+        "tasks": [
+          {
+            "task_id": "agent-5",
+            "requirement_name": "Complete defense corpus task schema_modality_graph_invalidity 5.",
+            "requirement_id": "complete-defense-corpus-task-schema-modality-graph-invalidity-5",
+            "capability_id": "complete-defense-corpus-task-schema-modality-graph-invalidity-5",
+            "description": "Invoke Agent 5 to perform the requested task, utilizing its available capability.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [],
+            "validation_contract": {
+              "json_schema": {},
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [
+          "agent-5"
+        ],
+        "expected_artifacts": [],
+        "completion_criteria": [],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      }
+    ]
+  },
+  "latency_ms": 4776.647500228137,
+  "evaluation_status": "raw_output_collected_not_scored"
+}

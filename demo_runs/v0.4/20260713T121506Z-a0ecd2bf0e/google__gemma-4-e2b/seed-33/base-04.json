@@ -1,0 +1,91 @@
+{
+  "case_id": "base-04",
+  "model_id": "google/gemma-4-e2b",
+  "seed": 33,
+  "temperature": 0,
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Return a non-executable LinguisticPlanDraft. Select every admitted requirement_id exactly once and only its declared capability_id. Dependencies may reference only admitted requirement IDs. Report ambiguous terms in unresolved_terms. Do not create task IDs, agents, trust, credentials, contracts, schemas, artifacts, or authority. Reference labels are unavailable."
+    },
+    {
+      "role": "user",
+      "content": "{\"request_text\":\"Coordinate the declared services for satellite imagery processing; preserve the specified data flow, evidence contract, and authority limits.\",\"admitted_request\":{\"user_goal\":\"Coordinate the declared services for satellite imagery processing; preserve the specified data flow, evidence contract, and authority limits.\",\"requirements\":[{\"name\":\"Capability 4\",\"requirement_id\":\"missing_or_auxiliary_overreach-capability-4\",\"capability_id\":\"missing_or_auxiliary_overreach-capability-4\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"required_trust_level\":\"standard\",\"validation_contract\":{\"required_artifacts\":[\"artifact-4\"]}}],\"required_artifacts\":[\"artifact-4\"],\"context\":{\"case_index\":4,\"allowed\":true}},\"registry_snapshot\":[]}"
+    }
+  ],
+  "raw_response": {
+    "id": "chatcmpl-dmfsgz1x3lbnq81d5t3jn",
+    "object": "chat.completion",
+    "created": 1783945334,
+    "model": "google/gemma-4-e2b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\": {\"rationale\": \"The user requests coordination of services for satellite imagery processing while preserving data flow, evidence contract, and authority limits. The only admitted requirement is Capability 4, which requires artifact-4. Therefore, the output must map the admitted requirement to its capability ID based on the provided structure. Since no other requirements are present, this is the sole mapping possible under the constraints of selecting every admitted requirement_id exactly once and only its declared capability_id.\"}}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 247,
+      "completion_tokens": 102,
+      "total_tokens": 349,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "google/gemma-4-e2b"
+  },
+  "parsed_object": {
+    "draft": {
+      "selections": [
+        {
+          "requirement_id": "missing_or_auxiliary_overreach-capability-4",
+          "capability_id": "missing_or_auxiliary_overreach-capability-4",
+          "depends_on_requirement_ids": []
+        }
+      ],
+      "unresolved_terms": [],
+      "rationale": "The previous turn indicated that the draft omitted the requirement 'missing_or_auxiliary_overreach-capability-4'. This instruction mandates selecting every admitted requirement_id exactly once and only its declared capability_id. The only admitted requirement is missing_or_auxiliary_overreach-capability-4, which maps to itself as its capability ID."
+    }
+  },
+  "linguistic_latency_ms": 2280.439999885857,
+  "repair_attempted": true,
+  "repair_latency_ms": 1446.2961999233812,
+  "repair_raw_response": {
+    "id": "chatcmpl-7dphsg1bvcjrrkhd9g7kqk",
+    "object": "chat.completion",
+    "created": 1783945336,
+    "model": "google/gemma-4-e2b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\":{\"selections\":[{\"requirement_id\":\"missing_or_auxiliary_overreach-capability-4\",\"capability_id\":\"missing_or_auxiliary_overreach-capability-4\"}],\"unresolved_terms\":[],\"rationale\":\"The previous turn indicated that the draft omitted the requirement 'missing_or_auxiliary_overreach-capability-4'. This instruction mandates selecting every admitted requirement_id exactly once and only its declared capability_id. The only admitted requirement is missing_or_auxiliary_overreach-capability-4, which maps to itself as its capability ID.\"}}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 428,
+      "completion_tokens": 126,
+      "total_tokens": 554,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "google/gemma-4-e2b"
+  },
+  "evaluation_status": "raw_output_collected_not_scored"
+}

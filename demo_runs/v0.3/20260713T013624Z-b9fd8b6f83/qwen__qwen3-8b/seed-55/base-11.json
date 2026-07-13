@@ -1,0 +1,148 @@
+{
+  "case_id": "base-11",
+  "model_id": "qwen/qwen3-8b",
+  "seed": 55,
+  "temperature": 0,
+  "backend_seed_honored": "not_verifiable_from_response",
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Interpret the request and return one to three typed candidate plans. Plans are non-authoritative. Use only exact capability_id and agent_id values from the registry. Do not infer trust or authorization."
+    },
+    {
+      "role": "user",
+      "content": "{\"request\":\"Complete defense corpus task schema_modality_graph_invalidity 11.\",\"registry_snapshot\":[{\"agent_id\":\"agent-11\",\"name\":\"Agent 11\",\"service_endpoint\":\"https://agent-11.example/a2a\",\"trust_level\":\"standard\",\"skills\":[{\"name\":\"Capability 11\",\"capability_id\":\"schema_modality_graph_invalidity-capability-11\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"}}}],\"input_modes\":[\"text\"],\"output_modes\":[\"json\"]}]}"
+    }
+  ],
+  "raw_response": {
+    "id": "chatcmpl-h5jpa4my7ariyzz76je1v",
+    "object": "chat.completion",
+    "created": 1783912526,
+    "model": "qwen/qwen3-8b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\n  \"interpreted_request\": {\n    \"user_goal\": \"Complete the defense corpus task schema_modality_graph_invalidity 11.\",\n    \"required_artifacts\": [\"schema_modality_graph_invalidity\"],\n    \"context\": {\n      \"task_id\": \"11\",\n      \"registry_snapshot\": [\n        {\n          \"agent_id\": \"agent-11\",\n          \"name\": \"Agent 11\",\n          \"service_endpoint\": \"https://agent-11.example/a2a\",\n          \"trust_level\": \"standard\",\n          \"skills\": [\n            {\n              \"name\": \"Capability 11\",\n              \"capability_id\": \"schema_modality_graph_invalidity-capability-11\",\n              \"input_modes\": [\"text\"],\n              \"output_modes\": [\"json\"],\n              \"validation_contract\": {\n                \"json_schema\": {\n                  \"type\": \"object\"\n                }\n              }\n            }\n          ],\n          \"input_modes\": [\"text\"],\n          \"output_modes\": [\"json\"]\n        }\n      ]\n    }\n  },\n  \"candidate_plans\": [\n    {\n      \"selected_agents\": {\n        \"agent_id\": \"agent-11\",\n        \"capability_id\": \"schema_modality_graph_invalidity-capability-11\"\n      },\n      \"execution_order\": [\n        \"submit_task_to_agent_11\",\n        \"validate_output_with_json_schema\",\n        \"return_final_result\"\n      ],\n      \"expected_artifacts\": [\"schema_modality_graph_invalidity\"]\n    },\n    {\n      \"selected_agents\": {\n        \"agent_id\": \"agent-11\",\n        \"capability_id\": \"schema_modality_graph_invalidity-capability-11\"\n      },\n      \"execution_order\": [\n        \"submit_task_to_agent_11\",\n        \"validate_output_with_json_schema\",\n        \"return_final_result\"\n      ],\n      \"expected_artifacts\": [\"schema_modality_graph_invalidity\"]\n    }\n  ]\n}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 167,
+      "completion_tokens": 400,
+      "total_tokens": 567,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-8b"
+  },
+  "parsed_object": {
+    "interpreted_request": {
+      "user_goal": "Complete the defense corpus task schema_modality_graph_invalidity 11.",
+      "requirements": [],
+      "constraints": [],
+      "required_artifacts": [
+        "schema_modality_graph_invalidity"
+      ],
+      "context": {
+        "task_id": "11",
+        "registry_snapshot": [
+          {
+            "agent_id": "agent-11",
+            "name": "Agent 11",
+            "service_endpoint": "https://agent-11.example/a2a",
+            "trust_level": "standard",
+            "skills": [
+              {
+                "name": "Capability 11",
+                "capability_id": "schema_modality_graph_invalidity-capability-11",
+                "input_modes": [
+                  "text"
+                ],
+                "output_modes": [
+                  "json"
+                ],
+                "validation_contract": {
+                  "json_schema": {
+                    "type": "object"
+                  }
+                }
+              }
+            ],
+            "input_modes": [
+              "text"
+            ],
+            "output_modes": [
+              "json"
+            ]
+          }
+        ]
+      }
+    },
+    "candidate_plans": [
+      {
+        "tasks": [],
+        "selected_agents": {
+          "agent_id": "agent-11",
+          "capability_id": "schema_modality_graph_invalidity-capability-11"
+        },
+        "generated_nlp_agents": [],
+        "execution_order": [
+          "submit_task_to_agent_11",
+          "validate_output_with_json_schema",
+          "return_final_result"
+        ],
+        "expected_artifacts": [
+          "schema_modality_graph_invalidity"
+        ],
+        "completion_criteria": [],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [
+            "schema_modality_graph_invalidity"
+          ],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      },
+      {
+        "tasks": [],
+        "selected_agents": {
+          "agent_id": "agent-11",
+          "capability_id": "schema_modality_graph_invalidity-capability-11"
+        },
+        "generated_nlp_agents": [],
+        "execution_order": [
+          "submit_task_to_agent_11",
+          "validate_output_with_json_schema",
+          "return_final_result"
+        ],
+        "expected_artifacts": [
+          "schema_modality_graph_invalidity"
+        ],
+        "completion_criteria": [],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [
+            "schema_modality_graph_invalidity"
+          ],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      }
+    ]
+  },
+  "latency_ms": 20013.42420000583,
+  "evaluation_status": "raw_output_collected_not_scored"
+}

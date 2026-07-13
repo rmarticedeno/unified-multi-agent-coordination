@@ -1,0 +1,196 @@
+{
+  "case_id": "base-20",
+  "model_id": "qwen/qwen3-1.7b",
+  "seed": 11,
+  "temperature": 0,
+  "backend_seed_honored": "not_verifiable_from_response",
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Interpret the request and return one to three typed candidate plans. Plans are non-authoritative. Use only exact capability_id and agent_id values from the registry. Do not infer trust or authorization."
+    },
+    {
+      "role": "user",
+      "content": "{\"request\":\"Complete defense corpus task decomposed_feasible 20.\",\"registry_snapshot\":[{\"agent_id\":\"agent-20\",\"name\":\"Agent 20\",\"service_endpoint\":\"https://agent-20.example/a2a\",\"trust_level\":\"standard\",\"skills\":[{\"name\":\"Capability 20\",\"capability_id\":\"decomposed_feasible-capability-20\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"}}}],\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"]},{\"agent_id\":\"finisher-20\",\"name\":\"Finisher 20\",\"service_endpoint\":\"https://finisher-20.example/a2a\",\"trust_level\":\"standard\",\"skills\":[{\"name\":\"Finish Capability 20\",\"capability_id\":\"decomposed_feasible-capability-20-finish\",\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"validation_contract\":{\"required_artifacts\":[\"artifact-20\"]}}],\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"]}]}"
+    }
+  ],
+  "raw_response": {
+    "id": "chatcmpl-nwg3v3srekkl9873b4spe",
+    "object": "chat.completion",
+    "created": 1783906659,
+    "model": "qwen/qwen3-1.7b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"interpreted_request\": {\"user_goal\": \"Complete defense corpus task decomposed_feasible 20.\", \"required_artifacts\": [\"artifact-20\"], \"context\": {\"agent_id\": \"agent-20\", \"capability_id\": \"decomposed_feasible-capability-20\", \"input_modes\": [\"text\"], \"output_modes\": [\"intermediate\"]}},\"candidate_plans\": [{\"tasks\": [{\"task_id\": \"plan1\", \"requirement_name\": \"Complete decomposition of defense corpus task decomposed_feasible 20.\", \"capability_id\": \"decomposed_feasible-capability-20\", \"description\": \"Agent 20 is responsible for decomposing the defense corpus task into feasible components. This involves analyzing the task requirements, breaking down complex tasks into manageable parts, and ensuring that each component aligns with the overall objectives of the defense corpus.\", \"expected_artifacts\": [\"artifact-20\"], \"validation_contract\": {\"required_artifacts\": [\"artifact-20\"]}}], \"execution_order\": [\"plan1\"]}, {\"tasks\": [{\"task_id\": \"plan2\", \"requirement_name\": \"Generate a feasible decomposition plan for the defense corpus task decomposed_feasible 20.\", \"capability_id\": \"decomposed_feasible-capability-20\", \"description\": \"Agent 20 will generate a detailed plan that outlines how each component of the defense corpus task will be addressed. This includes defining the scope, setting priorities, and ensuring that all necessary elements are included in the decomposition.\", \"expected_artifacts\": [\"artifact-20\"], \"validation_contract\": {\"required_artifacts\": [\"artifact-20\"]}}], \"execution_order\": [\"plan2\"]}, {\"tasks\": [{\"task_id\": \"plan3\", \"requirement_name\": \"Validate and finalize the decomposition of the defense corpus task decomposed_feasible 20.\", \"capability_id\": \"decomposed_feasible-capability-20\", \"description\": \"Agent 20 will validate the decomposition plan by checking for consistency, completeness, and feasibility. This step ensures that the decomposition meets all the requirements of the defense corpus task and is ready for further processing or implementation.\", \"expected_artifacts\": [\"artifact-20\"], \"validation_contract\": {\"required_artifacts\": [\"artifact-20\"]}}], \"execution_order\": [\"plan3\"]}]}\n",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 263,
+      "completion_tokens": 500,
+      "total_tokens": 763,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-1.7b"
+  },
+  "parsed_object": {
+    "interpreted_request": {
+      "user_goal": "Complete defense corpus task decomposed_feasible 20.",
+      "requirements": [],
+      "constraints": [],
+      "required_artifacts": [
+        "artifact-20"
+      ],
+      "context": {
+        "agent_id": "agent-20",
+        "capability_id": "decomposed_feasible-capability-20",
+        "input_modes": [
+          "text"
+        ],
+        "output_modes": [
+          "intermediate"
+        ]
+      }
+    },
+    "candidate_plans": [
+      {
+        "tasks": [
+          {
+            "task_id": "plan1",
+            "requirement_name": "Complete decomposition of defense corpus task decomposed_feasible 20.",
+            "requirement_id": "complete-decomposition-of-defense-corpus-task-decomposed-feasible-20",
+            "capability_id": "decomposed_feasible-capability-20",
+            "description": "Agent 20 is responsible for decomposing the defense corpus task into feasible components. This involves analyzing the task requirements, breaking down complex tasks into manageable parts, and ensuring that each component aligns with the overall objectives of the defense corpus.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "artifact-20"
+            ],
+            "validation_contract": {
+              "json_schema": {},
+              "required_artifacts": [
+                "artifact-20"
+              ],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [
+          "plan1"
+        ],
+        "expected_artifacts": [],
+        "completion_criteria": [],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      },
+      {
+        "tasks": [
+          {
+            "task_id": "plan2",
+            "requirement_name": "Generate a feasible decomposition plan for the defense corpus task decomposed_feasible 20.",
+            "requirement_id": "generate-a-feasible-decomposition-plan-for-the-defense-corpus-task-decomposed-feasible-20",
+            "capability_id": "decomposed_feasible-capability-20",
+            "description": "Agent 20 will generate a detailed plan that outlines how each component of the defense corpus task will be addressed. This includes defining the scope, setting priorities, and ensuring that all necessary elements are included in the decomposition.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "artifact-20"
+            ],
+            "validation_contract": {
+              "json_schema": {},
+              "required_artifacts": [
+                "artifact-20"
+              ],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [
+          "plan2"
+        ],
+        "expected_artifacts": [],
+        "completion_criteria": [],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      },
+      {
+        "tasks": [
+          {
+            "task_id": "plan3",
+            "requirement_name": "Validate and finalize the decomposition of the defense corpus task decomposed_feasible 20.",
+            "requirement_id": "validate-and-finalize-the-decomposition-of-the-defense-corpus-task-decomposed-feasible-20",
+            "capability_id": "decomposed_feasible-capability-20",
+            "description": "Agent 20 will validate the decomposition plan by checking for consistency, completeness, and feasibility. This step ensures that the decomposition meets all the requirements of the defense corpus task and is ready for further processing or implementation.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "artifact-20"
+            ],
+            "validation_contract": {
+              "json_schema": {},
+              "required_artifacts": [
+                "artifact-20"
+              ],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [
+          "plan3"
+        ],
+        "expected_artifacts": [],
+        "completion_criteria": [],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      }
+    ]
+  },
+  "latency_ms": 4571.254400070757,
+  "evaluation_status": "raw_output_collected_not_scored"
+}

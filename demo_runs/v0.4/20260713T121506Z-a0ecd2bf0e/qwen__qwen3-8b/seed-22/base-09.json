@@ -1,0 +1,91 @@
+{
+  "case_id": "base-09",
+  "model_id": "qwen/qwen3-8b",
+  "seed": 22,
+  "temperature": 0,
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Return a non-executable LinguisticPlanDraft. Select every admitted requirement_id exactly once and only its declared capability_id. Dependencies may reference only admitted requirement IDs. Report ambiguous terms in unresolved_terms. Do not create task IDs, agents, trust, credentials, contracts, schemas, artifacts, or authority. Reference labels are unavailable."
+    },
+    {
+      "role": "user",
+      "content": "{\"request_text\":\"Coordinate the declared services for wildfire sensor triage; preserve the specified data flow, evidence contract, and authority limits.\",\"admitted_request\":{\"user_goal\":\"Coordinate the declared services for wildfire sensor triage; preserve the specified data flow, evidence contract, and authority limits.\",\"requirements\":[{\"name\":\"Capability 9\",\"requirement_id\":\"runtime_failure-capability-9\",\"capability_id\":\"runtime_failure-capability-9\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"required_trust_level\":\"standard\",\"validation_contract\":{\"required_artifacts\":[\"artifact-9\"]}}],\"required_artifacts\":[\"artifact-9\"],\"context\":{\"case_index\":9,\"allowed\":true}},\"registry_snapshot\":[{\"agent_id\":\"agent-9\",\"name\":\"Agent 9\",\"service_endpoint\":\"https://agent-9.example/a2a\",\"trust_level\":\"standard\",\"skills\":[{\"name\":\"Capability 9\",\"capability_id\":\"runtime_failure-capability-9\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"}}}],\"input_modes\":[\"text\"],\"output_modes\":[\"json\"]}]}"
+    }
+  ],
+  "raw_response": {
+    "id": "chatcmpl-b4yedju5cfiob6d7xhr8i",
+    "object": "chat.completion",
+    "created": 1783945936,
+    "model": "qwen/qwen3-8b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\n  \"draft\": {\n    \"unresolved_terms\": [],\n    \"rationale\": \"The request involves coordinating declared services for wildfire sensor triage while preserving data flow, evidence contract, and authority limits. The admitted requirement is tied to 'Capability 9', which has a defined input/output mode and validation contract. This draft ensures the capability is referenced correctly without introducing new task IDs or other elements not specified in the request.\"\n  }\n}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 303,
+      "completion_tokens": 91,
+      "total_tokens": 394,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-8b"
+  },
+  "parsed_object": {
+    "draft": {
+      "selections": [
+        {
+          "requirement_id": "runtime_failure-capability-9",
+          "capability_id": "runtime_failure-capability-9",
+          "depends_on_requirement_ids": []
+        }
+      ],
+      "unresolved_terms": [],
+      "rationale": "The requirement 'runtime_failure-capability-9' has been added to the selections to address the missing_requirement error. This ensures that the capability is properly referenced in the draft without introducing new elements or task IDs."
+    }
+  },
+  "linguistic_latency_ms": 3461.5136000793427,
+  "repair_attempted": true,
+  "repair_latency_ms": 3404.268099926412,
+  "repair_raw_response": {
+    "id": "chatcmpl-8s5vc3xuqjs7oou5kuzwp",
+    "object": "chat.completion",
+    "created": 1783945939,
+    "model": "qwen/qwen3-8b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\":{\"selections\":[{\"requirement_id\":\"runtime_failure-capability-9\",\"capability_id\":\"runtime_failure-capability-9\"}],\"unresolved_terms\":[],\"rationale\":\"The requirement 'runtime_failure-capability-9' has been added to the selections to address the missing_requirement error. This ensures that the capability is properly referenced in the draft without introducing new elements or task IDs.\"}}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 447,
+      "completion_tokens": 81,
+      "total_tokens": 528,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-8b"
+  },
+  "evaluation_status": "raw_output_collected_not_scored"
+}

@@ -16,6 +16,16 @@ docker compose -f docker-compose.system.yml up --build \
 docker compose -f docker-compose.distributed.yml up --build \
   --abort-on-container-exit --exit-code-from distributed-system-tests
 uv run unified-defense-study --check
+uv run unified-analyze-defense-study \
+  demo_runs/v0.3/20260713T013624Z-b9fd8b6f83 \
+  --corpus corpus/v0.3 \
+  --output demo_runs/v0.3/20260713T013624Z-b9fd8b6f83/analysis.json
+uv run unified-defense-study-v04 --corpus corpus/v0.4 --check
+uv run unified-analyze-defense-study-v04 \
+  --run demo_runs/v0.4/20260713T121506Z-a0ecd2bf0e \
+  --corpus corpus/v0.4
+uv run unified-runtime-ablation-study \
+  --output-dir demo_runs/runtime_ablation/<new-run-id>
 \end{Verbatim}
 
 \chapter{Predicate Refinement and Claim--Evidence Matrix}
@@ -31,7 +41,8 @@ Verifiability & Task, requirement or capability validation contract & Validatorl
 Dependency safety & Completed prerequisites and declared artifacts only & Failure/timeout/unknown branch tests \\
 Traceability & Persisted session, plan, task and attempt events & Ordering, restart and isolation tests \\
 Recovery & Lease, fencing, idempotency and unknown-side-effect policy & PostgreSQL crash-fault harness \\
-RQ4 comparison & Blinded 36-case paired model study & Signed labels, 540 outputs and frozen analysis \\
+RQ4 comparison & Author-labelled, label-hidden v0.3 and v0.4 studies & Two immutable 540-output matrices and reproducible digests \\
+Runtime mechanisms & Secure-default policy surfaces and explicit negative controls & Separate 350-observation runtime-only bundle \\
 \bottomrule
 \end{longtable}
 
@@ -44,5 +55,6 @@ RQ4 comparison & Blinded 36-case paired model study & Signed labels, 540 outputs
   \item[What is trusted?] The coordinator code, durable store, locally configured trust policy, admitted registry descriptions, and contract validators. Malicious admitted agents remain outside scope.
   \item[Why is fencing not consensus?] All replicas serialize through one PostgreSQL authority; there is no replicated log or quorum protocol.
   \item[How broad is A2A interoperability?] Controlled fixtures plus one vendored official sample. This is evidence of concrete compatibility, not universal conformance.
-  \item[Why are comparative conclusions absent?] Independent corpus approval and the complete repeated study are release gates. Reporting legacy numbers would invalidate the corrected evaluation.
+  \item[Did the hybrid work empirically?] Version 0.3 universally refused feasible observations. The constrained v0.4 bridge reached 90.0\% accuracy, 76.0\% feasible recall, zero false acceptance, and majority acceptance for all feasible cases. It still failed the pre-registered per-model floor because Qwen3 1.7B recall was 28\%.
+  \item[Why trust the comparison?] The corpus and author labels were frozen before collection, labels were hidden during inference, all 540 identities were verified, and analysis is deterministic. However, labels were not independently adjudicated, so claims remain limited to framework conformance on this designed corpus.
 \end{description}

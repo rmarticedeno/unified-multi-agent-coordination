@@ -33,7 +33,7 @@ The specific objectives are:
   \item Critically synthesize classical multi-agent coordination, symbolic AI, LLM-agent architectures, and interoperability protocols to identify the unresolved integration gap.
   \item Define a protocol-independent theoretical framework for capabilities, tasks, authority, commitments, artifact compatibility, bounded auxiliary capabilities, and feasibility.
   \item Instantiate the framework as an implementable Python coordination agent over middleware SDK that preserves protocol-mediated interoperability while supporting remote, local, and Lingo-authored agents without coupling the theoretical contribution to a particular model provider, agent framework, or communication protocol.
-  \item Evaluate the corrected prototype with a blinded, repeated 36-case study, paired controls and ablations, deterministic scenarios, containerized A2A checks, and measured PostgreSQL crash recovery.
+  \item Evaluate the corrected prototype with an author-labelled, label-hidden, repeated 36-case study, paired controls and ablations, deterministic scenarios, containerized A2A checks, and measured PostgreSQL crash recovery.
   \item Analyze the scope, limitations, validity threats, and practical implications of the proposed framework.
 \end{enumerate}
 
@@ -54,7 +54,7 @@ The thesis focuses on plan-level coordination under a trusted central authorizat
 
 \section{Methodological Approach}
 
-The research follows a design-science approach. It combines critical literature synthesis, formal and architectural modeling, implementation-oriented specification, and controlled evaluation. The evaluation separates planning feasibility from runtime success, uses blinded labels and repeated local-model runs, tests mechanism ablations, and measures replicated-coordinator ownership through a shared durable store. Chapter~\ref{chap:methodology} explains the executed and gated stages.
+The research follows a design-science approach. It combines critical literature synthesis, formal and architectural modeling, implementation-oriented specification, and controlled evaluation. The evaluation separates planning feasibility from runtime success, uses pre-registered author labels hidden during inference and repeated local-model runs, tests mechanism ablations, and measures replicated-coordinator ownership through a shared durable store. Chapter~\ref{chap:methodology} explains the executed and gated stages.
 
 \section{Thesis Organization}
 

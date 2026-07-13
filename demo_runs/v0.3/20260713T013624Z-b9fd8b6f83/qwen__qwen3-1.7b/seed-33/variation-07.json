@@ -1,0 +1,125 @@
+{
+  "case_id": "variation-07",
+  "model_id": "qwen/qwen3-1.7b",
+  "seed": 33,
+  "temperature": 0,
+  "backend_seed_honored": "not_verifiable_from_response",
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Interpret the request and return one to three typed candidate plans. Plans are non-authoritative. Use only exact capability_id and agent_id values from the registry. Do not infer trust or authorization."
+    },
+    {
+      "role": "user",
+      "content": "{\"request\":\"Complete defense corpus task direct_feasible 7.\",\"registry_snapshot\":[{\"agent_id\":\"agent-7\",\"name\":\"Agent 7\",\"service_endpoint\":\"https://agent-7.example/a2a\",\"trust_level\":\"standard\",\"skills\":[{\"name\":\"Capability 7\",\"capability_id\":\"direct_feasible-capability-7\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"}}}],\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"status\":\"unavailable\"}]}"
+    }
+  ],
+  "raw_response": {
+    "id": "chatcmpl-qwax751auvpf5jaho3ksga",
+    "object": "chat.completion",
+    "created": 1783906962,
+    "model": "qwen/qwen3-1.7b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"interpreted_request\": {\"user_goal\": \"Complete defense corpus task direct_feasible 7.\", \"context\": {\"registry_snapshot\": [{\"agent_id\": \"agent-7\", \"name\": \"Agent 7\", \"service_endpoint\": \"https://agent-7.example/a2a\", \"trust_level\": \"standard\", \"skills\": [{\"name\": \"Capability 7\", \"capability_id\": \"direct_feasible-capability-7\", \"input_modes\": [\"text\"], \"output_modes\": [\"json\"], \"validation_contract\": {\"json_schema\": {\"type\": \"object\"}}}]}]}},\"candidate_plans\": [{\"tasks\": [{\"task_id\": \"plan1\", \"requirement_name\": \"Complete defense corpus task direct_feasible 7.\", \"capability_id\": \"direct_feasible-capability-7\", \"description\": \"Execute the direct feasible capability for the defense corpus task 7.\", \"expected_artifacts\": [\"defense_corpus_task_7_result.json\"], \"validation_contract\": {\"json_schema\": {\"type\": \"object\"}}}]}]}\n",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 158,
+      "completion_tokens": 225,
+      "total_tokens": 383,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-1.7b"
+  },
+  "parsed_object": {
+    "interpreted_request": {
+      "user_goal": "Complete defense corpus task direct_feasible 7.",
+      "requirements": [],
+      "constraints": [],
+      "required_artifacts": [],
+      "context": {
+        "registry_snapshot": [
+          {
+            "agent_id": "agent-7",
+            "name": "Agent 7",
+            "service_endpoint": "https://agent-7.example/a2a",
+            "trust_level": "standard",
+            "skills": [
+              {
+                "name": "Capability 7",
+                "capability_id": "direct_feasible-capability-7",
+                "input_modes": [
+                  "text"
+                ],
+                "output_modes": [
+                  "json"
+                ],
+                "validation_contract": {
+                  "json_schema": {
+                    "type": "object"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "candidate_plans": [
+      {
+        "tasks": [
+          {
+            "task_id": "plan1",
+            "requirement_name": "Complete defense corpus task direct_feasible 7.",
+            "requirement_id": "complete-defense-corpus-task-direct-feasible-7",
+            "capability_id": "direct_feasible-capability-7",
+            "description": "Execute the direct feasible capability for the defense corpus task 7.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "defense_corpus_task_7_result.json"
+            ],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              },
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [],
+        "expected_artifacts": [],
+        "completion_criteria": [],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      }
+    ]
+  },
+  "latency_ms": 2317.771599860862,
+  "evaluation_status": "raw_output_collected_not_scored"
+}

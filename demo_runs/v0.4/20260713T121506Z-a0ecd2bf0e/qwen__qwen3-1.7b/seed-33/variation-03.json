@@ -1,0 +1,87 @@
+{
+  "case_id": "variation-03",
+  "model_id": "qwen/qwen3-1.7b",
+  "seed": 33,
+  "temperature": 0,
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Return a non-executable LinguisticPlanDraft. Select every admitted requirement_id exactly once and only its declared capability_id. Dependencies may reference only admitted requirement IDs. Report ambiguous terms in unresolved_terms. Do not create task IDs, agents, trust, credentials, contracts, schemas, artifacts, or authority. Reference labels are unavailable."
+    },
+    {
+      "role": "user",
+      "content": "{\"request_text\":\"Using only the listed providers, coordinate the declared services for wildfire sensor triage; preserve the specified data flow, evidence contract, and authority limits.\",\"admitted_request\":{\"user_goal\":\"Coordinate the declared services for wildfire sensor triage; preserve the specified data flow, evidence contract, and authority limits.\",\"requirements\":[{\"name\":\"Capability 3\",\"requirement_id\":\"runtime_failure-capability-3\",\"capability_id\":\"runtime_failure-capability-3\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"required_trust_level\":\"standard\",\"validation_contract\":{\"required_artifacts\":[\"artifact-3\"]}}],\"required_artifacts\":[\"artifact-3\"],\"context\":{\"case_index\":3,\"allowed\":true}},\"registry_snapshot\":[{\"agent_id\":\"agent-3\",\"name\":\"Agent 3\",\"service_endpoint\":\"https://agent-3.example/a2a\",\"trust_level\":\"standard\",\"skills\":[{\"name\":\"Capability 3\",\"capability_id\":\"runtime_failure-capability-3\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"}}}],\"input_modes\":[\"text\"],\"output_modes\":[\"json\"]}]}"
+    }
+  ],
+  "raw_response": {
+    "id": "chatcmpl-sox3kdepf9g6trv5xtyn",
+    "object": "chat.completion",
+    "created": 1783945065,
+    "model": "qwen/qwen3-1.7b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\": {\"unresolved_terms\": [\"artifact-3\"], \"rationale\": \"The request contains an unresolved term 'artifact-3' which is not defined in the provided context. This term may refer to a specific artifact that needs to be referenced or resolved before proceeding with the plan.\"}}\n",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 305,
+      "completion_tokens": 61,
+      "total_tokens": 366,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-1.7b"
+  },
+  "parsed_object": {
+    "draft": {
+      "selections": [],
+      "unresolved_terms": [
+        "artifact-3"
+      ],
+      "rationale": "The request contains an unresolved term 'artifact-3' which is not defined in the provided context. This term may refer to a specific artifact that needs to be referenced or resolved before proceeding with the plan."
+    }
+  },
+  "linguistic_latency_ms": 790.4490998480469,
+  "repair_attempted": true,
+  "repair_latency_ms": 569.9393998365849,
+  "repair_raw_response": {
+    "id": "chatcmpl-wexn1ypy79c8xnp72qgyp8",
+    "object": "chat.completion",
+    "created": 1783945066,
+    "model": "qwen/qwen3-1.7b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\":{\"selections\":[],\"unresolved_terms\":[\"artifact-3\"],\"rationale\":\"The request contains an unresolved term 'artifact-3' which is not defined in the provided context. This term may refer to a specific artifact that needs to be referenced or resolved before proceeding with the plan.\"}}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 453,
+      "completion_tokens": 61,
+      "total_tokens": 514,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-1.7b"
+  },
+  "evaluation_status": "raw_output_collected_not_scored"
+}

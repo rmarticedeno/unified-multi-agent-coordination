@@ -1,0 +1,216 @@
+{
+  "case_id": "base-09",
+  "model_id": "qwen/qwen3-8b",
+  "seed": 33,
+  "temperature": 0,
+  "backend_seed_honored": "not_verifiable_from_response",
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Interpret the request and return one to three typed candidate plans. Plans are non-authoritative. Use only exact capability_id and agent_id values from the registry. Do not infer trust or authorization."
+    },
+    {
+      "role": "user",
+      "content": "{\"request\":\"Complete defense corpus task runtime_failure 9.\",\"registry_snapshot\":[{\"agent_id\":\"agent-9\",\"name\":\"Agent 9\",\"service_endpoint\":\"https://agent-9.example/a2a\",\"trust_level\":\"standard\",\"skills\":[{\"name\":\"Capability 9\",\"capability_id\":\"runtime_failure-capability-9\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"}}}],\"input_modes\":[\"text\"],\"output_modes\":[\"json\"]}]}"
+    }
+  ],
+  "raw_response": {
+    "id": "chatcmpl-f27ixhe5e7basccxbkyk3c",
+    "object": "chat.completion",
+    "created": 1783910146,
+    "model": "qwen/qwen3-8b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\n  \"interpreted_request\": {\n    \"user_goal\": \"Complete the defense corpus task associated with runtime_failure 9.\",\n    \"required_artifacts\": [\"runtime_failure-capability-9\"],\n    \"context\": {\n      \"agent_id\": \"agent-9\",\n      \"name\": \"Agent 9\",\n      \"service_endpoint\": \"https://agent-9.example/a2a\",\n      \"trust_level\": \"standard\"\n    }\n  },\n  \"candidate_plans\": [\n    {\n      \"tasks\": [\n        {\n          \"task_id\": \"plan_1\",\n          \"requirement_name\": \"runtime_failure-capability-9\",\n          \"description\": \"Initiate the runtime failure task using Agent 9's capability to process text input and generate JSON output.\",\n          \"expected_artifacts\": [\"json_output\"],\n          \"validation_contract\": {\n            \"json_schema\": {\n              \"type\": \"object\"\n            }\n          }\n        }\n      ],\n      \"execution_order\": [\"plan_1\"]\n    },\n    {\n      \"tasks\": [\n        {\n          \"task_id\": \"plan_2\",\n          \"requirement_name\": \"runtime_failure-capability-9\",\n          \"description\": \"Validate the input text for the runtime failure task and ensure it conforms to the expected JSON schema.\",\n          \"expected_artifacts\": [\"validated_input\"],\n          \"validation_contract\": {\n            \"json_schema\": {\n              \"type\": \"object\"\n            }\n          }\n        },\n        {\n          \"task_id\": \"plan_3\",\n          \"requirement_name\": \"runtime_failure-capability-9\",\n          \"description\": \"Execute the runtime failure task using Agent 9's capability to process text input and generate JSON output.\",\n          \"expected_artifacts\": [\"json_output\"],\n          \"validation_contract\": {\n            \"json_schema\": {\n              \"type\": \"object\"\n            }\n          }\n        }\n      ],\n      \"execution_order\": [\"plan_2\", \"plan_3\"]\n    },\n    {\n      \"tasks\": [\n        {\n          \"task_id\": \"plan_4\",\n          \"requirement_name\": \"runtime_failure-capability-9\",\n          \"description\": \"Use Agent 9's service endpoint to submit the runtime failure task and retrieve the JSON output.\",\n          \"expected_artifacts\": [\"json_output\"],\n          \"validation_contract\": {\n            \"json_schema\": {\n              \"type\": \"object\"\n            }\n          }\n        }\n      ],\n      \"execution_order\": [\"plan_4\"]\n    }\n  ]\n}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 153,
+      "completion_tokens": 522,
+      "total_tokens": 675,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-8b"
+  },
+  "parsed_object": {
+    "interpreted_request": {
+      "user_goal": "Complete the defense corpus task associated with runtime_failure 9.",
+      "requirements": [],
+      "constraints": [],
+      "required_artifacts": [
+        "runtime_failure-capability-9"
+      ],
+      "context": {
+        "agent_id": "agent-9",
+        "name": "Agent 9",
+        "service_endpoint": "https://agent-9.example/a2a",
+        "trust_level": "standard"
+      }
+    },
+    "candidate_plans": [
+      {
+        "tasks": [
+          {
+            "task_id": "plan_1",
+            "requirement_name": "runtime_failure-capability-9",
+            "requirement_id": "runtime-failure-capability-9",
+            "capability_id": "runtime-failure-capability-9",
+            "description": "Initiate the runtime failure task using Agent 9's capability to process text input and generate JSON output.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "json_output"
+            ],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              },
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [
+          "plan_1"
+        ],
+        "expected_artifacts": [],
+        "completion_criteria": [],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      },
+      {
+        "tasks": [
+          {
+            "task_id": "plan_2",
+            "requirement_name": "runtime_failure-capability-9",
+            "requirement_id": "runtime-failure-capability-9",
+            "capability_id": "runtime-failure-capability-9",
+            "description": "Validate the input text for the runtime failure task and ensure it conforms to the expected JSON schema.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "validated_input"
+            ],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              },
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          },
+          {
+            "task_id": "plan_3",
+            "requirement_name": "runtime_failure-capability-9",
+            "requirement_id": "runtime-failure-capability-9",
+            "capability_id": "runtime-failure-capability-9",
+            "description": "Execute the runtime failure task using Agent 9's capability to process text input and generate JSON output.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "json_output"
+            ],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              },
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [
+          "plan_2",
+          "plan_3"
+        ],
+        "expected_artifacts": [],
+        "completion_criteria": [],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      },
+      {
+        "tasks": [
+          {
+            "task_id": "plan_4",
+            "requirement_name": "runtime_failure-capability-9",
+            "requirement_id": "runtime-failure-capability-9",
+            "capability_id": "runtime-failure-capability-9",
+            "description": "Use Agent 9's service endpoint to submit the runtime failure task and retrieve the JSON output.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "json_output"
+            ],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              },
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [
+          "plan_4"
+        ],
+        "expected_artifacts": [],
+        "completion_criteria": [],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      }
+    ]
+  },
+  "latency_ms": 25795.121500035748,
+  "evaluation_status": "raw_output_collected_not_scored"
+}

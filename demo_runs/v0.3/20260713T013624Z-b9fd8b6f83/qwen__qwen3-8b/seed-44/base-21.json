@@ -1,0 +1,224 @@
+{
+  "case_id": "base-21",
+  "model_id": "qwen/qwen3-8b",
+  "seed": 44,
+  "temperature": 0,
+  "backend_seed_honored": "not_verifiable_from_response",
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Interpret the request and return one to three typed candidate plans. Plans are non-authoritative. Use only exact capability_id and agent_id values from the registry. Do not infer trust or authorization."
+    },
+    {
+      "role": "user",
+      "content": "{\"request\":\"Complete defense corpus task runtime_failure 21.\",\"registry_snapshot\":[{\"agent_id\":\"agent-21\",\"name\":\"Agent 21\",\"service_endpoint\":\"https://agent-21.example/a2a\",\"trust_level\":\"standard\",\"skills\":[{\"name\":\"Capability 21\",\"capability_id\":\"runtime_failure-capability-21\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"}}}],\"input_modes\":[\"text\"],\"output_modes\":[\"json\"]}]}"
+    }
+  ],
+  "raw_response": {
+    "id": "chatcmpl-svsira5khwhpd1kydsv4",
+    "object": "chat.completion",
+    "created": 1783911694,
+    "model": "qwen/qwen3-8b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\n  \"interpreted_request\": {\n    \"user_goal\": \"Complete the defense corpus task associated with runtime_failure 21.\",\n    \"required_artifacts\": [\"defense_corpus\", \"runtime_failure_report\"],\n    \"context\": {\n      \"agent_id\": \"agent-21\",\n      \"name\": \"Agent 21\",\n      \"service_endpoint\": \"https://agent-21.example/a2a\",\n      \"trust_level\": \"standard\"\n    }\n  },\n  \"candidate_plans\": [\n    {\n      \"tasks\": [\n        {\n          \"task_id\": \"task-2101\",\n          \"requirement_name\": \"Execute defense corpus task\",\n          \"capability_id\": \"runtime_failure-capability-21\",\n          \"description\": \"Run the runtime failure analysis on the defense corpus using Agent 21's capability.\",\n          \"expected_artifacts\": [\"runtime_failure_report\"]\n        },\n        {\n          \"task_id\": \"task-2102\",\n          \"requirement_name\": \"Validate output format\",\n          \"capability_id\": \"runtime_failure-capability-21\",\n          \"description\": \"Ensure the output is in JSON format as per the validation contract.\",\n          \"expected_artifacts\": [\"validated_output\"]\n        }\n      ]\n    },\n    {\n      \"tasks\": [\n        {\n          \"task_id\": \"task-2103\",\n          \"requirement_name\": \"Retrieve defense corpus data\",\n          \"capability_id\": \"runtime_failure-capability-21\",\n          \"description\": \"Fetch the required defense corpus data from the system for analysis.\",\n          \"expected_artifacts\": [\"defense_corpus\"]\n        },\n        {\n          \"task_id\": \"task-2104\",\n          \"requirement_name\": \"Generate runtime failure report\",\n          \"capability_id\": \"runtime_failure-capability-21\",\n          \"description\": \"Use the defense corpus to generate a detailed runtime failure report.\",\n          \"expected_artifacts\": [\"runtime_failure_report\"]\n        }\n      ]\n    },\n    {\n      \"tasks\": [\n        {\n          \"task_id\": \"task-2105\",\n          \"requirement_name\": \"Coordinate with Agent 21\",\n          \"capability_id\": \"runtime_failure-capability-21\",\n          \"description\": \"Leverage the service endpoint of Agent 21 to coordinate and execute the defense corpus task.\",\n          \"expected_artifacts\": [\"execution_status\", \"runtime_failure_report\"]\n        }\n      ]\n    }\n  ]\n}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 159,
+      "completion_tokens": 523,
+      "total_tokens": 682,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-8b"
+  },
+  "parsed_object": {
+    "interpreted_request": {
+      "user_goal": "Complete the defense corpus task associated with runtime_failure 21.",
+      "requirements": [],
+      "constraints": [],
+      "required_artifacts": [
+        "defense_corpus",
+        "runtime_failure_report"
+      ],
+      "context": {
+        "agent_id": "agent-21",
+        "name": "Agent 21",
+        "service_endpoint": "https://agent-21.example/a2a",
+        "trust_level": "standard"
+      }
+    },
+    "candidate_plans": [
+      {
+        "tasks": [
+          {
+            "task_id": "task-2101",
+            "requirement_name": "Execute defense corpus task",
+            "requirement_id": "execute-defense-corpus-task",
+            "capability_id": "runtime_failure-capability-21",
+            "description": "Run the runtime failure analysis on the defense corpus using Agent 21's capability.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "runtime_failure_report"
+            ],
+            "validation_contract": {
+              "json_schema": {},
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          },
+          {
+            "task_id": "task-2102",
+            "requirement_name": "Validate output format",
+            "requirement_id": "validate-output-format",
+            "capability_id": "runtime_failure-capability-21",
+            "description": "Ensure the output is in JSON format as per the validation contract.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "validated_output"
+            ],
+            "validation_contract": {
+              "json_schema": {},
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [],
+        "expected_artifacts": [],
+        "completion_criteria": [],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      },
+      {
+        "tasks": [
+          {
+            "task_id": "task-2103",
+            "requirement_name": "Retrieve defense corpus data",
+            "requirement_id": "retrieve-defense-corpus-data",
+            "capability_id": "runtime_failure-capability-21",
+            "description": "Fetch the required defense corpus data from the system for analysis.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "defense_corpus"
+            ],
+            "validation_contract": {
+              "json_schema": {},
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          },
+          {
+            "task_id": "task-2104",
+            "requirement_name": "Generate runtime failure report",
+            "requirement_id": "generate-runtime-failure-report",
+            "capability_id": "runtime_failure-capability-21",
+            "description": "Use the defense corpus to generate a detailed runtime failure report.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "runtime_failure_report"
+            ],
+            "validation_contract": {
+              "json_schema": {},
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [],
+        "expected_artifacts": [],
+        "completion_criteria": [],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      },
+      {
+        "tasks": [
+          {
+            "task_id": "task-2105",
+            "requirement_name": "Coordinate with Agent 21",
+            "requirement_id": "coordinate-with-agent-21",
+            "capability_id": "runtime_failure-capability-21",
+            "description": "Leverage the service endpoint of Agent 21 to coordinate and execute the defense corpus task.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "execution_status",
+              "runtime_failure_report"
+            ],
+            "validation_contract": {
+              "json_schema": {},
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [],
+        "expected_artifacts": [],
+        "completion_criteria": [],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      }
+    ]
+  },
+  "latency_ms": 27369.496600003913,
+  "evaluation_status": "raw_output_collected_not_scored"
+}

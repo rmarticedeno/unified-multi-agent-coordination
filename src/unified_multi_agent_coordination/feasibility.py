@@ -18,6 +18,7 @@ from .models import (
     TaskSpec,
     ValidationContract,
 )
+from .runtime_policies import AuxiliaryAdmissionPolicy, StrictAuxiliaryAdmissionPolicy
 
 
 class FeasibilityAnalyzer:
@@ -29,8 +30,16 @@ class FeasibilityAnalyzer:
         "normalization",
     }
 
-    def __init__(self, trust_order: list[str] | None = None) -> None:
+    def __init__(
+        self,
+        trust_order: list[str] | None = None,
+        *,
+        auxiliary_admission_policy: AuxiliaryAdmissionPolicy | None = None,
+    ) -> None:
         self.trust_order = trust_order or ["standard", "elevated", "admin"]
+        self.auxiliary_admission_policy = (
+            auxiliary_admission_policy or StrictAuxiliaryAdmissionPolicy()
+        )
 
     def check(
         self,
@@ -300,12 +309,14 @@ class FeasibilityAnalyzer:
         risks: list[str],
     ) -> bool:
         checks = [
-            (requirement.auxiliary_eligible, f"Requirement {requirement.name} is not auxiliary eligible."),
+            (
+                self.auxiliary_admission_policy.admissible(
+                    auxiliary, requirement.auxiliary_eligible
+                ),
+                f"Auxiliary spec {auxiliary.spec_id} violates eligibility, persists, "
+                "lifecycle, validation, or authority bounds.",
+            ),
             (auxiliary.method in self.APPROVED_AUXILIARY_METHODS, f"Auxiliary method {auxiliary.method} is not approved."),
-            (not auxiliary.persists, f"Auxiliary spec {auxiliary.spec_id} persists beyond the plan."),
-            (bool(auxiliary.lifecycle), f"Auxiliary spec {auxiliary.spec_id} lacks a lifecycle token."),
-            (bool(auxiliary.validation_rule), f"Auxiliary spec {auxiliary.spec_id} lacks a validation rule."),
-            ("read_only" in auxiliary.authority_bounds, f"Auxiliary spec {auxiliary.spec_id} is not read-only bounded."),
             (self._schema_compatible(auxiliary.output_schema, requirement.output_schema), f"Auxiliary spec {auxiliary.spec_id} does not cover the required output schema."),
         ]
         for passed, message in checks:

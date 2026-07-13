@@ -22,7 +22,7 @@ from .models import ProblemRequest, SolutionProposal
 MODELS = ("qwen/qwen3-1.7b", "google/gemma-4-e2b", "qwen/qwen3-8b")
 SEEDS = (11, 22, 33, 44, 55)
 ENDPOINT = "http://127.0.0.1:1234/v1"
-PROMPT_VERSION = "defense-v0.2.0"
+PROMPT_VERSION = "defense-v0.3.0"
 
 
 class LinguisticBatchOutput(BaseModel):
@@ -35,7 +35,14 @@ def _sha256(path: Path) -> str:
 
 
 def _run(command: list[str], *, check: bool = True) -> subprocess.CompletedProcess[str]:
-    return subprocess.run(command, text=True, capture_output=True, check=check)
+    return subprocess.run(
+        command,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+        capture_output=True,
+        check=check,
+    )
 
 
 def _installed_models() -> set[str]:
@@ -43,21 +50,34 @@ def _installed_models() -> set[str]:
     return {str(item.get("modelKey")) for item in json.loads(result.stdout)}
 
 
-def validate_prerequisites(corpus_root: Path, *, require_signoff: bool) -> dict[str, Any]:
+def validate_frozen_labels(corpus_root: Path) -> dict[str, Any]:
     public = json.loads((corpus_root / "public/cases.json").read_text(encoding="utf-8"))
-    signoff = json.loads((corpus_root / "label-signoff.json").read_text(encoding="utf-8"))
+    hidden = json.loads((corpus_root / "hidden/reference-labels.json").read_text(encoding="utf-8"))
+    provenance = json.loads((corpus_root / "label-provenance.json").read_text(encoding="utf-8"))
     if len(public.get("cases", [])) != 36:
         raise RuntimeError("The public corpus must contain exactly 36 cases.")
-    if signoff.get("corpus_hash") != public.get("corpus_hash"):
-        raise RuntimeError("Label sign-off hash does not match the public corpus.")
-    if require_signoff and not all(
-        [
-            signoff.get("approved") is True,
-            signoff.get("reviewer_role"),
-            signoff.get("review_date"),
-        ]
-    ):
-        raise RuntimeError("Independent label approval is incomplete; model collection is blocked.")
+    hashes = {public.get("corpus_hash"), hidden.get("corpus_hash"), provenance.get("corpus_hash")}
+    if len(hashes) != 1:
+        raise RuntimeError("Public cases, hidden labels, and provenance hashes differ.")
+    if provenance.get("annotation_type") != "author_labeled":
+        raise RuntimeError("Label provenance must declare author_labeled annotation.")
+    if provenance.get("frozen") is not True:
+        raise RuntimeError("Reference labels must be frozen before collection.")
+    if not provenance.get("author") or not provenance.get("annotation_date"):
+        raise RuntimeError("Frozen label provenance is incomplete.")
+    return provenance
+
+
+def validate_prerequisites(corpus_root: Path, *, check_runtime: bool = True) -> dict[str, Any]:
+    public = json.loads((corpus_root / "public/cases.json").read_text(encoding="utf-8"))
+    provenance = validate_frozen_labels(corpus_root)
+    if not check_runtime:
+        return {
+            "case_count": 36,
+            "corpus_hash": public["corpus_hash"],
+            "labels_frozen": True,
+            "annotation_type": provenance["annotation_type"],
+        }
     missing = set(MODELS) - _installed_models()
     if missing:
         raise RuntimeError("Required LM Studio models are missing: " + ", ".join(sorted(missing)))
@@ -67,7 +87,8 @@ def validate_prerequisites(corpus_root: Path, *, require_signoff: bool) -> dict[
     return {
         "case_count": 36,
         "corpus_hash": public["corpus_hash"],
-        "signoff_approved": signoff.get("approved") is True,
+        "labels_frozen": True,
+        "annotation_type": provenance["annotation_type"],
         "models_installed": list(MODELS),
         "server_reachable": True,
     }
@@ -157,6 +178,7 @@ def _prompt(case: dict[str, Any]) -> list[dict[str, str]]:
 
 
 def _completion(client: httpx.Client, model: str, seed: int, messages: list[dict[str, str]]) -> dict[str, Any]:
+    schema = _lm_studio_schema(LinguisticBatchOutput.model_json_schema())
     response = client.post(
         f"{ENDPOINT}/chat/completions",
         json={
@@ -164,29 +186,54 @@ def _completion(client: httpx.Client, model: str, seed: int, messages: list[dict
             "messages": messages,
             "temperature": 0,
             "seed": seed,
+            "max_tokens": 4096,
             "response_format": {
                 "type": "json_schema",
                 "json_schema": {
                     "name": "linguistic_batch_output",
                     "strict": True,
-                    "schema": LinguisticBatchOutput.model_json_schema(),
+                    "schema": schema,
                 },
             },
         },
     )
-    response.raise_for_status()
+    if response.is_error:
+        raise RuntimeError(
+            f"LM Studio completion failed ({response.status_code}): {response.text}"
+        )
     return response.json()
 
 
-def collect(corpus_root: Path, output_root: Path) -> Path:
-    prerequisites = validate_prerequisites(corpus_root, require_signoff=True)
+def _lm_studio_schema(value: Any) -> Any:
+    """Remove annotation keywords rejected by LM Studio's constrained decoder."""
+    if isinstance(value, dict):
+        return {
+            key: _lm_studio_schema(item)
+            for key, item in value.items()
+            if key not in {"default", "title"}
+        }
+    if isinstance(value, list):
+        return [_lm_studio_schema(item) for item in value]
+    return value
+
+
+def collect(corpus_root: Path, output_root: Path, *, resume_root: Path | None = None) -> Path:
+    prerequisites = validate_prerequisites(corpus_root)
     corpus = json.loads((corpus_root / "public/cases.json").read_text(encoding="utf-8"))
-    run_id = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ") + "-" + prerequisites["corpus_hash"][:10]
-    run_root = output_root / run_id
-    run_root.mkdir(parents=True, exist_ok=False)
-    (run_root / "provenance.json").write_text(
-        json.dumps(_provenance(prerequisites["corpus_hash"]), indent=2), encoding="utf-8"
-    )
+    if resume_root is None:
+        run_id = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ") + "-" + prerequisites["corpus_hash"][:10]
+        run_root = output_root / run_id
+        run_root.mkdir(parents=True, exist_ok=False)
+        (run_root / "provenance.json").write_text(
+            json.dumps(_provenance(prerequisites["corpus_hash"]), indent=2), encoding="utf-8"
+        )
+    else:
+        run_root = resume_root
+        provenance = json.loads((run_root / "provenance.json").read_text(encoding="utf-8"))
+        if provenance.get("corpus_hash") != prerequisites["corpus_hash"]:
+            raise RuntimeError("Resume run corpus hash differs from the selected corpus.")
+        if (run_root / "collection-complete.json").exists():
+            raise RuntimeError("Completed immutable runs cannot be resumed.")
     with httpx.Client(timeout=300.0) as client:
         for model in MODELS:
             _run(["lms", "unload", "--all"], check=False)
@@ -195,16 +242,25 @@ def collect(corpus_root: Path, output_root: Path) -> Path:
             if not any(item.get("id") == model for item in catalog.get("data", [])):
                 raise RuntimeError(f"Loaded model catalog does not expose exact ID {model}.")
             for seed in SEEDS:
-                sentinel = _completion(
-                    client,
-                    model,
-                    seed,
-                    [{"role": "user", "content": "Return a typed no-op coordination request and plan."}],
-                )
                 batch_dir = run_root / model.replace("/", "__") / f"seed-{seed}"
-                batch_dir.mkdir(parents=True)
-                (batch_dir / "sentinel.json").write_text(json.dumps(sentinel, indent=2), encoding="utf-8")
+                batch_dir.mkdir(parents=True, exist_ok=True)
+                sentinel_path = batch_dir / "sentinel.json"
+                if not sentinel_path.exists():
+                    sentinel = _completion(
+                        client,
+                        model,
+                        seed,
+                        [{"role": "user", "content": "Return a typed no-op coordination request and plan."}],
+                    )
+                    sentinel_path.write_text(json.dumps(sentinel, indent=2), encoding="utf-8")
                 for case in corpus["cases"]:
+                    case_path = batch_dir / f"{case['case_id']}.json"
+                    if case_path.exists():
+                        existing = json.loads(case_path.read_text(encoding="utf-8"))
+                        identity = (existing.get("case_id"), existing.get("model_id"), existing.get("seed"))
+                        if identity != (case["case_id"], model, seed):
+                            raise RuntimeError(f"Resume identity mismatch in {case_path}.")
+                        continue
                     messages = _prompt(case)
                     started = time.perf_counter()
                     raw = _completion(client, model, seed, messages)
@@ -226,24 +282,29 @@ def collect(corpus_root: Path, output_root: Path) -> Path:
                         "latency_ms": elapsed_ms,
                         "evaluation_status": "raw_output_collected_not_scored",
                     }
-                    (batch_dir / f"{case['case_id']}.json").write_text(
+                    case_path.write_text(
                         json.dumps(record, indent=2), encoding="utf-8"
                     )
             _run(["lms", "unload", "--all"], check=False)
+    (run_root / "collection-complete.json").write_text(
+        json.dumps({"complete": True, "expected_outputs": len(MODELS) * len(SEEDS) * 36}, indent=2),
+        encoding="utf-8",
+    )
     return run_root
 
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--corpus", type=Path, default=Path("corpus/v0.2"))
-    parser.add_argument("--output", type=Path, default=Path("demo_runs/v0.2"))
+    parser.add_argument("--corpus", type=Path, default=Path("corpus/v0.3"))
+    parser.add_argument("--output", type=Path, default=Path("demo_runs/v0.3"))
     parser.add_argument("--check", action="store_true")
     parser.add_argument("--collect", action="store_true")
+    parser.add_argument("--resume", type=Path)
     args = parser.parse_args()
-    if args.collect:
-        print(collect(args.corpus, args.output))
+    if args.collect or args.resume:
+        print(collect(args.corpus, args.output, resume_root=args.resume))
     else:
-        print(json.dumps(validate_prerequisites(args.corpus, require_signoff=False), indent=2))
+        print(json.dumps(validate_prerequisites(args.corpus, check_runtime=not args.check), indent=2))
 
 
 if __name__ == "__main__":

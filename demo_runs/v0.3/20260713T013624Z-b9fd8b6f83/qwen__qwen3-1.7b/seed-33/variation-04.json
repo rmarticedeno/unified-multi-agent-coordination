@@ -1,0 +1,267 @@
+{
+  "case_id": "variation-04",
+  "model_id": "qwen/qwen3-1.7b",
+  "seed": 33,
+  "temperature": 0,
+  "backend_seed_honored": "not_verifiable_from_response",
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Interpret the request and return one to three typed candidate plans. Plans are non-authoritative. Use only exact capability_id and agent_id values from the registry. Do not infer trust or authorization."
+    },
+    {
+      "role": "user",
+      "content": "{\"request\":\"Please complete defense corpus task missing_or_auxiliary_overreach 4.\",\"registry_snapshot\":[]}"
+    }
+  ],
+  "raw_response": {
+    "id": "chatcmpl-vn3totk8h6cgn55sylmnsc",
+    "object": "chat.completion",
+    "created": 1783906951,
+    "model": "qwen/qwen3-1.7b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"interpreted_request\": {\"user_goal\": \"Complete defense corpus task missing_or_auxiliary_overreach 4.\", \"required_artifacts\": [\"missing_or_auxiliary_overreach_4\"], \"context\": {\"task_type\": \"defense_corpus\", \"task_id\": \"missing_or_auxiliary_overreach_4\", \"status\": \"in_progress\"}},\"candidate_plans\": [{\"tasks\": [{\"task_id\": \"plan1\", \"requirement_name\": \"data_collection\", \"requirement_id\": \"dc001\", \"description\": \"Collect data from the defense corpus for task 4.\", \"expected_artifacts\": [\"missing_or_auxiliary_overreach_4_data\"]}, {\"task_id\": \"plan2\", \"requirement_name\": \"preprocessing\", \"requirement_id\": \"pp001\", \"description\": \"Preprocess the collected data to clean and format it.\", \"expected_artifacts\": [\"cleaned_missing_or_auxiliary_overreach_4_data\"]}, {\"task_id\": \"plan3\", \"requirement_name\": \"model_training\", \"requirement_id\": \"mt001\", \"description\": \"Train a model on the preprocessed data to identify missing or auxiliary overreaches.\", \"expected_artifacts\": [\"trained_model_for_missing_or_auxiliary_overreach_4\"]}, {\"task_id\": \"plan4\", \"requirement_name\": \"evaluation\", \"requirement_id\": \"ev001\", \"description\": \"Evaluate the model's performance on a validation set.\", \"expected_artifacts\": [\"model_evaluation_results_for_missing_or_auxiliary_overreach_4\"]}]},{\"tasks\": [{\"task_id\": \"plan5\", \"requirement_name\": \"data_collection\", \"requirement_id\": \"dc002\", \"description\": \"Collect data from the defense corpus for task 4.\", \"expected_artifacts\": [\"missing_or_auxiliary_overreach_4_data_2\"]}, {\"task_id\": \"plan6\", \"requirement_name\": \"preprocessing\", \"requirement_id\": \"pp002\", \"description\": \"Preprocess the collected data to clean and format it.\", \"expected_artifacts\": [\"cleaned_missing_or_auxiliary_overreach_4_data_2\"]}, {\"task_id\": \"plan7\", \"requirement_name\": \"model_training\", \"requirement_id\": \"mt002\", \"description\": \"Train a model on the preprocessed data to identify missing or auxiliary overreaches.\", \"expected_artifacts\": [\"trained_model_for_missing_or_auxiliary_overreach_4_2\"]}, {\"task_id\": \"plan8\", \"requirement_name\": \"evaluation\", \"requirement_id\": \"ev002\", \"description\": \"Evaluate the model's performance on a validation set.\", \"expected_artifacts\": [\"model_evaluation_results_for_missing_or_auxiliary_overreach_4_2\"]}]}]}\n",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 73,
+      "completion_tokens": 599,
+      "total_tokens": 672,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-1.7b"
+  },
+  "parsed_object": {
+    "interpreted_request": {
+      "user_goal": "Complete defense corpus task missing_or_auxiliary_overreach 4.",
+      "requirements": [],
+      "constraints": [],
+      "required_artifacts": [
+        "missing_or_auxiliary_overreach_4"
+      ],
+      "context": {
+        "task_type": "defense_corpus",
+        "task_id": "missing_or_auxiliary_overreach_4",
+        "status": "in_progress"
+      }
+    },
+    "candidate_plans": [
+      {
+        "tasks": [
+          {
+            "task_id": "plan1",
+            "requirement_name": "data_collection",
+            "requirement_id": "dc001",
+            "capability_id": "data-collection",
+            "description": "Collect data from the defense corpus for task 4.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "missing_or_auxiliary_overreach_4_data"
+            ],
+            "validation_contract": {
+              "json_schema": {},
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          },
+          {
+            "task_id": "plan2",
+            "requirement_name": "preprocessing",
+            "requirement_id": "pp001",
+            "capability_id": "preprocessing",
+            "description": "Preprocess the collected data to clean and format it.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "cleaned_missing_or_auxiliary_overreach_4_data"
+            ],
+            "validation_contract": {
+              "json_schema": {},
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          },
+          {
+            "task_id": "plan3",
+            "requirement_name": "model_training",
+            "requirement_id": "mt001",
+            "capability_id": "model-training",
+            "description": "Train a model on the preprocessed data to identify missing or auxiliary overreaches.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "trained_model_for_missing_or_auxiliary_overreach_4"
+            ],
+            "validation_contract": {
+              "json_schema": {},
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          },
+          {
+            "task_id": "plan4",
+            "requirement_name": "evaluation",
+            "requirement_id": "ev001",
+            "capability_id": "evaluation",
+            "description": "Evaluate the model's performance on a validation set.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "model_evaluation_results_for_missing_or_auxiliary_overreach_4"
+            ],
+            "validation_contract": {
+              "json_schema": {},
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [],
+        "expected_artifacts": [],
+        "completion_criteria": [],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      },
+      {
+        "tasks": [
+          {
+            "task_id": "plan5",
+            "requirement_name": "data_collection",
+            "requirement_id": "dc002",
+            "capability_id": "data-collection",
+            "description": "Collect data from the defense corpus for task 4.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "missing_or_auxiliary_overreach_4_data_2"
+            ],
+            "validation_contract": {
+              "json_schema": {},
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          },
+          {
+            "task_id": "plan6",
+            "requirement_name": "preprocessing",
+            "requirement_id": "pp002",
+            "capability_id": "preprocessing",
+            "description": "Preprocess the collected data to clean and format it.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "cleaned_missing_or_auxiliary_overreach_4_data_2"
+            ],
+            "validation_contract": {
+              "json_schema": {},
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          },
+          {
+            "task_id": "plan7",
+            "requirement_name": "model_training",
+            "requirement_id": "mt002",
+            "capability_id": "model-training",
+            "description": "Train a model on the preprocessed data to identify missing or auxiliary overreaches.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "trained_model_for_missing_or_auxiliary_overreach_4_2"
+            ],
+            "validation_contract": {
+              "json_schema": {},
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          },
+          {
+            "task_id": "plan8",
+            "requirement_name": "evaluation",
+            "requirement_id": "ev002",
+            "capability_id": "evaluation",
+            "description": "Evaluate the model's performance on a validation set.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "model_evaluation_results_for_missing_or_auxiliary_overreach_4_2"
+            ],
+            "validation_contract": {
+              "json_schema": {},
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [],
+        "expected_artifacts": [],
+        "completion_criteria": [],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      }
+    ]
+  },
+  "latency_ms": 5353.187599917874,
+  "evaluation_status": "raw_output_collected_not_scored"
+}

@@ -1,0 +1,149 @@
+{
+  "case_id": "variation-08",
+  "model_id": "google/gemma-4-e2b",
+  "seed": 11,
+  "temperature": 0,
+  "backend_seed_honored": "not_verifiable_from_response",
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Interpret the request and return one to three typed candidate plans. Plans are non-authoritative. Use only exact capability_id and agent_id values from the registry. Do not infer trust or authorization."
+    },
+    {
+      "role": "user",
+      "content": "{\"request\":\"Complete defense corpus task decomposed_feasible 8.\",\"registry_snapshot\":[{\"agent_id\":\"agent-8\",\"name\":\"Agent 8\",\"service_endpoint\":\"https://agent-8.example/a2a\",\"trust_level\":\"standard\",\"skills\":[{\"name\":\"Capability 8\",\"capability_id\":\"decomposed_feasible-capability-8\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"}}}],\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"status\":\"unavailable\"},{\"agent_id\":\"finisher-8\",\"name\":\"Finisher 8\",\"service_endpoint\":\"https://finisher-8.example/a2a\",\"trust_level\":\"standard\",\"skills\":[{\"name\":\"Finish Capability 8\",\"capability_id\":\"decomposed_feasible-capability-8-finish\",\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"validation_contract\":{\"required_artifacts\":[\"artifact-8\"]}}],\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"status\":\"unavailable\"}]}"
+    }
+  ],
+  "raw_response": {
+    "id": "chatcmpl-fwrbe1uzghs18rsrhvxp02",
+    "object": "chat.completion",
+    "created": 1783907409,
+    "model": "google/gemma-4-e2b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\n  \"interpreted_request\": {\n    \"user_goal\": \"Complete defense corpus task decomposed_feasible 8.\",\n    \"required_artifacts\": [\n      \"artifact-8\"\n    ]\n  },\n  \"candidate_plans\": [\n    {\n      \"tasks\": [\n        {\n          \"task_id\": \"decomposed_feasible-capability-8\",\n          \"requirement_name\": \"Complete defense corpus task decomposed_feasible 8.\",\n          \"expected_artifacts\": [\n            \"artifact-8\"\n          ],\n          \"validation_contract\": {\n            \"json_schema\": {\n              \"type\": \"object\"\n            }\n          }\n        }\n      ],\n      \"execution_order\": [\n        \"decomposed_feasible-capability-8\"\n      ],\n      \"constraint_evidence\": {\n        \"artifact-8\": \"required\"\n      }\n    },\n    {\n      \"tasks\": [\n        {\n          \"task_id\": \"decomposed_feasible-capability-8-finish\",\n          \"requirement_name\": \"Complete defense corpus task decomposed_feasible 8.\",\n          \"expected_artifacts\": [\n            \"artifact-8\"\n          ],\n          \"validation_contract\": {\n            \"required_artifacts\": [\n              \"artifact-8\"\n            ]\n          }\n        }\n      ],\n      \"execution_order\": [\n        \"decomposed_feasible-capability-8\"\n      ],\n      \"constraint_evidence\": {\n        \"artifact-8\": \"required\"\n      }\n    }\n  ]\n}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 280,
+      "completion_tokens": 376,
+      "total_tokens": 656,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "google/gemma-4-e2b"
+  },
+  "parsed_object": {
+    "interpreted_request": {
+      "user_goal": "Complete defense corpus task decomposed_feasible 8.",
+      "requirements": [],
+      "constraints": [],
+      "required_artifacts": [
+        "artifact-8"
+      ],
+      "context": {}
+    },
+    "candidate_plans": [
+      {
+        "tasks": [
+          {
+            "task_id": "decomposed_feasible-capability-8",
+            "requirement_name": "Complete defense corpus task decomposed_feasible 8.",
+            "requirement_id": "complete-defense-corpus-task-decomposed-feasible-8",
+            "capability_id": "complete-defense-corpus-task-decomposed-feasible-8",
+            "description": "",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "artifact-8"
+            ],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              },
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [
+          "decomposed_feasible-capability-8"
+        ],
+        "expected_artifacts": [],
+        "completion_criteria": [],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {
+          "artifact-8": "required"
+        }
+      },
+      {
+        "tasks": [
+          {
+            "task_id": "decomposed_feasible-capability-8-finish",
+            "requirement_name": "Complete defense corpus task decomposed_feasible 8.",
+            "requirement_id": "complete-defense-corpus-task-decomposed-feasible-8",
+            "capability_id": "complete-defense-corpus-task-decomposed-feasible-8",
+            "description": "",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "artifact-8"
+            ],
+            "validation_contract": {
+              "json_schema": {},
+              "required_artifacts": [
+                "artifact-8"
+              ],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [
+          "decomposed_feasible-capability-8"
+        ],
+        "expected_artifacts": [],
+        "completion_criteria": [],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {
+          "artifact-8": "required"
+        }
+      }
+    ]
+  },
+  "latency_ms": 5457.26320007816,
+  "evaluation_status": "raw_output_collected_not_scored"
+}

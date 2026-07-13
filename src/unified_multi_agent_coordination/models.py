@@ -185,6 +185,39 @@ class ProblemRequest(BaseModel):
         ]
 
 
+class DraftRequirementSelection(BaseModel):
+    """A linguistic choice over identifiers already present in admitted input."""
+
+    requirement_id: str
+    capability_id: str
+    depends_on_requirement_ids: list[str] = Field(default_factory=list)
+
+
+class LinguisticPlanDraft(BaseModel):
+    """Non-executable model output; it cannot create agents, contracts, or task IDs."""
+
+    selections: list[DraftRequirementSelection] = Field(default_factory=list)
+    unresolved_terms: list[str] = Field(default_factory=list)
+    rationale: str = ""
+
+
+class HydrationIssue(BaseModel):
+    """One deterministic reason why a linguistic draft cannot become a proposal."""
+
+    code: Literal[
+        "duplicate_requirement",
+        "missing_requirement",
+        "unknown_requirement",
+        "unknown_capability",
+        "unavailable_capability",
+        "invalid_dependency",
+        "dependency_cycle",
+        "unresolved_term",
+    ]
+    message: str
+    requirement_id: str = ""
+
+
 class GeneratedNlpAgentSpec(BaseModel):
     spec_id: str
     purpose: str

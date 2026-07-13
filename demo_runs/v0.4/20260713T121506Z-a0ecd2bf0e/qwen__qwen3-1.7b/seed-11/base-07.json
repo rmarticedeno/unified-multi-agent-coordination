@@ -1,0 +1,93 @@
+{
+  "case_id": "base-07",
+  "model_id": "qwen/qwen3-1.7b",
+  "seed": 11,
+  "temperature": 0,
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Return a non-executable LinguisticPlanDraft. Select every admitted requirement_id exactly once and only its declared capability_id. Dependencies may reference only admitted requirement IDs. Report ambiguous terms in unresolved_terms. Do not create task IDs, agents, trust, credentials, contracts, schemas, artifacts, or authority. Reference labels are unavailable."
+    },
+    {
+      "role": "user",
+      "content": "{\"request_text\":\"Coordinate the declared services for coastal flood response; preserve the specified data flow, evidence contract, and authority limits.\",\"admitted_request\":{\"user_goal\":\"Coordinate the declared services for coastal flood response; preserve the specified data flow, evidence contract, and authority limits.\",\"requirements\":[{\"name\":\"Capability 7\",\"requirement_id\":\"direct_feasible-capability-7\",\"capability_id\":\"direct_feasible-capability-7\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"required_trust_level\":\"standard\",\"validation_contract\":{\"required_artifacts\":[\"artifact-7\"]}}],\"required_artifacts\":[\"artifact-7\"],\"context\":{\"case_index\":7,\"allowed\":true}},\"registry_snapshot\":[{\"agent_id\":\"agent-7\",\"name\":\"Agent 7\",\"service_endpoint\":\"https://agent-7.example/a2a\",\"trust_level\":\"standard\",\"skills\":[{\"name\":\"Capability 7\",\"capability_id\":\"direct_feasible-capability-7\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"}}}],\"input_modes\":[\"text\"],\"output_modes\":[\"json\"]}]}"
+    }
+  ],
+  "raw_response": {
+    "id": "chatcmpl-nnq44oo385s7wq3goxj4f",
+    "object": "chat.completion",
+    "created": 1783944922,
+    "model": "qwen/qwen3-1.7b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\": {\"unresolved_terms\": [\"artifact-7\"], \"rationale\": \"The request contains a requirement for 'artifact-7' which is not yet resolved. The capability 'direct_feasible-capability-7' requires this artifact as an input, but it's not specified in the registry snapshot. Therefore, the term 'artifact-7' remains unresolved.\"}}\n",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 303,
+      "completion_tokens": 78,
+      "total_tokens": 381,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-1.7b"
+  },
+  "parsed_object": {
+    "draft": {
+      "selections": [
+        {
+          "requirement_id": "direct_feasible-capability-7",
+          "capability_id": "direct_feasible-capability-7",
+          "depends_on_requirement_ids": []
+        }
+      ],
+      "unresolved_terms": [
+        "artifact-7"
+      ],
+      "rationale": "The request includes a requirement for 'direct_feasible-capability-7' which is not yet resolved. The capability requires 'artifact-7' as an input, but it's not specified in the registry snapshot. Therefore, the term 'artifact-7' remains unresolved."
+    }
+  },
+  "linguistic_latency_ms": 831.0193999204785,
+  "repair_attempted": true,
+  "repair_latency_ms": 853.4629000350833,
+  "repair_raw_response": {
+    "id": "chatcmpl-fa3l3t3beh845jyjwlzyw6",
+    "object": "chat.completion",
+    "created": 1783944922,
+    "model": "qwen/qwen3-1.7b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\":{\"selections\":[{\"requirement_id\":\"direct_feasible-capability-7\",\"capability_id\":\"direct_feasible-capability-7\"}],\"unresolved_terms\":[\"artifact-7\"],\"rationale\":\"The request includes a requirement for 'direct_feasible-capability-7' which is not yet resolved. The capability requires 'artifact-7' as an input, but it's not specified in the registry snapshot. Therefore, the term 'artifact-7' remains unresolved.\"}}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 472,
+      "completion_tokens": 101,
+      "total_tokens": 573,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-1.7b"
+  },
+  "evaluation_status": "raw_output_collected_not_scored"
+}

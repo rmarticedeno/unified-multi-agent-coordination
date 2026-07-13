@@ -36,6 +36,9 @@ from .models import (
     CoordinationPlanResult,
     CoordinationRunResult,
     FeasibilityReport,
+    DraftRequirementSelection,
+    HydrationIssue,
+    LinguisticPlanDraft,
     GeneratedNlpAgentSpec,
     LeaseRecord,
     PlanGeneration,
@@ -51,6 +54,17 @@ from .models import (
     TaskSpec,
     TraceEvent,
     ValidationContract,
+)
+from .plan_hydration import PlanHydrationResult, PlanHydrator
+from .runtime_policies import (
+    DurableTraceEvidencePolicy,
+    EphemeralTraceEvidencePolicy,
+    StrictAuxiliaryAdmissionPolicy,
+    StrictDependencyDispatchPolicy,
+    SingleUseAuxiliaryLifecyclePolicy,
+    UnsafeIgnoreDependencyPolicy,
+    UnsafePermissiveAuxiliaryPolicy,
+    UnsafeReusableAuxiliaryLifecyclePolicy,
 )
 
 __all__ = [
@@ -73,6 +87,8 @@ __all__ = [
     "CredentialProvider",
     "FeasibilityAnalyzer",
     "FeasibilityReport",
+    "DraftRequirementSelection",
+    "HydrationIssue",
     "GeneratedNlpAgentSpec",
     "InMemoryCoordinationLedger",
     "JsonlCoordinationLedger",
@@ -81,6 +97,9 @@ __all__ = [
     "LeaseConflictError",
     "LeaseRecord",
     "LingoLinguisticCoordinator",
+    "LinguisticPlanDraft",
+    "PlanHydrationResult",
+    "PlanHydrator",
     "PlanGeneration",
     "PredicateEvidence",
     "ProblemRequest",
@@ -102,4 +121,12 @@ __all__ = [
     "TraceValidationReport",
     "ValidationContract",
     "validate_trace",
+    "DurableTraceEvidencePolicy",
+    "EphemeralTraceEvidencePolicy",
+    "StrictAuxiliaryAdmissionPolicy",
+    "StrictDependencyDispatchPolicy",
+    "SingleUseAuxiliaryLifecyclePolicy",
+    "UnsafeIgnoreDependencyPolicy",
+    "UnsafePermissiveAuxiliaryPolicy",
+    "UnsafeReusableAuxiliaryLifecyclePolicy",
 ]

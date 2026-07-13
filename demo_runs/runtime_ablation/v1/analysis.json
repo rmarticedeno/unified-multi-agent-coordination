@@ -1,0 +1,30 @@
+{
+  "by_configuration": {
+    "secure_default": {
+      "observations": 150,
+      "safety_violations": 0
+    },
+    "without_auxiliary": {
+      "observations": 50,
+      "safety_violations": 0
+    },
+    "without_auxiliary_bounds": {
+      "observations": 50,
+      "safety_violations": 40
+    },
+    "without_dependency_gating": {
+      "observations": 50,
+      "safety_violations": 40
+    },
+    "without_durable_trace_evidence": {
+      "observations": 50,
+      "safety_violations": 50
+    }
+  },
+  "generated_at": "2026-07-13T12:11:20.933712+00:00",
+  "observation_count": 350,
+  "observations_sha256": "7617bb8da5308b9a22a7ed7fe12c93d7e0b80484b2a18de2ee44ea3d2e3b7bbf",
+  "planning_comparison": false,
+  "repetitions": 10,
+  "study_type": "runtime_only_ablation"
+}

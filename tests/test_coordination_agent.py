@@ -7,10 +7,12 @@ from unified_multi_agent_coordination import (
     CoordinationAgent,
     CoordinationPlanResult,
     CoordinationSdk,
+    DraftRequirementSelection,
     InMemoryCoordinationLedger,
     JsonlCoordinationLedger,
     LedgerEvent,
     LingoLinguisticCoordinator,
+    LinguisticPlanDraft,
     ProblemRequest,
     RetryPolicy,
     SolutionProposal,
@@ -152,18 +154,12 @@ async def test_build_solution_plan_uses_linguistic_planner_when_direct_match_is_
         llm=MockLLM(
             [
                 request,
-                SolutionProposal(
-                    tasks=[
-                        TaskSpec(
-                            task_id="t1",
-                            requirement_name="summarize",
-                            assigned_to="other",
-                        )
-                    ],
-                    execution_order=["t1"],
-                    expected_artifacts=["summary"],
-                    completion_criteria=["summary exists"],
-                ),
+                LinguisticPlanDraft(selections=[DraftRequirementSelection(
+                    requirement_id="summarize", capability_id="summarize"
+                )]),
+                LinguisticPlanDraft(selections=[DraftRequirementSelection(
+                    requirement_id="summarize", capability_id="summarize"
+                )]),
             ]
         )
     )
@@ -171,7 +167,7 @@ async def test_build_solution_plan_uses_linguistic_planner_when_direct_match_is_
 
     result = await agent.build_solution_plan("Summarize this report.")
 
-    assert result.proposal.tasks[0].assigned_to == "other"
+    assert result.proposal.tasks[0].assigned_to is None
     assert not result.feasibility_report.feasible
 
 

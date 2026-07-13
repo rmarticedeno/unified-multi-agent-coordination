@@ -1,0 +1,254 @@
+{
+  "case_id": "base-15",
+  "model_id": "qwen/qwen3-8b",
+  "seed": 55,
+  "temperature": 0,
+  "backend_seed_honored": "not_verifiable_from_response",
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Interpret the request and return one to three typed candidate plans. Plans are non-authoritative. Use only exact capability_id and agent_id values from the registry. Do not infer trust or authorization."
+    },
+    {
+      "role": "user",
+      "content": "{\"request\":\"Complete defense corpus task runtime_failure 15.\",\"registry_snapshot\":[{\"agent_id\":\"agent-15\",\"name\":\"Agent 15\",\"service_endpoint\":\"https://agent-15.example/a2a\",\"trust_level\":\"standard\",\"skills\":[{\"name\":\"Capability 15\",\"capability_id\":\"runtime_failure-capability-15\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"}}}],\"input_modes\":[\"text\"],\"output_modes\":[\"json\"]}]}"
+    }
+  ],
+  "raw_response": {
+    "id": "chatcmpl-11lrtrqds1h34tjkxtm9ve",
+    "object": "chat.completion",
+    "created": 1783912652,
+    "model": "qwen/qwen3-8b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\n  \"interpreted_request\": {\n    \"user_goal\": \"Complete the defense corpus task associated with runtime_failure 15.\",\n    \"required_artifacts\": [\"defense_corpus\", \"runtime_failure_report\"],\n    \"context\": {\n      \"agent_id\": \"agent-15\",\n      \"capability_id\": \"runtime_failure-capability-15\"\n    }\n  },\n  \"candidate_plans\": [\n    {\n      \"tasks\": [\n        {\n          \"task_id\": \"plan-1\",\n          \"requirement_name\": \"defense_corpus\",\n          \"description\": \"Retrieve the defense corpus associated with runtime_failure 15 from the registry.\",\n          \"expected_artifacts\": [\"defense_corpus\"],\n          \"validation_contract\": {\n            \"json_schema\": {\n              \"type\": \"object\"\n            }\n          }\n        },\n        {\n          \"task_id\": \"plan-2\",\n          \"requirement_name\": \"runtime_failure_report\",\n          \"description\": \"Generate a runtime failure report using the capability 'runtime_failure-capability-15' for task completion.\",\n          \"expected_artifacts\": [\"runtime_failure_report\"],\n          \"validation_contract\": {\n            \"json_schema\": {\n              \"type\": \"object\"\n            }\n          }\n        }\n      ]\n    },\n    {\n      \"tasks\": [\n        {\n          \"task_id\": \"plan-3\",\n          \"requirement_name\": \"defense_corpus\",\n          \"description\": \"Access the defense corpus through the service endpoint of agent-15 to ensure task completion.\",\n          \"expected_artifacts\": [\"defense_corpus\"],\n          \"validation_contract\": {\n            \"json_schema\": {\n              \"type\": \"object\"\n            }\n          }\n        },\n        {\n          \"task_id\": \"plan-4\",\n          \"requirement_name\": \"runtime_failure_report\",\n          \"description\": \"Utilize the 'runtime_failure-capability-15' to generate a report for runtime failure 15.\",\n          \"expected_artifacts\": [\"runtime_failure_report\"],\n          \"validation_contract\": {\n            \"json_schema\": {\n              \"type\": \"object\"\n            }\n          }\n        }\n      ]\n    },\n    {\n      \"tasks\": [\n        {\n          \"task_id\": \"plan-5\",\n          \"requirement_name\": \"defense_corpus\",\n          \"description\": \"Fetch the defense corpus for runtime_failure 15 using the standard trust level and input/output modes defined in the registry.\",\n          \"expected_artifacts\": [\"defense_corpus\"],\n          \"validation_contract\": {\n            \"json_schema\": {\n              \"type\": \"object\"\n            }\n          }\n        },\n        {\n          \"task_id\": \"plan-6\",\n          \"requirement_name\": \"runtime_failure_report\",\n          \"description\": \"Execute the 'runtime_failure-capability-15' to produce a report for the defense corpus task.\",\n          \"expected_artifacts\": [\"runtime_failure_report\"],\n          \"validation_contract\": {\n            \"json_schema\": {\n              \"type\": \"object\"\n            }\n          }\n        }\n      ]\n    }\n  ]\n}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 159,
+      "completion_tokens": 632,
+      "total_tokens": 791,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-8b"
+  },
+  "parsed_object": {
+    "interpreted_request": {
+      "user_goal": "Complete the defense corpus task associated with runtime_failure 15.",
+      "requirements": [],
+      "constraints": [],
+      "required_artifacts": [
+        "defense_corpus",
+        "runtime_failure_report"
+      ],
+      "context": {
+        "agent_id": "agent-15",
+        "capability_id": "runtime_failure-capability-15"
+      }
+    },
+    "candidate_plans": [
+      {
+        "tasks": [
+          {
+            "task_id": "plan-1",
+            "requirement_name": "defense_corpus",
+            "requirement_id": "defense-corpus",
+            "capability_id": "defense-corpus",
+            "description": "Retrieve the defense corpus associated with runtime_failure 15 from the registry.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "defense_corpus"
+            ],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              },
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          },
+          {
+            "task_id": "plan-2",
+            "requirement_name": "runtime_failure_report",
+            "requirement_id": "runtime-failure-report",
+            "capability_id": "runtime-failure-report",
+            "description": "Generate a runtime failure report using the capability 'runtime_failure-capability-15' for task completion.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "runtime_failure_report"
+            ],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              },
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [],
+        "expected_artifacts": [],
+        "completion_criteria": [],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      },
+      {
+        "tasks": [
+          {
+            "task_id": "plan-3",
+            "requirement_name": "defense_corpus",
+            "requirement_id": "defense-corpus",
+            "capability_id": "defense-corpus",
+            "description": "Access the defense corpus through the service endpoint of agent-15 to ensure task completion.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "defense_corpus"
+            ],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              },
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          },
+          {
+            "task_id": "plan-4",
+            "requirement_name": "runtime_failure_report",
+            "requirement_id": "runtime-failure-report",
+            "capability_id": "runtime-failure-report",
+            "description": "Utilize the 'runtime_failure-capability-15' to generate a report for runtime failure 15.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "runtime_failure_report"
+            ],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              },
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [],
+        "expected_artifacts": [],
+        "completion_criteria": [],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      },
+      {
+        "tasks": [
+          {
+            "task_id": "plan-5",
+            "requirement_name": "defense_corpus",
+            "requirement_id": "defense-corpus",
+            "capability_id": "defense-corpus",
+            "description": "Fetch the defense corpus for runtime_failure 15 using the standard trust level and input/output modes defined in the registry.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "defense_corpus"
+            ],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              },
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          },
+          {
+            "task_id": "plan-6",
+            "requirement_name": "runtime_failure_report",
+            "requirement_id": "runtime-failure-report",
+            "capability_id": "runtime-failure-report",
+            "description": "Execute the 'runtime_failure-capability-15' to produce a report for the defense corpus task.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "runtime_failure_report"
+            ],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              },
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [],
+        "expected_artifacts": [],
+        "completion_criteria": [],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      }
+    ]
+  },
+  "latency_ms": 35798.43780002557,
+  "evaluation_status": "raw_output_collected_not_scored"
+}

@@ -1,0 +1,91 @@
+{
+  "case_id": "variation-09",
+  "model_id": "google/gemma-4-e2b",
+  "seed": 11,
+  "temperature": 0,
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Return a non-executable LinguisticPlanDraft. Select every admitted requirement_id exactly once and only its declared capability_id. Dependencies may reference only admitted requirement IDs. Report ambiguous terms in unresolved_terms. Do not create task IDs, agents, trust, credentials, contracts, schemas, artifacts, or authority. Reference labels are unavailable."
+    },
+    {
+      "role": "user",
+      "content": "{\"request_text\":\"Coordinate the declared services for wildfire sensor triage; preserve the specified data flow, evidence contract, and authority limits.\",\"admitted_request\":{\"user_goal\":\"Coordinate the declared services for wildfire sensor triage; preserve the specified data flow, evidence contract, and authority limits.\",\"requirements\":[{\"name\":\"Capability 9\",\"requirement_id\":\"runtime_failure-capability-9\",\"capability_id\":\"runtime_failure-capability-9\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"required_trust_level\":\"standard\",\"validation_contract\":{\"required_artifacts\":[\"artifact-9\"]}}],\"required_artifacts\":[\"artifact-9\"],\"context\":{\"case_index\":9,\"allowed\":true}},\"registry_snapshot\":[{\"agent_id\":\"agent-9\",\"name\":\"Agent 9\",\"service_endpoint\":\"https://agent-9.example/a2a\",\"trust_level\":\"standard\",\"skills\":[{\"name\":\"Capability 9\",\"capability_id\":\"runtime_failure-capability-9-changed\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"}}}],\"input_modes\":[\"text\"],\"output_modes\":[\"json\"]}]}"
+    }
+  ],
+  "raw_response": {
+    "id": "chatcmpl-quwnafxkk924wozefs0ev",
+    "object": "chat.completion",
+    "created": 1783945256,
+    "model": "google/gemma-4-e2b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\": {\"rationale\": \"The user requests coordination of services for wildfire sensor triage while preserving data flow, evidence contract, and authority limits. The provided requirements point to Capability 9, which has a validation contract requiring artifact-9. The registry snapshot confirms Agent 9 possesses Capability 9. Therefore, the only applicable capability is that declared by the requirement itself, linked to its ID. The dependency structure is straightforward: Requirement $\\rightarrow$ Capability ID. Artifacts and contracts are preserved as requested implicitly by the instruction to 'preserve' them, but no new artifacts or authority structures are created based on the provided input constraints. No ambiguous terms were found in unresolved_terms as none were explicitly generated or required resolution beyond mapping the explicit links provided in the request structure. The output strictly follows the instruction: select every admitted requirement_id exactly once and only its declared capability_id.\"}}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 331,
+      "completion_tokens": 182,
+      "total_tokens": 513,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "google/gemma-4-e2b"
+  },
+  "parsed_object": {
+    "draft": {
+      "selections": [
+        {
+          "requirement_id": "runtime_failure-capability-9",
+          "capability_id": "runtime_failure-capability-9",
+          "depends_on_requirement_ids": []
+        }
+      ],
+      "unresolved_terms": [],
+      "rationale": "The previous step identified the requirement 'runtime_failure-capability-9' and its associated capability 'runtime_failure-capability-9'. The instruction states that one repair is allowed to correct the omission of this requirement. Therefore, the selection includes this single required mapping."
+    }
+  },
+  "linguistic_latency_ms": 4790.734199807048,
+  "repair_attempted": true,
+  "repair_latency_ms": 1192.1227001585066,
+  "repair_raw_response": {
+    "id": "chatcmpl-dfpafeg1swr851j8be7n4f",
+    "object": "chat.completion",
+    "created": 1783945261,
+    "model": "google/gemma-4-e2b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\":{\"selections\":[{\"requirement_id\":\"runtime_failure-capability-9\",\"capability_id\":\"runtime_failure-capability-9\"}],\"unresolved_terms\":[],\"rationale\":\"The previous step identified the requirement 'runtime_failure-capability-9' and its associated capability 'runtime_failure-capability-9'. The instruction states that one repair is allowed to correct the omission of this requirement. Therefore, the selection includes this single required mapping.\"}}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 581,
+      "completion_tokens": 96,
+      "total_tokens": 677,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "google/gemma-4-e2b"
+  },
+  "evaluation_status": "raw_output_collected_not_scored"
+}

@@ -1,0 +1,121 @@
+{
+  "case_id": "variation-09",
+  "model_id": "qwen/qwen3-1.7b",
+  "seed": 11,
+  "temperature": 0,
+  "backend_seed_honored": "not_verifiable_from_response",
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Interpret the request and return one to three typed candidate plans. Plans are non-authoritative. Use only exact capability_id and agent_id values from the registry. Do not infer trust or authorization."
+    },
+    {
+      "role": "user",
+      "content": "{\"request\":\"Complete defense corpus task runtime_failure 9.\",\"registry_snapshot\":[{\"agent_id\":\"agent-9\",\"name\":\"Agent 9\",\"service_endpoint\":\"https://agent-9.example/a2a\",\"trust_level\":\"standard\",\"skills\":[{\"name\":\"Friendly alias that is not an identity\",\"capability_id\":\"runtime_failure-capability-9-mismatch\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"}}}],\"input_modes\":[\"text\"],\"output_modes\":[\"json\"]}]}"
+    }
+  ],
+  "raw_response": {
+    "id": "chatcmpl-1twiarehflg0i5mqdnkvqk",
+    "object": "chat.completion",
+    "created": 1783906706,
+    "model": "qwen/qwen3-1.7b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"interpreted_request\": {\"user_goal\": \"Complete defense corpus task runtime_failure 9.\", \"context\": {\"registry_snapshot\": [{\"agent_id\": \"agent-9\", \"name\": \"Agent 9\", \"service_endpoint\": \"https://agent-9.example/a2a\", \"trust_level\": \"standard\", \"skills\": [{\"name\": \"Friendly alias that is not an identity\", \"capability_id\": \"runtime_failure-capability-9-mismatch\", \"input_modes\": [\"text\"], \"output_modes\": [\"json\"], \"validation_contract\": {\"json_schema\": {\"type\": \"object\"}}}]}]}},\"candidate_plans\": [{\"tasks\": [{\"task_id\": \"plan1\", \"requirement_name\": \"Complete defense corpus task runtime_failure 9.\", \"capability_id\": \"runtime_failure-capability-9-mismatch\", \"description\": \"The agent will complete the defense corpus task for runtime failure 9 by processing the input text and generating a JSON output based on the validation contract.\"}]}]}\n",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 155,
+      "completion_tokens": 212,
+      "total_tokens": 367,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-1.7b"
+  },
+  "parsed_object": {
+    "interpreted_request": {
+      "user_goal": "Complete defense corpus task runtime_failure 9.",
+      "requirements": [],
+      "constraints": [],
+      "required_artifacts": [],
+      "context": {
+        "registry_snapshot": [
+          {
+            "agent_id": "agent-9",
+            "name": "Agent 9",
+            "service_endpoint": "https://agent-9.example/a2a",
+            "trust_level": "standard",
+            "skills": [
+              {
+                "name": "Friendly alias that is not an identity",
+                "capability_id": "runtime_failure-capability-9-mismatch",
+                "input_modes": [
+                  "text"
+                ],
+                "output_modes": [
+                  "json"
+                ],
+                "validation_contract": {
+                  "json_schema": {
+                    "type": "object"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "candidate_plans": [
+      {
+        "tasks": [
+          {
+            "task_id": "plan1",
+            "requirement_name": "Complete defense corpus task runtime_failure 9.",
+            "requirement_id": "complete-defense-corpus-task-runtime-failure-9",
+            "capability_id": "runtime_failure-capability-9-mismatch",
+            "description": "The agent will complete the defense corpus task for runtime failure 9 by processing the input text and generating a JSON output based on the validation contract.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [],
+            "validation_contract": {
+              "json_schema": {},
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [],
+        "expected_artifacts": [],
+        "completion_criteria": [],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      }
+    ]
+  },
+  "latency_ms": 2235.045399982482,
+  "evaluation_status": "raw_output_collected_not_scored"
+}

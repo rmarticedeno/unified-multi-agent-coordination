@@ -1,0 +1,91 @@
+{
+  "case_id": "base-13",
+  "model_id": "qwen/qwen3-8b",
+  "seed": 11,
+  "temperature": 0,
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Return a non-executable LinguisticPlanDraft. Select every admitted requirement_id exactly once and only its declared capability_id. Dependencies may reference only admitted requirement IDs. Report ambiguous terms in unresolved_terms. Do not create task IDs, agents, trust, credentials, contracts, schemas, artifacts, or authority. Reference labels are unavailable."
+    },
+    {
+      "role": "user",
+      "content": "{\"request_text\":\"Coordinate the declared services for coastal flood response; preserve the specified data flow, evidence contract, and authority limits.\",\"admitted_request\":{\"user_goal\":\"Coordinate the declared services for coastal flood response; preserve the specified data flow, evidence contract, and authority limits.\",\"requirements\":[{\"name\":\"Capability 13\",\"requirement_id\":\"direct_feasible-capability-13\",\"capability_id\":\"direct_feasible-capability-13\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"required_trust_level\":\"standard\",\"validation_contract\":{\"required_artifacts\":[\"artifact-13\"]}}],\"required_artifacts\":[\"artifact-13\"],\"context\":{\"case_index\":13,\"allowed\":true}},\"registry_snapshot\":[{\"agent_id\":\"agent-13\",\"name\":\"Agent 13\",\"service_endpoint\":\"https://agent-13.example/a2a\",\"trust_level\":\"standard\",\"skills\":[{\"name\":\"Capability 13\",\"capability_id\":\"direct_feasible-capability-13\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"}}}],\"input_modes\":[\"text\"],\"output_modes\":[\"json\"]}]}"
+    }
+  ],
+  "raw_response": {
+    "id": "chatcmpl-q9h7zlw8dkqmw52q5ak2k",
+    "object": "chat.completion",
+    "created": 1783945665,
+    "model": "qwen/qwen3-8b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\n  \"draft\": {\n    \"unresolved_terms\": [],\n    \"rationale\": \"This LinguisticPlanDraft coordinates the declared services for coastal flood response by preserving the specified data flow, evidence contract, and authority limits. It ensures that all required capabilities are referenced exactly once with their declared capability IDs, while adhering to the constraints of the admitted request and registry snapshot.\"\n  }\n}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 318,
+      "completion_tokens": 81,
+      "total_tokens": 399,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-8b"
+  },
+  "parsed_object": {
+    "draft": {
+      "selections": [
+        {
+          "requirement_id": "direct_feasible-capability-13",
+          "capability_id": "direct_feasible-capability-13",
+          "depends_on_requirement_ids": []
+        }
+      ],
+      "unresolved_terms": [],
+      "rationale": "This LinguisticPlanDraft coordinates the declared services for coastal flood response by preserving the specified data flow, evidence contract, and authority limits. It ensures that all required capabilities are referenced exactly once with their declared capability IDs, while adhering to the constraints of the admitted request and registry snapshot."
+    }
+  },
+  "linguistic_latency_ms": 4224.231700180098,
+  "repair_attempted": true,
+  "repair_latency_ms": 4193.54570005089,
+  "repair_raw_response": {
+    "id": "chatcmpl-6s5eig89un8zkkrjhp5o8c",
+    "object": "chat.completion",
+    "created": 1783945669,
+    "model": "qwen/qwen3-8b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\":{\"selections\":[{\"requirement_id\":\"direct_feasible-capability-13\",\"capability_id\":\"direct_feasible-capability-13\"}],\"unresolved_terms\":[],\"rationale\":\"This LinguisticPlanDraft coordinates the declared services for coastal flood response by preserving the specified data flow, evidence contract, and authority limits. It ensures that all required capabilities are referenced exactly once with their declared capability IDs, while adhering to the constraints of the admitted request and registry snapshot.\"}}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 458,
+      "completion_tokens": 101,
+      "total_tokens": 559,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-8b"
+  },
+  "evaluation_status": "raw_output_collected_not_scored"
+}

@@ -1,0 +1,91 @@
+{
+  "case_id": "variation-07",
+  "model_id": "qwen/qwen3-8b",
+  "seed": 33,
+  "temperature": 0,
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Return a non-executable LinguisticPlanDraft. Select every admitted requirement_id exactly once and only its declared capability_id. Dependencies may reference only admitted requirement IDs. Report ambiguous terms in unresolved_terms. Do not create task IDs, agents, trust, credentials, contracts, schemas, artifacts, or authority. Reference labels are unavailable."
+    },
+    {
+      "role": "user",
+      "content": "{\"request_text\":\"Coordinate the declared services for coastal flood response; preserve the specified data flow, evidence contract, and authority limits.\",\"admitted_request\":{\"user_goal\":\"Coordinate the declared services for coastal flood response; preserve the specified data flow, evidence contract, and authority limits.\",\"requirements\":[{\"name\":\"Capability 7\",\"requirement_id\":\"direct_feasible-capability-7\",\"capability_id\":\"direct_feasible-capability-7\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"required_trust_level\":\"standard\",\"validation_contract\":{\"required_artifacts\":[\"artifact-7\"]}}],\"required_artifacts\":[\"artifact-7\"],\"context\":{\"case_index\":7,\"allowed\":true}},\"registry_snapshot\":[{\"agent_id\":\"agent-7\",\"name\":\"Agent 7\",\"service_endpoint\":\"https://agent-7.example/a2a\",\"trust_level\":\"standard\",\"skills\":[{\"name\":\"Capability 7\",\"capability_id\":\"direct_feasible-capability-7\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"}}}],\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"status\":\"unavailable\"}]}"
+    }
+  ],
+  "raw_response": {
+    "id": "chatcmpl-vtwggugvz4okp39y2kw1h",
+    "object": "chat.completion",
+    "created": 1783946386,
+    "model": "qwen/qwen3-8b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\n  \"draft\": {\n    \"unresolved_terms\": [],\n    \"rationale\": \"The request involves coordinating declared services for coastal flood response while preserving data flow, evidence contract, and authority limits. The admitted requirement specifies the use of 'Capability 7' with a defined input/output mode and validation contract. The registry snapshot provides details about Agent 7, which is associated with this capability but marked as unavailable. No task IDs, agents, trust, credentials, contracts, schemas, artifacts, or authority are created in this draft.\"\n  }\n}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 312,
+      "completion_tokens": 113,
+      "total_tokens": 425,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-8b"
+  },
+  "parsed_object": {
+    "draft": {
+      "selections": [
+        {
+          "requirement_id": "direct_feasible-capability-7",
+          "capability_id": "direct_feasible-capability-7",
+          "depends_on_requirement_ids": []
+        }
+      ],
+      "unresolved_terms": [],
+      "rationale": "The requirement 'direct_feasible-capability-7' has been selected to address the missing requirement error. This capability is associated with the admitted request and is defined in both the admitted_request and registry_snapshot. No other requirements, tasks, agents, trust levels, contracts, schemas, artifacts, or authority have been included as per the instructions."
+    }
+  },
+  "linguistic_latency_ms": 3962.2275999281555,
+  "repair_attempted": true,
+  "repair_latency_ms": 4802.75240004994,
+  "repair_raw_response": {
+    "id": "chatcmpl-tx486kn09mcj4z6gk6jazi",
+    "object": "chat.completion",
+    "created": 1783946390,
+    "model": "qwen/qwen3-8b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\":{\"selections\":[{\"requirement_id\":\"direct_feasible-capability-7\",\"capability_id\":\"direct_feasible-capability-7\"}],\"unresolved_terms\":[],\"rationale\":\"The requirement 'direct_feasible-capability-7' has been selected to address the missing requirement error. This capability is associated with the admitted request and is defined in both the admitted_request and registry_snapshot. No other requirements, tasks, agents, trust levels, contracts, schemas, artifacts, or authority have been included as per the instructions.\"}}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 482,
+      "completion_tokens": 111,
+      "total_tokens": 593,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-8b"
+  },
+  "evaluation_status": "raw_output_collected_not_scored"
+}

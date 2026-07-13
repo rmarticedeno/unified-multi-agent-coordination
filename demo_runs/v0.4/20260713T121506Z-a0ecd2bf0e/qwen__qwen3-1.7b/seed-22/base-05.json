@@ -1,0 +1,95 @@
+{
+  "case_id": "base-05",
+  "model_id": "qwen/qwen3-1.7b",
+  "seed": 22,
+  "temperature": 0,
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Return a non-executable LinguisticPlanDraft. Select every admitted requirement_id exactly once and only its declared capability_id. Dependencies may reference only admitted requirement IDs. Report ambiguous terms in unresolved_terms. Do not create task IDs, agents, trust, credentials, contracts, schemas, artifacts, or authority. Reference labels are unavailable."
+    },
+    {
+      "role": "user",
+      "content": "{\"request_text\":\"Coordinate the declared services for warehouse incident recovery; preserve the specified data flow, evidence contract, and authority limits.\",\"admitted_request\":{\"user_goal\":\"Coordinate the declared services for warehouse incident recovery; preserve the specified data flow, evidence contract, and authority limits.\",\"requirements\":[{\"name\":\"Capability 5\",\"requirement_id\":\"schema_modality_graph_invalidity-capability-5\",\"capability_id\":\"schema_modality_graph_invalidity-capability-5\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"required_trust_level\":\"standard\",\"validation_contract\":{\"required_artifacts\":[\"artifact-5\"]},\"input_schema\":{\"type\":\"object\",\"required\":[\"nested\"]}}],\"required_artifacts\":[\"artifact-5\"],\"context\":{\"case_index\":5,\"allowed\":true}},\"registry_snapshot\":[{\"agent_id\":\"agent-5\",\"name\":\"Agent 5\",\"service_endpoint\":\"https://agent-5.example/a2a\",\"trust_level\":\"standard\",\"skills\":[{\"name\":\"Capability 5\",\"capability_id\":\"schema_modality_graph_invalidity-capability-5\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"}},\"input_schema\":{\"type\":\"string\"}}],\"input_modes\":[\"text\"],\"output_modes\":[\"json\"]}]}"
+    }
+  ],
+  "raw_response": {
+    "id": "chatcmpl-pdui3n8f8btrm2w5ycj0q",
+    "object": "chat.completion",
+    "created": 1783944974,
+    "model": "qwen/qwen3-1.7b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\": {\"unresolved_terms\": [\"data flow\", \"evidence contract\", \"authority limits\"], \"rationale\": \"The request mentions 'preserve the specified data flow, evidence contract, and authority limits' but no specific artifacts or capabilities are mentioned. The capability for schema_modality_graph_invalidity-capability-5 is available, but its input and output modes are not explicitly linked to these terms.\"}}\n",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 328,
+      "completion_tokens": 84,
+      "total_tokens": 412,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-1.7b"
+  },
+  "parsed_object": {
+    "draft": {
+      "selections": [
+        {
+          "requirement_id": "schema_modality_graph_invalidity-capability-5",
+          "capability_id": "schema_modality_graph_invalidity-capability-5",
+          "depends_on_requirement_ids": []
+        }
+      ],
+      "unresolved_terms": [
+        "data flow",
+        "evidence contract",
+        "authority limits"
+      ],
+      "rationale": "The request mentions preserving data flow, evidence contract, and authority limits but no specific artifacts or capabilities are mentioned. The capability for schema_modality_graph_invalidity-capability-5 is available, but its input and output modes are not explicitly linked to these terms."
+    }
+  },
+  "linguistic_latency_ms": 915.0954000651836,
+  "repair_attempted": true,
+  "repair_latency_ms": 898.6440000589937,
+  "repair_raw_response": {
+    "id": "chatcmpl-7ezeblqagzi5dhvsgmexeg",
+    "object": "chat.completion",
+    "created": 1783944975,
+    "model": "qwen/qwen3-1.7b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\":{\"selections\":[{\"requirement_id\":\"schema_modality_graph_invalidity-capability-5\",\"capability_id\":\"schema_modality_graph_invalidity-capability-5\"}],\"unresolved_terms\":[\"data flow\",\"evidence contract\",\"authority limits\"],\"rationale\":\"The request mentions preserving data flow, evidence contract, and authority limits but no specific artifacts or capabilities are mentioned. The capability for schema_modality_graph_invalidity-capability-5 is available, but its input and output modes are not explicitly linked to these terms.\"}}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 558,
+      "completion_tokens": 107,
+      "total_tokens": 665,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-1.7b"
+  },
+  "evaluation_status": "raw_output_collected_not_scored"
+}

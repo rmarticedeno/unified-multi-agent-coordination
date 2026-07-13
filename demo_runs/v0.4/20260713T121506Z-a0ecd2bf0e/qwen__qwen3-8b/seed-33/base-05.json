@@ -1,0 +1,91 @@
+{
+  "case_id": "base-05",
+  "model_id": "qwen/qwen3-8b",
+  "seed": 33,
+  "temperature": 0,
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Return a non-executable LinguisticPlanDraft. Select every admitted requirement_id exactly once and only its declared capability_id. Dependencies may reference only admitted requirement IDs. Report ambiguous terms in unresolved_terms. Do not create task IDs, agents, trust, credentials, contracts, schemas, artifacts, or authority. Reference labels are unavailable."
+    },
+    {
+      "role": "user",
+      "content": "{\"request_text\":\"Coordinate the declared services for warehouse incident recovery; preserve the specified data flow, evidence contract, and authority limits.\",\"admitted_request\":{\"user_goal\":\"Coordinate the declared services for warehouse incident recovery; preserve the specified data flow, evidence contract, and authority limits.\",\"requirements\":[{\"name\":\"Capability 5\",\"requirement_id\":\"schema_modality_graph_invalidity-capability-5\",\"capability_id\":\"schema_modality_graph_invalidity-capability-5\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"required_trust_level\":\"standard\",\"validation_contract\":{\"required_artifacts\":[\"artifact-5\"]},\"input_schema\":{\"type\":\"object\",\"required\":[\"nested\"]}}],\"required_artifacts\":[\"artifact-5\"],\"context\":{\"case_index\":5,\"allowed\":true}},\"registry_snapshot\":[{\"agent_id\":\"agent-5\",\"name\":\"Agent 5\",\"service_endpoint\":\"https://agent-5.example/a2a\",\"trust_level\":\"standard\",\"skills\":[{\"name\":\"Capability 5\",\"capability_id\":\"schema_modality_graph_invalidity-capability-5\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"}},\"input_schema\":{\"type\":\"string\"}}],\"input_modes\":[\"text\"],\"output_modes\":[\"json\"]}]}"
+    }
+  ],
+  "raw_response": {
+    "id": "chatcmpl-qh2q2fn0yu94r9d6suf2n",
+    "object": "chat.completion",
+    "created": 1783946185,
+    "model": "qwen/qwen3-8b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\n  \"draft\": {\n    \"unresolved_terms\": [],\n    \"rationale\": \"The request involves coordinating declared services for warehouse incident recovery while preserving data flow, evidence contract, and authority limits. The admitted requirement is tied to 'Capability 5', which has a specific input mode of text and output mode of json. It requires the artifact 'artifact-5' and operates under standard trust level. The registry snapshot confirms that Agent 5 provides this capability with matching input/output modes and validation contract requirements.\"\n  }\n}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 332,
+      "completion_tokens": 108,
+      "total_tokens": 440,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-8b"
+  },
+  "parsed_object": {
+    "draft": {
+      "selections": [
+        {
+          "requirement_id": "schema_modality_graph_invalidity-capability-5",
+          "capability_id": "schema_modality_graph_invalidity-capability-5",
+          "depends_on_requirement_ids": []
+        }
+      ],
+      "unresolved_terms": [],
+      "rationale": "The requirement 'schema_modality_graph_invalidity-capability-5' has been selected to address the missing_requirement error. This capability is necessary for coordinating declared services during warehouse incident recovery and preserving data flow, evidence contract, and authority limits as specified in the request."
+    }
+  },
+  "linguistic_latency_ms": 3861.7633001413196,
+  "repair_attempted": true,
+  "repair_latency_ms": 4482.35149984248,
+  "repair_raw_response": {
+    "id": "chatcmpl-j66soohtrjguv2uzi5e1k",
+    "object": "chat.completion",
+    "created": 1783946189,
+    "model": "qwen/qwen3-8b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\":{\"selections\":[{\"requirement_id\":\"schema_modality_graph_invalidity-capability-5\",\"capability_id\":\"schema_modality_graph_invalidity-capability-5\"}],\"unresolved_terms\":[],\"rationale\":\"The requirement 'schema_modality_graph_invalidity-capability-5' has been selected to address the missing_requirement error. This capability is necessary for coordinating declared services during warehouse incident recovery and preserving data flow, evidence contract, and authority limits as specified in the request.\"}}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 501,
+      "completion_tokens": 100,
+      "total_tokens": 601,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-8b"
+  },
+  "evaluation_status": "raw_output_collected_not_scored"
+}

@@ -1,0 +1,220 @@
+{
+  "case_id": "base-17",
+  "model_id": "qwen/qwen3-8b",
+  "seed": 11,
+  "temperature": 0,
+  "backend_seed_honored": "not_verifiable_from_response",
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Interpret the request and return one to three typed candidate plans. Plans are non-authoritative. Use only exact capability_id and agent_id values from the registry. Do not infer trust or authorization."
+    },
+    {
+      "role": "user",
+      "content": "{\"request\":\"Complete defense corpus task schema_modality_graph_invalidity 17.\",\"registry_snapshot\":[{\"agent_id\":\"agent-17\",\"name\":\"Agent 17\",\"service_endpoint\":\"https://agent-17.example/a2a\",\"trust_level\":\"standard\",\"skills\":[{\"name\":\"Capability 17\",\"capability_id\":\"schema_modality_graph_invalidity-capability-17\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"}}}],\"input_modes\":[\"text\"],\"output_modes\":[\"json\"]}]}"
+    }
+  ],
+  "raw_response": {
+    "id": "chatcmpl-d4q5df5b4vbt95rd3szh",
+    "object": "chat.completion",
+    "created": 1783908557,
+    "model": "qwen/qwen3-8b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\n  \"interpreted_request\": {\n    \"user_goal\": \"Complete the defense corpus task schema_modality_graph_invalidity 17.\",\n    \"required_artifacts\": [\"schema_modality_graph_invalidity\"],\n    \"context\": {\n      \"task_id\": \"17\",\n      \"registry_snapshot\": [\n        {\n          \"agent_id\": \"agent-17\",\n          \"name\": \"Agent 17\",\n          \"service_endpoint\": \"https://agent-17.example/a2a\",\n          \"trust_level\": \"standard\",\n          \"skills\": [\n            {\n              \"name\": \"Capability 17\",\n              \"capability_id\": \"schema_modality_graph_invalidity-capability-17\",\n              \"input_modes\": [\"text\"],\n              \"output_modes\": [\"json\"],\n              \"validation_contract\": {\n                \"json_schema\": {\n                  \"type\": \"object\"\n                }\n              }\n            }\n          ],\n          \"input_modes\": [\"text\"],\n          \"output_modes\": [\"json\"]\n        }\n      ]\n    }\n  },\n  \"candidate_plans\": [\n    {\n      \"tasks\": [\n        {\n          \"task_id\": \"17\",\n          \"requirement_name\": \"schema_modality_graph_invalidity\",\n          \"description\": \"Validate the schema modality graph for invalidity using Agent 17's capability.\",\n          \"assigned_to\": \"agent-17\",\n          \"expected_artifacts\": [\"validation_result\"],\n          \"validation_contract\": {\n            \"json_schema\": {\n              \"type\": \"object\"\n            }\n          }\n        }\n      ],\n      \"execution_order\": [\n        \"schema_modality_graph_invalidity-capability-17\"\n      ]\n    },\n    {\n      \"tasks\": [\n        {\n          \"task_id\": \"17\",\n          \"requirement_name\": \"schema_modality_graph_invalidity\",\n          \"description\": \"Validate the schema modality graph for invalidity using Agent 17's capability.\",\n          \"assigned_to\": \"agent-17\",\n          \"expected_artifacts\": [\"validation_result\"],\n          \"validation_contract\": {\n            \"json_schema\": {\n              \"type\": \"object\"\n            }\n          }\n        }\n      ],\n      \"execution_order\": [\n        \"schema_modality_graph_invalidity-capability-17\"\n      ]\n    },\n    {\n      \"tasks\": [\n        {\n          \"task_id\": \"17\",\n          \"requirement_name\": \"schema_modality_graph_invalidity\",\n          \"description\": \"Validate the schema modality graph for invalidity using Agent 17's capability.\",\n          \"assigned_to\": \"agent-17\",\n          \"expected_artifacts\": [\"validation_result\"],\n          \"validation_contract\": {\n            \"json_schema\": {\n              \"type\": \"object\"\n            }\n          }\n        }\n      ],\n      \"execution_order\": [\n        \"schema_modality_graph_invalidity-capability-17\"\n      ]\n    }\n  ]\n}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 167,
+      "completion_tokens": 609,
+      "total_tokens": 776,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-8b"
+  },
+  "parsed_object": {
+    "interpreted_request": {
+      "user_goal": "Complete the defense corpus task schema_modality_graph_invalidity 17.",
+      "requirements": [],
+      "constraints": [],
+      "required_artifacts": [
+        "schema_modality_graph_invalidity"
+      ],
+      "context": {
+        "task_id": "17",
+        "registry_snapshot": [
+          {
+            "agent_id": "agent-17",
+            "name": "Agent 17",
+            "service_endpoint": "https://agent-17.example/a2a",
+            "trust_level": "standard",
+            "skills": [
+              {
+                "name": "Capability 17",
+                "capability_id": "schema_modality_graph_invalidity-capability-17",
+                "input_modes": [
+                  "text"
+                ],
+                "output_modes": [
+                  "json"
+                ],
+                "validation_contract": {
+                  "json_schema": {
+                    "type": "object"
+                  }
+                }
+              }
+            ],
+            "input_modes": [
+              "text"
+            ],
+            "output_modes": [
+              "json"
+            ]
+          }
+        ]
+      }
+    },
+    "candidate_plans": [
+      {
+        "tasks": [
+          {
+            "task_id": "17",
+            "requirement_name": "schema_modality_graph_invalidity",
+            "requirement_id": "schema-modality-graph-invalidity",
+            "capability_id": "schema-modality-graph-invalidity",
+            "description": "Validate the schema modality graph for invalidity using Agent 17's capability.",
+            "assigned_to": "agent-17",
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "validation_result"
+            ],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              },
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [
+          "schema_modality_graph_invalidity-capability-17"
+        ],
+        "expected_artifacts": [],
+        "completion_criteria": [],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      },
+      {
+        "tasks": [
+          {
+            "task_id": "17",
+            "requirement_name": "schema_modality_graph_invalidity",
+            "requirement_id": "schema-modality-graph-invalidity",
+            "capability_id": "schema-modality-graph-invalidity",
+            "description": "Validate the schema modality graph for invalidity using Agent 17's capability.",
+            "assigned_to": "agent-17",
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "validation_result"
+            ],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              },
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [
+          "schema_modality_graph_invalidity-capability-17"
+        ],
+        "expected_artifacts": [],
+        "completion_criteria": [],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      },
+      {
+        "tasks": [
+          {
+            "task_id": "17",
+            "requirement_name": "schema_modality_graph_invalidity",
+            "requirement_id": "schema-modality-graph-invalidity",
+            "capability_id": "schema-modality-graph-invalidity",
+            "description": "Validate the schema modality graph for invalidity using Agent 17's capability.",
+            "assigned_to": "agent-17",
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "validation_result"
+            ],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              },
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [
+          "schema_modality_graph_invalidity-capability-17"
+        ],
+        "expected_artifacts": [],
+        "completion_criteria": [],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      }
+    ]
+  },
+  "latency_ms": 20146.70030004345,
+  "evaluation_status": "raw_output_collected_not_scored"
+}

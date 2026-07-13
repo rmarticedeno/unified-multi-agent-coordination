@@ -24,6 +24,7 @@ from .models import (
     TraceEvent,
     ValidationContract,
 )
+from .runtime_policies import AuxiliaryLifecyclePolicy, SingleUseAuxiliaryLifecyclePolicy
 
 
 class RemoteRegistryError(RuntimeError):
@@ -50,6 +51,7 @@ class CoordinationSdk:
         http_client: Any | None = None,
         admission_policy: AgentAdmissionPolicy | None = None,
         credential_provider: CredentialProvider | None = None,
+        auxiliary_lifecycle_policy: AuxiliaryLifecyclePolicy | None = None,
     ) -> None:
         self.remote_registry_url = self._select_registry_url(
             remote_registry_url, registry_endpoint, registry_addr
@@ -66,6 +68,9 @@ class CoordinationSdk:
         self._local_idempotency_cache: dict[str, TaskExecutionResult] = {}
         self._consumed_auxiliary_lifecycles: set[str] = set()
         self.credential_provider = credential_provider
+        self.auxiliary_lifecycle_policy = (
+            auxiliary_lifecycle_policy or SingleUseAuxiliaryLifecyclePolicy()
+        )
         self.a2a_adapter = A2AAdapter(
             card_fetcher or self._fetch_agent_card,
             task_sender or self._send_remote_a2a_task,
@@ -422,7 +427,9 @@ class CoordinationSdk:
         identity: dict[str, str] | None = None,
     ) -> TaskExecutionResult:
         identity = identity or {}
-        if spec.lifecycle in self._consumed_auxiliary_lifecycles:
+        if not self.auxiliary_lifecycle_policy.claim(
+            spec.lifecycle, self._consumed_auxiliary_lifecycles
+        ):
             return TaskExecutionResult(
                 task_id=task.task_id,
                 agent_id=spec.spec_id,
@@ -431,7 +438,6 @@ class CoordinationSdk:
                 error="Auxiliary lifecycle has expired and cannot be reused.",
                 metadata={"lifecycle": spec.lifecycle, "expired": True},
             )
-        self._consumed_auxiliary_lifecycles.add(spec.lifecycle)
         self._record(
             "sdk_auxiliary_task_started",
             f"Auxiliary task {task.task_id} started.",

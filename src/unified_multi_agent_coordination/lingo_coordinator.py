@@ -7,6 +7,8 @@ from lingo import Context, Engine, LLM, Message, State
 from .models import (
     AgentRegistryEntry,
     FeasibilityReport,
+    HydrationIssue,
+    LinguisticPlanDraft,
     PredicateEvidence,
     ProblemRequest,
     SolutionProposal,
@@ -129,6 +131,52 @@ class LingoLinguisticCoordinator:
         self.state.candidate_plan = proposal.model_dump(mode="json")
         self.state.record("solution_proposed", "Candidate SolutionProposal produced.")
         return proposal
+
+    async def propose_draft(
+        self, request: ProblemRequest, registry: list[AgentRegistryEntry]
+    ) -> LinguisticPlanDraft:
+        """Select only identifiers declared by the admitted request and registry."""
+        ctx = Context([])
+        ctx.append(Message.system(
+            "Create a LinguisticPlanDraft, not an executable plan. Select each admitted "
+            "requirement_id exactly once and use only its declared capability_id. Express "
+            "dependencies only between declared requirement IDs. Never create task IDs, "
+            "agents, credentials, trust levels, contracts, schemas, artifacts, or authority."
+        ))
+        ctx.append(Message.system("Admitted request:\n" + request.model_dump_json()))
+        ctx.append(Message.system(
+            "Available identifiers (descriptive only):\n"
+            + "\n".join(agent.model_dump_json() for agent in registry)
+        ))
+        draft = await self.engine.create(ctx, LinguisticPlanDraft)
+        self.state.candidate_plan = draft.model_dump(mode="json")
+        self.state.record("linguistic_draft_proposed", "Non-executable draft produced.")
+        return draft
+
+    async def repair_draft(
+        self,
+        request: ProblemRequest,
+        registry: list[AgentRegistryEntry],
+        draft: LinguisticPlanDraft,
+        issues: list[HydrationIssue],
+    ) -> LinguisticPlanDraft:
+        """Perform one caller-bounded repair using public hydration diagnostics."""
+        ctx = Context([])
+        ctx.append(Message.system(
+            "Repair the LinguisticPlanDraft using the hydration errors. The same identifier "
+            "and authority restrictions apply. Return only a LinguisticPlanDraft."
+        ))
+        ctx.append(Message.system("Admitted request:\n" + request.model_dump_json()))
+        ctx.append(Message.system(
+            "Registry:\n" + "\n".join(agent.model_dump_json() for agent in registry)
+        ))
+        ctx.append(Message.system("Rejected draft:\n" + draft.model_dump_json()))
+        ctx.append(Message.system(
+            "Hydration errors:\n" + "\n".join(issue.model_dump_json() for issue in issues)
+        ))
+        repaired = await self.engine.create(ctx, LinguisticPlanDraft)
+        self.state.record("linguistic_draft_repaired", "One bounded repair produced.")
+        return repaired
 
     async def propose_solutions(
         self, request: ProblemRequest, registry: list[AgentRegistryEntry]

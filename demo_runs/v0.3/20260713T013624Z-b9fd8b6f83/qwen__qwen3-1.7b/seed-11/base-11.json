@@ -1,0 +1,209 @@
+{
+  "case_id": "base-11",
+  "model_id": "qwen/qwen3-1.7b",
+  "seed": 11,
+  "temperature": 0,
+  "backend_seed_honored": "not_verifiable_from_response",
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Interpret the request and return one to three typed candidate plans. Plans are non-authoritative. Use only exact capability_id and agent_id values from the registry. Do not infer trust or authorization."
+    },
+    {
+      "role": "user",
+      "content": "{\"request\":\"Complete defense corpus task schema_modality_graph_invalidity 11.\",\"registry_snapshot\":[{\"agent_id\":\"agent-11\",\"name\":\"Agent 11\",\"service_endpoint\":\"https://agent-11.example/a2a\",\"trust_level\":\"standard\",\"skills\":[{\"name\":\"Capability 11\",\"capability_id\":\"schema_modality_graph_invalidity-capability-11\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"}}}],\"input_modes\":[\"text\"],\"output_modes\":[\"json\"]}]}"
+    }
+  ],
+  "raw_response": {
+    "id": "chatcmpl-y59ezed1i2i4i4bt4v9wrf",
+    "object": "chat.completion",
+    "created": 1783906630,
+    "model": "qwen/qwen3-1.7b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"interpreted_request\": {\"user_goal\": \"Complete defense corpus task schema_modality_graph_invalidity 11.\", \"required_artifacts\": [\"schema_modality_graph_invalidity-capability-11\"], \"context\": {\"agent_id\": \"agent-11\", \"name\": \"Agent 11\", \"service_endpoint\": \"https://agent-11.example/a2a\", \"trust_level\": \"standard\", \"skills\": [{\"name\": \"Capability 11\", \"capability_id\": \"schema_modality_graph_invalidity-capability-11\", \"input_modes\": [\"text\"], \"output_modes\": [\"json\"], \"validation_contract\": {\"json_schema\": {\"type\": \"object\"}}}]}}, \"candidate_plans\": [{\"tasks\": [{\"task_id\": \"plan_1\", \"requirement_name\": \"Complete schema_modality_graph_invalidity capability 11\", \"description\": \"Implement the capability to handle defense corpus task schema_modality_graph_invalidity 11.\", \"expected_artifacts\": [\"schema_modality_graph_invalidity-capability-11\"], \"validation_contract\": {\"json_schema\": {\"type\": \"object\"}}}], \"execution_order\": [ \"plan_1\" ]}, {\"tasks\": [{\"task_id\": \"plan_2\", \"requirement_name\": \"Implement schema_modality_graph_invalidity capability 11\", \"description\": \"Develop the capability to process defense corpus task schema_modality_graph_invalidity 11.\", \"expected_artifacts\": [\"schema_modality_graph_invalidity-capability-11\"], \"validation_contract\": {\"json_schema\": {\"type\": \"object\"}}}], \"execution_order\": [ \"plan_2\" ]}, {\"tasks\": [{\"task_id\": \"plan_3\", \"requirement_name\": \"Develop schema_modality_graph_invalidity capability 11\", \"description\": \"Create the capability to handle defense corpus task schema_modality_graph_invalidity 11.\", \"expected_artifacts\": [\"schema_modality_graph_invalidity-capability-11\"], \"validation_contract\": {\"json_schema\": {\"type\": \"object\"}}}], \"execution_order\": [ \"plan_3\" ]}]}\n",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 163,
+      "completion_tokens": 452,
+      "total_tokens": 615,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-1.7b"
+  },
+  "parsed_object": {
+    "interpreted_request": {
+      "user_goal": "Complete defense corpus task schema_modality_graph_invalidity 11.",
+      "requirements": [],
+      "constraints": [],
+      "required_artifacts": [
+        "schema_modality_graph_invalidity-capability-11"
+      ],
+      "context": {
+        "agent_id": "agent-11",
+        "name": "Agent 11",
+        "service_endpoint": "https://agent-11.example/a2a",
+        "trust_level": "standard",
+        "skills": [
+          {
+            "name": "Capability 11",
+            "capability_id": "schema_modality_graph_invalidity-capability-11",
+            "input_modes": [
+              "text"
+            ],
+            "output_modes": [
+              "json"
+            ],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "candidate_plans": [
+      {
+        "tasks": [
+          {
+            "task_id": "plan_1",
+            "requirement_name": "Complete schema_modality_graph_invalidity capability 11",
+            "requirement_id": "complete-schema-modality-graph-invalidity-capability-11",
+            "capability_id": "complete-schema-modality-graph-invalidity-capability-11",
+            "description": "Implement the capability to handle defense corpus task schema_modality_graph_invalidity 11.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "schema_modality_graph_invalidity-capability-11"
+            ],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              },
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [
+          "plan_1"
+        ],
+        "expected_artifacts": [],
+        "completion_criteria": [],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      },
+      {
+        "tasks": [
+          {
+            "task_id": "plan_2",
+            "requirement_name": "Implement schema_modality_graph_invalidity capability 11",
+            "requirement_id": "implement-schema-modality-graph-invalidity-capability-11",
+            "capability_id": "implement-schema-modality-graph-invalidity-capability-11",
+            "description": "Develop the capability to process defense corpus task schema_modality_graph_invalidity 11.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "schema_modality_graph_invalidity-capability-11"
+            ],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              },
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [
+          "plan_2"
+        ],
+        "expected_artifacts": [],
+        "completion_criteria": [],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      },
+      {
+        "tasks": [
+          {
+            "task_id": "plan_3",
+            "requirement_name": "Develop schema_modality_graph_invalidity capability 11",
+            "requirement_id": "develop-schema-modality-graph-invalidity-capability-11",
+            "capability_id": "develop-schema-modality-graph-invalidity-capability-11",
+            "description": "Create the capability to handle defense corpus task schema_modality_graph_invalidity 11.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "schema_modality_graph_invalidity-capability-11"
+            ],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              },
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [
+          "plan_3"
+        ],
+        "expected_artifacts": [],
+        "completion_criteria": [],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      }
+    ]
+  },
+  "latency_ms": 4134.1365000698715,
+  "evaluation_status": "raw_output_collected_not_scored"
+}

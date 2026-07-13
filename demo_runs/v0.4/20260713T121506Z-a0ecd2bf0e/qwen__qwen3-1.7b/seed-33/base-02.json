@@ -1,0 +1,85 @@
+{
+  "case_id": "base-02",
+  "model_id": "qwen/qwen3-1.7b",
+  "seed": 33,
+  "temperature": 0,
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Return a non-executable LinguisticPlanDraft. Select every admitted requirement_id exactly once and only its declared capability_id. Dependencies may reference only admitted requirement IDs. Report ambiguous terms in unresolved_terms. Do not create task IDs, agents, trust, credentials, contracts, schemas, artifacts, or authority. Reference labels are unavailable."
+    },
+    {
+      "role": "user",
+      "content": "{\"request_text\":\"Coordinate the declared services for hospital supply routing; preserve the specified data flow, evidence contract, and authority limits.\",\"admitted_request\":{\"user_goal\":\"Coordinate the declared services for hospital supply routing; preserve the specified data flow, evidence contract, and authority limits.\",\"requirements\":[{\"name\":\"Capability 2\",\"requirement_id\":\"decomposed_feasible-capability-2\",\"capability_id\":\"decomposed_feasible-capability-2\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"required_trust_level\":\"standard\",\"validation_contract\":{\"required_artifacts\":[\"artifact-2\"]}},{\"name\":\"Finish Capability 2\",\"requirement_id\":\"decomposed_feasible-capability-2-finish\",\"capability_id\":\"decomposed_feasible-capability-2-finish\",\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"validation_contract\":{\"required_artifacts\":[\"artifact-2\"]}}],\"required_artifacts\":[\"artifact-2\"],\"context\":{\"case_index\":2,\"allowed\":true}},\"registry_snapshot\":[{\"agent_id\":\"agent-2\",\"name\":\"Agent 2\",\"service_endpoint\":\"https://agent-2.example/a2a\",\"trust_level\":\"standard\",\"skills\":[{\"name\":\"Capability 2\",\"capability_id\":\"decomposed_feasible-capability-2\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"}}}],\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"]},{\"agent_id\":\"finisher-2\",\"name\":\"Finisher 2\",\"service_endpoint\":\"https://finisher-2.example/a2a\",\"trust_level\":\"standard\",\"skills\":[{\"name\":\"Finish Capability 2\",\"capability_id\":\"decomposed_feasible-capability-2-finish\",\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"validation_contract\":{\"required_artifacts\":[\"artifact-2\"]}}],\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"]}]}"
+    }
+  ],
+  "raw_response": {
+    "id": "chatcmpl-ofsmi9cfcvb014toyw5se3k",
+    "object": "chat.completion",
+    "created": 1783945026,
+    "model": "qwen/qwen3-1.7b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\":{}}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 464,
+      "completion_tokens": 6,
+      "total_tokens": 470,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-1.7b"
+  },
+  "parsed_object": {
+    "draft": {
+      "selections": [],
+      "unresolved_terms": [],
+      "rationale": ""
+    }
+  },
+  "linguistic_latency_ms": 201.70559990219772,
+  "repair_attempted": true,
+  "repair_latency_ms": 217.97110000625253,
+  "repair_raw_response": {
+    "id": "chatcmpl-wgeexxxej4jqew4f3304h",
+    "object": "chat.completion",
+    "created": 1783945026,
+    "model": "qwen/qwen3-1.7b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\":{\"selections\":[],\"unresolved_terms\":[],\"rationale\":\"\"}}\n",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 595,
+      "completion_tokens": 17,
+      "total_tokens": 612,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-1.7b"
+  },
+  "evaluation_status": "raw_output_collected_not_scored"
+}

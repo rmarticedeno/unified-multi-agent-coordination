@@ -1,13 +1,69 @@
 {
-  "schema_version": "0.2.0",
+  "schema_version": "0.4.0",
   "release_status": "candidate-blocked",
   "source_commit": "UNFROZEN",
   "dirty_state": true,
-  "accepted_evidence": [],
+  "accepted_evidence": [
+    "demo_runs/v0.3/20260713T013624Z-b9fd8b6f83/provenance.json",
+    "demo_runs/v0.3/20260713T013624Z-b9fd8b6f83/collection-complete.json",
+    "demo_runs/v0.3/20260713T013624Z-b9fd8b6f83/analysis.json",
+    "demo_runs/v0.4/20260713T121506Z-a0ecd2bf0e/provenance.json",
+    "demo_runs/v0.4/20260713T121506Z-a0ecd2bf0e/collection-complete.json",
+    "demo_runs/v0.4/20260713T121506Z-a0ecd2bf0e/analysis.json",
+    "demo_runs/runtime_ablation/v1/analysis.json"
+  ],
+  "study_evidence": {
+    "run_id": "20260713T013624Z-b9fd8b6f83",
+    "case_outputs": 540,
+    "identity_matrix_complete": true,
+    "analysis_sha256": "b70a169d8527b2f4b95a5ef1a7ac083e0eb81874c896f50412352b37b14b03a3",
+    "analysis_reproduction": "two reruns produced the same digest",
+    "claim_boundary": "author-designed and author-labelled conformance corpus; no independent adjudication",
+    "headline_results": {
+      "hybrid_accuracy": 0.5833333333333334,
+      "hybrid_false_acceptance": 0,
+      "hybrid_false_refusal": 225,
+      "llm_only_accuracy": 0.4388888888888889,
+      "llm_only_false_acceptance": 303,
+      "llm_only_false_refusal": 0,
+      "structured_oracle_accuracy": 1.0
+    }
+  },
+  "bridge_redesign_evidence": {
+    "run_id": "20260713T121506Z-a0ecd2bf0e",
+    "corpus_version": "0.4",
+    "corpus_hash": "a0ecd2bf0ebc6740a205108e45385eb1e2e7d7ae00dacab38bc123c8ca49aa2d",
+    "case_outputs": 540,
+    "bounded_repairs": 424,
+    "identity_matrix_complete": true,
+    "analysis_sha256": "1823095063a91ba21df8ff31fd5580b451f594e80f51197032aca7ebdb093c9e",
+    "analysis_reproduction": "two reruns produced the same digest",
+    "headline_results": {
+      "hybrid_accuracy": 0.9,
+      "hybrid_recall": 0.76,
+      "hybrid_false_acceptance": 0,
+      "hybrid_false_refusal": 54,
+      "feasible_cases_with_majority_acceptance": 15,
+      "qwen_1_7b_recall": 0.28,
+      "gemma_e2b_recall": 1.0,
+      "qwen_8b_recall": 1.0,
+      "all_preregistered_criteria_met": false
+    }
+  },
+  "runtime_ablation_evidence": {
+    "observations": 350,
+    "secure_default_violations": 0,
+    "without_dependency_gating_violations": 40,
+    "without_auxiliary_bounds_violations": 40,
+    "without_durable_trace_evidence_violations": 50,
+    "observations_sha256": "7617bb8da5308b9a22a7ed7fe12c93d7e0b80484b2a18de2ee44ea3d2e3b7bbf"
+  },
   "preflight_evidence": {
+    "corpus_version": "0.3",
     "corpus_hash": "b9fd8b6f8398eaf33b8676e14288f0d3c4956cca5a9b915ca7b68990167c9c1d",
-    "tests": "78 passing",
-    "coverage": "55 percent overall; release threshold not met",
+    "label_provenance": "author_labeled; frozen; no independent adjudication",
+    "tests": "95 passing",
+    "coverage": "60 percent overall; release threshold not met",
     "deterministic": "7/7",
     "docker_a2a": "demo_runs/v0.2/preflight-20260712-03/docker-system-report.json",
     "distributed": "demo_runs/v0.2/preflight-20260712-07/distributed-system-report.json",
@@ -24,8 +80,6 @@
     "demo_runs/thesis_analysis"
   ],
   "open_gates": [
-    "independent corpus label sign-off",
-    "540-model-output run",
     "coverage thresholds",
     "final institutional metadata",
     "clean frozen commit and Docker digests"

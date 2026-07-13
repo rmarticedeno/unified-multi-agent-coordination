@@ -1,0 +1,96 @@
+{
+  "case_id": "base-08",
+  "model_id": "qwen/qwen3-8b",
+  "seed": 22,
+  "temperature": 0,
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Return a non-executable LinguisticPlanDraft. Select every admitted requirement_id exactly once and only its declared capability_id. Dependencies may reference only admitted requirement IDs. Report ambiguous terms in unresolved_terms. Do not create task IDs, agents, trust, credentials, contracts, schemas, artifacts, or authority. Reference labels are unavailable."
+    },
+    {
+      "role": "user",
+      "content": "{\"request_text\":\"Coordinate the declared services for hospital supply routing; preserve the specified data flow, evidence contract, and authority limits.\",\"admitted_request\":{\"user_goal\":\"Coordinate the declared services for hospital supply routing; preserve the specified data flow, evidence contract, and authority limits.\",\"requirements\":[{\"name\":\"Capability 8\",\"requirement_id\":\"decomposed_feasible-capability-8\",\"capability_id\":\"decomposed_feasible-capability-8\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"required_trust_level\":\"standard\",\"validation_contract\":{\"required_artifacts\":[\"artifact-8\"]}},{\"name\":\"Finish Capability 8\",\"requirement_id\":\"decomposed_feasible-capability-8-finish\",\"capability_id\":\"decomposed_feasible-capability-8-finish\",\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"validation_contract\":{\"required_artifacts\":[\"artifact-8\"]}}],\"required_artifacts\":[\"artifact-8\"],\"context\":{\"case_index\":8,\"allowed\":true}},\"registry_snapshot\":[{\"agent_id\":\"agent-8\",\"name\":\"Agent 8\",\"service_endpoint\":\"https://agent-8.example/a2a\",\"trust_level\":\"standard\",\"skills\":[{\"name\":\"Capability 8\",\"capability_id\":\"decomposed_feasible-capability-8\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"}}}],\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"]},{\"agent_id\":\"finisher-8\",\"name\":\"Finisher 8\",\"service_endpoint\":\"https://finisher-8.example/a2a\",\"trust_level\":\"standard\",\"skills\":[{\"name\":\"Finish Capability 8\",\"capability_id\":\"decomposed_feasible-capability-8-finish\",\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"validation_contract\":{\"required_artifacts\":[\"artifact-8\"]}}],\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"]}]}"
+    }
+  ],
+  "raw_response": {
+    "id": "chatcmpl-h37y9loraysmwihhgqrknm",
+    "object": "chat.completion",
+    "created": 1783945927,
+    "model": "qwen/qwen3-8b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\n  \"draft\": {\n    \"unresolved_terms\": [],\n    \"rationale\": \"This draft outlines the coordination of declared services for hospital supply routing, ensuring preservation of data flow, evidence contract, and authority limits as per the admitted requirements. It selects each requirement_id exactly once with its corresponding capability_id, while respecting dependencies and constraints.\"\n  }\n}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 468,
+      "completion_tokens": 74,
+      "total_tokens": 542,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-8b"
+  },
+  "parsed_object": {
+    "draft": {
+      "selections": [
+        {
+          "requirement_id": "decomposed_feasible-capability-8",
+          "capability_id": "decomposed_feasible-capability-8",
+          "depends_on_requirement_ids": []
+        },
+        {
+          "requirement_id": "decomposed_feasible-capability-8-finish",
+          "capability_id": "decomposed_feasible-capability-8-finish",
+          "depends_on_requirement_ids": []
+        }
+      ],
+      "unresolved_terms": [],
+      "rationale": "This draft includes the omitted requirements 'decomposed_feasible-capability-8' and 'decomposed_feasible-capability-8-finish', selecting each requirement_id exactly once with its corresponding capability_id, while respecting dependencies and constraints."
+    }
+  },
+  "linguistic_latency_ms": 3427.873299922794,
+  "repair_attempted": true,
+  "repair_latency_ms": 5553.597399964929,
+  "repair_raw_response": {
+    "id": "chatcmpl-v3f73ggd9akvxtruv7orub",
+    "object": "chat.completion",
+    "created": 1783945930,
+    "model": "qwen/qwen3-8b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\":{\"selections\":[{\"requirement_id\":\"decomposed_feasible-capability-8\",\"capability_id\":\"decomposed_feasible-capability-8\"},{\"requirement_id\":\"decomposed_feasible-capability-8-finish\",\"capability_id\":\"decomposed_feasible-capability-8-finish\"}],\"unresolved_terms\":[],\"rationale\":\"This draft includes the omitted requirements 'decomposed_feasible-capability-8' and 'decomposed_feasible-capability-8-finish', selecting each requirement_id exactly once with its corresponding capability_id, while respecting dependencies and constraints.\"}}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 649,
+      "completion_tokens": 124,
+      "total_tokens": 773,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-8b"
+  },
+  "evaluation_status": "raw_output_collected_not_scored"
+}

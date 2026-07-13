@@ -1,0 +1,209 @@
+{
+  "case_id": "base-17",
+  "model_id": "qwen/qwen3-1.7b",
+  "seed": 33,
+  "temperature": 0,
+  "backend_seed_honored": "not_verifiable_from_response",
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Interpret the request and return one to three typed candidate plans. Plans are non-authoritative. Use only exact capability_id and agent_id values from the registry. Do not infer trust or authorization."
+    },
+    {
+      "role": "user",
+      "content": "{\"request\":\"Complete defense corpus task schema_modality_graph_invalidity 17.\",\"registry_snapshot\":[{\"agent_id\":\"agent-17\",\"name\":\"Agent 17\",\"service_endpoint\":\"https://agent-17.example/a2a\",\"trust_level\":\"standard\",\"skills\":[{\"name\":\"Capability 17\",\"capability_id\":\"schema_modality_graph_invalidity-capability-17\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"}}}],\"input_modes\":[\"text\"],\"output_modes\":[\"json\"]}]}"
+    }
+  ],
+  "raw_response": {
+    "id": "chatcmpl-dv5arr56vkhjbm0ecz3p9i",
+    "object": "chat.completion",
+    "created": 1783906912,
+    "model": "qwen/qwen3-1.7b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"interpreted_request\": {\"user_goal\": \"Complete defense corpus task schema_modality_graph_invalidity 17.\", \"required_artifacts\": [\"schema_modality_graph_invalidity-capability-17\"], \"context\": {\"agent_id\": \"agent-17\", \"name\": \"Agent 17\", \"service_endpoint\": \"https://agent-17.example/a2a\", \"trust_level\": \"standard\", \"skills\": [{\"name\": \"Capability 17\", \"capability_id\": \"schema_modality_graph_invalidity-capability-17\", \"input_modes\": [\"text\"], \"output_modes\": [\"json\"], \"validation_contract\": {\"json_schema\": {\"type\": \"object\"}}}]}}, \"candidate_plans\": [{\"tasks\": [{\"task_id\": \"plan_1\", \"requirement_name\": \"Complete schema_modality_graph_invalidity 17.\", \"description\": \"Execute capability 17 to generate the required artifact.\", \"expected_artifacts\": [\"schema_modality_graph_invalidity-capability-17\"], \"validation_contract\": {\"json_schema\": {\"type\": \"object\"}}}], \"execution_order\": [\"plan_1\"]}, {\"tasks\": [{\"task_id\": \"plan_2\", \"requirement_name\": \"Validate schema_modality_graph_invalidity 17.\", \"description\": \"Verify the generated artifact meets the required specifications.\", \"expected_artifacts\": [\"schema_modality_graph_invalidity-capability-17\"], \"validation_contract\": {\"json_schema\": {\"type\": \"object\"}}}], \"execution_order\": [\"plan_2\"]}, {\"tasks\": [{\"task_id\": \"plan_3\", \"requirement_name\": \"Archive schema_modality_graph_invalidity 17.\", \"description\": \"Store the artifact in a secure location for future reference.\", \"expected_artifacts\": [\"schema_modality_graph_invalidity-capability-17\"], \"validation_contract\": {\"json_schema\": {\"type\": \"object\"}}}], \"execution_order\": [\"plan_3\"]}]}\n",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 163,
+      "completion_tokens": 423,
+      "total_tokens": 586,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-1.7b"
+  },
+  "parsed_object": {
+    "interpreted_request": {
+      "user_goal": "Complete defense corpus task schema_modality_graph_invalidity 17.",
+      "requirements": [],
+      "constraints": [],
+      "required_artifacts": [
+        "schema_modality_graph_invalidity-capability-17"
+      ],
+      "context": {
+        "agent_id": "agent-17",
+        "name": "Agent 17",
+        "service_endpoint": "https://agent-17.example/a2a",
+        "trust_level": "standard",
+        "skills": [
+          {
+            "name": "Capability 17",
+            "capability_id": "schema_modality_graph_invalidity-capability-17",
+            "input_modes": [
+              "text"
+            ],
+            "output_modes": [
+              "json"
+            ],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "candidate_plans": [
+      {
+        "tasks": [
+          {
+            "task_id": "plan_1",
+            "requirement_name": "Complete schema_modality_graph_invalidity 17.",
+            "requirement_id": "complete-schema-modality-graph-invalidity-17",
+            "capability_id": "complete-schema-modality-graph-invalidity-17",
+            "description": "Execute capability 17 to generate the required artifact.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "schema_modality_graph_invalidity-capability-17"
+            ],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              },
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [
+          "plan_1"
+        ],
+        "expected_artifacts": [],
+        "completion_criteria": [],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      },
+      {
+        "tasks": [
+          {
+            "task_id": "plan_2",
+            "requirement_name": "Validate schema_modality_graph_invalidity 17.",
+            "requirement_id": "validate-schema-modality-graph-invalidity-17",
+            "capability_id": "validate-schema-modality-graph-invalidity-17",
+            "description": "Verify the generated artifact meets the required specifications.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "schema_modality_graph_invalidity-capability-17"
+            ],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              },
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [
+          "plan_2"
+        ],
+        "expected_artifacts": [],
+        "completion_criteria": [],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      },
+      {
+        "tasks": [
+          {
+            "task_id": "plan_3",
+            "requirement_name": "Archive schema_modality_graph_invalidity 17.",
+            "requirement_id": "archive-schema-modality-graph-invalidity-17",
+            "capability_id": "archive-schema-modality-graph-invalidity-17",
+            "description": "Store the artifact in a secure location for future reference.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "schema_modality_graph_invalidity-capability-17"
+            ],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              },
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [
+          "plan_3"
+        ],
+        "expected_artifacts": [],
+        "completion_criteria": [],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      }
+    ]
+  },
+  "latency_ms": 4172.358499839902,
+  "evaluation_status": "raw_output_collected_not_scored"
+}

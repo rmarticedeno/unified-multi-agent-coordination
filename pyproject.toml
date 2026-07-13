@@ -30,6 +30,11 @@ unified-coordination-store-migrate = "unified_multi_agent_coordination.coordinat
 unified-generate-defense-corpus = "unified_multi_agent_coordination.corpus:main"
 unified-defense-study = "unified_multi_agent_coordination.defense_study:main"
 unified-analyze-defense-study = "unified_multi_agent_coordination.study_analysis:main"
+unified-evidence-preflight = "unified_multi_agent_coordination.evidence_preflight:main"
+unified-runtime-ablation-study = "unified_multi_agent_coordination.runtime_ablation_study:main"
+unified-generate-defense-corpus-v04 = "unified_multi_agent_coordination.corpus_v04:main"
+unified-defense-study-v04 = "unified_multi_agent_coordination.defense_study_v04:main"
+unified-analyze-defense-study-v04 = "unified_multi_agent_coordination.study_analysis_v04:main"
 
 [build-system]
 requires = ["hatchling"]

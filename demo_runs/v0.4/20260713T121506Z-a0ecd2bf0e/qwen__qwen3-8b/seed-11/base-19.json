@@ -1,0 +1,91 @@
+{
+  "case_id": "base-19",
+  "model_id": "qwen/qwen3-8b",
+  "seed": 11,
+  "temperature": 0,
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Return a non-executable LinguisticPlanDraft. Select every admitted requirement_id exactly once and only its declared capability_id. Dependencies may reference only admitted requirement IDs. Report ambiguous terms in unresolved_terms. Do not create task IDs, agents, trust, credentials, contracts, schemas, artifacts, or authority. Reference labels are unavailable."
+    },
+    {
+      "role": "user",
+      "content": "{\"request_text\":\"Coordinate the declared services for coastal flood response; preserve the specified data flow, evidence contract, and authority limits.\",\"admitted_request\":{\"user_goal\":\"Coordinate the declared services for coastal flood response; preserve the specified data flow, evidence contract, and authority limits.\",\"requirements\":[{\"name\":\"Capability 19\",\"requirement_id\":\"direct_feasible-capability-19\",\"capability_id\":\"direct_feasible-capability-19\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"required_trust_level\":\"standard\",\"validation_contract\":{\"required_artifacts\":[\"artifact-19\"]}}],\"required_artifacts\":[\"artifact-19\"],\"context\":{\"case_index\":19,\"allowed\":true}},\"registry_snapshot\":[{\"agent_id\":\"agent-19\",\"name\":\"Agent 19\",\"service_endpoint\":\"https://agent-19.example/a2a\",\"trust_level\":\"standard\",\"skills\":[{\"name\":\"Capability 19\",\"capability_id\":\"direct_feasible-capability-19\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"}}}],\"input_modes\":[\"text\"],\"output_modes\":[\"json\"]}]}"
+    }
+  ],
+  "raw_response": {
+    "id": "chatcmpl-tvwsizz8k2swpozpcx4g",
+    "object": "chat.completion",
+    "created": 1783945717,
+    "model": "qwen/qwen3-8b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\n  \"draft\": {\n    \"unresolved_terms\": [],\n    \"rationale\": \"This draft outlines the coordination of declared services for coastal flood response, ensuring preservation of data flow, evidence contract, and authority limits as per the admitted requirements. It references only the admitted requirement IDs and their associated capability IDs without creating new task IDs, agents, trust levels, credentials, contracts, schemas, artifacts, or authorities.\"\n  }\n}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 318,
+      "completion_tokens": 89,
+      "total_tokens": 407,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-8b"
+  },
+  "parsed_object": {
+    "draft": {
+      "selections": [
+        {
+          "requirement_id": "direct_feasible-capability-19",
+          "capability_id": "direct_feasible-capability-19",
+          "depends_on_requirement_ids": []
+        }
+      ],
+      "unresolved_terms": [],
+      "rationale": "This draft includes the requirement 'direct_feasible-capability-19' and its associated capability ID, addressing the missing requirement error. It references only the admitted requirement IDs and their declared capability IDs without creating new task IDs, agents, trust levels, credentials, contracts, schemas, artifacts, or authorities."
+    }
+  },
+  "linguistic_latency_ms": 4320.76060003601,
+  "repair_attempted": true,
+  "repair_latency_ms": 4474.196899915114,
+  "repair_raw_response": {
+    "id": "chatcmpl-2eki5b4hr8nsgw7qhoj86",
+    "object": "chat.completion",
+    "created": 1783945721,
+    "model": "qwen/qwen3-8b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\":{\"selections\":[{\"requirement_id\":\"direct_feasible-capability-19\",\"capability_id\":\"direct_feasible-capability-19\"}],\"unresolved_terms\":[],\"rationale\":\"This draft includes the requirement 'direct_feasible-capability-19' and its associated capability ID, addressing the missing requirement error. It references only the admitted requirement IDs and their declared capability IDs without creating new task IDs, agents, trust levels, credentials, contracts, schemas, artifacts, or authorities.\"}}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 466,
+      "completion_tokens": 106,
+      "total_tokens": 572,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-8b"
+  },
+  "evaluation_status": "raw_output_collected_not_scored"
+}

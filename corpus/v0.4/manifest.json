@@ -1,0 +1,19 @@
+{
+  "version": "0.4",
+  "generated_at": "2026-07-13T12:14:45.961985+00:00",
+  "corpus_hash": "a0ecd2bf0ebc6740a205108e45385eb1e2e7d7ae00dacab38bc123c8ca49aa2d",
+  "case_count": 36,
+  "base_case_count": 24,
+  "variation_count": 12,
+  "development_example_count": 6,
+  "primary_statistical_unit": "case",
+  "repeated_measurements": [
+    "model",
+    "seed"
+  ],
+  "success_criteria": {
+    "hybrid_false_accepts": 0,
+    "feasible_case_majority_accepts_at_least": 12,
+    "minimum_per_model_feasible_recall": 0.6
+  }
+}

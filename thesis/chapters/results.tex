@@ -3,30 +3,31 @@
 
 \section{Evidence Status}
 
-This chapter distinguishes corrected version 0.2 preflight evidence from final study evidence. Reports produced by the earlier implementation are legacy artifacts and are excluded from every table and conclusion below. The comparative 36-case local-model study is not yet scored because the independent label sign-off is incomplete. Consequently, this draft reports implementation verification but does not report model accuracy, baseline superiority, or an answer to RQ4 based on the planned comparative study.
+This chapter distinguishes historical version 0.2 preflight evidence from the completed version 0.3 conformance study. Reports produced by the earlier implementation are legacy artifacts and are excluded from final comparative claims. The 36-case corpus is author-labelled, pre-registered, frozen, and label-hidden during inference; no independent adjudicator was available. The accepted run contains all 540 planned outputs and an identity-complete, deterministically reproducible analysis.
 
 \begin{table}[htbp]
 \centering
-\caption{Corrected version 0.2 preflight gates.}
+\caption{Version 0.3 evidence gates after collection.}
 \label{tab:v02-preflight}
 \begin{tabular}{p{0.50\textwidth}rr}
 \toprule
 \textbf{Gate} & \textbf{Observed} & \textbf{Required} \\
 \midrule
-Python tests & 78 passing & all passing \\
-Overall source coverage & 55\% & at least 85\% \\
+Python tests & 95 passing & all passing \\
+Overall source coverage & 60\% & at least 85\% \\
 Deterministic scenarios & 7/7 & 7/7 \\
 Docker A2A checks & 11/11 & 11/11 \\
 PostgreSQL distributed checks & 5/5 & 5/5 \\
 Official A2A sample interoperability & 1/1 & passing \\
 Ruff and mypy & passing & passing \\
-Independent corpus sign-off & incomplete & complete \\
-Local-model outputs & 0/540 & 540/540 \\
+Frozen author-label provenance & complete & complete \\
+Local-model outputs & 540/540 & 540/540 \\
+Deterministic frozen analysis & passing & passing \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-The coverage gate is the principal automated quality blocker. Aggregate coverage is not used to conceal critical gaps: the corrected measurement reports 88\% for the coordination agent, 83\% for feasibility, 77\% for trace validation, 42\% for the PostgreSQL store, and no pytest coverage in the newly added corpus and study runners. Thus the release is not defense-ready even though the executed tests pass.
+The coverage gate is the principal automated quality blocker. Aggregate coverage is not used to conceal critical gaps: the corrected measurement reports 87\% for the coordination agent, 83\% for feasibility, 77\% for trace validation, 44\% for the PostgreSQL store, 95\% for plan hydration, 89\% for the runtime-ablation runner, 28\% for v0.4 collection, and 24\% for v0.4 analysis. Thus the release remains conditionally ready even though the executed tests pass.
 
 \section{Fail-Closed Symbolic Boundary}
 
@@ -50,8 +51,62 @@ The PostgreSQL harness passes five checks: live lease conflict, takeover after a
 
 An additional test launches the vendored official A2A Hello World sample as an independent server, ingests its Agent Card, preserves its \texttt{echo\_bot} skill identifier, authorizes the matching task, and receives its remote artifact. This establishes one concrete interoperability path; it is not evidence of universal A2A compatibility.
 
-\section{Comparative Study Gate}
+\section{Separate Runtime-Only Ablations}
 
-The public corpus contains 36 cases and has hash \texttt{b9fd8b6f8398eaf3\allowbreak 3b8676e14288f0d3\allowbreak c4956cca5a9b915c\allowbreak a7b68990167c9c1d}. All three required models are installed and the LM Studio server is reachable. The sign-off record is deliberately marked unapproved. The collection runner therefore refuses to produce the 540 submitted outputs, and the scoring program independently refuses to read hidden labels. This is a successful blinding control, not an empirical result.
+The runtime bundle contains 350 deterministic observations: 100 dependency-dispatch observations, 150 auxiliary-admission observations, and 100 trace-evidence observations. The secure defaults produced zero safety violations across their 150 applicable observations. Removing dependency gating produced 40 unsafe dispatch decisions in the 40 predecessor-missing, failed, timed-out, or unknown observations. Removing auxiliary bounds admitted 40 of 40 deliberately ineligible, persistent, unscoped, or write-authorized specifications; disabling auxiliary behavior admitted none, including ten otherwise valid bounded cases. Suppressing durable diagnostic trace evidence removed the required observation in all 50 trace cases while leaving state-critical persistence unchanged. The observation-file SHA-256 is \texttt{7617bb8da5308b9a\allowbreak 22a7ed7fe12c93d7\allowbreak e0b80484b2a18de2\allowbreak ee44ea3d2e3b7bbf}.
 
-RQ1--RQ3 receive implementation-level support from the corrected boundary and harnesses. RQ4 remains open until sign-off, collection, scoring, uncertainty analysis, and a clean evidence freeze are complete. The abstract and conclusion therefore contain no numerical comparative claim.
+These controls isolate mechanism consequences rather than planning quality. Repetition confirms deterministic behavior of the implemented policy surfaces but does not create 350 independent scenarios: the scenario types, not repeated executions, bound external validity. In particular, the trace result concerns availability of auditable returned evidence, not deletion of leases, fencing tokens, attempts, or terminal results.
+
+\section{Comparative Conformance Study}
+
+The public corpus contains 36 cases and has hash \texttt{b9fd8b6f8398eaf3\allowbreak 3b8676e14288f0d3\allowbreak c4956cca5a9b915c\allowbreak a7b68990167c9c1d}. Its provenance declares author annotation, corpus freeze, and the absence of independent adjudication. The collector verified this exact hash and never included reference labels in prompts. The scorer verified all 540 unique model--seed--case identities before loading labels. Two analysis reruns produced the same SHA-256 digest, \texttt{b70a169d8527b2f4\allowbreak b95a5ef1a7ac083e\allowbreak 0eb81874c896f504\allowbreak 12352b37b14b03a3}. These are leakage, completeness, and reproducibility controls, not evidence that the labels are independently correct.
+
+\begin{table}[htbp]
+\centering
+\caption{Decision results on 540 repeated observations; intervals are clustered by the 36 cases.}
+\label{tab:v03-comparison}
+\begin{tabular}{p{0.35\textwidth}rrrr}
+\toprule
+\textbf{Configuration} & \textbf{Accuracy} & \textbf{95\% CI} & \textbf{FA} & \textbf{FR} \\
+\midrule
+Hybrid & 58.3\% & 41.7--75.0\% & 0 & 225 \\
+Natural-language rule-only & 58.3\% & 41.7--75.0\% & 0 & 225 \\
+Structured oracle upper bound & 100.0\% & 100.0--100.0\% & 0 & 0 \\
+LLM-only without symbolic gate & 43.9\% & 28.5--59.3\% & 303 & 0 \\
+Each planning ablation & 58.3\% & 41.7--75.0\% & 0 & 225 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The hybrid refused every feasible observation: precision, recall, and F1 for feasible acceptance were all zero. Its 58.3\% accuracy therefore reflects correct refusal of infeasible cases rather than useful end-to-end acceptance. On feasible observations, failed predicates most often concerned coverage (225), total assignment (191), completion (185), verifiability (147), and ordering (86). The recurring risks show that local-model proposals omitted accountable executors, canonical requirement identities, promised artifacts, completion contracts, or deterministic validation evidence. The symbolic gate behaved fail-closed, but the linguistic-to-typed-plan bridge did not produce executable plans reliably.
+
+The LLM-only configuration achieved 100\% recall but admitted 303 infeasible repeated observations; its feasible-class precision was 42.6\% and F1 was 59.8\%. The structured oracle achieved 100\% on the author-declared criteria, showing that the symbolic evaluator can accept and refuse correctly when supplied the intended structured request and proposal. At the primary 36-case unit, the oracle differed from the hybrid with Holm-adjusted exact McNemar $p=0.000366$; the LLM-only difference was not significant after correction ($p_{\mathrm{Holm}}=1.0$). Rule-only and the three planning ablations had no discordant decisions relative to the hybrid. This floor effect makes those ablations uninformative rather than evidence that their mechanisms do not matter.
+
+Median collected linguistic latency was 4.84~s overall: 3.61~s for Qwen3 1.7B, 4.66~s for Gemma 4 E2B, and 27.39~s for Qwen3 8B. Configurations share these raw outputs, so this latency is not a between-configuration performance comparison. Symbolic-validation and execution latency belong to the separate controlled runtime evidence.
+
+RQ1--RQ3 receive implementation-level support from the corrected boundary and harnesses. The version 0.3 evaluation answers RQ4 negatively for that protocol: symbolic refusal prevented unsafe acceptance, but model-generated plans made the hybrid unusably conservative. This frozen result supports the authorization boundary while falsifying any claim that the original linguistic integration provided effective accepted coordination. It remains limited to the author's declared criteria on 36 designed cases and does not establish general superiority.
+
+\section{Version 0.4 Linguistic-Bridge Redesign}
+
+Version 0.4 preserves version 0.3 as immutable negative evidence and evaluates a new corpus/protocol hash, \texttt{a0ecd2bf0ebc6740\allowbreak a205108e45385eb1\allowbreak e2e7d7ae00dacab3\allowbreak 8bc123c8ca49aa2d}. The model generated only canonical requirement/capability selections and requirement-level dependencies; deterministic hydration supplied executable fields from the admitted request and registry. One bounded structural repair was attempted in 424 of 540 primary outputs. The complete identity matrix was scored only after its completion sentinel. Two analysis reruns produced the same SHA-256 digest, \texttt{1823095063a91ba2\allowbreak 1df8ff31fd5580b4\allowbreak 51f594e80f511970\allowbreak 32aca7ebdb093c9e}.
+
+\begin{table}[htbp]
+\centering
+\caption{Version 0.4 bridge results on 540 repeated observations.}
+\label{tab:v04-comparison}
+\begin{tabular}{p{0.37\textwidth}rrrr}
+\toprule
+\textbf{Configuration} & \textbf{Accuracy} & \textbf{Recall} & \textbf{FA} & \textbf{FR} \\
+\midrule
+Hybrid constrained bridge & 90.0\% & 76.0\% & 0 & 54 \\
+Natural-language rule-only & 58.3\% & 0.0\% & 0 & 225 \\
+Structured oracle upper bound & 100.0\% & 100.0\% & 0 & 0 \\
+LLM-only without symbolic gate & 54.3\% & 88.4\% & 221 & 26 \\
+Typed-constraint ablation & 89.8\% & 76.0\% & 1 & 54 \\
+Authority ablation & 89.8\% & 76.0\% & 1 & 54 \\
+Contract-validation ablation & 90.0\% & 76.0\% & 0 & 54 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The hybrid's 95\% case-clustered accuracy interval is 85.0--94.6\%. At the case-unit level, all 15 feasible cases had majority acceptance. Nevertheless, only two of three pre-registered success criteria passed. Qwen3 1.7B achieved 28.0\% feasible recall and 70.0\% accuracy; Gemma E2B and Qwen3 8B each achieved 100\% recall and accuracy. Consequently the required 60\% per-model recall floor failed, and version 0.4 is a substantial improvement rather than a fully successful pre-registered validation. The changed corpus wording and bridge protocol also prevent treating the difference from version 0.3 as a direct paired causal estimate.

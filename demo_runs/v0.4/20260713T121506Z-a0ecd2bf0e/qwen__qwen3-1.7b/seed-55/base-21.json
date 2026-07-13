@@ -1,0 +1,87 @@
+{
+  "case_id": "base-21",
+  "model_id": "qwen/qwen3-1.7b",
+  "seed": 55,
+  "temperature": 0,
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Return a non-executable LinguisticPlanDraft. Select every admitted requirement_id exactly once and only its declared capability_id. Dependencies may reference only admitted requirement IDs. Report ambiguous terms in unresolved_terms. Do not create task IDs, agents, trust, credentials, contracts, schemas, artifacts, or authority. Reference labels are unavailable."
+    },
+    {
+      "role": "user",
+      "content": "{\"request_text\":\"Coordinate the declared services for wildfire sensor triage; preserve the specified data flow, evidence contract, and authority limits.\",\"admitted_request\":{\"user_goal\":\"Coordinate the declared services for wildfire sensor triage; preserve the specified data flow, evidence contract, and authority limits.\",\"requirements\":[{\"name\":\"Capability 21\",\"requirement_id\":\"runtime_failure-capability-21\",\"capability_id\":\"runtime_failure-capability-21\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"required_trust_level\":\"standard\",\"validation_contract\":{\"required_artifacts\":[\"artifact-21\"]}}],\"required_artifacts\":[\"artifact-21\"],\"context\":{\"case_index\":21,\"allowed\":true}},\"registry_snapshot\":[{\"agent_id\":\"agent-21\",\"name\":\"Agent 21\",\"service_endpoint\":\"https://agent-21.example/a2a\",\"trust_level\":\"standard\",\"skills\":[{\"name\":\"Capability 21\",\"capability_id\":\"runtime_failure-capability-21\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"}}}],\"input_modes\":[\"text\"],\"output_modes\":[\"json\"]}]}"
+    }
+  ],
+  "raw_response": {
+    "id": "chatcmpl-01ojeh6p17qo0iz4cqnc3l4a",
+    "object": "chat.completion",
+    "created": 1783945167,
+    "model": "qwen/qwen3-1.7b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\": {\"unresolved_terms\": [\"artifact-21\"], \"rationale\": \"The request mentions 'preserve the specified data flow, evidence contract, and authority limits' but does not explicitly define these terms. The capability requires a trust level of 'standard', which is already declared. However, the required artifact 'artifact-21' must be included to fulfill the service coordination.\"}}\n",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 310,
+      "completion_tokens": 81,
+      "total_tokens": 391,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-1.7b"
+  },
+  "parsed_object": {
+    "draft": {
+      "selections": [],
+      "unresolved_terms": [
+        "artifact-21"
+      ],
+      "rationale": "The request mentions 'preserve the specified data flow, evidence contract, and authority limits' but does not explicitly define these terms. The capability requires a trust level of 'standard', which is already declared. However, the required artifact 'artifact-21' must be included to fulfill the service coordination."
+    }
+  },
+  "linguistic_latency_ms": 915.7999001909047,
+  "repair_attempted": true,
+  "repair_latency_ms": 757.7405001502484,
+  "repair_raw_response": {
+    "id": "chatcmpl-8haoidossdop09cjzzy",
+    "object": "chat.completion",
+    "created": 1783945168,
+    "model": "qwen/qwen3-1.7b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\":{\"selections\":[],\"unresolved_terms\":[\"artifact-21\"],\"rationale\":\"The request mentions 'preserve the specified data flow, evidence contract, and authority limits' but does not explicitly define these terms. The capability requires a trust level of 'standard', which is already declared. However, the required artifact 'artifact-21' must be included to fulfill the service coordination.\"}}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 481,
+      "completion_tokens": 81,
+      "total_tokens": 562,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-1.7b"
+  },
+  "evaluation_status": "raw_output_collected_not_scored"
+}

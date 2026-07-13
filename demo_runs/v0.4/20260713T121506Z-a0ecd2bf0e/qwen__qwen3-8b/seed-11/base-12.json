@@ -1,0 +1,91 @@
+{
+  "case_id": "base-12",
+  "model_id": "qwen/qwen3-8b",
+  "seed": 11,
+  "temperature": 0,
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Return a non-executable LinguisticPlanDraft. Select every admitted requirement_id exactly once and only its declared capability_id. Dependencies may reference only admitted requirement IDs. Report ambiguous terms in unresolved_terms. Do not create task IDs, agents, trust, credentials, contracts, schemas, artifacts, or authority. Reference labels are unavailable."
+    },
+    {
+      "role": "user",
+      "content": "{\"request_text\":\"Coordinate the declared services for municipal water monitoring; preserve the specified data flow, evidence contract, and authority limits.\",\"admitted_request\":{\"user_goal\":\"Coordinate the declared services for municipal water monitoring; preserve the specified data flow, evidence contract, and authority limits.\",\"requirements\":[{\"name\":\"Capability 12\",\"requirement_id\":\"authority_constraint_registry_invalidity-capability-12\",\"capability_id\":\"authority_constraint_registry_invalidity-capability-12\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"required_trust_level\":\"standard\",\"validation_contract\":{\"required_artifacts\":[\"artifact-12\"]}}],\"required_artifacts\":[\"artifact-12\"],\"context\":{\"case_index\":12,\"allowed\":true},\"constraints\":[{\"constraint_id\":\"deny-12\",\"source\":\"request_context\",\"path\":\"/allowed\",\"operator\":\"eq\",\"expected\":false}]},\"registry_snapshot\":[{\"agent_id\":\"agent-12\",\"name\":\"Agent 12\",\"service_endpoint\":\"https://agent-12.example/a2a\",\"trust_level\":\"standard\",\"skills\":[{\"name\":\"Capability 12\",\"capability_id\":\"authority_constraint_registry_invalidity-capability-12\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"}}}],\"input_modes\":[\"text\"],\"output_modes\":[\"json\"]}]}"
+    }
+  ],
+  "raw_response": {
+    "id": "chatcmpl-ahpf36dacnkaxgqn9q9eu",
+    "object": "chat.completion",
+    "created": 1783945657,
+    "model": "qwen/qwen3-8b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\n  \"draft\": {\n    \"unresolved_terms\": [],\n    \"rationale\": \"The request involves coordinating declared services for municipal water monitoring while preserving data flow, evidence contract, and authority limits. The provided context includes a capability with specific input/output modes, trust level, and validation requirements that must be adhered to in the plan draft.\"\n  }\n}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 349,
+      "completion_tokens": 75,
+      "total_tokens": 424,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-8b"
+  },
+  "parsed_object": {
+    "draft": {
+      "selections": [
+        {
+          "requirement_id": "authority_constraint_registry_invalidity-capability-12",
+          "capability_id": "authority_constraint_registry_invalidity-capability-12",
+          "depends_on_requirement_ids": []
+        }
+      ],
+      "unresolved_terms": [],
+      "rationale": "The requirement 'authority_constraint_registry_invalidity-capability-12' has been added to the draft to address the missing requirement error."
+    }
+  },
+  "linguistic_latency_ms": 4397.31639996171,
+  "repair_attempted": true,
+  "repair_latency_ms": 3306.5122000407428,
+  "repair_raw_response": {
+    "id": "chatcmpl-6cpw5p5868udgmrnevqkg8",
+    "object": "chat.completion",
+    "created": 1783945662,
+    "model": "qwen/qwen3-8b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\":{\"selections\":[{\"requirement_id\":\"authority_constraint_registry_invalidity-capability-12\",\"capability_id\":\"authority_constraint_registry_invalidity-capability-12\"}],\"unresolved_terms\":[],\"rationale\":\"The requirement 'authority_constraint_registry_invalidity-capability-12' has been added to the draft to address the missing requirement error.\"}}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 485,
+      "completion_tokens": 73,
+      "total_tokens": 558,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-8b"
+  },
+  "evaluation_status": "raw_output_collected_not_scored"
+}

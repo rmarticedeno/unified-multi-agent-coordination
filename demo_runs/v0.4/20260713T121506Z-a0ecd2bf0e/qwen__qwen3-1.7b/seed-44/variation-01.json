@@ -1,0 +1,93 @@
+{
+  "case_id": "variation-01",
+  "model_id": "qwen/qwen3-1.7b",
+  "seed": 44,
+  "temperature": 0,
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Return a non-executable LinguisticPlanDraft. Select every admitted requirement_id exactly once and only its declared capability_id. Dependencies may reference only admitted requirement IDs. Report ambiguous terms in unresolved_terms. Do not create task IDs, agents, trust, credentials, contracts, schemas, artifacts, or authority. Reference labels are unavailable."
+    },
+    {
+      "role": "user",
+      "content": "{\"request_text\":\"Using only the listed providers, coordinate the declared services for coastal flood response; preserve the specified data flow, evidence contract, and authority limits.\",\"admitted_request\":{\"user_goal\":\"Coordinate the declared services for coastal flood response; preserve the specified data flow, evidence contract, and authority limits.\",\"requirements\":[{\"name\":\"Capability 1\",\"requirement_id\":\"direct_feasible-capability-1\",\"capability_id\":\"direct_feasible-capability-1\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"required_trust_level\":\"standard\",\"validation_contract\":{\"required_artifacts\":[\"artifact-1\"]}}],\"required_artifacts\":[\"artifact-1\"],\"context\":{\"case_index\":1,\"allowed\":true}},\"registry_snapshot\":[{\"agent_id\":\"agent-1\",\"name\":\"Agent 1\",\"service_endpoint\":\"https://agent-1.example/a2a\",\"trust_level\":\"standard\",\"skills\":[{\"name\":\"Capability 1\",\"capability_id\":\"direct_feasible-capability-1\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"}}}],\"input_modes\":[\"text\"],\"output_modes\":[\"json\"]}]}"
+    }
+  ],
+  "raw_response": {
+    "id": "chatcmpl-xzz5rmhyjdl87u8r4ogs8f",
+    "object": "chat.completion",
+    "created": 1783945116,
+    "model": "qwen/qwen3-1.7b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\": {\"unresolved_terms\": [\"artifact-1\"], \"rationale\": \"The request requires coordinating services for coastal flood response while preserving data flow, evidence contract, and authority limits. The admitted requirement includes Capability 1 with input and output modes specified. However, the required artifact 'artifact-1' is not explicitly mentioned in the request text, leading to ambiguity about its role. The draft identifies all admitted requirements but leaves unresolved terms where the request does not specify details.\"}}\n",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 309,
+      "completion_tokens": 99,
+      "total_tokens": 408,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-1.7b"
+  },
+  "parsed_object": {
+    "draft": {
+      "selections": [
+        {
+          "requirement_id": "direct_feasible-capability-1",
+          "capability_id": "direct_feasible-capability-1",
+          "depends_on_requirement_ids": []
+        }
+      ],
+      "unresolved_terms": [
+        "artifact-1"
+      ],
+      "rationale": "The request specifies one repair is allowed, so only the 'missing_requirement' error is addressed. The 'artifact-1' term remains unresolved as it's not mentioned in the request text."
+    }
+  },
+  "linguistic_latency_ms": 933.97879996337,
+  "repair_attempted": true,
+  "repair_latency_ms": 729.4371998868883,
+  "repair_raw_response": {
+    "id": "chatcmpl-ql7lobcpzogdiy0k85w4k",
+    "object": "chat.completion",
+    "created": 1783945117,
+    "model": "qwen/qwen3-1.7b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\":{\"selections\":[{\"requirement_id\":\"direct_feasible-capability-1\",\"capability_id\":\"direct_feasible-capability-1\"}],\"unresolved_terms\":[\"artifact-1\"],\"rationale\":\"The request specifies one repair is allowed, so only the 'missing_requirement' error is addressed. The 'artifact-1' term remains unresolved as it's not mentioned in the request text.\"}}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 499,
+      "completion_tokens": 84,
+      "total_tokens": 583,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-1.7b"
+  },
+  "evaluation_status": "raw_output_collected_not_scored"
+}

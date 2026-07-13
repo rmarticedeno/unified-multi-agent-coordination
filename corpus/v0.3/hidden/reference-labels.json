@@ -1,0 +1,222 @@
+{
+  "version": "0.3",
+  "corpus_hash": "b9fd8b6f8398eaf33b8676e14288f0d3c4956cca5a9b915ca7b68990167c9c1d",
+  "labels": [
+    {
+      "case_id": "base-01",
+      "feasible": true,
+      "status": "completed",
+      "minimum_justification": "Reference follows the declared direct_feasible contract boundary."
+    },
+    {
+      "case_id": "base-02",
+      "feasible": true,
+      "status": "completed",
+      "minimum_justification": "Reference follows the declared decomposed_feasible contract boundary."
+    },
+    {
+      "case_id": "base-03",
+      "feasible": true,
+      "status": "failed",
+      "minimum_justification": "Reference follows the declared runtime_failure contract boundary."
+    },
+    {
+      "case_id": "base-04",
+      "feasible": false,
+      "status": "infeasible",
+      "minimum_justification": "Reference follows the declared missing_or_auxiliary_overreach contract boundary."
+    },
+    {
+      "case_id": "base-05",
+      "feasible": false,
+      "status": "infeasible",
+      "minimum_justification": "Reference follows the declared schema_modality_graph_invalidity contract boundary."
+    },
+    {
+      "case_id": "base-06",
+      "feasible": false,
+      "status": "infeasible",
+      "minimum_justification": "Reference follows the declared authority_constraint_registry_invalidity contract boundary."
+    },
+    {
+      "case_id": "base-07",
+      "feasible": true,
+      "status": "completed",
+      "minimum_justification": "Reference follows the declared direct_feasible contract boundary."
+    },
+    {
+      "case_id": "base-08",
+      "feasible": true,
+      "status": "completed",
+      "minimum_justification": "Reference follows the declared decomposed_feasible contract boundary."
+    },
+    {
+      "case_id": "base-09",
+      "feasible": true,
+      "status": "failed",
+      "minimum_justification": "Reference follows the declared runtime_failure contract boundary."
+    },
+    {
+      "case_id": "base-10",
+      "feasible": false,
+      "status": "infeasible",
+      "minimum_justification": "Reference follows the declared missing_or_auxiliary_overreach contract boundary."
+    },
+    {
+      "case_id": "base-11",
+      "feasible": false,
+      "status": "infeasible",
+      "minimum_justification": "Reference follows the declared schema_modality_graph_invalidity contract boundary."
+    },
+    {
+      "case_id": "base-12",
+      "feasible": false,
+      "status": "infeasible",
+      "minimum_justification": "Reference follows the declared authority_constraint_registry_invalidity contract boundary."
+    },
+    {
+      "case_id": "base-13",
+      "feasible": true,
+      "status": "completed",
+      "minimum_justification": "Reference follows the declared direct_feasible contract boundary."
+    },
+    {
+      "case_id": "base-14",
+      "feasible": true,
+      "status": "completed",
+      "minimum_justification": "Reference follows the declared decomposed_feasible contract boundary."
+    },
+    {
+      "case_id": "base-15",
+      "feasible": true,
+      "status": "failed",
+      "minimum_justification": "Reference follows the declared runtime_failure contract boundary."
+    },
+    {
+      "case_id": "base-16",
+      "feasible": false,
+      "status": "infeasible",
+      "minimum_justification": "Reference follows the declared missing_or_auxiliary_overreach contract boundary."
+    },
+    {
+      "case_id": "base-17",
+      "feasible": false,
+      "status": "infeasible",
+      "minimum_justification": "Reference follows the declared schema_modality_graph_invalidity contract boundary."
+    },
+    {
+      "case_id": "base-18",
+      "feasible": false,
+      "status": "infeasible",
+      "minimum_justification": "Reference follows the declared authority_constraint_registry_invalidity contract boundary."
+    },
+    {
+      "case_id": "base-19",
+      "feasible": true,
+      "status": "completed",
+      "minimum_justification": "Reference follows the declared direct_feasible contract boundary."
+    },
+    {
+      "case_id": "base-20",
+      "feasible": true,
+      "status": "completed",
+      "minimum_justification": "Reference follows the declared decomposed_feasible contract boundary."
+    },
+    {
+      "case_id": "base-21",
+      "feasible": true,
+      "status": "failed",
+      "minimum_justification": "Reference follows the declared runtime_failure contract boundary."
+    },
+    {
+      "case_id": "base-22",
+      "feasible": false,
+      "status": "infeasible",
+      "minimum_justification": "Reference follows the declared missing_or_auxiliary_overreach contract boundary."
+    },
+    {
+      "case_id": "base-23",
+      "feasible": false,
+      "status": "infeasible",
+      "minimum_justification": "Reference follows the declared schema_modality_graph_invalidity contract boundary."
+    },
+    {
+      "case_id": "base-24",
+      "feasible": false,
+      "status": "infeasible",
+      "minimum_justification": "Reference follows the declared authority_constraint_registry_invalidity contract boundary."
+    },
+    {
+      "case_id": "variation-01",
+      "feasible": true,
+      "status": "completed",
+      "minimum_justification": "Reference follows the declared direct_feasible contract boundary."
+    },
+    {
+      "case_id": "variation-02",
+      "feasible": true,
+      "status": "completed",
+      "minimum_justification": "Reference follows the declared decomposed_feasible contract boundary."
+    },
+    {
+      "case_id": "variation-03",
+      "feasible": true,
+      "status": "failed",
+      "minimum_justification": "Reference follows the declared runtime_failure contract boundary."
+    },
+    {
+      "case_id": "variation-04",
+      "feasible": false,
+      "status": "infeasible",
+      "minimum_justification": "Reference follows the declared missing_or_auxiliary_overreach contract boundary."
+    },
+    {
+      "case_id": "variation-05",
+      "feasible": false,
+      "status": "infeasible",
+      "minimum_justification": "The only canonical capability provider is unavailable."
+    },
+    {
+      "case_id": "variation-06",
+      "feasible": false,
+      "status": "infeasible",
+      "minimum_justification": "The only canonical capability provider is unavailable."
+    },
+    {
+      "case_id": "variation-07",
+      "feasible": false,
+      "status": "infeasible",
+      "minimum_justification": "The only canonical capability provider is unavailable."
+    },
+    {
+      "case_id": "variation-08",
+      "feasible": false,
+      "status": "infeasible",
+      "minimum_justification": "The only canonical capability provider is unavailable."
+    },
+    {
+      "case_id": "variation-09",
+      "feasible": false,
+      "status": "infeasible",
+      "minimum_justification": "Display-name similarity cannot replace canonical capability identity."
+    },
+    {
+      "case_id": "variation-10",
+      "feasible": false,
+      "status": "infeasible",
+      "minimum_justification": "Display-name similarity cannot replace canonical capability identity."
+    },
+    {
+      "case_id": "variation-11",
+      "feasible": false,
+      "status": "infeasible",
+      "minimum_justification": "Display-name similarity cannot replace canonical capability identity."
+    },
+    {
+      "case_id": "variation-12",
+      "feasible": false,
+      "status": "infeasible",
+      "minimum_justification": "Display-name similarity cannot replace canonical capability identity."
+    }
+  ]
+}

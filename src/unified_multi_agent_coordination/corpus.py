@@ -1,4 +1,4 @@
-"""Generate the versioned, label-separated 36-case defense corpus."""
+"""Generate and audit the frozen, author-labelled 36-case defense corpus."""
 
 from __future__ import annotations
 
@@ -18,6 +18,9 @@ STRATA = (
     "schema_modality_graph_invalidity",
     "authority_constraint_registry_invalidity",
 )
+CORPUS_VERSION = "0.3"
+LABELING_PROTOCOL_VERSION = "author-conformance-v1"
+DEFAULT_AUTHOR = "Roberto Marti Cedeno"
 
 
 def _case(stratum: str, index: int) -> dict[str, Any]:
@@ -237,7 +240,52 @@ def build_corpus() -> list[dict[str, Any]]:
     return bases + variations
 
 
-def write_corpus(root: Path) -> dict[str, Any]:
+def audit_corpus(public_document: dict[str, Any], labels_document: dict[str, Any]) -> dict[str, Any]:
+    """Check internal consistency; this is not independent label adjudication."""
+    cases = public_document.get("cases", [])
+    labels = labels_document.get("labels", [])
+    errors: list[str] = []
+    case_ids = [item.get("case_id") for item in cases]
+    label_ids = [item.get("case_id") for item in labels]
+    if len(cases) != 36:
+        errors.append(f"expected 36 public cases, found {len(cases)}")
+    if len(set(case_ids)) != len(case_ids):
+        errors.append("duplicate public case_id")
+    if len(set(label_ids)) != len(label_ids):
+        errors.append("duplicate reference-label case_id")
+    if set(case_ids) != set(label_ids):
+        errors.append("public cases and reference labels have different case_id sets")
+    if public_document.get("corpus_hash") != labels_document.get("corpus_hash"):
+        errors.append("public and hidden corpus hashes differ")
+    allowed_statuses = {"completed", "failed", "infeasible"}
+    for label in labels:
+        if not isinstance(label.get("feasible"), bool):
+            errors.append(f"{label.get('case_id')}: feasible must be boolean")
+        if label.get("status") not in allowed_statuses:
+            errors.append(f"{label.get('case_id')}: invalid status")
+        if label.get("feasible") is False and label.get("status") != "infeasible":
+            errors.append(f"{label.get('case_id')}: infeasible label has contradictory status")
+        if not str(label.get("minimum_justification", "")).strip():
+            errors.append(f"{label.get('case_id')}: missing minimum justification")
+    return {
+        "audit_type": "internal_consistency_only",
+        "independent_adjudication": False,
+        "case_count": len(cases),
+        "label_count": len(labels),
+        "checks": [
+            "document shape and count",
+            "unique scenario identities",
+            "public/hidden identity alignment",
+            "hash alignment",
+            "label status consistency",
+            "minimum justification presence",
+        ],
+        "passed": not errors,
+        "errors": errors,
+    }
+
+
+def write_corpus(root: Path, *, author: str = DEFAULT_AUTHOR) -> dict[str, Any]:
     cases = build_corpus()
     public_cases = [
         {key: value for key, value in case.items() if key != "reference"}
@@ -257,49 +305,60 @@ def write_corpus(root: Path) -> dict[str, Any]:
     public.mkdir(parents=True, exist_ok=True)
     hidden.mkdir(parents=True, exist_ok=True)
     review.mkdir(parents=True, exist_ok=True)
-    (public / "cases.json").write_text(
-        json.dumps({"version": "0.2", "corpus_hash": corpus_hash, "cases": public_cases}, indent=2),
-        encoding="utf-8",
-    )
-    (hidden / "reference-labels.json").write_text(
-        json.dumps({"version": "0.2", "corpus_hash": corpus_hash, "labels": labels}, indent=2),
-        encoding="utf-8",
-    )
+    public_document = {"version": CORPUS_VERSION, "corpus_hash": corpus_hash, "cases": public_cases}
+    labels_document = {"version": CORPUS_VERSION, "corpus_hash": corpus_hash, "labels": labels}
+    provenance_path = root / "label-provenance.json"
+    if provenance_path.exists():
+        provenance = json.loads(provenance_path.read_text(encoding="utf-8"))
+        if provenance.get("frozen") is True:
+            try:
+                existing_public = json.loads((public / "cases.json").read_text(encoding="utf-8"))
+                existing_labels = json.loads(
+                    (hidden / "reference-labels.json").read_text(encoding="utf-8")
+                )
+                existing_canonical = json.dumps(
+                    {"cases": existing_public["cases"], "labels": existing_labels["labels"]},
+                    sort_keys=True,
+                    separators=(",", ":"),
+                ).encode("utf-8")
+                existing_hash = hashlib.sha256(existing_canonical).hexdigest()
+            except (OSError, KeyError, json.JSONDecodeError) as exc:
+                raise RuntimeError("Frozen corpus files are missing or invalid.") from exc
+            if len({existing_hash, provenance.get("corpus_hash"), corpus_hash}) != 1:
+                raise RuntimeError("Frozen corpus cannot be changed; create a new corpus version.")
+            return json.loads((root / "manifest.json").read_text(encoding="utf-8"))
+    (public / "cases.json").write_text(json.dumps(public_document, indent=2), encoding="utf-8")
+    (hidden / "reference-labels.json").write_text(json.dumps(labels_document, indent=2), encoding="utf-8")
     (review / "label-review-packet.json").write_text(
         json.dumps(
             {
-                "version": "0.2",
+                "version": CORPUS_VERSION,
                 "corpus_hash": corpus_hash,
-                "instructions": "Review labels and minimum justifications without model outputs.",
+                "instructions": "Author labels frozen before collection; model outputs are unavailable here.",
                 "items": labels,
             },
             indent=2,
         ),
         encoding="utf-8",
     )
-    signoff = root / "label-signoff.json"
-    existing_signoff = (
-        json.loads(signoff.read_text(encoding="utf-8")) if signoff.exists() else {}
-    )
-    if existing_signoff.get("approved") is True and existing_signoff.get("corpus_hash") != corpus_hash:
-        raise RuntimeError("Refusing to replace a signed label record for a different corpus hash.")
-    if not signoff.exists() or existing_signoff.get("approved") is not True:
-        signoff.write_text(
-            json.dumps(
-                {
-                    "corpus_hash": corpus_hash,
-                    "approved": False,
-                    "reviewer_role": "",
-                    "reviewer_name": "",
-                    "review_date": "",
-                    "notes": "Independent qualified reviewer must complete this record.",
-                },
-                indent=2,
-            ),
-            encoding="utf-8",
-        )
+    provenance = {
+        "annotation_type": "author_labeled",
+        "author": author,
+        "annotation_date": generated_at,
+        "labeling_protocol_version": LABELING_PROTOCOL_VERSION,
+        "corpus_version": CORPUS_VERSION,
+        "corpus_hash": corpus_hash,
+        "frozen": True,
+        "independent_adjudication": False,
+        "limitation": "No independent label adjudicator was available; labels encode the author's declared framework conformance criteria.",
+    }
+    provenance_path.write_text(json.dumps(provenance, indent=2), encoding="utf-8")
+    audit = audit_corpus(public_document, labels_document)
+    if not audit["passed"]:
+        raise RuntimeError("Corpus internal-consistency audit failed: " + "; ".join(audit["errors"]))
+    (review / "internal-consistency-audit.json").write_text(json.dumps(audit, indent=2), encoding="utf-8")
     manifest = {
-        "version": "0.2",
+        "version": CORPUS_VERSION,
         "generated_at": generated_at,
         "corpus_hash": corpus_hash,
         "case_count": len(cases),
@@ -313,9 +372,10 @@ def write_corpus(root: Path) -> dict[str, Any]:
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--output", type=Path, default=Path("corpus/v0.2"))
+    parser.add_argument("--output", type=Path, default=Path("corpus/v0.3"))
+    parser.add_argument("--author", default=DEFAULT_AUTHOR)
     args = parser.parse_args()
-    print(json.dumps(write_corpus(args.output), indent=2))
+    print(json.dumps(write_corpus(args.output, author=args.author), indent=2))
 
 
 if __name__ == "__main__":

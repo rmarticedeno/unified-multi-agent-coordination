@@ -1,0 +1,401 @@
+{
+  "scored": false,
+  "cases": [
+    {
+      "request": {
+        "user_goal": "Coordinate the declared services for coastal flood response; preserve the specified data flow, evidence contract, and authority limits.",
+        "requirements": [
+          {
+            "name": "Capability 1",
+            "requirement_id": "direct_feasible-capability-1",
+            "capability_id": "direct_feasible-capability-1",
+            "input_modes": [
+              "text"
+            ],
+            "output_modes": [
+              "json"
+            ],
+            "required_trust_level": "standard",
+            "validation_contract": {
+              "required_artifacts": [
+                "artifact-1"
+              ]
+            }
+          }
+        ],
+        "required_artifacts": [
+          "artifact-1"
+        ],
+        "context": {
+          "case_index": 1,
+          "allowed": true
+        }
+      },
+      "registry_snapshot": [
+        {
+          "agent_id": "agent-1",
+          "name": "Agent 1",
+          "service_endpoint": "https://agent-1.example/a2a",
+          "trust_level": "standard",
+          "skills": [
+            {
+              "name": "Capability 1",
+              "capability_id": "direct_feasible-capability-1",
+              "input_modes": [
+                "text"
+              ],
+              "output_modes": [
+                "json"
+              ],
+              "validation_contract": {
+                "json_schema": {
+                  "type": "object"
+                }
+              }
+            }
+          ],
+          "input_modes": [
+            "text"
+          ],
+          "output_modes": [
+            "json"
+          ]
+        }
+      ]
+    },
+    {
+      "request": {
+        "user_goal": "Coordinate the declared services for hospital supply routing; preserve the specified data flow, evidence contract, and authority limits.",
+        "requirements": [
+          {
+            "name": "Capability 2",
+            "requirement_id": "decomposed_feasible-capability-2",
+            "capability_id": "decomposed_feasible-capability-2",
+            "input_modes": [
+              "text"
+            ],
+            "output_modes": [
+              "intermediate"
+            ],
+            "required_trust_level": "standard",
+            "validation_contract": {
+              "required_artifacts": [
+                "artifact-2"
+              ]
+            }
+          },
+          {
+            "name": "Finish Capability 2",
+            "requirement_id": "decomposed_feasible-capability-2-finish",
+            "capability_id": "decomposed_feasible-capability-2-finish",
+            "input_modes": [
+              "intermediate"
+            ],
+            "output_modes": [
+              "json"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "artifact-2"
+              ]
+            }
+          }
+        ],
+        "required_artifacts": [
+          "artifact-2"
+        ],
+        "context": {
+          "case_index": 2,
+          "allowed": true
+        }
+      },
+      "registry_snapshot": [
+        {
+          "agent_id": "agent-2",
+          "name": "Agent 2",
+          "service_endpoint": "https://agent-2.example/a2a",
+          "trust_level": "standard",
+          "skills": [
+            {
+              "name": "Capability 2",
+              "capability_id": "decomposed_feasible-capability-2",
+              "input_modes": [
+                "text"
+              ],
+              "output_modes": [
+                "intermediate"
+              ],
+              "validation_contract": {
+                "json_schema": {
+                  "type": "object"
+                }
+              }
+            }
+          ],
+          "input_modes": [
+            "text"
+          ],
+          "output_modes": [
+            "intermediate"
+          ]
+        },
+        {
+          "agent_id": "finisher-2",
+          "name": "Finisher 2",
+          "service_endpoint": "https://finisher-2.example/a2a",
+          "trust_level": "standard",
+          "skills": [
+            {
+              "name": "Finish Capability 2",
+              "capability_id": "decomposed_feasible-capability-2-finish",
+              "input_modes": [
+                "intermediate"
+              ],
+              "output_modes": [
+                "json"
+              ],
+              "validation_contract": {
+                "required_artifacts": [
+                  "artifact-2"
+                ]
+              }
+            }
+          ],
+          "input_modes": [
+            "intermediate"
+          ],
+          "output_modes": [
+            "json"
+          ]
+        }
+      ]
+    },
+    {
+      "request": {
+        "user_goal": "Coordinate the declared services for wildfire sensor triage; preserve the specified data flow, evidence contract, and authority limits.",
+        "requirements": [
+          {
+            "name": "Capability 3",
+            "requirement_id": "runtime_failure-capability-3",
+            "capability_id": "runtime_failure-capability-3",
+            "input_modes": [
+              "text"
+            ],
+            "output_modes": [
+              "json"
+            ],
+            "required_trust_level": "standard",
+            "validation_contract": {
+              "required_artifacts": [
+                "artifact-3"
+              ]
+            }
+          }
+        ],
+        "required_artifacts": [
+          "artifact-3"
+        ],
+        "context": {
+          "case_index": 3,
+          "allowed": true
+        }
+      },
+      "registry_snapshot": [
+        {
+          "agent_id": "agent-3",
+          "name": "Agent 3",
+          "service_endpoint": "https://agent-3.example/a2a",
+          "trust_level": "standard",
+          "skills": [
+            {
+              "name": "Capability 3",
+              "capability_id": "runtime_failure-capability-3",
+              "input_modes": [
+                "text"
+              ],
+              "output_modes": [
+                "json"
+              ],
+              "validation_contract": {
+                "json_schema": {
+                  "type": "object"
+                }
+              }
+            }
+          ],
+          "input_modes": [
+            "text"
+          ],
+          "output_modes": [
+            "json"
+          ]
+        }
+      ]
+    },
+    {
+      "request": {
+        "user_goal": "Coordinate the declared services for satellite imagery processing; preserve the specified data flow, evidence contract, and authority limits.",
+        "requirements": [
+          {
+            "name": "Capability 4",
+            "requirement_id": "missing_or_auxiliary_overreach-capability-4",
+            "capability_id": "missing_or_auxiliary_overreach-capability-4",
+            "input_modes": [
+              "text"
+            ],
+            "output_modes": [
+              "json"
+            ],
+            "required_trust_level": "standard",
+            "validation_contract": {
+              "required_artifacts": [
+                "artifact-4"
+              ]
+            }
+          }
+        ],
+        "required_artifacts": [
+          "artifact-4"
+        ],
+        "context": {
+          "case_index": 4,
+          "allowed": true
+        }
+      },
+      "registry_snapshot": []
+    },
+    {
+      "request": {
+        "user_goal": "Coordinate the declared services for warehouse incident recovery; preserve the specified data flow, evidence contract, and authority limits.",
+        "requirements": [
+          {
+            "name": "Capability 5",
+            "requirement_id": "schema_modality_graph_invalidity-capability-5",
+            "capability_id": "schema_modality_graph_invalidity-capability-5",
+            "input_modes": [
+              "text"
+            ],
+            "output_modes": [
+              "json"
+            ],
+            "required_trust_level": "standard",
+            "validation_contract": {
+              "required_artifacts": [
+                "artifact-5"
+              ]
+            },
+            "input_schema": {
+              "type": "object",
+              "required": [
+                "nested"
+              ]
+            }
+          }
+        ],
+        "required_artifacts": [
+          "artifact-5"
+        ],
+        "context": {
+          "case_index": 5,
+          "allowed": true
+        }
+      },
+      "registry_snapshot": [
+        {
+          "agent_id": "agent-5",
+          "name": "Agent 5",
+          "service_endpoint": "https://agent-5.example/a2a",
+          "trust_level": "standard",
+          "skills": [
+            {
+              "name": "Capability 5",
+              "capability_id": "schema_modality_graph_invalidity-capability-5",
+              "input_modes": [
+                "text"
+              ],
+              "output_modes": [
+                "json"
+              ],
+              "validation_contract": {
+                "json_schema": {
+                  "type": "object"
+                }
+              },
+              "input_schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "input_modes": [
+            "text"
+          ],
+          "output_modes": [
+            "json"
+          ]
+        }
+      ]
+    },
+    {
+      "request": {
+        "user_goal": "Coordinate the declared services for municipal water monitoring; preserve the specified data flow, evidence contract, and authority limits.",
+        "requirements": [
+          {
+            "name": "Capability 6",
+            "requirement_id": "authority_constraint_registry_invalidity-capability-6",
+            "capability_id": "authority_constraint_registry_invalidity-capability-6",
+            "input_modes": [
+              "text"
+            ],
+            "output_modes": [
+              "json"
+            ],
+            "required_trust_level": "admin",
+            "validation_contract": {
+              "required_artifacts": [
+                "artifact-6"
+              ]
+            }
+          }
+        ],
+        "required_artifacts": [
+          "artifact-6"
+        ],
+        "context": {
+          "case_index": 6,
+          "allowed": true
+        }
+      },
+      "registry_snapshot": [
+        {
+          "agent_id": "agent-6",
+          "name": "Agent 6",
+          "service_endpoint": "https://agent-6.example/a2a",
+          "trust_level": "standard",
+          "skills": [
+            {
+              "name": "Capability 6",
+              "capability_id": "authority_constraint_registry_invalidity-capability-6",
+              "input_modes": [
+                "text"
+              ],
+              "output_modes": [
+                "json"
+              ],
+              "validation_contract": {
+                "json_schema": {
+                  "type": "object"
+                }
+              }
+            }
+          ],
+          "input_modes": [
+            "text"
+          ],
+          "output_modes": [
+            "json"
+          ]
+        }
+      ]
+    }
+  ]
+}

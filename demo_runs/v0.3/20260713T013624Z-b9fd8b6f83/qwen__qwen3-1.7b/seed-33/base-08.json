@@ -1,0 +1,214 @@
+{
+  "case_id": "base-08",
+  "model_id": "qwen/qwen3-1.7b",
+  "seed": 33,
+  "temperature": 0,
+  "backend_seed_honored": "not_verifiable_from_response",
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Interpret the request and return one to three typed candidate plans. Plans are non-authoritative. Use only exact capability_id and agent_id values from the registry. Do not infer trust or authorization."
+    },
+    {
+      "role": "user",
+      "content": "{\"request\":\"Complete defense corpus task decomposed_feasible 8.\",\"registry_snapshot\":[{\"agent_id\":\"agent-8\",\"name\":\"Agent 8\",\"service_endpoint\":\"https://agent-8.example/a2a\",\"trust_level\":\"standard\",\"skills\":[{\"name\":\"Capability 8\",\"capability_id\":\"decomposed_feasible-capability-8\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"}}}],\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"]},{\"agent_id\":\"finisher-8\",\"name\":\"Finisher 8\",\"service_endpoint\":\"https://finisher-8.example/a2a\",\"trust_level\":\"standard\",\"skills\":[{\"name\":\"Finish Capability 8\",\"capability_id\":\"decomposed_feasible-capability-8-finish\",\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"validation_contract\":{\"required_artifacts\":[\"artifact-8\"]}}],\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"]}]}"
+    }
+  ],
+  "raw_response": {
+    "id": "chatcmpl-skc1ocx4w6n8lrozlc16t6",
+    "object": "chat.completion",
+    "created": 1783906880,
+    "model": "qwen/qwen3-1.7b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"interpreted_request\": {\"user_goal\": \"Complete defense corpus task decomposed_feasible 8.\", \"required_artifacts\": [\"artifact-8\"], \"context\": {\"agent_id\": \"finisher-8\", \"service_endpoint\": \"https://finisher-8.example/a2a\", \"trust_level\": \"standard\", \"skills\": [{\"name\": \"Finish Capability 8\", \"capability_id\": \"decomposed_feasible-capability-8-finish\", \"input_modes\": [\"intermediate\"], \"output_modes\": [\"json\"], \"validation_contract\": {\"required_artifacts\": [\"artifact-8\"]}}]}},\"candidate_plans\": [{\"tasks\": [{\"task_id\": \"plan1\", \"requirement_name\": \"Complete decomposition of feasible defense corpus\", \"capability_id\": \"decomposed_feasible-capability-8\", \"description\": \"This task involves decomposing the feasible defense corpus into its constituent parts for further analysis or processing. It may involve breaking down complex data structures, identifying key components, and ensuring that all relevant information is properly categorized.\", \"expected_artifacts\": [\"artifact-8\"]}], \"execution_order\": [\"plan1\"], \"constraint_evidence\": {\"agent_id\": \"finisher-8\", \"service_endpoint\": \"https://finisher-8.example/a2a\", \"trust_level\": \"standard\"}}, {\"tasks\": [{\"task_id\": \"plan2\", \"requirement_name\": \"Validate decomposition process\", \"capability_id\": \"decomposed_feasible-capability-8\", \"description\": \"This task involves validating the decomposition of the feasible defense corpus to ensure that it meets the required standards and is free from errors. It may involve checking for consistency, correctness, and completeness in the decomposed parts.\", \"expected_artifacts\": [\"artifact-8\"]}], \"execution_order\": [\"plan2\"], \"constraint_evidence\": {\"agent_id\": \"finisher-8\", \"service_endpoint\": \"https://finisher-8.example/a2a\", \"trust_level\": \"standard\"}}, {\"tasks\": [{\"task_id\": \"plan3\", \"requirement_name\": \"Finalize and output the decomposed corpus\", \"capability_id\": \"decomposed_feasible-capability-8-finish\", \"description\": \"This task involves finalizing the decomposition of the feasible defense corpus and outputting the results in a structured format. It may involve formatting the output, ensuring that all components are correctly presented, and preparing the decomposed data for further use or sharing.\", \"expected_artifacts\": [\"artifact-8\"]}], \"execution_order\": [\"plan3\"], \"constraint_evidence\": {\"agent_id\": \"finisher-8\", \"service_endpoint\": \"https://finisher-8.example/a2a\", \"trust_level\": \"standard\"}}] }\n",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 251,
+      "completion_tokens": 582,
+      "total_tokens": 833,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-1.7b"
+  },
+  "parsed_object": {
+    "interpreted_request": {
+      "user_goal": "Complete defense corpus task decomposed_feasible 8.",
+      "requirements": [],
+      "constraints": [],
+      "required_artifacts": [
+        "artifact-8"
+      ],
+      "context": {
+        "agent_id": "finisher-8",
+        "service_endpoint": "https://finisher-8.example/a2a",
+        "trust_level": "standard",
+        "skills": [
+          {
+            "name": "Finish Capability 8",
+            "capability_id": "decomposed_feasible-capability-8-finish",
+            "input_modes": [
+              "intermediate"
+            ],
+            "output_modes": [
+              "json"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "artifact-8"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "candidate_plans": [
+      {
+        "tasks": [
+          {
+            "task_id": "plan1",
+            "requirement_name": "Complete decomposition of feasible defense corpus",
+            "requirement_id": "complete-decomposition-of-feasible-defense-corpus",
+            "capability_id": "decomposed_feasible-capability-8",
+            "description": "This task involves decomposing the feasible defense corpus into its constituent parts for further analysis or processing. It may involve breaking down complex data structures, identifying key components, and ensuring that all relevant information is properly categorized.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "artifact-8"
+            ],
+            "validation_contract": {
+              "json_schema": {},
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [
+          "plan1"
+        ],
+        "expected_artifacts": [],
+        "completion_criteria": [],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {
+          "agent_id": "finisher-8",
+          "service_endpoint": "https://finisher-8.example/a2a",
+          "trust_level": "standard"
+        }
+      },
+      {
+        "tasks": [
+          {
+            "task_id": "plan2",
+            "requirement_name": "Validate decomposition process",
+            "requirement_id": "validate-decomposition-process",
+            "capability_id": "decomposed_feasible-capability-8",
+            "description": "This task involves validating the decomposition of the feasible defense corpus to ensure that it meets the required standards and is free from errors. It may involve checking for consistency, correctness, and completeness in the decomposed parts.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "artifact-8"
+            ],
+            "validation_contract": {
+              "json_schema": {},
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [
+          "plan2"
+        ],
+        "expected_artifacts": [],
+        "completion_criteria": [],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {
+          "agent_id": "finisher-8",
+          "service_endpoint": "https://finisher-8.example/a2a",
+          "trust_level": "standard"
+        }
+      },
+      {
+        "tasks": [
+          {
+            "task_id": "plan3",
+            "requirement_name": "Finalize and output the decomposed corpus",
+            "requirement_id": "finalize-and-output-the-decomposed-corpus",
+            "capability_id": "decomposed_feasible-capability-8-finish",
+            "description": "This task involves finalizing the decomposition of the feasible defense corpus and outputting the results in a structured format. It may involve formatting the output, ensuring that all components are correctly presented, and preparing the decomposed data for further use or sharing.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "artifact-8"
+            ],
+            "validation_contract": {
+              "json_schema": {},
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [
+          "plan3"
+        ],
+        "expected_artifacts": [],
+        "completion_criteria": [],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {
+          "agent_id": "finisher-8",
+          "service_endpoint": "https://finisher-8.example/a2a",
+          "trust_level": "standard"
+        }
+      }
+    ]
+  },
+  "latency_ms": 6020.367699908093,
+  "evaluation_status": "raw_output_collected_not_scored"
+}

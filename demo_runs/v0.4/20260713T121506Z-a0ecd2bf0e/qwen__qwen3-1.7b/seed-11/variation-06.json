@@ -1,0 +1,88 @@
+{
+  "case_id": "variation-06",
+  "model_id": "qwen/qwen3-1.7b",
+  "seed": 11,
+  "temperature": 0,
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Return a non-executable LinguisticPlanDraft. Select every admitted requirement_id exactly once and only its declared capability_id. Dependencies may reference only admitted requirement IDs. Report ambiguous terms in unresolved_terms. Do not create task IDs, agents, trust, credentials, contracts, schemas, artifacts, or authority. Reference labels are unavailable."
+    },
+    {
+      "role": "user",
+      "content": "{\"request_text\":\"Coordinate the declared services for municipal water monitoring; preserve the specified data flow, evidence contract, and authority limits.\",\"admitted_request\":{\"user_goal\":\"Coordinate the declared services for municipal water monitoring; preserve the specified data flow, evidence contract, and authority limits.\",\"requirements\":[{\"name\":\"Capability 6\",\"requirement_id\":\"authority_constraint_registry_invalidity-capability-6\",\"capability_id\":\"authority_constraint_registry_invalidity-capability-6\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"required_trust_level\":\"admin\",\"validation_contract\":{\"required_artifacts\":[\"artifact-6\"]}}],\"required_artifacts\":[\"artifact-6\"],\"context\":{\"case_index\":6,\"allowed\":true}},\"registry_snapshot\":[{\"agent_id\":\"agent-6\",\"name\":\"Agent 6\",\"service_endpoint\":\"https://agent-6.example/a2a\",\"trust_level\":\"standard\",\"skills\":[{\"name\":\"Capability 6\",\"capability_id\":\"authority_constraint_registry_invalidity-capability-6\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"}}}],\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"status\":\"unavailable\"}]}"
+    }
+  ],
+  "raw_response": {
+    "id": "chatcmpl-orxeqlb6o81c9cmhydxyu",
+    "object": "chat.completion",
+    "created": 1783944959,
+    "model": "qwen/qwen3-1.7b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\": {\"unresolved_terms\": [\"agent-6\", \"artifact-6\", \"authority_constraint_registry_invalidity-capability-6\"], \"rationale\": \"The request mentions coordinating services and preserving data flow, but the required artifacts (artifact-6) are not yet available. The agent (agent-6) is marked as unavailable, which may affect coordination. The capability (authority_constraint_registry_invalidity-capability-6) has an unresolved status, impacting its availability.\"}}\n",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 311,
+      "completion_tokens": 99,
+      "total_tokens": 410,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-1.7b"
+  },
+  "parsed_object": {
+    "draft": {
+      "selections": [],
+      "unresolved_terms": [
+        "agent-6",
+        "artifact-6"
+      ],
+      "rationale": "The draft omits requirement 'authority_constraint_registry_invalidity-capability-6' and has unresolved terms 'agent-6' and 'artifact-6'. The 'missing_requirement' indicates the omission, while the 'unresolved_term' warnings suggest these entities are not yet defined."
+    }
+  },
+  "linguistic_latency_ms": 999.9399001244456,
+  "repair_attempted": true,
+  "repair_latency_ms": 693.4951001312584,
+  "repair_raw_response": {
+    "id": "chatcmpl-3jvt98yfwhcd3ejq4cwnt9",
+    "object": "chat.completion",
+    "created": 1783944960,
+    "model": "qwen/qwen3-1.7b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\":{\"selections\":[],\"unresolved_terms\":[\"agent-6\",\"artifact-6\"],\"rationale\":\"The draft omits requirement 'authority_constraint_registry_invalidity-capability-6' and has unresolved terms 'agent-6' and 'artifact-6'. The 'missing_requirement' indicates the omission, while the 'unresolved_term' warnings suggest these entities are not yet defined.\"}}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 563,
+      "completion_tokens": 81,
+      "total_tokens": 644,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-1.7b"
+  },
+  "evaluation_status": "raw_output_collected_not_scored"
+}

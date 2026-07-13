@@ -34,29 +34,67 @@ The runner writes `demo_runs/end_to_end_scenarios.json` by default. Each scenari
 uv run --with-editable . unified-coordination-scenarios --showcase
 ```
 
-## Version 0.2 Defense Study
+## Version 0.3 Defense Study
 
-Reports outside `demo_runs/v0.2/` are legacy evidence and cannot supply final
-thesis numbers. Generate and validate the blinded 36-case corpus with:
+Version 0.2 is preserved as historical evidence. Final study numbers must come
+from `demo_runs/v0.3/`. Generate the author-labelled, pre-registered corpus with:
 
 ```powershell
-uv run unified-generate-defense-corpus --output corpus/v0.2
+uv run unified-generate-defense-corpus --output corpus/v0.3
 uv run unified-defense-study --check
 ```
 
-Collection is fail-closed until a qualified independent reviewer completes
-`corpus/v0.2/label-signoff.json` for the exact corpus hash. After sign-off,
+Collection is fail-closed until `corpus/v0.3/label-provenance.json` records
+frozen author labels for the exact corpus hash. No independent adjudicator was
+available. Labels are hidden from inference prompts and scoring occurs only
+after collection completes. The resulting study measures conformance to the
+author's declared framework criteria, not neutral benchmark truth. After freeze,
 `uv run unified-defense-study --collect` runs 36 cases at five seeds for each of
 `qwen/qwen3-1.7b`, `google/gemma-4-e2b`, and `qwen/qwen3-8b`. Raw outputs are
 written to a new immutable run-ID directory. Hidden labels are not placed in
-prompts. Scoring is a separate command:
+prompts. An interrupted, incomplete directory can be continued without
+rewriting validated case files:
 
 ```powershell
-uv run unified-analyze-defense-study demo_runs/v0.2/<run-id> `
-  --output demo_runs/v0.2/<run-id>/analysis.json
+uv run unified-defense-study --resume demo_runs/v0.3/<run-id>
+```
+
+Scoring is a separate command and requires the completion marker:
+
+```powershell
+uv run unified-analyze-defense-study demo_runs/v0.3/<run-id> `
+  --output demo_runs/v0.3/<run-id>/analysis.json
 ```
 
 See `REPRODUCING.md` and `evidence-manifest.json` for the complete gates.
+
+The accepted run `20260713T013624Z-b9fd8b6f83` contains all 540 outputs. Its
+deterministic analysis is deliberately negative: the hybrid refused every
+feasible observation, while LLM-only produced extensive false acceptance and
+the structured oracle satisfied the declared criteria. These results support
+the fail-closed boundary but not the effectiveness of the current linguistic
+plan generator or any general-superiority claim.
+
+## Version 0.4 Bridge and Runtime Evidence
+
+Version 0.3 remains immutable historical evidence. Version 0.4 evaluates the
+redesigned boundary: a model emits only a `LinguisticPlanDraft` containing
+declared requirement/capability references and requirement-level dependencies.
+`PlanHydrator` deterministically selects admitted providers and copies task IDs,
+contracts, artifacts, and completion conditions from authoritative inputs. One
+repair may receive public hydration errors; labels are never available.
+
+```powershell
+uv run unified-generate-defense-corpus-v04 --output corpus/v0.4
+uv run unified-defense-study-v04 --corpus corpus/v0.4 --check
+uv run unified-defense-study-v04 --corpus corpus/v0.4 --collect
+uv run unified-analyze-defense-study-v04 --run demo_runs/v0.4/<run-id>
+uv run unified-runtime-ablation-study --output-dir demo_runs/runtime_ablation/<run-id>
+```
+
+Runtime-only dependency, auxiliary-admission, and trace-evidence controls are
+reported separately from planning comparisons. Unsafe controls are explicit
+experimental classes; production constructors retain secure defaults.
 
 ## Service
 

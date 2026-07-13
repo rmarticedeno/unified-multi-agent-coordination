@@ -1,0 +1,208 @@
+{
+  "case_id": "base-19",
+  "model_id": "qwen/qwen3-1.7b",
+  "seed": 33,
+  "temperature": 0,
+  "backend_seed_honored": "not_verifiable_from_response",
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Interpret the request and return one to three typed candidate plans. Plans are non-authoritative. Use only exact capability_id and agent_id values from the registry. Do not infer trust or authorization."
+    },
+    {
+      "role": "user",
+      "content": "{\"request\":\"Complete defense corpus task direct_feasible 19.\",\"registry_snapshot\":[{\"agent_id\":\"agent-19\",\"name\":\"Agent 19\",\"service_endpoint\":\"https://agent-19.example/a2a\",\"trust_level\":\"standard\",\"skills\":[{\"name\":\"Capability 19\",\"capability_id\":\"direct_feasible-capability-19\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"}}}],\"input_modes\":[\"text\"],\"output_modes\":[\"json\"]}]}"
+    }
+  ],
+  "raw_response": {
+    "id": "chatcmpl-lpu0zbx1qpomt6o8rosvj",
+    "object": "chat.completion",
+    "created": 1783906919,
+    "model": "qwen/qwen3-1.7b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"interpreted_request\": {\"user_goal\": \"Complete defense corpus task direct_feasible 19\", \"required_artifacts\": [\"direct_feasible-capability-19\"], \"context\": {\"agent_id\": \"agent-19\", \"service_endpoint\": \"https://agent-19.example/a2a\", \"trust_level\": \"standard\", \"skills\": [{\"name\": \"Capability 19\", \"capability_id\": \"direct_feasible-capability-19\", \"input_modes\": [\"text\"], \"output_modes\": [\"json\"], \"validation_contract\": {\"json_schema\": {\"type\": \"object\"}}}]}}, \"candidate_plans\": [{\"tasks\": [{\"task_id\": \"plan_1\", \"requirement_name\": \"complete_defense_corpus_task_direct_feasible_19\", \"capability_id\": \"direct_feasible-capability-19\", \"description\": \"Execute the direct feasible capability to complete the defense corpus task.\", \"expected_artifacts\": [\"direct_feasible-result-19\"], \"validation_contract\": {\"json_schema\": {\"type\": \"object\"}}}], \"execution_order\": [\"plan_1\"]}, {\"tasks\": [{\"task_id\": \"plan_2\", \"requirement_name\": \"validate_direct_feasibility_of_task_19\", \"capability_id\": \"direct_feasible-capability-19\", \"description\": \"Validate the direct feasibility of task 19.\", \"expected_artifacts\": [\"direct_feasibility_result_19\"], \"validation_contract\": {\"json_schema\": {\"type\": \"object\"}}}], \"execution_order\": [\"plan_2\"]}, {\"tasks\": [{\"task_id\": \"plan_3\", \"requirement_name\": \"generate_defense_corpus_report_19\", \"capability_id\": \"direct_feasible-capability-19\", \"description\": \"Generate a defense corpus report for task 19.\", \"expected_artifacts\": [\"defense_corpus_report_19\"], \"validation_contract\": {\"json_schema\": {\"type\": \"object\"}}}], \"execution_order\": [\"plan_3\"]}]}\n",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 159,
+      "completion_tokens": 444,
+      "total_tokens": 603,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-1.7b"
+  },
+  "parsed_object": {
+    "interpreted_request": {
+      "user_goal": "Complete defense corpus task direct_feasible 19",
+      "requirements": [],
+      "constraints": [],
+      "required_artifacts": [
+        "direct_feasible-capability-19"
+      ],
+      "context": {
+        "agent_id": "agent-19",
+        "service_endpoint": "https://agent-19.example/a2a",
+        "trust_level": "standard",
+        "skills": [
+          {
+            "name": "Capability 19",
+            "capability_id": "direct_feasible-capability-19",
+            "input_modes": [
+              "text"
+            ],
+            "output_modes": [
+              "json"
+            ],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "candidate_plans": [
+      {
+        "tasks": [
+          {
+            "task_id": "plan_1",
+            "requirement_name": "complete_defense_corpus_task_direct_feasible_19",
+            "requirement_id": "complete-defense-corpus-task-direct-feasible-19",
+            "capability_id": "direct_feasible-capability-19",
+            "description": "Execute the direct feasible capability to complete the defense corpus task.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "direct_feasible-result-19"
+            ],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              },
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [
+          "plan_1"
+        ],
+        "expected_artifacts": [],
+        "completion_criteria": [],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      },
+      {
+        "tasks": [
+          {
+            "task_id": "plan_2",
+            "requirement_name": "validate_direct_feasibility_of_task_19",
+            "requirement_id": "validate-direct-feasibility-of-task-19",
+            "capability_id": "direct_feasible-capability-19",
+            "description": "Validate the direct feasibility of task 19.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "direct_feasibility_result_19"
+            ],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              },
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [
+          "plan_2"
+        ],
+        "expected_artifacts": [],
+        "completion_criteria": [],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      },
+      {
+        "tasks": [
+          {
+            "task_id": "plan_3",
+            "requirement_name": "generate_defense_corpus_report_19",
+            "requirement_id": "generate-defense-corpus-report-19",
+            "capability_id": "direct_feasible-capability-19",
+            "description": "Generate a defense corpus report for task 19.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "defense_corpus_report_19"
+            ],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              },
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [
+          "plan_3"
+        ],
+        "expected_artifacts": [],
+        "completion_criteria": [],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      }
+    ]
+  },
+  "latency_ms": 4457.776200026274,
+  "evaluation_status": "raw_output_collected_not_scored"
+}

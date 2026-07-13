@@ -1,0 +1,29 @@
+{
+  "id": "chatcmpl-70aylk29fxyckb29eiq4dg",
+  "object": "chat.completion",
+  "created": 1783907111,
+  "model": "qwen/qwen3-1.7b",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "{\"interpreted_request\": {\"user_goal\": \"to create a no-op coordination request\", \"context\": {\"type\": \"coordination\", \"mode\": \"request\", \"action\": \"no_op\", \"description\": \"a coordination request that does not perform any action or change the state of the system.\"}}, \"candidate_plans\": [{\"tasks\": [{\"task_id\": \"1\", \"requirement_name\": \"define_coordination_request\", \"description\": \"Define a coordination request with no-op action and appropriate parameters.\", \"expected_artifacts\": [\"coordination_request_json\"]}], \"execution_order\": [\"task_1\"], \"constraint_evidence\": {\"constraint_1\": \"the request must be in the form of JSON object\", \"constraint_2\": \"must include a 'type' field with value 'coordination'\", \"constraint_3\": \"must have 'mode', 'action', and 'description' fields\"}}, {\"tasks\": [{\"task_id\": \"2\", \"requirement_name\": \"generate_coordination_request\", \"description\": \"Generate the coordination request based on the defined parameters.\", \"expected_artifacts\": [\"coordination_request_json\"]}], \"execution_order\": [\"task_1\", \"task_2\"], \"constraint_evidence\": {\"constraint_1\": \"the generated request must be in JSON format\", \"constraint_2\": \"must include all required fields from the definition\"}}, {\"tasks\": [{\"task_id\": \"3\", \"requirement_name\": \"validate_coordination_request\", \"description\": \"Validate the generated coordination request against the defined requirements.\", \"expected_artifacts\": [\"validated_coordination_request_json\"]}], \"execution_order\": [\"task_2\", \"task_3\"], \"constraint_evidence\": {\"constraint_1\": \"must ensure all required fields are present and correct\", \"constraint_2\": \"check that the action is 'no_op'\"}}]}\n",
+        "reasoning_content": "",
+        "tool_calls": []
+      },
+      "logprobs": null,
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 18,
+    "completion_tokens": 408,
+    "total_tokens": 426,
+    "completion_tokens_details": {
+      "reasoning_tokens": 0
+    }
+  },
+  "stats": {},
+  "system_fingerprint": "qwen/qwen3-1.7b"
+}

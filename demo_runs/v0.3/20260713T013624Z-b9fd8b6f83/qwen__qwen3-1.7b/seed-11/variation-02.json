@@ -1,0 +1,214 @@
+{
+  "case_id": "variation-02",
+  "model_id": "qwen/qwen3-1.7b",
+  "seed": 11,
+  "temperature": 0,
+  "backend_seed_honored": "not_verifiable_from_response",
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Interpret the request and return one to three typed candidate plans. Plans are non-authoritative. Use only exact capability_id and agent_id values from the registry. Do not infer trust or authorization."
+    },
+    {
+      "role": "user",
+      "content": "{\"request\":\"Please complete defense corpus task decomposed_feasible 2.\",\"registry_snapshot\":[{\"agent_id\":\"agent-2\",\"name\":\"Agent 2\",\"service_endpoint\":\"https://agent-2.example/a2a\",\"trust_level\":\"standard\",\"skills\":[{\"name\":\"Capability 2\",\"capability_id\":\"decomposed_feasible-capability-2\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"}}}],\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"]},{\"agent_id\":\"finisher-2\",\"name\":\"Finisher 2\",\"service_endpoint\":\"https://finisher-2.example/a2a\",\"trust_level\":\"standard\",\"skills\":[{\"name\":\"Finish Capability 2\",\"capability_id\":\"decomposed_feasible-capability-2-finish\",\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"validation_contract\":{\"required_artifacts\":[\"artifact-2\"]}}],\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"]}]}"
+    }
+  ],
+  "raw_response": {
+    "id": "chatcmpl-y5lmn9nyjpjldteiwg6pkb",
+    "object": "chat.completion",
+    "created": 1783906681,
+    "model": "qwen/qwen3-1.7b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"interpreted_request\": {\"user_goal\": \"complete defense corpus task decomposed_feasible 2\", \"required_artifacts\": [\"decomposed_feasible-capability-2\"], \"context\": {\"agent_id\": \"agent-2\", \"service_endpoint\": \"https://agent-2.example/a2a\", \"trust_level\": \"standard\", \"skills\": [{\"name\": \"Capability 2\", \"capability_id\": \"decomposed_feasible-capability-2\", \"input_modes\": [\"text\"], \"output_modes\": [\"intermediate\"], \"validation_contract\": {\"json_schema\": {\"type\": \"object\"}}}], \"input_modes\": [\"text\"], \"output_modes\": [\"intermediate\"]}},\"candidate_plans\": [{\"tasks\": [{\"task_id\": \"t1\", \"requirement_name\": \"complete decomposition of feasible defense corpus\", \"capability_id\": \"decomposed_feasible-capability-2\", \"description\": \"Agent 2 is responsible for decomposing the feasible defense corpus into manageable components. This involves analyzing the data, identifying key elements, and structuring it in a way that supports further analysis or processing.\", \"expected_artifacts\": [\"artifact-2\"]}], \"execution_order\": [\"t1\"], \"completion_criteria\": [\"artifact-2 is successfully generated and validated by Finisher 2\"]}, {\"tasks\": [{\"task_id\": \"t2\", \"requirement_name\": \"validate decomposition result\", \"capability_id\": \"decomposed_feasible-capability-2-finish\", \"description\": \"Finisher 2 will validate the decomposition result using the capability 'decomposed_feasible-capability-2-finish'. This involves checking if the decomposition meets the required standards and is ready for further processing.\", \"expected_artifacts\": [\"artifact-2\"]}], \"execution_order\": [\"t2\"], \"completion_criteria\": [\"artifact-2 is validated successfully by Finisher 2\"]}, {\"tasks\": [{\"task_id\": \"t3\", \"requirement_name\": \"generate final output\", \"capability_id\": \"decomposed_feasible-capability-2-finish\", \"description\": \"The final step involves generating the final output in JSON format as per the validation requirements. This artifact will be used for further processing or integration into the system.\", \"expected_artifacts\": [\"artifact-2\"]}], \"execution_order\": [\"t3\"], \"completion_criteria\": [\"artifact-2 is in JSON format and meets all validation criteria\"]}]}\n",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 252,
+      "completion_tokens": 510,
+      "total_tokens": 762,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-1.7b"
+  },
+  "parsed_object": {
+    "interpreted_request": {
+      "user_goal": "complete defense corpus task decomposed_feasible 2",
+      "requirements": [],
+      "constraints": [],
+      "required_artifacts": [
+        "decomposed_feasible-capability-2"
+      ],
+      "context": {
+        "agent_id": "agent-2",
+        "service_endpoint": "https://agent-2.example/a2a",
+        "trust_level": "standard",
+        "skills": [
+          {
+            "name": "Capability 2",
+            "capability_id": "decomposed_feasible-capability-2",
+            "input_modes": [
+              "text"
+            ],
+            "output_modes": [
+              "intermediate"
+            ],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          }
+        ],
+        "input_modes": [
+          "text"
+        ],
+        "output_modes": [
+          "intermediate"
+        ]
+      }
+    },
+    "candidate_plans": [
+      {
+        "tasks": [
+          {
+            "task_id": "t1",
+            "requirement_name": "complete decomposition of feasible defense corpus",
+            "requirement_id": "complete-decomposition-of-feasible-defense-corpus",
+            "capability_id": "decomposed_feasible-capability-2",
+            "description": "Agent 2 is responsible for decomposing the feasible defense corpus into manageable components. This involves analyzing the data, identifying key elements, and structuring it in a way that supports further analysis or processing.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "artifact-2"
+            ],
+            "validation_contract": {
+              "json_schema": {},
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [
+          "t1"
+        ],
+        "expected_artifacts": [],
+        "completion_criteria": [
+          "artifact-2 is successfully generated and validated by Finisher 2"
+        ],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      },
+      {
+        "tasks": [
+          {
+            "task_id": "t2",
+            "requirement_name": "validate decomposition result",
+            "requirement_id": "validate-decomposition-result",
+            "capability_id": "decomposed_feasible-capability-2-finish",
+            "description": "Finisher 2 will validate the decomposition result using the capability 'decomposed_feasible-capability-2-finish'. This involves checking if the decomposition meets the required standards and is ready for further processing.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "artifact-2"
+            ],
+            "validation_contract": {
+              "json_schema": {},
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [
+          "t2"
+        ],
+        "expected_artifacts": [],
+        "completion_criteria": [
+          "artifact-2 is validated successfully by Finisher 2"
+        ],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      },
+      {
+        "tasks": [
+          {
+            "task_id": "t3",
+            "requirement_name": "generate final output",
+            "requirement_id": "generate-final-output",
+            "capability_id": "decomposed_feasible-capability-2-finish",
+            "description": "The final step involves generating the final output in JSON format as per the validation requirements. This artifact will be used for further processing or integration into the system.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "artifact-2"
+            ],
+            "validation_contract": {
+              "json_schema": {},
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [
+          "t3"
+        ],
+        "expected_artifacts": [],
+        "completion_criteria": [
+          "artifact-2 is in JSON format and meets all validation criteria"
+        ],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      }
+    ]
+  },
+  "latency_ms": 4814.377199858427,
+  "evaluation_status": "raw_output_collected_not_scored"
+}

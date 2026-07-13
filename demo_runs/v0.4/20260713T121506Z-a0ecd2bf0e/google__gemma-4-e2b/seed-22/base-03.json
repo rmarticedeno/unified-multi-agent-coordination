@@ -1,0 +1,91 @@
+{
+  "case_id": "base-03",
+  "model_id": "google/gemma-4-e2b",
+  "seed": 22,
+  "temperature": 0,
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Return a non-executable LinguisticPlanDraft. Select every admitted requirement_id exactly once and only its declared capability_id. Dependencies may reference only admitted requirement IDs. Report ambiguous terms in unresolved_terms. Do not create task IDs, agents, trust, credentials, contracts, schemas, artifacts, or authority. Reference labels are unavailable."
+    },
+    {
+      "role": "user",
+      "content": "{\"request_text\":\"Coordinate the declared services for wildfire sensor triage; preserve the specified data flow, evidence contract, and authority limits.\",\"admitted_request\":{\"user_goal\":\"Coordinate the declared services for wildfire sensor triage; preserve the specified data flow, evidence contract, and authority limits.\",\"requirements\":[{\"name\":\"Capability 3\",\"requirement_id\":\"runtime_failure-capability-3\",\"capability_id\":\"runtime_failure-capability-3\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"required_trust_level\":\"standard\",\"validation_contract\":{\"required_artifacts\":[\"artifact-3\"]}}],\"required_artifacts\":[\"artifact-3\"],\"context\":{\"case_index\":3,\"allowed\":true}},\"registry_snapshot\":[{\"agent_id\":\"agent-3\",\"name\":\"Agent 3\",\"service_endpoint\":\"https://agent-3.example/a2a\",\"trust_level\":\"standard\",\"skills\":[{\"name\":\"Capability 3\",\"capability_id\":\"runtime_failure-capability-3\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"}}}],\"input_modes\":[\"text\"],\"output_modes\":[\"json\"]}]}"
+    }
+  ],
+  "raw_response": {
+    "id": "chatcmpl-3jyzcrwfrhqacz8f3qrepp",
+    "object": "chat.completion",
+    "created": 1783945268,
+    "model": "google/gemma-4-e2b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\": {\"rationale\": \"The user requests coordination of services for wildfire sensor triage while preserving data flow, evidence contract, and authority limits. The provided requirements specify a single capability: 'runtime_failure-capability-3', which requires an artifact ('artifact-3') for validation. The registry snapshot confirms Agent 3 possesses this capability. Therefore, the plan coordinates the execution of Capability 3 using the available agent context to fulfill the coordination request while respecting the specified constraints (data flow, contract, limits). The specific data flow and contract details are implicitly handled by invoking the required capability on the relevant agent/context provided in the snapshot. No unresolved terms were found as all requirements map directly to existing capabilities and artifacts. The output is a direct mapping of admitted requirements to their capabilities based on the input structure provided.\"}}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 329,
+      "completion_tokens": 169,
+      "total_tokens": 498,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "google/gemma-4-e2b"
+  },
+  "parsed_object": {
+    "draft": {
+      "selections": [
+        {
+          "requirement_id": "runtime_failure-capability-3",
+          "capability_id": "runtime_failure-capability-3",
+          "depends_on_requirement_ids": []
+        }
+      ],
+      "unresolved_terms": [],
+      "rationale": "The previous step identified a missing requirement 'runtime_failure-capability-3' in the draft. This instruction explicitly mandates including this requirement and its corresponding capability ID. The selection is made to ensure all admitted requirements are accounted for, fulfilling the request to correct the omission."
+    }
+  },
+  "linguistic_latency_ms": 4004.98229986988,
+  "repair_attempted": true,
+  "repair_latency_ms": 1177.7307000011206,
+  "repair_raw_response": {
+    "id": "chatcmpl-egq2ssqivqk6h0w0pv24kg",
+    "object": "chat.completion",
+    "created": 1783945272,
+    "model": "google/gemma-4-e2b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\":{\"selections\":[{\"requirement_id\":\"runtime_failure-capability-3\",\"capability_id\":\"runtime_failure-capability-3\"}],\"unresolved_terms\":[],\"rationale\":\"The previous step identified a missing requirement 'runtime_failure-capability-3' in the draft. This instruction explicitly mandates including this requirement and its corresponding capability ID. The selection is made to ensure all admitted requirements are accounted for, fulfilling the request to correct the omission.\"}}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 566,
+      "completion_tokens": 96,
+      "total_tokens": 662,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "google/gemma-4-e2b"
+  },
+  "evaluation_status": "raw_output_collected_not_scored"
+}

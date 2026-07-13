@@ -1,0 +1,230 @@
+{
+  "case_id": "base-01",
+  "model_id": "qwen/qwen3-1.7b",
+  "seed": 11,
+  "temperature": 0,
+  "backend_seed_honored": "not_verifiable_from_response",
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Interpret the request and return one to three typed candidate plans. Plans are non-authoritative. Use only exact capability_id and agent_id values from the registry. Do not infer trust or authorization."
+    },
+    {
+      "role": "user",
+      "content": "{\"request\":\"Complete defense corpus task direct_feasible 1.\",\"registry_snapshot\":[{\"agent_id\":\"agent-1\",\"name\":\"Agent 1\",\"service_endpoint\":\"https://agent-1.example/a2a\",\"trust_level\":\"standard\",\"skills\":[{\"name\":\"Capability 1\",\"capability_id\":\"direct_feasible-capability-1\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"}}}],\"input_modes\":[\"text\"],\"output_modes\":[\"json\"]}]}"
+    }
+  ],
+  "raw_response": {
+    "id": "chatcmpl-oziyvh8pyahad5zzecksbq",
+    "object": "chat.completion",
+    "created": 1783906592,
+    "model": "qwen/qwen3-1.7b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"interpreted_request\": {\"user_goal\": \"Complete defense corpus task direct_feasible 1.\", \"required_artifacts\": [\"direct_feasible-capability-1\"], \"context\": {\"agent_id\": \"agent-1\", \"service_endpoint\": \"https://agent-1.example/a2a\", \"trust_level\": \"standard\"}},\"candidate_plans\": [{\"tasks\":[{\"task_id\":\"plan1\",\"requirement_name\":\"complete task direct_feasible 1\",\"description\":\"Call capability 'direct_feasible-capability-1' with input text and output json.\",\"depends_on\":[]}]},{\"tasks\":[{\"task_id\":\"plan2\",\"requirement_name\":\"complete task direct_feasible 1\",\"description\":\"Call capability 'direct_feasible-capability-1' with input text and output json.\",\"depends_on\":[]},{\"task_id\":\"plan3\",\"requirement_name\":\"complete task direct_feasible 1\",\"description\":\"Call capability 'direct_feasible-capability-1' with input text and output json.\",\"depends_on\":[]}]}, {\"tasks\":[{\"task_id\":\"plan4\",\"requirement_name\":\"complete task direct_feasible 1\",\"description\":\"Call capability 'direct_feasible-capability-1' with input text and output json.\",\"depends_on\":[]},{\"task_id\":\"plan5\",\"requirement_name\":\"complete task direct_feasible 1\",\"description\":\"Call capability 'direct_feasible-capability-1' with input text and output json.\",\"depends_on\":[]},{\"task_id\":\"plan6\",\"requirement_name\":\"complete task direct_feasible 1\",\"description\":\"Call capability 'direct_feasible-capability-1' with input text and output json.\",\"depends_on\":[]}] }]}\n",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 153,
+      "completion_tokens": 364,
+      "total_tokens": 517,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-1.7b"
+  },
+  "parsed_object": {
+    "interpreted_request": {
+      "user_goal": "Complete defense corpus task direct_feasible 1.",
+      "requirements": [],
+      "constraints": [],
+      "required_artifacts": [
+        "direct_feasible-capability-1"
+      ],
+      "context": {
+        "agent_id": "agent-1",
+        "service_endpoint": "https://agent-1.example/a2a",
+        "trust_level": "standard"
+      }
+    },
+    "candidate_plans": [
+      {
+        "tasks": [
+          {
+            "task_id": "plan1",
+            "requirement_name": "complete task direct_feasible 1",
+            "requirement_id": "complete-task-direct-feasible-1",
+            "capability_id": "complete-task-direct-feasible-1",
+            "description": "Call capability 'direct_feasible-capability-1' with input text and output json.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [],
+            "validation_contract": {
+              "json_schema": {},
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [],
+        "expected_artifacts": [],
+        "completion_criteria": [],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      },
+      {
+        "tasks": [
+          {
+            "task_id": "plan2",
+            "requirement_name": "complete task direct_feasible 1",
+            "requirement_id": "complete-task-direct-feasible-1",
+            "capability_id": "complete-task-direct-feasible-1",
+            "description": "Call capability 'direct_feasible-capability-1' with input text and output json.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [],
+            "validation_contract": {
+              "json_schema": {},
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          },
+          {
+            "task_id": "plan3",
+            "requirement_name": "complete task direct_feasible 1",
+            "requirement_id": "complete-task-direct-feasible-1",
+            "capability_id": "complete-task-direct-feasible-1",
+            "description": "Call capability 'direct_feasible-capability-1' with input text and output json.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [],
+            "validation_contract": {
+              "json_schema": {},
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [],
+        "expected_artifacts": [],
+        "completion_criteria": [],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      },
+      {
+        "tasks": [
+          {
+            "task_id": "plan4",
+            "requirement_name": "complete task direct_feasible 1",
+            "requirement_id": "complete-task-direct-feasible-1",
+            "capability_id": "complete-task-direct-feasible-1",
+            "description": "Call capability 'direct_feasible-capability-1' with input text and output json.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [],
+            "validation_contract": {
+              "json_schema": {},
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          },
+          {
+            "task_id": "plan5",
+            "requirement_name": "complete task direct_feasible 1",
+            "requirement_id": "complete-task-direct-feasible-1",
+            "capability_id": "complete-task-direct-feasible-1",
+            "description": "Call capability 'direct_feasible-capability-1' with input text and output json.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [],
+            "validation_contract": {
+              "json_schema": {},
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          },
+          {
+            "task_id": "plan6",
+            "requirement_name": "complete task direct_feasible 1",
+            "requirement_id": "complete-task-direct-feasible-1",
+            "capability_id": "complete-task-direct-feasible-1",
+            "description": "Call capability 'direct_feasible-capability-1' with input text and output json.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [],
+            "validation_contract": {
+              "json_schema": {},
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [],
+        "expected_artifacts": [],
+        "completion_criteria": [],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      }
+    ]
+  },
+  "latency_ms": 3658.3221000619233,
+  "evaluation_status": "raw_output_collected_not_scored"
+}

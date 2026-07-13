@@ -1,0 +1,219 @@
+{
+  "case_id": "base-23",
+  "model_id": "qwen/qwen3-8b",
+  "seed": 11,
+  "temperature": 0,
+  "backend_seed_honored": "not_verifiable_from_response",
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Interpret the request and return one to three typed candidate plans. Plans are non-authoritative. Use only exact capability_id and agent_id values from the registry. Do not infer trust or authorization."
+    },
+    {
+      "role": "user",
+      "content": "{\"request\":\"Complete defense corpus task schema_modality_graph_invalidity 23.\",\"registry_snapshot\":[{\"agent_id\":\"agent-23\",\"name\":\"Agent 23\",\"service_endpoint\":\"https://agent-23.example/a2a\",\"trust_level\":\"standard\",\"skills\":[{\"name\":\"Capability 23\",\"capability_id\":\"schema_modality_graph_invalidity-capability-23\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"}}}],\"input_modes\":[\"text\"],\"output_modes\":[\"json\"]}]}"
+    }
+  ],
+  "raw_response": {
+    "id": "chatcmpl-6z5teqfrp5jun3fvljbad",
+    "object": "chat.completion",
+    "created": 1783908692,
+    "model": "qwen/qwen3-8b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\n  \"interpreted_request\": {\n    \"user_goal\": \"Complete the defense corpus task related to schema_modality_graph_invalidity with ID 23.\",\n    \"required_artifacts\": [\n      \"schema_modality_graph_invalidity\",\n      \"task_id_23\"\n    ],\n    \"context\": {\n      \"agent_id\": \"agent-23\",\n      \"name\": \"Agent 23\",\n      \"service_endpoint\": \"https://agent-23.example/a2a\",\n      \"trust_level\": \"standard\",\n      \"skills\": [\n        {\n          \"name\": \"Capability 23\",\n          \"capability_id\": \"schema_modality_graph_invalidity-capability-23\",\n          \"input_modes\": [\"text\"],\n          \"output_modes\": [\"json\"],\n          \"validation_contract\": {\n            \"json_schema\": {\n              \"type\": \"object\"\n            }\n          }\n        }\n      ],\n      \"input_modes\": [\"text\"],\n      \"output_modes\": [\"json\"]\n    }\n  },\n  \"candidate_plans\": [\n    {\n      \"tasks\": [\n        {\n          \"task_id\": \"schema_modality_graph_invalidity-23\",\n          \"requirement_name\": \"Validate schema modality graph invalidity\",\n          \"description\": \"Perform validation of the schema modality graph for task ID 23 to ensure it adheres to defined constraints.\",\n          \"expected_artifacts\": [\"validation_result\", \"schema_modality_graph_invalidity\"],\n          \"validation_contract\": {\n            \"json_schema\": {\n              \"type\": \"object\"\n            }\n          }\n        }\n      ],\n      \"execution_order\": [\n        \"schema_modality_graph_invalidity-23\"\n      ]\n    },\n    {\n      \"tasks\": [\n        {\n          \"task_id\": \"schema_modality_graph_invalidity-23\",\n          \"requirement_name\": \"Schema modality graph invalidity analysis\",\n          \"description\": \"Analyze the schema modality graph for task ID 23 to identify and report any inconsistencies or invalidities.\",\n          \"expected_artifacts\": [\"analysis_report\", \"schema_modality_graph_invalidity\"],\n          \"validation_contract\": {\n            \"json_schema\": {\n              \"type\": \"object\"\n            }\n          }\n        }\n      ],\n      \"execution_order\": [\n        \"schema_modality_graph_invalidity-23\"\n      ]\n    },\n    {\n      \"tasks\": [\n        {\n          \"task_id\": \"schema_modality_graph_invalidity-23\",\n          \"requirement_name\": \"Schema modality graph invalidity resolution\",\n          \"description\": \"Resolve any identified issues in the schema modality graph for task ID 23 to ensure it is valid and conforms to expected standards.\",\n          \"expected_artifacts\": [\"resolution_report\", \"schema_modality_graph_invalidity\"],\n          \"validation_contract\": {\n            \"json_schema\": {\n              \"type\": \"object\"\n            }\n          }\n        }\n      ],\n      \"execution_order\": [\n        \"schema_modality_graph_invalidity-23\"\n      ]\n    }\n  ]\n}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 167,
+      "completion_tokens": 644,
+      "total_tokens": 811,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-8b"
+  },
+  "parsed_object": {
+    "interpreted_request": {
+      "user_goal": "Complete the defense corpus task related to schema_modality_graph_invalidity with ID 23.",
+      "requirements": [],
+      "constraints": [],
+      "required_artifacts": [
+        "schema_modality_graph_invalidity",
+        "task_id_23"
+      ],
+      "context": {
+        "agent_id": "agent-23",
+        "name": "Agent 23",
+        "service_endpoint": "https://agent-23.example/a2a",
+        "trust_level": "standard",
+        "skills": [
+          {
+            "name": "Capability 23",
+            "capability_id": "schema_modality_graph_invalidity-capability-23",
+            "input_modes": [
+              "text"
+            ],
+            "output_modes": [
+              "json"
+            ],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          }
+        ],
+        "input_modes": [
+          "text"
+        ],
+        "output_modes": [
+          "json"
+        ]
+      }
+    },
+    "candidate_plans": [
+      {
+        "tasks": [
+          {
+            "task_id": "schema_modality_graph_invalidity-23",
+            "requirement_name": "Validate schema modality graph invalidity",
+            "requirement_id": "validate-schema-modality-graph-invalidity",
+            "capability_id": "validate-schema-modality-graph-invalidity",
+            "description": "Perform validation of the schema modality graph for task ID 23 to ensure it adheres to defined constraints.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "validation_result",
+              "schema_modality_graph_invalidity"
+            ],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              },
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [
+          "schema_modality_graph_invalidity-23"
+        ],
+        "expected_artifacts": [],
+        "completion_criteria": [],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      },
+      {
+        "tasks": [
+          {
+            "task_id": "schema_modality_graph_invalidity-23",
+            "requirement_name": "Schema modality graph invalidity analysis",
+            "requirement_id": "schema-modality-graph-invalidity-analysis",
+            "capability_id": "schema-modality-graph-invalidity-analysis",
+            "description": "Analyze the schema modality graph for task ID 23 to identify and report any inconsistencies or invalidities.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "analysis_report",
+              "schema_modality_graph_invalidity"
+            ],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              },
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [
+          "schema_modality_graph_invalidity-23"
+        ],
+        "expected_artifacts": [],
+        "completion_criteria": [],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      },
+      {
+        "tasks": [
+          {
+            "task_id": "schema_modality_graph_invalidity-23",
+            "requirement_name": "Schema modality graph invalidity resolution",
+            "requirement_id": "schema-modality-graph-invalidity-resolution",
+            "capability_id": "schema-modality-graph-invalidity-resolution",
+            "description": "Resolve any identified issues in the schema modality graph for task ID 23 to ensure it is valid and conforms to expected standards.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "resolution_report",
+              "schema_modality_graph_invalidity"
+            ],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              },
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [
+          "schema_modality_graph_invalidity-23"
+        ],
+        "expected_artifacts": [],
+        "completion_criteria": [],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      }
+    ]
+  },
+  "latency_ms": 21431.391600053757,
+  "evaluation_status": "raw_output_collected_not_scored"
+}

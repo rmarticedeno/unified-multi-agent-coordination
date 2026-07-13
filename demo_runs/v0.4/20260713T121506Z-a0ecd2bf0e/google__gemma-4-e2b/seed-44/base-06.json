@@ -1,0 +1,95 @@
+{
+  "case_id": "base-06",
+  "model_id": "google/gemma-4-e2b",
+  "seed": 44,
+  "temperature": 0,
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Return a non-executable LinguisticPlanDraft. Select every admitted requirement_id exactly once and only its declared capability_id. Dependencies may reference only admitted requirement IDs. Report ambiguous terms in unresolved_terms. Do not create task IDs, agents, trust, credentials, contracts, schemas, artifacts, or authority. Reference labels are unavailable."
+    },
+    {
+      "role": "user",
+      "content": "{\"request_text\":\"Coordinate the declared services for municipal water monitoring; preserve the specified data flow, evidence contract, and authority limits.\",\"admitted_request\":{\"user_goal\":\"Coordinate the declared services for municipal water monitoring; preserve the specified data flow, evidence contract, and authority limits.\",\"requirements\":[{\"name\":\"Capability 6\",\"requirement_id\":\"authority_constraint_registry_invalidity-capability-6\",\"capability_id\":\"authority_constraint_registry_invalidity-capability-6\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"required_trust_level\":\"admin\",\"validation_contract\":{\"required_artifacts\":[\"artifact-6\"]}}],\"required_artifacts\":[\"artifact-6\"],\"context\":{\"case_index\":6,\"allowed\":true}},\"registry_snapshot\":[{\"agent_id\":\"agent-6\",\"name\":\"Agent 6\",\"service_endpoint\":\"https://agent-6.example/a2a\",\"trust_level\":\"standard\",\"skills\":[{\"name\":\"Capability 6\",\"capability_id\":\"authority_constraint_registry_invalidity-capability-6\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"}}}],\"input_modes\":[\"text\"],\"output_modes\":[\"json\"]}]}"
+    }
+  ],
+  "raw_response": {
+    "id": "chatcmpl-cqnaceh9vxsmh7m0zpcb9",
+    "object": "chat.completion",
+    "created": 1783945403,
+    "model": "google/gemma-4-e2b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\": {\"unresolved_terms\": [\"data flow\", \"evidence contract\", \"authority limits\"]}}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 344,
+      "completion_tokens": 25,
+      "total_tokens": 369,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "google/gemma-4-e2b"
+  },
+  "parsed_object": {
+    "draft": {
+      "selections": [
+        {
+          "requirement_id": "authority_constraint_registry_invalidity-capability-6",
+          "capability_id": "authority_constraint_registry_invalidity-capability-6",
+          "depends_on_requirement_ids": []
+        }
+      ],
+      "unresolved_terms": [
+        "data flow",
+        "evidence contract",
+        "authority limits"
+      ],
+      "rationale": "The request explicitly asks to coordinate services while preserving data flow, evidence contract, and authority limits. The only admitted requirement is 'authority_constraint_registry_invalidity-capability-6', which relates to an authority constraint registry invalidity capability. This capability is selected as it is the only available option."
+    }
+  },
+  "linguistic_latency_ms": 605.2745999768376,
+  "repair_attempted": true,
+  "repair_latency_ms": 1394.9992000125349,
+  "repair_raw_response": {
+    "id": "chatcmpl-7uqbgrdbqad8bfu7ypoeo",
+    "object": "chat.completion",
+    "created": 1783945403,
+    "model": "google/gemma-4-e2b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\":{\"selections\":[{\"requirement_id\":\"authority_constraint_registry_invalidity-capability-6\",\"capability_id\":\"authority_constraint_registry_invalidity-capability-6\"}],\"unresolved_terms\":[\"data flow\",\"evidence contract\",\"authority limits\"],\"rationale\":\"The request explicitly asks to coordinate services while preserving data flow, evidence contract, and authority limits. The only admitted requirement is 'authority_constraint_registry_invalidity-capability-6', which relates to an authority constraint registry invalidity capability. This capability is selected as it is the only available option.\"}}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 526,
+      "completion_tokens": 121,
+      "total_tokens": 647,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "google/gemma-4-e2b"
+  },
+  "evaluation_status": "raw_output_collected_not_scored"
+}

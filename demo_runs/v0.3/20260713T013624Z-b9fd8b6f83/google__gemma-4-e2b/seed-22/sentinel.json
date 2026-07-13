@@ -1,0 +1,29 @@
+{
+  "id": "chatcmpl-89mzcu3og34tmv20lqwylc",
+  "object": "chat.completion",
+  "created": 1783907434,
+  "model": "google/gemma-4-e2b",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "{\n  \"interpreted_request\": {\n    \"user_goal\": \"Return a typed no-op coordination request and plan.\",\n    \"constraints\": [\n      {\"constraint_id\": \"C1\", \"source\": \"request_context\", \"description\": \"Must be a 'no-op' (no operation).\"},\n      {\"constraint_id\": \"C2\", \"source\": \"request_context\", \"description\": \"Must be a 'coordination request'.\"},\n      {\"constraint_id\": \"C3\", \"source\": \"request_context\", \"description\": \"Must be a 'plan'.\"},\n      {\"constraint_id\": \"C4\", \"source\": \"request_context\", \"description\": \"Must be 'typed' (structured/formal).\"}\n    ]\n  },\n  \"candidate_plans\": [\n    {\n      \"tasks\": [\n        {\"task_id\": \"T1\", \"requirement_name\": \"Coordination Request Type\", \"requirement_id\": \"R1\"},\n        {\"task_id\": \"T2\", \"requirement_name\": \"Action/Operation\", \"requirement_id\": \"R2\"},\n        {\"task_id\": \"T3\", \"requirement_name\": \"Execution Status\", \"requirement_id\": \"R3\"}\n      ],\n      \"execution_order\": [\"T1\", \"T2\", \"T3\"],\n      \"completion_criteria\": [\n        \"Request acknowledged as no-op.\",\n        \"No external action initiated.\",\n        \"Status confirmed as complete.\"\n      ]\n    }\n  ]\n}\n",
+        "reasoning_content": "",
+        "tool_calls": []
+      },
+      "logprobs": null,
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 27,
+    "completion_tokens": 357,
+    "total_tokens": 384,
+    "completion_tokens_details": {
+      "reasoning_tokens": 0
+    }
+  },
+  "stats": {},
+  "system_fingerprint": "google/gemma-4-e2b"
+}

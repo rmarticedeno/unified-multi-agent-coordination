@@ -1,0 +1,88 @@
+{
+  "case_id": "base-15",
+  "model_id": "qwen/qwen3-1.7b",
+  "seed": 55,
+  "temperature": 0,
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Return a non-executable LinguisticPlanDraft. Select every admitted requirement_id exactly once and only its declared capability_id. Dependencies may reference only admitted requirement IDs. Report ambiguous terms in unresolved_terms. Do not create task IDs, agents, trust, credentials, contracts, schemas, artifacts, or authority. Reference labels are unavailable."
+    },
+    {
+      "role": "user",
+      "content": "{\"request_text\":\"Coordinate the declared services for wildfire sensor triage; preserve the specified data flow, evidence contract, and authority limits.\",\"admitted_request\":{\"user_goal\":\"Coordinate the declared services for wildfire sensor triage; preserve the specified data flow, evidence contract, and authority limits.\",\"requirements\":[{\"name\":\"Capability 15\",\"requirement_id\":\"runtime_failure-capability-15\",\"capability_id\":\"runtime_failure-capability-15\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"required_trust_level\":\"standard\",\"validation_contract\":{\"required_artifacts\":[\"artifact-15\"]}}],\"required_artifacts\":[\"artifact-15\"],\"context\":{\"case_index\":15,\"allowed\":true}},\"registry_snapshot\":[{\"agent_id\":\"agent-15\",\"name\":\"Agent 15\",\"service_endpoint\":\"https://agent-15.example/a2a\",\"trust_level\":\"standard\",\"skills\":[{\"name\":\"Capability 15\",\"capability_id\":\"runtime_failure-capability-15\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"}}}],\"input_modes\":[\"text\"],\"output_modes\":[\"json\"]}]}"
+    }
+  ],
+  "raw_response": {
+    "id": "chatcmpl-y7n9r7qteua95qhgh47viu",
+    "object": "chat.completion",
+    "created": 1783945157,
+    "model": "qwen/qwen3-1.7b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\":{}}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 310,
+      "completion_tokens": 6,
+      "total_tokens": 316,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-1.7b"
+  },
+  "parsed_object": {
+    "draft": {
+      "selections": [],
+      "unresolved_terms": [
+        "missing_requirement",
+        "runtime_failure-capability-15"
+      ],
+      "rationale": "The draft omits the required requirement 'runtime_failure-capability-15' due to a public hydration error. The selection is empty because no valid selections were found."
+    }
+  },
+  "linguistic_latency_ms": 247.2287998534739,
+  "repair_attempted": true,
+  "repair_latency_ms": 603.6632999312133,
+  "repair_raw_response": {
+    "id": "chatcmpl-odg6f0jskwkc4b23w8909n",
+    "object": "chat.completion",
+    "created": 1783945158,
+    "model": "qwen/qwen3-1.7b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\":{\"selections\":[],\"unresolved_terms\":[\"missing_requirement\",\"runtime_failure-capability-15\"],\"rationale\":\"The draft omits the required requirement 'runtime_failure-capability-15' due to a public hydration error. The selection is empty because no valid selections were found.\"}}\n",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 389,
+      "completion_tokens": 62,
+      "total_tokens": 451,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-1.7b"
+  },
+  "evaluation_status": "raw_output_collected_not_scored"
+}

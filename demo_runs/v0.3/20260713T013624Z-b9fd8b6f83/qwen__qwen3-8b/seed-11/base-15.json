@@ -1,0 +1,339 @@
+{
+  "case_id": "base-15",
+  "model_id": "qwen/qwen3-8b",
+  "seed": 11,
+  "temperature": 0,
+  "backend_seed_honored": "not_verifiable_from_response",
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Interpret the request and return one to three typed candidate plans. Plans are non-authoritative. Use only exact capability_id and agent_id values from the registry. Do not infer trust or authorization."
+    },
+    {
+      "role": "user",
+      "content": "{\"request\":\"Complete defense corpus task runtime_failure 15.\",\"registry_snapshot\":[{\"agent_id\":\"agent-15\",\"name\":\"Agent 15\",\"service_endpoint\":\"https://agent-15.example/a2a\",\"trust_level\":\"standard\",\"skills\":[{\"name\":\"Capability 15\",\"capability_id\":\"runtime_failure-capability-15\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"}}}],\"input_modes\":[\"text\"],\"output_modes\":[\"json\"]}]}"
+    }
+  ],
+  "raw_response": {
+    "id": "chatcmpl-6p5c83kqsars6vt1ithel",
+    "object": "chat.completion",
+    "created": 1783908462,
+    "model": "qwen/qwen3-8b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\n  \"interpreted_request\": {\n    \"user_goal\": \"Complete the defense corpus task that has encountered a runtime failure with ID 15.\",\n    \"required_artifacts\": [\n      \"A detailed description of the runtime failure\",\n      \"The specific task or objective associated with defense corpus ID 15\"\n    ],\n    \"context\": {\n      \"agent_id\": \"agent-15\",\n      \"name\": \"Agent 15\",\n      \"service_endpoint\": \"https://agent-15.example/a2a\",\n      \"trust_level\": \"standard\",\n      \"skills\": [\n        {\n          \"name\": \"Capability 15\",\n          \"capability_id\": \"runtime_failure-capability-15\",\n          \"input_modes\": [\"text\"],\n          \"output_modes\": [\"json\"],\n          \"validation_contract\": {\n            \"json_schema\": {\n              \"type\": \"object\"\n            }\n          }\n        }\n      ],\n      \"input_modes\": [\"text\"],\n      \"output_modes\": [\"json\"]\n    }\n  },\n  \"candidate_plans\": [\n    {\n      \"tasks\": [\n        {\n          \"task_id\": \"plan-1\",\n          \"requirement_name\": \"Collect runtime failure details\",\n          \"description\": \"Gather detailed information about the runtime failure associated with defense corpus task ID 15.\",\n          \"expected_artifacts\": [\"Runtime failure log\", \"Error message or stack trace\"]\n        },\n        {\n          \"task_id\": \"plan-2\",\n          \"requirement_name\": \"Query Agent 15 for capability\",\n          \"description\": \"Use the service endpoint of Agent 15 to request assistance with resolving the runtime failure using Capability 15.\",\n          \"expected_artifacts\": [\"Agent response\", \"Capability execution result\"]\n        },\n        {\n          \"task_id\": \"plan-3\",\n          \"requirement_name\": \"Validate and report resolution\",\n          \"description\": \"Validate the output from Capability 15 to ensure it resolves the runtime failure, then provide a structured JSON response.\",\n          \"expected_artifacts\": [\"Validation confirmation\", \"Structured JSON result\"]\n        }\n      ]\n    },\n    {\n      \"tasks\": [\n        {\n          \"task_id\": \"plan-4\",\n          \"requirement_name\": \"Log and analyze error\",\n          \"description\": \"Log the runtime failure details for analysis, ensuring all relevant data is captured for debugging.\",\n          \"expected_artifacts\": [\"Error log\", \"Analysis summary\"]\n        },\n        {\n          \"task_id\": \"plan-5\",\n          \"requirement_name\": \"Trigger capability execution\",\n          \"description\": \"Send a structured request to Agent 15's service endpoint using Capability 15 to resolve the runtime failure.\",\n          \"expected_artifacts\": [\"Execution request\", \"Capability response\"]\n        },\n        {\n          \"task_id\": \"plan-6\",\n          \"requirement_name\": \"Confirm resolution and output\",\n          \"description\": \"Verify that the capability execution resolved the issue, then return a JSON-formatted result as per the validation contract.\",\n          \"expected_artifacts\": [\"Resolution confirmation\", \"Output in JSON format\"]\n        }\n      ]\n    },\n    {\n      \"tasks\": [\n        {\n          \"task_id\": \"plan-7\",\n          \"requirement_name\": \"Request assistance from Agent 15\",\n          \"description\": \"Send a text-based request to Agent 15's service endpoint, asking for help in resolving the runtime failure of defense corpus task ID 15.\",\n          \"expected_artifacts\": [\"Text request\", \"Agent response\"]\n        },\n        {\n          \"task_id\": \"plan-8\",\n          \"requirement_name\": \"Process and validate output\",\n          \"description\": \"Receive a JSON-formatted response from Capability 15, then validate it against the defined schema to ensure correctness.\",\n          \"expected_artifacts\": [\"JSON response\", \"Validation confirmation\"]\n        },\n        {\n          \"task_id\": \"plan-9\",\n          \"requirement_name\": \"Finalize and return result\",\n          \"description\": \"Once validated, finalize the output as a structured JSON result for the user to confirm resolution of the runtime failure.\",\n          \"expected_artifacts\": [\"Finalized JSON result\", \"User confirmation\"]\n        }\n      ]\n    }\n  ]\n}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 159,
+      "completion_tokens": 892,
+      "total_tokens": 1051,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-8b"
+  },
+  "parsed_object": {
+    "interpreted_request": {
+      "user_goal": "Complete the defense corpus task that has encountered a runtime failure with ID 15.",
+      "requirements": [],
+      "constraints": [],
+      "required_artifacts": [
+        "A detailed description of the runtime failure",
+        "The specific task or objective associated with defense corpus ID 15"
+      ],
+      "context": {
+        "agent_id": "agent-15",
+        "name": "Agent 15",
+        "service_endpoint": "https://agent-15.example/a2a",
+        "trust_level": "standard",
+        "skills": [
+          {
+            "name": "Capability 15",
+            "capability_id": "runtime_failure-capability-15",
+            "input_modes": [
+              "text"
+            ],
+            "output_modes": [
+              "json"
+            ],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          }
+        ],
+        "input_modes": [
+          "text"
+        ],
+        "output_modes": [
+          "json"
+        ]
+      }
+    },
+    "candidate_plans": [
+      {
+        "tasks": [
+          {
+            "task_id": "plan-1",
+            "requirement_name": "Collect runtime failure details",
+            "requirement_id": "collect-runtime-failure-details",
+            "capability_id": "collect-runtime-failure-details",
+            "description": "Gather detailed information about the runtime failure associated with defense corpus task ID 15.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "Runtime failure log",
+              "Error message or stack trace"
+            ],
+            "validation_contract": {
+              "json_schema": {},
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          },
+          {
+            "task_id": "plan-2",
+            "requirement_name": "Query Agent 15 for capability",
+            "requirement_id": "query-agent-15-for-capability",
+            "capability_id": "query-agent-15-for-capability",
+            "description": "Use the service endpoint of Agent 15 to request assistance with resolving the runtime failure using Capability 15.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "Agent response",
+              "Capability execution result"
+            ],
+            "validation_contract": {
+              "json_schema": {},
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          },
+          {
+            "task_id": "plan-3",
+            "requirement_name": "Validate and report resolution",
+            "requirement_id": "validate-and-report-resolution",
+            "capability_id": "validate-and-report-resolution",
+            "description": "Validate the output from Capability 15 to ensure it resolves the runtime failure, then provide a structured JSON response.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "Validation confirmation",
+              "Structured JSON result"
+            ],
+            "validation_contract": {
+              "json_schema": {},
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [],
+        "expected_artifacts": [],
+        "completion_criteria": [],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      },
+      {
+        "tasks": [
+          {
+            "task_id": "plan-4",
+            "requirement_name": "Log and analyze error",
+            "requirement_id": "log-and-analyze-error",
+            "capability_id": "log-and-analyze-error",
+            "description": "Log the runtime failure details for analysis, ensuring all relevant data is captured for debugging.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "Error log",
+              "Analysis summary"
+            ],
+            "validation_contract": {
+              "json_schema": {},
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          },
+          {
+            "task_id": "plan-5",
+            "requirement_name": "Trigger capability execution",
+            "requirement_id": "trigger-capability-execution",
+            "capability_id": "trigger-capability-execution",
+            "description": "Send a structured request to Agent 15's service endpoint using Capability 15 to resolve the runtime failure.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "Execution request",
+              "Capability response"
+            ],
+            "validation_contract": {
+              "json_schema": {},
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          },
+          {
+            "task_id": "plan-6",
+            "requirement_name": "Confirm resolution and output",
+            "requirement_id": "confirm-resolution-and-output",
+            "capability_id": "confirm-resolution-and-output",
+            "description": "Verify that the capability execution resolved the issue, then return a JSON-formatted result as per the validation contract.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "Resolution confirmation",
+              "Output in JSON format"
+            ],
+            "validation_contract": {
+              "json_schema": {},
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [],
+        "expected_artifacts": [],
+        "completion_criteria": [],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      },
+      {
+        "tasks": [
+          {
+            "task_id": "plan-7",
+            "requirement_name": "Request assistance from Agent 15",
+            "requirement_id": "request-assistance-from-agent-15",
+            "capability_id": "request-assistance-from-agent-15",
+            "description": "Send a text-based request to Agent 15's service endpoint, asking for help in resolving the runtime failure of defense corpus task ID 15.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "Text request",
+              "Agent response"
+            ],
+            "validation_contract": {
+              "json_schema": {},
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          },
+          {
+            "task_id": "plan-8",
+            "requirement_name": "Process and validate output",
+            "requirement_id": "process-and-validate-output",
+            "capability_id": "process-and-validate-output",
+            "description": "Receive a JSON-formatted response from Capability 15, then validate it against the defined schema to ensure correctness.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "JSON response",
+              "Validation confirmation"
+            ],
+            "validation_contract": {
+              "json_schema": {},
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          },
+          {
+            "task_id": "plan-9",
+            "requirement_name": "Finalize and return result",
+            "requirement_id": "finalize-and-return-result",
+            "capability_id": "finalize-and-return-result",
+            "description": "Once validated, finalize the output as a structured JSON result for the user to confirm resolution of the runtime failure.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "Finalized JSON result",
+              "User confirmation"
+            ],
+            "validation_contract": {
+              "json_schema": {},
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [],
+        "expected_artifacts": [],
+        "completion_criteria": [],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      }
+    ]
+  },
+  "latency_ms": 35077.42930017412,
+  "evaluation_status": "raw_output_collected_not_scored"
+}

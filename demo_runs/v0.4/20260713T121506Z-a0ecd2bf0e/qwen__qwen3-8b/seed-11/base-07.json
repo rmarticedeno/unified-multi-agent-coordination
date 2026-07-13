@@ -1,0 +1,91 @@
+{
+  "case_id": "base-07",
+  "model_id": "qwen/qwen3-8b",
+  "seed": 11,
+  "temperature": 0,
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Return a non-executable LinguisticPlanDraft. Select every admitted requirement_id exactly once and only its declared capability_id. Dependencies may reference only admitted requirement IDs. Report ambiguous terms in unresolved_terms. Do not create task IDs, agents, trust, credentials, contracts, schemas, artifacts, or authority. Reference labels are unavailable."
+    },
+    {
+      "role": "user",
+      "content": "{\"request_text\":\"Coordinate the declared services for coastal flood response; preserve the specified data flow, evidence contract, and authority limits.\",\"admitted_request\":{\"user_goal\":\"Coordinate the declared services for coastal flood response; preserve the specified data flow, evidence contract, and authority limits.\",\"requirements\":[{\"name\":\"Capability 7\",\"requirement_id\":\"direct_feasible-capability-7\",\"capability_id\":\"direct_feasible-capability-7\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"required_trust_level\":\"standard\",\"validation_contract\":{\"required_artifacts\":[\"artifact-7\"]}}],\"required_artifacts\":[\"artifact-7\"],\"context\":{\"case_index\":7,\"allowed\":true}},\"registry_snapshot\":[{\"agent_id\":\"agent-7\",\"name\":\"Agent 7\",\"service_endpoint\":\"https://agent-7.example/a2a\",\"trust_level\":\"standard\",\"skills\":[{\"name\":\"Capability 7\",\"capability_id\":\"direct_feasible-capability-7\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"}}}],\"input_modes\":[\"text\"],\"output_modes\":[\"json\"]}]}"
+    }
+  ],
+  "raw_response": {
+    "id": "chatcmpl-th9cgjpyzil70x10v04g",
+    "object": "chat.completion",
+    "created": 1783945604,
+    "model": "qwen/qwen3-8b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\n  \"draft\": {\n    \"unresolved_terms\": [],\n    \"rationale\": \"The LinguisticPlanDraft is constructed to align with the admitted request, ensuring that all declared services for coastal flood response are coordinated while preserving data flow, evidence contract, and authority limits as specified. The plan references only the admitted requirement_id and its associated capability_id without introducing new task IDs, agents, trust levels, credentials, contracts, schemas, artifacts, or authority.\"\n  }\n}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 307,
+      "completion_tokens": 98,
+      "total_tokens": 405,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-8b"
+  },
+  "parsed_object": {
+    "draft": {
+      "selections": [
+        {
+          "requirement_id": "direct_feasible-capability-7",
+          "capability_id": "direct_feasible-capability-7",
+          "depends_on_requirement_ids": []
+        }
+      ],
+      "unresolved_terms": [],
+      "rationale": "The LinguisticPlanDraft now includes the requirement 'direct_feasible-capability-7' and its associated capability_id, addressing the missing_requirement error. The draft ensures alignment with the admitted request by referencing only the admitted requirement_id and its declared capability_id without introducing new task IDs, agents, trust levels, credentials, contracts, schemas, artifacts, or authority."
+    }
+  },
+  "linguistic_latency_ms": 6488.182400120422,
+  "repair_attempted": true,
+  "repair_latency_ms": 6930.49699999392,
+  "repair_raw_response": {
+    "id": "chatcmpl-tmyuqg7lnls10cqlbb5bao8",
+    "object": "chat.completion",
+    "created": 1783945610,
+    "model": "qwen/qwen3-8b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\":{\"selections\":[{\"requirement_id\":\"direct_feasible-capability-7\",\"capability_id\":\"direct_feasible-capability-7\"}],\"unresolved_terms\":[],\"rationale\":\"The LinguisticPlanDraft now includes the requirement 'direct_feasible-capability-7' and its associated capability_id, addressing the missing_requirement error. The draft ensures alignment with the admitted request by referencing only the admitted requirement_id and its declared capability_id without introducing new task IDs, agents, trust levels, credentials, contracts, schemas, artifacts, or authority.\"}}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 462,
+      "completion_tokens": 116,
+      "total_tokens": 578,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-8b"
+  },
+  "evaluation_status": "raw_output_collected_not_scored"
+}

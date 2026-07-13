@@ -1,0 +1,157 @@
+{
+  "case_id": "base-09",
+  "model_id": "google/gemma-4-e2b",
+  "seed": 55,
+  "temperature": 0,
+  "backend_seed_honored": "not_verifiable_from_response",
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Interpret the request and return one to three typed candidate plans. Plans are non-authoritative. Use only exact capability_id and agent_id values from the registry. Do not infer trust or authorization."
+    },
+    {
+      "role": "user",
+      "content": "{\"request\":\"Complete defense corpus task runtime_failure 9.\",\"registry_snapshot\":[{\"agent_id\":\"agent-9\",\"name\":\"Agent 9\",\"service_endpoint\":\"https://agent-9.example/a2a\",\"trust_level\":\"standard\",\"skills\":[{\"name\":\"Capability 9\",\"capability_id\":\"runtime_failure-capability-9\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"}}}],\"input_modes\":[\"text\"],\"output_modes\":[\"json\"]}]}"
+    }
+  ],
+  "raw_response": {
+    "id": "chatcmpl-h86tgv6oh4ugs111weignk",
+    "object": "chat.completion",
+    "created": 1783907995,
+    "model": "google/gemma-4-e2b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\n  \"interpreted_request\": {\n    \"user_goal\": \"Complete defense corpus task runtime_failure 9.\",\n    \"required_artifacts\": [\n      \"runtime_failure-capability-9\"\n    ]\n  },\n  \"candidate_plans\": [\n    {\n      \"tasks\": [\n        {\n          \"task_id\": \"runtime_failure-capability-9\",\n          \"requirement_name\": \"Complete defense corpus task runtime_failure 9\"\n        },\n        {\n          \"task_id\": \"agent-9\",\n          \"requirement_name\": \"Execute the required capability using Agent 9\"\n        }\n      ],\n      \"execution_order\": [\n        \"agent-9\",\n        \"runtime_failure-capability-9\"\n      ]\n    },\n    {\n      \"tasks\": [\n        {\n          \"task_id\": \"runtime_failure-capability-9\",\n          \"requirement_name\": \"Execute the capability for the specified task\"\n        }\n      ],\n      \"execution_order\": [\n        \"runtime_failure-capability-9\"\n      ]\n    }\n  ]\n}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 170,
+      "completion_tokens": 267,
+      "total_tokens": 437,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "google/gemma-4-e2b"
+  },
+  "parsed_object": {
+    "interpreted_request": {
+      "user_goal": "Complete defense corpus task runtime_failure 9.",
+      "requirements": [],
+      "constraints": [],
+      "required_artifacts": [
+        "runtime_failure-capability-9"
+      ],
+      "context": {}
+    },
+    "candidate_plans": [
+      {
+        "tasks": [
+          {
+            "task_id": "runtime_failure-capability-9",
+            "requirement_name": "Complete defense corpus task runtime_failure 9",
+            "requirement_id": "complete-defense-corpus-task-runtime-failure-9",
+            "capability_id": "complete-defense-corpus-task-runtime-failure-9",
+            "description": "",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [],
+            "validation_contract": {
+              "json_schema": {},
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          },
+          {
+            "task_id": "agent-9",
+            "requirement_name": "Execute the required capability using Agent 9",
+            "requirement_id": "execute-the-required-capability-using-agent-9",
+            "capability_id": "execute-the-required-capability-using-agent-9",
+            "description": "",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [],
+            "validation_contract": {
+              "json_schema": {},
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [
+          "agent-9",
+          "runtime_failure-capability-9"
+        ],
+        "expected_artifacts": [],
+        "completion_criteria": [],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      },
+      {
+        "tasks": [
+          {
+            "task_id": "runtime_failure-capability-9",
+            "requirement_name": "Execute the capability for the specified task",
+            "requirement_id": "execute-the-capability-for-the-specified-task",
+            "capability_id": "execute-the-capability-for-the-specified-task",
+            "description": "",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [],
+            "validation_contract": {
+              "json_schema": {},
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [
+          "runtime_failure-capability-9"
+        ],
+        "expected_artifacts": [],
+        "completion_criteria": [],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      }
+    ]
+  },
+  "latency_ms": 3483.831000048667,
+  "evaluation_status": "raw_output_collected_not_scored"
+}

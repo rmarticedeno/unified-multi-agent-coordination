@@ -1,0 +1,29 @@
+{
+  "id": "chatcmpl-kk3mvh6lmndeqqtt2n9wq",
+  "object": "chat.completion",
+  "created": 1783908938,
+  "model": "qwen/qwen3-8b",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "{\n  \"interpreted_request\": {\n    \"user_goal\": \"Perform a no-op coordination action\",\n    \"context\": {\n      \"current_state\": \"No active tasks or processes are running\",\n      \"environment\": \"Stable, no external changes expected\"\n    }\n  },\n  \"candidate_plans\": [\n    {\n      \"selected_agents\": {\n        \"coordinator_agent\": \"system_coordinator\",\n        \"executor_agent\": \"no_op_executor\"\n      },\n      \"execution_order\": [\n        \"initiate_no_operation_request\",\n        \"validate_no_operation_conditions\",\n        \"execute_no_operation_action\",\n        \"confirm_no_operation_completion\"\n      ],\n      \"expected_artifacts\": [],\n      \"constraint_evidence\": {\n        \"no_side_effects\": true,\n        \"minimal_resource_usage\": true\n      }\n    }\n  ]\n}",
+        "reasoning_content": "",
+        "tool_calls": []
+      },
+      "logprobs": null,
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 22,
+    "completion_tokens": 180,
+    "total_tokens": 202,
+    "completion_tokens_details": {
+      "reasoning_tokens": 0
+    }
+  },
+  "stats": {},
+  "system_fingerprint": "qwen/qwen3-8b"
+}

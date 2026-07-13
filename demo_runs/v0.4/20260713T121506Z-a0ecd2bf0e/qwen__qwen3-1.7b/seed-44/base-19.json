@@ -1,0 +1,96 @@
+{
+  "case_id": "base-19",
+  "model_id": "qwen/qwen3-1.7b",
+  "seed": 44,
+  "temperature": 0,
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Return a non-executable LinguisticPlanDraft. Select every admitted requirement_id exactly once and only its declared capability_id. Dependencies may reference only admitted requirement IDs. Report ambiguous terms in unresolved_terms. Do not create task IDs, agents, trust, credentials, contracts, schemas, artifacts, or authority. Reference labels are unavailable."
+    },
+    {
+      "role": "user",
+      "content": "{\"request_text\":\"Coordinate the declared services for coastal flood response; preserve the specified data flow, evidence contract, and authority limits.\",\"admitted_request\":{\"user_goal\":\"Coordinate the declared services for coastal flood response; preserve the specified data flow, evidence contract, and authority limits.\",\"requirements\":[{\"name\":\"Capability 19\",\"requirement_id\":\"direct_feasible-capability-19\",\"capability_id\":\"direct_feasible-capability-19\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"required_trust_level\":\"standard\",\"validation_contract\":{\"required_artifacts\":[\"artifact-19\"]}}],\"required_artifacts\":[\"artifact-19\"],\"context\":{\"case_index\":19,\"allowed\":true}},\"registry_snapshot\":[{\"agent_id\":\"agent-19\",\"name\":\"Agent 19\",\"service_endpoint\":\"https://agent-19.example/a2a\",\"trust_level\":\"standard\",\"skills\":[{\"name\":\"Capability 19\",\"capability_id\":\"direct_feasible-capability-19\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"}}}],\"input_modes\":[\"text\"],\"output_modes\":[\"json\"]}]}"
+    }
+  ],
+  "raw_response": {
+    "id": "chatcmpl-26u69qbt4p8n955c2a2jjo",
+    "object": "chat.completion",
+    "created": 1783945108,
+    "model": "qwen/qwen3-1.7b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\": {\"unresolved_terms\": [\"Coastal flood response\", \"data flow\", \"evidence contract\", \"authority limits\"], \"rationale\": \"The request mentions coordinating declared services for coastal flood response, preserving data flow, evidence contract, and authority limits. However, the admitted requirements only include Capability 19 with a validation contract requiring artifact-19. The terms 'coastal flood response', 'data flow', 'evidence contract', and 'authority limits' are not explicitly addressed in the admitted requirements, so they remain unresolved.\"}}\n",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 314,
+      "completion_tokens": 115,
+      "total_tokens": 429,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-1.7b"
+  },
+  "parsed_object": {
+    "draft": {
+      "selections": [
+        {
+          "requirement_id": "direct_feasible-capability-19",
+          "capability_id": "direct_feasible-capability-19",
+          "depends_on_requirement_ids": []
+        }
+      ],
+      "unresolved_terms": [
+        "Coastal flood response",
+        "data flow",
+        "evidence contract",
+        "authority limits"
+      ],
+      "rationale": "The draft includes the required capability 'direct_feasible-capability-19' as per the public hydration errors. The unresolved terms 'coastal flood response', 'data flow', 'evidence contract', and 'authority limits' are linguistic terms not explicitly addressed in the admitted requirements, so they remain unresolved."
+    }
+  },
+  "linguistic_latency_ms": 1044.6796999312937,
+  "repair_attempted": true,
+  "repair_latency_ms": 1034.3117001466453,
+  "repair_raw_response": {
+    "id": "chatcmpl-w30yzwnj9zts6l5ks97",
+    "object": "chat.completion",
+    "created": 1783945109,
+    "model": "qwen/qwen3-1.7b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\":{\"selections\":[{\"requirement_id\":\"direct_feasible-capability-19\",\"capability_id\":\"direct_feasible-capability-19\"}],\"unresolved_terms\":[\"Coastal flood response\",\"data flow\",\"evidence contract\",\"authority limits\"],\"rationale\":\"The draft includes the required capability 'direct_feasible-capability-19' as per the public hydration errors. The unresolved terms 'coastal flood response', 'data flow', 'evidence contract', and 'authority limits' are linguistic terms not explicitly addressed in the admitted requirements, so they remain unresolved.\"}}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 600,
+      "completion_tokens": 123,
+      "total_tokens": 723,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-1.7b"
+  },
+  "evaluation_status": "raw_output_collected_not_scored"
+}

@@ -1,0 +1,192 @@
+{
+  "case_id": "variation-03",
+  "model_id": "qwen/qwen3-8b",
+  "seed": 55,
+  "temperature": 0,
+  "backend_seed_honored": "not_verifiable_from_response",
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Interpret the request and return one to three typed candidate plans. Plans are non-authoritative. Use only exact capability_id and agent_id values from the registry. Do not infer trust or authorization."
+    },
+    {
+      "role": "user",
+      "content": "{\"request\":\"Please complete defense corpus task runtime_failure 3.\",\"registry_snapshot\":[{\"agent_id\":\"agent-3\",\"name\":\"Agent 3\",\"service_endpoint\":\"https://agent-3.example/a2a\",\"trust_level\":\"standard\",\"skills\":[{\"name\":\"Capability 3\",\"capability_id\":\"runtime_failure-capability-3\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"}}}],\"input_modes\":[\"text\"],\"output_modes\":[\"json\"]}]}"
+    }
+  ],
+  "raw_response": {
+    "id": "chatcmpl-u2tml7f6e5ek61tfd4spna",
+    "object": "chat.completion",
+    "created": 1783913043,
+    "model": "qwen/qwen3-8b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\n  \"interpreted_request\": {\n    \"user_goal\": \"Complete the defense corpus task associated with runtime_failure 3.\",\n    \"required_artifacts\": [\"runtime_failure-capability-3\"],\n    \"context\": {\n      \"agent_id\": \"agent-3\",\n      \"name\": \"Agent 3\",\n      \"service_endpoint\": \"https://agent-3.example/a2a\",\n      \"trust_level\": \"standard\"\n    }\n  },\n  \"candidate_plans\": [\n    {\n      \"tasks\": [\n        {\n          \"task_id\": \"task-1\",\n          \"requirement_name\": \"runtime_failure-capability-3\",\n          \"description\": \"Invoke the runtime_failure-capability-3 to complete the defense corpus task.\",\n          \"expected_artifacts\": [\"json\"],\n          \"validation_contract\": {\n            \"json_schema\": {\n              \"type\": \"object\"\n            }\n          }\n        }\n      ],\n      \"execution_order\": [\"task-1\"]\n    },\n    {\n      \"tasks\": [\n        {\n          \"task_id\": \"task-1\",\n          \"requirement_name\": \"runtime_failure-capability-3\",\n          \"description\": \"Use the runtime_failure-capability-3 to process and complete the defense corpus task.\",\n          \"expected_artifacts\": [\"json\"],\n          \"validation_contract\": {\n            \"json_schema\": {\n              \"type\": \"object\"\n            }\n          }\n        }\n      ],\n      \"execution_order\": [\"task-1\"]\n    },\n    {\n      \"tasks\": [\n        {\n          \"task_id\": \"task-1\",\n          \"requirement_name\": \"runtime_failure-capability-3\",\n          \"description\": \"Trigger the runtime_failure-capability-3 to finalize the defense corpus task.\",\n          \"expected_artifacts\": [\"json\"],\n          \"validation_contract\": {\n            \"json_schema\": {\n              \"type\": \"object\"\n            }\n          }\n        }\n      ],\n      \"execution_order\": [\"task-1\"]\n    }\n  ]\n}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 154,
+      "completion_tokens": 415,
+      "total_tokens": 569,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-8b"
+  },
+  "parsed_object": {
+    "interpreted_request": {
+      "user_goal": "Complete the defense corpus task associated with runtime_failure 3.",
+      "requirements": [],
+      "constraints": [],
+      "required_artifacts": [
+        "runtime_failure-capability-3"
+      ],
+      "context": {
+        "agent_id": "agent-3",
+        "name": "Agent 3",
+        "service_endpoint": "https://agent-3.example/a2a",
+        "trust_level": "standard"
+      }
+    },
+    "candidate_plans": [
+      {
+        "tasks": [
+          {
+            "task_id": "task-1",
+            "requirement_name": "runtime_failure-capability-3",
+            "requirement_id": "runtime-failure-capability-3",
+            "capability_id": "runtime-failure-capability-3",
+            "description": "Invoke the runtime_failure-capability-3 to complete the defense corpus task.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "json"
+            ],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              },
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [
+          "task-1"
+        ],
+        "expected_artifacts": [],
+        "completion_criteria": [],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      },
+      {
+        "tasks": [
+          {
+            "task_id": "task-1",
+            "requirement_name": "runtime_failure-capability-3",
+            "requirement_id": "runtime-failure-capability-3",
+            "capability_id": "runtime-failure-capability-3",
+            "description": "Use the runtime_failure-capability-3 to process and complete the defense corpus task.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "json"
+            ],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              },
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [
+          "task-1"
+        ],
+        "expected_artifacts": [],
+        "completion_criteria": [],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      },
+      {
+        "tasks": [
+          {
+            "task_id": "task-1",
+            "requirement_name": "runtime_failure-capability-3",
+            "requirement_id": "runtime-failure-capability-3",
+            "capability_id": "runtime-failure-capability-3",
+            "description": "Trigger the runtime_failure-capability-3 to finalize the defense corpus task.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "json"
+            ],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              },
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [
+          "task-1"
+        ],
+        "expected_artifacts": [],
+        "completion_criteria": [],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      }
+    ]
+  },
+  "latency_ms": 19409.9097000435,
+  "evaluation_status": "raw_output_collected_not_scored"
+}

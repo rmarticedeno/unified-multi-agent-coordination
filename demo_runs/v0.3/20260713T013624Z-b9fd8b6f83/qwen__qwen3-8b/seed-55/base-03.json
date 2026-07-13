@@ -1,0 +1,224 @@
+{
+  "case_id": "base-03",
+  "model_id": "qwen/qwen3-8b",
+  "seed": 55,
+  "temperature": 0,
+  "backend_seed_honored": "not_verifiable_from_response",
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Interpret the request and return one to three typed candidate plans. Plans are non-authoritative. Use only exact capability_id and agent_id values from the registry. Do not infer trust or authorization."
+    },
+    {
+      "role": "user",
+      "content": "{\"request\":\"Complete defense corpus task runtime_failure 3.\",\"registry_snapshot\":[{\"agent_id\":\"agent-3\",\"name\":\"Agent 3\",\"service_endpoint\":\"https://agent-3.example/a2a\",\"trust_level\":\"standard\",\"skills\":[{\"name\":\"Capability 3\",\"capability_id\":\"runtime_failure-capability-3\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"}}}],\"input_modes\":[\"text\"],\"output_modes\":[\"json\"]}]}"
+    }
+  ],
+  "raw_response": {
+    "id": "chatcmpl-lwxjzaoln5oqw2e8yb9st",
+    "object": "chat.completion",
+    "created": 1783912273,
+    "model": "qwen/qwen3-8b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\n  \"interpreted_request\": {\n    \"user_goal\": \"Complete the defense corpus task that resulted in a runtime failure with identifier '3'.\",\n    \"required_artifacts\": [\"runtime_failure-capability-3\"],\n    \"context\": {\n      \"agent_id\": \"agent-3\",\n      \"name\": \"Agent 3\",\n      \"service_endpoint\": \"https://agent-3.example/a2a\",\n      \"trust_level\": \"standard\"\n    }\n  },\n  \"candidate_plans\": [\n    {\n      \"tasks\": [\n        {\n          \"task_id\": \"1\",\n          \"requirement_name\": \"Trigger runtime_failure-capability-3\",\n          \"capability_id\": \"runtime_failure-capability-3\",\n          \"description\": \"Invoke the 'runtime_failure-capability-3' capability to process the defense corpus task and handle any runtime failure.\"\n        }\n      ],\n      \"expected_artifacts\": [\"json\"]\n    },\n    {\n      \"tasks\": [\n        {\n          \"task_id\": \"1\",\n          \"requirement_name\": \"Validate input format for runtime_failure-capability-3\",\n          \"capability_id\": \"runtime_failure-capability-3\",\n          \"description\": \"Ensure the input is in 'text' format before invoking the 'runtime_failure-capability-3' capability.\"\n        },\n        {\n          \"task_id\": \"2\",\n          \"requirement_name\": \"Process defense corpus task with runtime_failure-capability-3\",\n          \"capability_id\": \"runtime_failure-capability-3\",\n          \"description\": \"Use the 'runtime_failure-capability-3' to process the defense corpus and handle any runtime failure.\"\n        }\n      ],\n      \"expected_artifacts\": [\"json\"]\n    },\n    {\n      \"tasks\": [\n        {\n          \"task_id\": \"1\",\n          \"requirement_name\": \"Log error details from runtime_failure-capability-3\",\n          \"capability_id\": \"runtime_failure-capability-3\",\n          \"description\": \"Capture and log any error details returned by the 'runtime_failure-capability-3' capability during task execution.\"\n        },\n        {\n          \"task_id\": \"2\",\n          \"requirement_name\": \"Retry or resolve runtime failure using runtime_failure-capability-3\",\n          \"capability_id\": \"runtime_failure-capability-3\",\n          \"description\": \"Attempt to retry the defense corpus task or resolve any runtime failure using the 'runtime_failure-capability-3' capability.\"\n        }\n      ],\n      \"expected_artifacts\": [\"json\"]\n    }\n  ]\n}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 153,
+      "completion_tokens": 524,
+      "total_tokens": 677,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-8b"
+  },
+  "parsed_object": {
+    "interpreted_request": {
+      "user_goal": "Complete the defense corpus task that resulted in a runtime failure with identifier '3'.",
+      "requirements": [],
+      "constraints": [],
+      "required_artifacts": [
+        "runtime_failure-capability-3"
+      ],
+      "context": {
+        "agent_id": "agent-3",
+        "name": "Agent 3",
+        "service_endpoint": "https://agent-3.example/a2a",
+        "trust_level": "standard"
+      }
+    },
+    "candidate_plans": [
+      {
+        "tasks": [
+          {
+            "task_id": "1",
+            "requirement_name": "Trigger runtime_failure-capability-3",
+            "requirement_id": "trigger-runtime-failure-capability-3",
+            "capability_id": "runtime_failure-capability-3",
+            "description": "Invoke the 'runtime_failure-capability-3' capability to process the defense corpus task and handle any runtime failure.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [],
+            "validation_contract": {
+              "json_schema": {},
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [],
+        "expected_artifacts": [
+          "json"
+        ],
+        "completion_criteria": [],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [
+            "json"
+          ],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      },
+      {
+        "tasks": [
+          {
+            "task_id": "1",
+            "requirement_name": "Validate input format for runtime_failure-capability-3",
+            "requirement_id": "validate-input-format-for-runtime-failure-capability-3",
+            "capability_id": "runtime_failure-capability-3",
+            "description": "Ensure the input is in 'text' format before invoking the 'runtime_failure-capability-3' capability.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [],
+            "validation_contract": {
+              "json_schema": {},
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          },
+          {
+            "task_id": "2",
+            "requirement_name": "Process defense corpus task with runtime_failure-capability-3",
+            "requirement_id": "process-defense-corpus-task-with-runtime-failure-capability-3",
+            "capability_id": "runtime_failure-capability-3",
+            "description": "Use the 'runtime_failure-capability-3' to process the defense corpus and handle any runtime failure.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [],
+            "validation_contract": {
+              "json_schema": {},
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [],
+        "expected_artifacts": [
+          "json"
+        ],
+        "completion_criteria": [],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [
+            "json"
+          ],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      },
+      {
+        "tasks": [
+          {
+            "task_id": "1",
+            "requirement_name": "Log error details from runtime_failure-capability-3",
+            "requirement_id": "log-error-details-from-runtime-failure-capability-3",
+            "capability_id": "runtime_failure-capability-3",
+            "description": "Capture and log any error details returned by the 'runtime_failure-capability-3' capability during task execution.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [],
+            "validation_contract": {
+              "json_schema": {},
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          },
+          {
+            "task_id": "2",
+            "requirement_name": "Retry or resolve runtime failure using runtime_failure-capability-3",
+            "requirement_id": "retry-or-resolve-runtime-failure-using-runtime-failure-capability-3",
+            "capability_id": "runtime_failure-capability-3",
+            "description": "Attempt to retry the defense corpus task or resolve any runtime failure using the 'runtime_failure-capability-3' capability.",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [],
+            "validation_contract": {
+              "json_schema": {},
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [],
+        "expected_artifacts": [
+          "json"
+        ],
+        "completion_criteria": [],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [
+            "json"
+          ],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      }
+    ]
+  },
+  "latency_ms": 28529.755600029603,
+  "evaluation_status": "raw_output_collected_not_scored"
+}

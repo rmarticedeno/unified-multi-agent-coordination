@@ -1,0 +1,88 @@
+{
+  "case_id": "base-06",
+  "model_id": "qwen/qwen3-1.7b",
+  "seed": 44,
+  "temperature": 0,
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Return a non-executable LinguisticPlanDraft. Select every admitted requirement_id exactly once and only its declared capability_id. Dependencies may reference only admitted requirement IDs. Report ambiguous terms in unresolved_terms. Do not create task IDs, agents, trust, credentials, contracts, schemas, artifacts, or authority. Reference labels are unavailable."
+    },
+    {
+      "role": "user",
+      "content": "{\"request_text\":\"Coordinate the declared services for municipal water monitoring; preserve the specified data flow, evidence contract, and authority limits.\",\"admitted_request\":{\"user_goal\":\"Coordinate the declared services for municipal water monitoring; preserve the specified data flow, evidence contract, and authority limits.\",\"requirements\":[{\"name\":\"Capability 6\",\"requirement_id\":\"authority_constraint_registry_invalidity-capability-6\",\"capability_id\":\"authority_constraint_registry_invalidity-capability-6\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"required_trust_level\":\"admin\",\"validation_contract\":{\"required_artifacts\":[\"artifact-6\"]}}],\"required_artifacts\":[\"artifact-6\"],\"context\":{\"case_index\":6,\"allowed\":true}},\"registry_snapshot\":[{\"agent_id\":\"agent-6\",\"name\":\"Agent 6\",\"service_endpoint\":\"https://agent-6.example/a2a\",\"trust_level\":\"standard\",\"skills\":[{\"name\":\"Capability 6\",\"capability_id\":\"authority_constraint_registry_invalidity-capability-6\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"}}}],\"input_modes\":[\"text\"],\"output_modes\":[\"json\"]}]}"
+    }
+  ],
+  "raw_response": {
+    "id": "chatcmpl-8fwwv1oqvomvkcck5yixm",
+    "object": "chat.completion",
+    "created": 1783945087,
+    "model": "qwen/qwen3-1.7b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\": {\"unresolved_terms\": [\"agent-6\", \"artifact-6\", \"authority_constraint_registry_invalidity-capability-6\"], \"rationale\": \"The request mentions coordinating services and preserving data flow, but the required artifacts are not yet defined. The agent's capabilities and trust levels need to be confirmed. Ambiguous terms like 'agent-6' and 'artifact-6' require further clarification.\"}}\n",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 306,
+      "completion_tokens": 86,
+      "total_tokens": 392,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-1.7b"
+  },
+  "parsed_object": {
+    "draft": {
+      "selections": [],
+      "unresolved_terms": [
+        "agent-6",
+        "artifact-6"
+      ],
+      "rationale": "The draft omits requirement 'authority_constraint_registry_invalidity-capability-6' and has unresolved terms 'agent-6' and 'artifact-6'. These need to be resolved before proceeding."
+    }
+  },
+  "linguistic_latency_ms": 868.7654000241309,
+  "repair_attempted": true,
+  "repair_latency_ms": 591.1957998760045,
+  "repair_raw_response": {
+    "id": "chatcmpl-ur8aq1kw0r9b31ycnwk357",
+    "object": "chat.completion",
+    "created": 1783945088,
+    "model": "qwen/qwen3-1.7b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\":{\"selections\":[],\"unresolved_terms\":[\"agent-6\",\"artifact-6\"],\"rationale\":\"The draft omits requirement 'authority_constraint_registry_invalidity-capability-6' and has unresolved terms 'agent-6' and 'artifact-6'. These need to be resolved before proceeding.\"}}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 545,
+      "completion_tokens": 63,
+      "total_tokens": 608,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-1.7b"
+  },
+  "evaluation_status": "raw_output_collected_not_scored"
+}

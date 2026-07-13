@@ -33,6 +33,13 @@ from .models import (
     TaskSpec,
     TraceEvent,
 )
+from .plan_hydration import PlanHydrator
+from .runtime_policies import (
+    DependencyDispatchPolicy,
+    DurableTraceEvidencePolicy,
+    StrictDependencyDispatchPolicy,
+    TraceEvidencePolicy,
+)
 
 
 class CoordinationAgent:
@@ -52,6 +59,9 @@ class CoordinationAgent:
         coordinator_id: str | None = None,
         lease_ttl_s: float = 30.0,
         lease_renew_interval_s: float | None = None,
+        plan_hydrator: PlanHydrator | None = None,
+        dependency_dispatch_policy: DependencyDispatchPolicy | None = None,
+        trace_evidence_policy: TraceEvidencePolicy | None = None,
     ) -> None:
         self.sdk = sdk
         self.feasibility_analyzer = feasibility_analyzer or FeasibilityAnalyzer()
@@ -68,6 +78,11 @@ class CoordinationAgent:
             0.1,
         )
         self._abandon_current_lease = False
+        self.plan_hydrator = plan_hydrator or PlanHydrator()
+        self.dependency_dispatch_policy = (
+            dependency_dispatch_policy or StrictDependencyDispatchPolicy()
+        )
+        self.trace_evidence_policy = trace_evidence_policy or DurableTraceEvidencePolicy()
 
     async def build_solution_plan(
         self,
@@ -102,7 +117,20 @@ class CoordinationAgent:
                 linguistic_candidates = [self._unassigned_solution_plan(request)]
             else:
                 linguistic = self._linguistic()
-                if hasattr(linguistic, "propose_solutions"):
+                if hasattr(linguistic, "propose_draft"):
+                    draft = await linguistic.propose_draft(request, registry)
+                    hydration = self.plan_hydrator.hydrate(request, registry, draft)
+                    if not hydration.complete and hasattr(linguistic, "repair_draft"):
+                        repaired = await linguistic.repair_draft(
+                            request, registry, draft, hydration.issues
+                        )
+                        hydration = self.plan_hydrator.hydrate(request, registry, repaired)
+                    linguistic_candidates = (
+                        [hydration.proposal]
+                        if hydration.proposal is not None
+                        else [self._unassigned_solution_plan(request)]
+                    )
+                elif hasattr(linguistic, "propose_solutions"):
                     linguistic_candidates = await linguistic.propose_solutions(
                         request, registry
                     )
@@ -334,12 +362,9 @@ class CoordinationAgent:
         artifacts_by_task: dict[str, list[dict[str, Any]]] = {}
         for task in self._ordered_tasks(plan_result.proposal):
             lease = await self.store.renew_lease(lease, self.lease_ttl_s)
-            blocked_by = [
-                dependency
-                for dependency in task.depends_on
-                if dependency not in results_by_task
-                or results_by_task[dependency].status != "completed"
-            ]
+            blocked_by = self.dependency_dispatch_policy.blocked_dependencies(
+                task, results_by_task
+            )
             if blocked_by:
                 skipped = TaskExecutionResult(
                     session_id=session_id,
@@ -689,7 +714,7 @@ class CoordinationAgent:
             )
             for event in await self.store.events(session_id)
         ]
-        return ledger_events
+        return self.trace_evidence_policy.expose(ledger_events)
 
     async def _with_recovered_trace(
         self,

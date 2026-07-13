@@ -1,0 +1,157 @@
+{
+  "case_id": "base-19",
+  "model_id": "google/gemma-4-e2b",
+  "seed": 33,
+  "temperature": 0,
+  "backend_seed_honored": "not_verifiable_from_response",
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Interpret the request and return one to three typed candidate plans. Plans are non-authoritative. Use only exact capability_id and agent_id values from the registry. Do not infer trust or authorization."
+    },
+    {
+      "role": "user",
+      "content": "{\"request\":\"Complete defense corpus task direct_feasible 19.\",\"registry_snapshot\":[{\"agent_id\":\"agent-19\",\"name\":\"Agent 19\",\"service_endpoint\":\"https://agent-19.example/a2a\",\"trust_level\":\"standard\",\"skills\":[{\"name\":\"Capability 19\",\"capability_id\":\"direct_feasible-capability-19\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"}}}],\"input_modes\":[\"text\"],\"output_modes\":[\"json\"]}]}"
+    }
+  ],
+  "raw_response": {
+    "id": "chatcmpl-wh0au9w4hgakr881919u6",
+    "object": "chat.completion",
+    "created": 1783907697,
+    "model": "google/gemma-4-e2b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\n  \"interpreted_request\": {\n    \"user_goal\": \"Complete defense corpus task direct_feasible 19.\",\n    \"required_artifacts\": [\n      \"direct_feasible-capability-19\"\n    ]\n  },\n  \"candidate_plans\": [\n    {\n      \"tasks\": [\n        {\n          \"task_id\": \"direct_feasible-capability-19\",\n          \"requirement_name\": \"Complete defense corpus task direct_feasible 19\"\n        },\n        {\n          \"task_id\": \"agent-19\",\n          \"requirement_name\": \"Execute the task using Agent 19\"\n        }\n      ],\n      \"execution_order\": [\n        \"agent-19\",\n        \"direct_feasible-capability-19\"\n      ]\n    },\n    {\n      \"tasks\": [\n        {\n          \"task_id\": \"direct_feasible-capability-19\",\n          \"requirement_name\": \"Process the request using Capability direct_feasible-capability-19\"\n        }\n      ],\n      \"execution_order\": [\n        \"direct_feasible-capability-19\"\n      ]\n    }\n  ]\n}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 176,
+      "completion_tokens": 282,
+      "total_tokens": 458,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "google/gemma-4-e2b"
+  },
+  "parsed_object": {
+    "interpreted_request": {
+      "user_goal": "Complete defense corpus task direct_feasible 19.",
+      "requirements": [],
+      "constraints": [],
+      "required_artifacts": [
+        "direct_feasible-capability-19"
+      ],
+      "context": {}
+    },
+    "candidate_plans": [
+      {
+        "tasks": [
+          {
+            "task_id": "direct_feasible-capability-19",
+            "requirement_name": "Complete defense corpus task direct_feasible 19",
+            "requirement_id": "complete-defense-corpus-task-direct-feasible-19",
+            "capability_id": "complete-defense-corpus-task-direct-feasible-19",
+            "description": "",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [],
+            "validation_contract": {
+              "json_schema": {},
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          },
+          {
+            "task_id": "agent-19",
+            "requirement_name": "Execute the task using Agent 19",
+            "requirement_id": "execute-the-task-using-agent-19",
+            "capability_id": "execute-the-task-using-agent-19",
+            "description": "",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [],
+            "validation_contract": {
+              "json_schema": {},
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [
+          "agent-19",
+          "direct_feasible-capability-19"
+        ],
+        "expected_artifacts": [],
+        "completion_criteria": [],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      },
+      {
+        "tasks": [
+          {
+            "task_id": "direct_feasible-capability-19",
+            "requirement_name": "Process the request using Capability direct_feasible-capability-19",
+            "requirement_id": "process-the-request-using-capability-direct-feasible-capability-19",
+            "capability_id": "process-the-request-using-capability-direct-feasible-capability-19",
+            "description": "",
+            "assigned_to": null,
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [],
+            "validation_contract": {
+              "json_schema": {},
+              "required_artifacts": [],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {},
+        "generated_nlp_agents": [],
+        "execution_order": [
+          "direct_feasible-capability-19"
+        ],
+        "expected_artifacts": [],
+        "completion_criteria": [],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      }
+    ]
+  },
+  "latency_ms": 3623.8292998168617,
+  "evaluation_status": "raw_output_collected_not_scored"
+}
