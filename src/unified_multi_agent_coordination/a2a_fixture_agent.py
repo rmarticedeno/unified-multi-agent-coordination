@@ -5,9 +5,12 @@ from __future__ import annotations
 import asyncio
 import json
 import os
+from contextlib import asynccontextmanager, suppress
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Any
 
+import httpx
 import uvicorn
 from fastapi import FastAPI
 
@@ -31,6 +34,9 @@ from a2a.types.a2a_pb2 import (
 from a2a.utils.constants import PROTOCOL_VERSION_CURRENT, TransportProtocol
 
 from .models import stable_identifier
+from .models import AgentRegistryEntry, CapabilityRequirement
+from .agent_registry import RegisteredAgent
+from .cluster import HmacAuthenticator, SignedEnvelope
 
 
 JsonObject = dict[str, Any]
@@ -52,6 +58,7 @@ class FixtureConfig:
     delay_s: float
     failure_mode: str
     include_coordination_summary: bool
+    dedup_path: str
 
     @classmethod
     def from_env(cls) -> "FixtureConfig":
@@ -74,6 +81,7 @@ class FixtureConfig:
             include_coordination_summary=_bool_env(
                 "A2A_AGENT_INCLUDE_COORDINATION_SUMMARY"
             ),
+            dedup_path=os.getenv("A2A_AGENT_DEDUP_PATH", ""),
         )
 
 
@@ -87,6 +95,9 @@ class FixtureAgentExecutor(AgentExecutor):
         self._effectful_count_by_idempotency_key: dict[str, int] = {}
         self._request_count_by_session_task: dict[str, int] = {}
         self._effectful_count_by_session_task: dict[str, int] = {}
+        self._highest_fence_by_operation: dict[str, int] = {}
+        self._completed_operation_keys: set[str] = set()
+        self._load_dedup_state()
 
     async def execute(
         self,
@@ -96,6 +107,7 @@ class FixtureAgentExecutor(AgentExecutor):
         payload = _payload_from_context(context)
         idempotency_key = _idempotency_key(payload)
         session_task_key = _session_task_key(payload)
+        operation_key, fencing_token = _operation_fence(payload)
         if idempotency_key:
             self._request_count_by_idempotency_key[idempotency_key] = (
                 self._request_count_by_idempotency_key.get(idempotency_key, 0) + 1
@@ -124,6 +136,45 @@ class FixtureAgentExecutor(AgentExecutor):
                 )
             )
             return
+
+        if operation_key:
+            highest = self._highest_fence_by_operation.get(operation_key, 0)
+            if fencing_token < highest:
+                updater = TaskUpdater(
+                    event_queue,
+                    task_id=str(context.task_id),
+                    context_id=str(context.context_id),
+                )
+                await updater.reject(
+                    new_text_message(
+                        f"{self.config.agent_id} rejected stale fencing token.",
+                        task_id=context.task_id,
+                        context_id=context.context_id,
+                    )
+                )
+                return
+            if operation_key in self._completed_operation_keys:
+                artifact = self._artifact(payload)
+                updater = TaskUpdater(
+                    event_queue,
+                    task_id=str(context.task_id),
+                    context_id=str(context.context_id),
+                )
+                await updater.add_artifact(
+                    list(artifact.parts),
+                    name=artifact.name,
+                    artifact_id=artifact.artifact_id,
+                )
+                await updater.complete(
+                    new_text_message(
+                        f"{self.config.agent_id} returned durable operation result.",
+                        task_id=context.task_id,
+                        context_id=context.context_id,
+                    )
+                )
+                return
+            self._highest_fence_by_operation[operation_key] = fencing_token
+            self._persist_dedup_state()
 
         if self.config.delay_s > 0:
             await asyncio.sleep(self.config.delay_s)
@@ -154,8 +205,6 @@ class FixtureAgentExecutor(AgentExecutor):
             return
 
         artifact = self._artifact(payload)
-        if idempotency_key:
-            self._completed_by_idempotency_key[idempotency_key] = artifact
         await updater.add_artifact(
             list(artifact.parts),
             name=artifact.name,
@@ -170,6 +219,11 @@ class FixtureAgentExecutor(AgentExecutor):
                 )
             )
             return
+        if idempotency_key:
+            self._completed_by_idempotency_key[idempotency_key] = artifact
+        if operation_key:
+            self._completed_operation_keys.add(operation_key)
+            self._persist_dedup_state()
         await updater.complete(
             new_text_message(
                 f"{self.config.agent_id} completed.",
@@ -216,7 +270,40 @@ class FixtureAgentExecutor(AgentExecutor):
             "effectful_executions_by_session_task": dict(
                 self._effectful_count_by_session_task
             ),
+            "highest_fence_by_operation": dict(self._highest_fence_by_operation),
+            "completed_operation_count": len(self._completed_operation_keys),
         }
+
+    def _load_dedup_state(self) -> None:
+        if not self.config.dedup_path:
+            return
+        path = Path(self.config.dedup_path)
+        if not path.exists():
+            return
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        self._highest_fence_by_operation = {
+            str(key): int(value)
+            for key, value in (payload.get("highest_fence_by_operation") or {}).items()
+        }
+        self._completed_operation_keys = set(payload.get("completed_operation_keys") or [])
+
+    def _persist_dedup_state(self) -> None:
+        if not self.config.dedup_path:
+            return
+        path = Path(self.config.dedup_path)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = path.with_suffix(path.suffix + ".tmp")
+        temporary.write_text(
+            json.dumps(
+                {
+                    "highest_fence_by_operation": self._highest_fence_by_operation,
+                    "completed_operation_keys": sorted(self._completed_operation_keys),
+                },
+                sort_keys=True,
+            ),
+            encoding="utf-8",
+        )
+        temporary.replace(path)
 
     def _artifact(self, payload: JsonObject):
         if self.config.artifact_kind == "text":
@@ -243,9 +330,23 @@ class FixtureAgentExecutor(AgentExecutor):
 def create_app(config: FixtureConfig | None = None) -> FastAPI:
     """Create the fixture A2A FastAPI application."""
     config = config or FixtureConfig.from_env()
-    app = FastAPI(title=f"A2A Fixture Agent: {config.agent_id}")
     card = _agent_card(config)
     executor = FixtureAgentExecutor(config)
+
+    @asynccontextmanager
+    async def lifespan(_: FastAPI):
+        registration_task: asyncio.Task[Any] | None = None
+        if os.getenv("COORDINATION_REGISTRATION_URL"):
+            registration_task = asyncio.create_task(_registration_loop(config))
+        try:
+            yield
+        finally:
+            if registration_task is not None:
+                registration_task.cancel()
+                with suppress(asyncio.CancelledError):
+                    await registration_task
+
+    app = FastAPI(title=f"A2A Fixture Agent: {config.agent_id}", lifespan=lifespan)
     handler = DefaultRequestHandler(
         agent_executor=executor,
         task_store=InMemoryTaskStore(),
@@ -319,6 +420,100 @@ def _session_task_key(payload: JsonObject) -> str:
     if not session_id or not task_id:
         return ""
     return f"{session_id}:{task_id}"
+
+
+def _operation_fence(payload: JsonObject) -> tuple[str, int]:
+    coordination = payload.get("_coordination")
+    if not isinstance(coordination, dict):
+        return "", 0
+    return (
+        str(coordination.get("operation_key") or ""),
+        int(coordination.get("fencing_token") or 0),
+    )
+
+
+async def _registration_loop(config: FixtureConfig) -> None:
+    base_urls = [
+        value.strip().rstrip("/")
+        for value in os.environ["COORDINATION_REGISTRATION_URL"].split(",")
+        if value.strip()
+    ]
+    if not base_urls:
+        raise ValueError("COORDINATION_REGISTRATION_URL requires at least one URL.")
+    cluster_id = os.getenv("COORDINATION_CLUSTER_ID", "default")
+    ttl_s = float(os.getenv("A2A_AGENT_REGISTRATION_TTL_S", "30"))
+    authenticator = HmacAuthenticator(
+        os.getenv("COORDINATION_AGENT_REGISTRATION_SECRET", ""),
+        allow_insecure=_bool_env("COORDINATION_ALLOW_INSECURE_CLUSTER"),
+    )
+    entry = AgentRegistryEntry(
+        agent_id=config.agent_id,
+        name=config.name,
+        description=config.description,
+        service_endpoint=config.base_url,
+        invocation_endpoint=f"{config.base_url.rstrip('/')}/",
+        skills=[
+            CapabilityRequirement(
+                name=config.skill,
+                capability_id=stable_identifier(config.skill),
+                input_modes=config.input_modes,
+                output_modes=config.output_modes,
+                side_effect_class="idempotent",
+            )
+        ],
+        input_modes=config.input_modes,
+        output_modes=config.output_modes,
+        supports_fencing=True,
+    )
+    record = RegisteredAgent(entry=entry, supports_fencing=True)
+    async with httpx.AsyncClient(timeout=5.0) as client:
+        endpoint_index = 0
+        while True:
+            while True:
+                register = authenticator.sign(
+                    SignedEnvelope(
+                        message_type="agent_register",
+                        cluster_id=cluster_id,
+                        node_id=config.agent_id,
+                        payload={
+                            "record": record.model_dump(mode="json"),
+                            "ttl_s": ttl_s,
+                        },
+                    )
+                )
+                try:
+                    response = await client.post(
+                        f"{base_urls[endpoint_index]}/internal/agents/register",
+                        json=register.model_dump(mode="json"),
+                    )
+                    response.raise_for_status()
+                    break
+                except httpx.HTTPError:
+                    endpoint_index = (endpoint_index + 1) % len(base_urls)
+                    await asyncio.sleep(1.0)
+            while True:
+                await asyncio.sleep(max(ttl_s / 3, 1.0))
+                heartbeat = authenticator.sign(
+                    SignedEnvelope(
+                        message_type="agent_heartbeat",
+                        cluster_id=cluster_id,
+                        node_id=config.agent_id,
+                    )
+                )
+                try:
+                    response = await client.post(
+                        f"{base_urls[endpoint_index]}/internal/agents/"
+                        f"{config.agent_id}/heartbeat",
+                        json=heartbeat.model_dump(mode="json"),
+                    )
+                    if response.status_code == 404:
+                        break
+                    response.raise_for_status()
+                except httpx.HTTPError:
+                    endpoint_index = (endpoint_index + 1) % len(base_urls)
+                    continue
+                continue
+            continue
 
 
 def _csv(name: str, default: list[str]) -> list[str]:

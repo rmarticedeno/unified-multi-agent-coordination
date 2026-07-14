@@ -111,6 +111,8 @@ Useful environment variables:
 - `COORDINATION_REQUEST_TIMEOUT_S`: registry request timeout in seconds.
 - `COORDINATION_LEDGER_PATH`: optional JSONL ledger path for crash recovery.
 - `COORDINATION_STORE_URL`: optional coordination store URL. PostgreSQL URLs enable the shared durable store; omitted values keep the JSONL/testing backend.
+- `COORDINATION_STORE_URL=etcd://host-a:2379,host-b:2379`: enables the consensus-backed authoritative store and distributed registry.
+- `COORDINATION_AUDIT_STORE_URL`: optional PostgreSQL URL for best-effort asynchronous audit projection when etcd is authoritative.
 - `COORDINATION_COORDINATOR_ID`: optional stable id for a coordinator replica. A generated id is used when omitted.
 - `COORDINATION_LEASE_TTL_S`: session lease TTL in seconds, default `30.0`.
 - `COORDINATION_LEASE_RENEW_INTERVAL_S`: in-flight dispatch renewal interval in seconds, default half the lease TTL.
@@ -120,10 +122,15 @@ Useful environment variables:
 - `COORDINATION_RETRY_BACKOFF_S`: retry backoff in seconds, default `0.05`.
 - `COORDINATION_SERVICE_HOST`: service bind host, default `0.0.0.0`.
 - `COORDINATION_SERVICE_PORT`: service bind port, default `8000`.
+- `COORDINATION_MAX_CONCURRENT_DISPATCHES`: bounds concurrent task dispatches so coordinator work cannot exhaust the process, default `16`.
+- `COORDINATION_LEAVE_ON_SHUTDOWN`: submits authenticated graceful leave on shutdown by default; set `false` for restart-oriented supervisors and invoke the leave API explicitly for deliberate scale-down.
 
 Endpoints:
 
 - `GET /health`
+- `GET /health/live`
+- `GET /health/ready`
+- `GET /cluster/status`
 - `GET /registry`
 - `POST /plan`
 - `POST /coordinate`
@@ -200,3 +207,54 @@ conflicts, process-exit recovery, stale-fence rejection, PostgreSQL invariant
 checks, fixture-agent duplicate-dispatch counters, recovery latency, and
 terminal correctness. It targets crash-fault-tolerant replicated execution; it
 does not claim Byzantine consensus or malicious-registry tolerance.
+
+## Consensus-backed coordinator nodes
+
+`docker-compose.etcd-distributed.yml` runs the fault-tolerant topology. Each
+coordinator container supervises one Python coordinator process and, when the
+authoritative membership assignment requires it, one etcd `v3.6.13` process.
+The first node bootstraps only with `COORDINATION_BOOTSTRAP=true`; every later
+node joins through DNS/direct API seeds and falls back to authenticated UDP
+multicast on `239.255.42.99:7947` when no seed is reachable.
+
+The authoritative voter target is configured with
+`COORDINATION_VOTER_TARGET`. Only `1`, `3`, `5`, and `7` are accepted. The
+default is `3`, which is also the minimum production recommendation. Target
+`1` is a development/degraded profile with no failure tolerance. New members
+enter as learners and are promoted only after etcd accepts promotion; nodes
+beyond the target remain coordinator-only. Authenticated target changes add or
+remove one member per reconciliation cycle. Majority loss is deliberately not
+auto-repaired.
+
+Required security variables are:
+
+- `COORDINATION_CLUSTER_ID`: stable logical cluster identity.
+- `COORDINATION_CLUSTER_SECRET`: HMAC-SHA256 secret for discovery and coordinator membership.
+- `COORDINATION_AGENT_REGISTRATION_SECRET`: separate HMAC-SHA256 secret for agent registration and heartbeats.
+- `COORDINATION_DISCOVERY_SEEDS`: comma-separated coordinator API URLs; DNS resolution is performed by the HTTP client.
+
+Etcd client and peer ports (`2379` and `2380`) are intended only for the private
+container network. Discovery and membership envelopes reject incompatible
+versions, wrong clusters, signatures outside a 30-second timestamp window, and
+replayed nonces. The explicit insecure mode exists only for isolated fixtures.
+
+The shared registry uses renewable etcd leases. Remote agents receive logical
+operation keys, attempt keys, coordinator fencing tokens, and registry
+revisions. Effectful agents must durably retain the highest fence and completed
+operation results; agents without fence support are limited to read-only or
+explicitly idempotent work. Process-local handlers are rejected from
+fault-tolerant plans unless represented as replicated providers.
+
+Run the three-voter smoke harness with:
+
+```powershell
+docker compose -f docker-compose.etcd-distributed.yml up --build `
+  --abort-on-container-exit --exit-code-from etcd-system-tests
+```
+
+The report is written to
+`demo_runs/etcd-distributed-system-report.json`. It records voter status,
+membership history, leader and revision observations, discovery paths, lease
+conflict behavior, duplicate-effect counts, and terminal correctness. The
+existing JSONL and PostgreSQL harnesses remain supported during evidence-parity
+work.

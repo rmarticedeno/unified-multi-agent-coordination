@@ -17,7 +17,11 @@ from .coordination_ledger import (
     RetryPolicy,
 )
 from .coordination_sdk import CoordinationSdk, RemoteRegistryError
-from .coordination_store import CoordinationStore, JsonlCoordinationStore
+from .coordination_store import (
+    CoordinationStore,
+    JsonlCoordinationStore,
+    registry_snapshot_hash,
+)
 from .feasibility import FeasibilityAnalyzer
 from .lingo_coordinator import LingoLinguisticCoordinator
 from .models import (
@@ -62,6 +66,7 @@ class CoordinationAgent:
         plan_hydrator: PlanHydrator | None = None,
         dependency_dispatch_policy: DependencyDispatchPolicy | None = None,
         trace_evidence_policy: TraceEvidencePolicy | None = None,
+        max_concurrent_dispatches: int = 16,
     ) -> None:
         self.sdk = sdk
         self.feasibility_analyzer = feasibility_analyzer or FeasibilityAnalyzer()
@@ -83,6 +88,9 @@ class CoordinationAgent:
             dependency_dispatch_policy or StrictDependencyDispatchPolicy()
         )
         self.trace_evidence_policy = trace_evidence_policy or DurableTraceEvidencePolicy()
+        if max_concurrent_dispatches < 1:
+            raise ValueError("max_concurrent_dispatches must be positive.")
+        self._dispatch_semaphore = asyncio.Semaphore(max_concurrent_dispatches)
 
     async def build_solution_plan(
         self,
@@ -168,6 +176,8 @@ class CoordinationAgent:
             proposal=proposal,
             feasibility_report=report,
             registry_snapshot=registry,
+            registry_revision=self.sdk.registry_revision,
+            registry_snapshot_hash=registry_snapshot_hash(registry),
         )
 
     @staticmethod
@@ -507,6 +517,11 @@ class CoordinationAgent:
                 task.task_id,
                 attempt_id,
             )
+            operation_key = self._operation_key(
+                session_id,
+                plan_result.plan_generation,
+                task.task_id,
+            )
             prior_result = await self.store.task_result_by_idempotency_key(
                 idempotency_key
             )
@@ -524,6 +539,8 @@ class CoordinationAgent:
                     "coordinator_id": self.coordinator_id,
                     "fencing_token": lease.fencing_token,
                     "idempotency_key": idempotency_key,
+                    "operation_key": operation_key,
+                    "attempt_key": idempotency_key,
                 },
                 lease=lease,
             )
@@ -543,6 +560,8 @@ class CoordinationAgent:
                             coordinator_id=self.coordinator_id,
                             fencing_token=lease.fencing_token,
                             idempotency_key=idempotency_key,
+                            operation_key=operation_key,
+                            registry_revision=plan_result.registry_revision,
                         ),
                         task,
                     ),
@@ -573,6 +592,9 @@ class CoordinationAgent:
                         "fencing_token": lease.fencing_token,
                         "plan_generation": plan_result.plan_generation,
                         "idempotency_key": idempotency_key,
+                        "operation_key": operation_key,
+                        "attempt_key": idempotency_key,
+                        "registry_revision": plan_result.registry_revision,
                     },
                 }
             )
@@ -639,7 +661,7 @@ class CoordinationAgent:
         lease: LeaseRecord,
     ) -> TaskExecutionResult:
         dispatch_task = asyncio.create_task(
-            self.sdk.send_task(report, task, payload, timeout_s=timeout_s)
+            self._bounded_send_task(report, task, payload, timeout_s=timeout_s)
         )
         renewal_task = asyncio.create_task(self._lease_renewal_loop(lease))
         try:
@@ -661,6 +683,17 @@ class CoordinationAgent:
             renewal_task.cancel()
             with suppress(asyncio.CancelledError):
                 await renewal_task
+
+    async def _bounded_send_task(
+        self,
+        report: FeasibilityReport,
+        task: TaskSpec,
+        payload: dict[str, Any],
+        *,
+        timeout_s: float,
+    ) -> TaskExecutionResult:
+        async with self._dispatch_semaphore:
+            return await self.sdk.send_task(report, task, payload, timeout_s=timeout_s)
 
     async def _lease_renewal_loop(self, lease: LeaseRecord) -> None:
         interval = max(self.lease_renew_interval_s, 0.05)
@@ -819,6 +852,14 @@ class CoordinationAgent:
         return f"{session_id}:{plan_id}:{task_id}:{attempt_id}"
 
     @staticmethod
+    def _operation_key(
+        session_id: str,
+        plan_generation: int,
+        task_id: str,
+    ) -> str:
+        return f"{session_id}:{plan_generation}:{task_id}"
+
+    @staticmethod
     def _with_coordination_metadata(
         payload: dict[str, Any],
         *,
@@ -830,6 +871,8 @@ class CoordinationAgent:
         coordinator_id: str,
         fencing_token: int,
         idempotency_key: str,
+        operation_key: str,
+        registry_revision: int,
     ) -> dict[str, Any]:
         enriched = dict(payload)
         metadata = dict(enriched.get("_coordination") or {})
@@ -843,6 +886,9 @@ class CoordinationAgent:
                 "coordinator_id": coordinator_id,
                 "fencing_token": fencing_token,
                 "idempotency_key": idempotency_key,
+                "attempt_key": idempotency_key,
+                "operation_key": operation_key,
+                "registry_revision": registry_revision,
             }
         )
         enriched["_coordination"] = metadata

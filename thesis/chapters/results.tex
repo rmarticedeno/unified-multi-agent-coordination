@@ -3,21 +3,22 @@
 
 \section{Evidence Status}
 
-This chapter distinguishes historical version 0.2 preflight evidence from the completed version 0.3 conformance study. Reports produced by the earlier implementation are legacy artifacts and are excluded from final comparative claims. The 36-case corpus is author-labelled, pre-registered, frozen, and label-hidden during inference; no independent adjudicator was available. The accepted run contains all 540 planned outputs and an identity-complete, deterministically reproducible analysis.
+This chapter distinguishes historical version 0.2 evidence, the completed version 0.3 and 0.4 conformance studies, and the later consensus-backed engineering extension. Reports produced by the earlier implementation are legacy artifacts and are excluded from final comparative claims. The 36-case corpus is author-labelled, pre-registered, frozen, and label-hidden during inference; no independent adjudicator was available. Each accepted study run contains all 540 planned outputs and an identity-complete, deterministically reproducible analysis. The etcd results are reported separately and do not modify those frozen model comparisons.
 
 \begin{table}[htbp]
 \centering
-\caption{Version 0.3 evidence gates after collection.}
-\label{tab:v02-preflight}
+\caption{Repository evidence status after the distributed implementation update.}
+\label{tab:evidence-status}
 \begin{tabular}{p{0.50\textwidth}rr}
 \toprule
 \textbf{Gate} & \textbf{Observed} & \textbf{Required} \\
 \midrule
-Python tests & 95 passing & all passing \\
+Python tests & 111 passing & all passing \\
 Overall source coverage & 60\% & at least 85\% \\
 Deterministic scenarios & 7/7 & 7/7 \\
 Docker A2A checks & 11/11 & 11/11 \\
 PostgreSQL distributed checks & 5/5 & 5/5 \\
+etcd three-voter smoke checks & 7/7 & 7/7 \\
 Official A2A sample interoperability & 1/1 & passing \\
 Ruff and mypy & passing & passing \\
 Frozen author-label provenance & complete & complete \\
@@ -27,7 +28,7 @@ Deterministic frozen analysis & passing & passing \\
 \end{tabular}
 \end{table}
 
-The coverage gate is the principal automated quality blocker. Aggregate coverage is not used to conceal critical gaps: the corrected measurement reports 87\% for the coordination agent, 83\% for feasibility, 77\% for trace validation, 44\% for the PostgreSQL store, 95\% for plan hydration, 89\% for the runtime-ablation runner, 28\% for v0.4 collection, and 24\% for v0.4 analysis. Thus the release remains conditionally ready even though the executed tests pass.
+The coverage gate is the principal automated quality blocker. Aggregate coverage is not used to conceal critical gaps: the last full measurement reports 87\% for the coordination agent, 83\% for feasibility, 77\% for trace validation, 44\% for the PostgreSQL store, 95\% for plan hydration, 89\% for the runtime-ablation runner, 28\% for v0.4 collection, and 24\% for v0.4 analysis. The new etcd client, store, discovery, membership, and launcher modules require a refreshed module-level coverage report before release. Thus the repository remains conditionally ready even though all 111 executed tests, Ruff, and mypy pass.
 
 \section{Fail-Closed Symbolic Boundary}
 
@@ -50,6 +51,14 @@ The corrected Docker harness passes eleven checks covering health, registry disc
 The PostgreSQL harness passes five checks: live lease conflict, takeover after an abandoned read-only attempt, process exit after external dispatch of unknown-side-effect work, stale-fence rejection, and database invariant rejection. It records zero duplicate dispatches and repeated effects in these cases, one lease conflict, one stale-write rejection, terminal correctness, and measured recovery latency. These observations do not establish consensus or cover all crash windows.
 
 An additional test launches the vendored official A2A Hello World sample as an independent server, ingests its Agent Card, preserves its \texttt{echo\_bot} skill identifier, authorizes the matching task, and receives its remote artifact. This establishes one concrete interoperability path; it is not evidence of universal A2A compatibility.
+
+\section{Post-Study etcd Distributed Evidence}
+
+The consensus-backed Docker harness starts three unified coordinator containers at a voter target of three with etcd~3.6.13. The accepted report records seven passing checks: three authoritative voters, a cluster-wide registry, conflicting live lease ownership returning HTTP \texttt{409}, rejection of a forged join message, presence of membership history, one terminal result, and zero duplicate external effects in the exercised request. It also records the elected leader, authoritative revision, quorum of two, and discovery paths containing explicit bootstrap and multicast fallback. This demonstrates that the implemented topology can form a three-voter cluster and preserve the checked invariants across coordinators; it does not by itself validate every Raft property.
+
+The evidence has important limits. All voters run as containers on one Docker host, so host, storage, switch, region, and correlated resource failures are not represented. The report does not automate the full planned matrix for leader kill, minority partition, majority loss and restoration, voter targets five and seven, live changes from three to five and back, PostgreSQL audit failure, or durable restart after every crash window. A separate manual run showed progress with one voter stopped and successful restart from persistent membership, but it is not preserved as an accepted machine-readable report and therefore is not counted as a formal result.
+
+The status snapshots also expose a convergence-observability weakness. They report an authoritative active-voter count of three, yet one node still labels its local role as \texttt{learner}, and every snapshot shows one pending membership change. Consequently, the \texttt{three\_voters} check establishes the authoritative member count, not convergence of every node-local role view or an empty reconciliation queue. A stronger gate should wait for role agreement and zero pending changes before declaring steady state.
 
 \section{Separate Runtime-Only Ablations}
 

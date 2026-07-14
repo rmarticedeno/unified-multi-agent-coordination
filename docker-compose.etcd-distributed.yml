@@ -1,0 +1,174 @@
+x-coordinator-node: &coordinator-node
+  build:
+    context: .
+  image: unified-multi-agent-coordination:etcd-distributed
+  command: ["/app/.venv/bin/unified-coordinator-node"]
+  environment: &coordinator-environment
+    COORDINATION_CLUSTER_ID: thesis-coordination
+    COORDINATION_CLUSTER_SECRET: development-cluster-secret
+    COORDINATION_AGENT_REGISTRATION_SECRET: development-agent-secret
+    COORDINATION_VOTER_TARGET: "3"
+    COORDINATION_LEASE_TTL_S: "5"
+    COORDINATION_LEASE_RENEW_INTERVAL_S: "1"
+    COORDINATION_SERVICE_HOST: 0.0.0.0
+    COORDINATION_SERVICE_PORT: "8000"
+    COORDINATION_MULTICAST_GROUP: 239.255.42.99
+    COORDINATION_MULTICAST_PORT: "7947"
+    COORDINATION_ALLOW_INSECURE_A2A: "true"
+    COORDINATION_LEAVE_ON_SHUTDOWN: "false"
+  healthcheck:
+    test:
+      [
+        "CMD",
+        "python",
+        "-c",
+        "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health/ready', timeout=2).read()",
+      ]
+    interval: 2s
+    timeout: 3s
+    retries: 60
+    start_period: 5s
+
+x-agent: &agent
+  build:
+    context: .
+  image: unified-multi-agent-coordination:etcd-distributed
+  command: ["/app/.venv/bin/unified-a2a-fixture-agent"]
+  environment: &agent-environment
+    COORDINATION_CLUSTER_ID: thesis-coordination
+    COORDINATION_AGENT_REGISTRATION_SECRET: development-agent-secret
+    COORDINATION_REGISTRATION_URL: >-
+      http://coordination-a:8000,http://coordination-b:8000,http://coordination-c:8000
+    A2A_AGENT_REGISTRATION_TTL_S: "15"
+  healthcheck:
+    test:
+      [
+        "CMD",
+        "python",
+        "-c",
+        "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=2).read()",
+      ]
+    interval: 2s
+    timeout: 3s
+    retries: 30
+
+services:
+  coordination-a:
+    <<: *coordinator-node
+    environment:
+      <<: *coordinator-environment
+      COORDINATION_NODE_ID: coordination-a
+      COORDINATION_COORDINATOR_ID: coordination-a
+      COORDINATION_BOOTSTRAP: "true"
+      COORDINATION_ADVERTISE_API_URL: http://coordination-a:8000
+      COORDINATION_ADVERTISE_CLIENT_URL: http://coordination-a:2379
+      COORDINATION_ADVERTISE_PEER_URL: http://coordination-a:2380
+    volumes:
+      - coordination-a-data:/var/lib/unified-coordination/etcd
+    ports:
+      - "8000:8000"
+
+  coordination-b:
+    <<: *coordinator-node
+    environment:
+      <<: *coordinator-environment
+      COORDINATION_NODE_ID: coordination-b
+      COORDINATION_COORDINATOR_ID: coordination-b
+      COORDINATION_DISCOVERY_SEEDS: http://coordination-a:8000
+      COORDINATION_ADVERTISE_API_URL: http://coordination-b:8000
+      COORDINATION_ADVERTISE_CLIENT_URL: http://coordination-b:2379
+      COORDINATION_ADVERTISE_PEER_URL: http://coordination-b:2380
+    volumes:
+      - coordination-b-data:/var/lib/unified-coordination/etcd
+    depends_on:
+      coordination-a:
+        condition: service_started
+
+  coordination-c:
+    <<: *coordinator-node
+    environment:
+      <<: *coordinator-environment
+      COORDINATION_NODE_ID: coordination-c
+      COORDINATION_COORDINATOR_ID: coordination-c
+      COORDINATION_DISCOVERY_SEEDS: http://coordination-a:8000,http://coordination-b:8000
+      COORDINATION_ADVERTISE_API_URL: http://coordination-c:8000
+      COORDINATION_ADVERTISE_CLIENT_URL: http://coordination-c:2379
+      COORDINATION_ADVERTISE_PEER_URL: http://coordination-c:2380
+    volumes:
+      - coordination-c-data:/var/lib/unified-coordination/etcd
+    depends_on:
+      coordination-b:
+        condition: service_started
+
+  summarizer:
+    <<: *agent
+    environment:
+      <<: *agent-environment
+      A2A_AGENT_ID: summarizer
+      A2A_AGENT_NAME: summarizer
+      A2A_AGENT_SKILL: summarize
+      A2A_AGENT_INPUT_MODES: text
+      A2A_AGENT_OUTPUT_MODES: data
+      A2A_AGENT_BASE_URL: http://summarizer:8000
+      A2A_AGENT_ARTIFACT_NAME: summary
+      A2A_AGENT_ARTIFACT_JSON: '{"summary":"Consensus-backed fixture summary"}'
+      A2A_AGENT_DEDUP_PATH: /var/lib/a2a/dedup.json
+    volumes:
+      - summarizer-data:/var/lib/a2a
+    depends_on:
+      coordination-a:
+        condition: service_healthy
+
+  slow-agent:
+    <<: *agent
+    environment:
+      <<: *agent-environment
+      A2A_AGENT_ID: slow-agent
+      A2A_AGENT_NAME: slow-agent
+      A2A_AGENT_SKILL: slow summarize
+      A2A_AGENT_INPUT_MODES: text
+      A2A_AGENT_OUTPUT_MODES: data
+      A2A_AGENT_BASE_URL: http://slow-agent:8000
+      A2A_AGENT_ARTIFACT_NAME: slow_summary
+      A2A_AGENT_ARTIFACT_JSON: '{"slow_summary":"Consensus-backed slow summary"}'
+      A2A_AGENT_DELAY_S: "1"
+      A2A_AGENT_DEDUP_PATH: /var/lib/a2a/dedup.json
+    volumes:
+      - slow-agent-data:/var/lib/a2a
+    depends_on:
+      coordination-a:
+        condition: service_healthy
+
+  etcd-system-tests:
+    build:
+      context: .
+    image: unified-multi-agent-coordination:etcd-distributed
+    command: ["/app/.venv/bin/unified-etcd-system-tests"]
+    environment:
+      COORDINATION_A_URL: http://coordination-a:8000
+      COORDINATION_B_URL: http://coordination-b:8000
+      COORDINATION_C_URL: http://coordination-c:8000
+      ETCD_ENDPOINTS: http://coordination-a:2379,http://coordination-b:2379,http://coordination-c:2379
+      SUMMARIZER_URL: http://summarizer:8000
+      SLOW_AGENT_URL: http://slow-agent:8000
+      ETCD_REPORT_PATH: /app/demo_runs/etcd-distributed-system-report.json
+    volumes:
+      - ./demo_runs:/app/demo_runs
+    depends_on:
+      coordination-a:
+        condition: service_healthy
+      coordination-b:
+        condition: service_healthy
+      coordination-c:
+        condition: service_healthy
+      summarizer:
+        condition: service_healthy
+      slow-agent:
+        condition: service_healthy
+
+volumes:
+  coordination-a-data:
+  coordination-b-data:
+  coordination-c-data:
+  summarizer-data:
+  slow-agent-data:

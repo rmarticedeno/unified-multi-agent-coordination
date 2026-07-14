@@ -165,6 +165,9 @@ class AgentRegistryEntry(BaseModel):
     security_schemes: JsonObject = Field(default_factory=dict)
     required_security_schemes: list[str] = Field(default_factory=list)
     source_card: JsonObject = Field(default_factory=dict)
+    supports_fencing: bool = False
+    availability_scope: Literal["remote", "replicated", "node_local"] = "remote"
+    owner_node_id: str = ""
 
 
 class ProblemRequest(BaseModel):
@@ -299,6 +302,8 @@ class CoordinationPlanResult(BaseModel):
     proposal: SolutionProposal
     feasibility_report: FeasibilityReport
     registry_snapshot: list[AgentRegistryEntry] = Field(default_factory=list)
+    registry_revision: int = 0
+    registry_snapshot_hash: str = ""
 
 
 class PlanGeneration(BaseModel):
@@ -342,6 +347,7 @@ class LeaseRecord(BaseModel):
     fencing_token: int
     expires_at: datetime
     heartbeat_at: datetime
+    backend_lease_id: int = 0
 
 
 class TerminalResultRecord(BaseModel):

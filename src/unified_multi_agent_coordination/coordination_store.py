@@ -77,6 +77,81 @@ class CoordinationStore(Protocol):
         ...
 
 
+class AuditProjectingCoordinationStore:
+    """Authoritative store with a serialized, best-effort audit projection."""
+
+    def __init__(self, authoritative: CoordinationStore, audit: CoordinationStore) -> None:
+        self.authoritative = authoritative
+        self.audit = audit
+        self.last_projection_error = ""
+        self._queue: asyncio.Queue[LedgerEvent] = asyncio.Queue()
+        self._worker: asyncio.Task[None] | None = None
+
+    async def acquire_lease(
+        self, session_id: str, holder_id: str, ttl_s: float
+    ) -> LeaseRecord:
+        return await self.authoritative.acquire_lease(session_id, holder_id, ttl_s)
+
+    async def renew_lease(self, lease: LeaseRecord, ttl_s: float) -> LeaseRecord:
+        return await self.authoritative.renew_lease(lease, ttl_s)
+
+    async def release_lease(self, lease: LeaseRecord) -> None:
+        await self.authoritative.release_lease(lease)
+
+    async def append_event(
+        self, event: LedgerEvent, lease: LeaseRecord | None = None
+    ) -> LedgerEvent:
+        written = await self.authoritative.append_event(event, lease)
+        self._ensure_worker()
+        self._queue.put_nowait(written)
+        return written
+
+    async def events(self, session_id: str) -> list[LedgerEvent]:
+        return await self.authoritative.events(session_id)
+
+    async def session_state(self, session_id: str) -> CoordinationSessionState:
+        return await self.authoritative.session_state(session_id)
+
+    async def task_result_by_idempotency_key(
+        self, idempotency_key: str
+    ) -> JsonObject | None:
+        return await self.authoritative.task_result_by_idempotency_key(idempotency_key)
+
+    async def ready(self) -> bool:
+        ready = getattr(self.authoritative, "ready", None)
+        if ready is not None:
+            return bool(await ready())
+        return True
+
+    async def close(self) -> None:
+        await self.authoritative.close()
+        if self._worker is not None:
+            try:
+                await asyncio.wait_for(self._queue.join(), timeout=1.0)
+            except TimeoutError:
+                pass
+            self._worker.cancel()
+            await asyncio.gather(self._worker, return_exceptions=True)
+        await self.audit.close()
+
+    def _ensure_worker(self) -> None:
+        if self._worker is None or self._worker.done():
+            self._worker = asyncio.create_task(self._project_events())
+
+    async def _project_events(self) -> None:
+        while True:
+            event = await self._queue.get()
+            try:
+                await self.audit.append_event(event)
+                self.last_projection_error = ""
+            except Exception as exc:
+                # Projection is observability only and cannot affect authority
+                # or readiness. The retained etcd event remains replayable.
+                self.last_projection_error = str(exc)
+            finally:
+                self._queue.task_done()
+
+
 class JsonlCoordinationStore:
     """Compatibility store backed by the existing JSONL/in-memory ledger."""
 
@@ -864,6 +939,10 @@ def registry_snapshot_hash(snapshot: Any) -> str:
 def store_from_url(url: str | None, ledger_path: str | None = None) -> CoordinationStore:
     """Create a coordination store from deployment configuration."""
     if url:
+        if url.startswith("etcd://"):
+            from .etcd_store import etcd_store_from_url
+
+            return etcd_store_from_url(url)
         if url.startswith(("postgres://", "postgresql://")):
             return PostgresCoordinationStore(url)
         raise CoordinationStoreError(f"Unsupported coordination store URL: {url}")

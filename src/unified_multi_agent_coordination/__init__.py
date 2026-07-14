@@ -1,6 +1,7 @@
 """Prototype interfaces for the thesis coordination framework."""
 
 from .a2a_adapter import A2AAdapter, AuthorizationError
+from .agent_registry import AgentRegistry, EtcdAgentRegistry, InMemoryAgentRegistry, RegisteredAgent
 from .admission import (
     AgentAdmissionError,
     AgentAdmissionPolicy,
@@ -25,6 +26,13 @@ from .coordination_store import (
     StaleFenceError,
     StoreInvariantError,
 )
+from .etcd_client import (
+    EtcdClient,
+    EtcdError,
+    EtcdQuorumUnavailableError,
+    EtcdUnavailableError,
+)
+from .etcd_store import EtcdCoordinationStore
 from .feasibility import FeasibilityAnalyzer
 from .lingo_coordinator import CoordinatorState, LingoLinguisticCoordinator
 from .trace_validation import TraceValidationReport, validate_trace
@@ -72,6 +80,7 @@ __all__ = [
     "AgentAdmissionError",
     "AgentAdmissionPolicy",
     "AgentRegistryEntry",
+    "AgentRegistry",
     "AuthorizationError",
     "BoundedAuxiliaryCapabilityFactory",
     "CapabilityRequirement",
@@ -88,9 +97,16 @@ __all__ = [
     "FeasibilityAnalyzer",
     "FeasibilityReport",
     "DraftRequirementSelection",
+    "EtcdClient",
+    "EtcdAgentRegistry",
+    "EtcdCoordinationStore",
+    "EtcdError",
+    "EtcdQuorumUnavailableError",
+    "EtcdUnavailableError",
     "HydrationIssue",
     "GeneratedNlpAgentSpec",
     "InMemoryCoordinationLedger",
+    "InMemoryAgentRegistry",
     "JsonlCoordinationLedger",
     "JsonlCoordinationStore",
     "LedgerEvent",
@@ -105,6 +121,7 @@ __all__ = [
     "ProblemRequest",
     "PostgresCoordinationStore",
     "RemoteRegistryError",
+    "RegisteredAgent",
     "RetryPolicy",
     "SessionState",
     "SolutionProposal",

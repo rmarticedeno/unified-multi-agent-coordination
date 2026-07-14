@@ -13,6 +13,7 @@ import httpx
 from jsonschema import Draft202012Validator
 
 from .a2a_adapter import A2AAdapter, AuthorizationError
+from .agent_registry import AgentRegistry, RegisteredAgent
 from .admission import AgentAdmissionPolicy, CredentialProvider
 from .models import (
     AgentRegistryEntry,
@@ -52,6 +53,7 @@ class CoordinationSdk:
         admission_policy: AgentAdmissionPolicy | None = None,
         credential_provider: CredentialProvider | None = None,
         auxiliary_lifecycle_policy: AuxiliaryLifecyclePolicy | None = None,
+        distributed_registry: AgentRegistry | None = None,
     ) -> None:
         self.remote_registry_url = self._select_registry_url(
             remote_registry_url, registry_endpoint, registry_addr
@@ -67,6 +69,9 @@ class CoordinationSdk:
         self._linguistic_handlers: dict[str, Callable[..., Any]] = {}
         self._local_idempotency_cache: dict[str, TaskExecutionResult] = {}
         self._consumed_auxiliary_lifecycles: set[str] = set()
+        self.distributed_registry = distributed_registry
+        self.registry_revision = 0
+        self._distributed_registry_ids: set[str] = set()
         self.credential_provider = credential_provider
         self.auxiliary_lifecycle_policy = (
             auxiliary_lifecycle_policy or SingleUseAuxiliaryLifecyclePolicy()
@@ -80,6 +85,7 @@ class CoordinationSdk:
 
     async def refresh_registry(self) -> list[AgentRegistryEntry]:
         """Refresh remote registry entries and return the visible snapshot."""
+        await self._refresh_distributed_registry()
         if not self.remote_registry_url:
             self._record(
                 "registry_refresh_skipped",
@@ -127,7 +133,7 @@ class CoordinationSdk:
             )
             raise error from exc
 
-        self._remote_registry = {entry.agent_id: entry for entry in entries}
+        self._remote_registry.update({entry.agent_id: entry for entry in entries})
         self._record(
             "registry_refresh_completed",
             "Remote registry refreshed.",
@@ -139,6 +145,7 @@ class CoordinationSdk:
         """Return the current admitted agent records."""
         if refresh:
             return await self.refresh_registry()
+        await self._refresh_distributed_registry()
         return self._visible_registry()
 
     async def capability_index(
@@ -162,6 +169,8 @@ class CoordinationSdk:
             entry.trust_level = trust_level
         entry.invocation_endpoint = entry.invocation_endpoint or entry.service_endpoint
         self._local_registry[entry.agent_id] = entry
+        if self.distributed_registry is not None:
+            await self.distributed_registry.register(RegisteredAgent(entry=entry))
         self._record(
             "sdk_agent_registered",
             f"Registered {entry.agent_id}.",
@@ -169,6 +178,16 @@ class CoordinationSdk:
             url=agent_card_url,
         )
         return entry
+
+    async def _refresh_distributed_registry(self) -> None:
+        if self.distributed_registry is None:
+            return
+        entries = await self.distributed_registry.snapshot()
+        self.registry_revision = self.distributed_registry.revision
+        for agent_id in self._distributed_registry_ids:
+            self._remote_registry.pop(agent_id, None)
+        self._distributed_registry_ids = {entry.agent_id for entry in entries}
+        self._remote_registry.update({entry.agent_id: entry for entry in entries})
 
     def register_local_agent(
         self,
@@ -776,6 +795,7 @@ class CoordinationSdk:
                 validation_contract or {}
             ),
             source_card={"handler": self._handler_name(handler)},
+            availability_scope="node_local",
         )
         self._local_registry[entry.agent_id] = entry
         return entry

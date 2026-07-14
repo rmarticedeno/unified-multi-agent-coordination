@@ -18,11 +18,13 @@ dependencies = [
 
 [project.scripts]
 unified-coordination-service = "unified_multi_agent_coordination.service:main"
+unified-coordinator-node = "unified_multi_agent_coordination.coordinator_node:main"
 unified-coordination-scenarios = "unified_multi_agent_coordination.end_to_end_scenarios:main"
 unified-a2a-fixture-agent = "unified_multi_agent_coordination.a2a_fixture_agent:main"
 unified-fixture-registry = "unified_multi_agent_coordination.fixture_registry:main"
 unified-docker-system-tests = "unified_multi_agent_coordination.docker_system_tests:main"
 unified-distributed-system-tests = "unified_multi_agent_coordination.distributed_system_tests:main"
+unified-etcd-system-tests = "unified_multi_agent_coordination.etcd_system_tests:main"
 unified-local-llm-reference = "unified_multi_agent_coordination.local_llm_reference:main"
 unified-baseline-evaluation = "unified_multi_agent_coordination.baseline_evaluation:main"
 unified-thesis-results = "unified_multi_agent_coordination.thesis_results:main"

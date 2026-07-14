@@ -35,11 +35,13 @@ class FeasibilityAnalyzer:
         trust_order: list[str] | None = None,
         *,
         auxiliary_admission_policy: AuxiliaryAdmissionPolicy | None = None,
+        require_effect_fencing: bool = False,
     ) -> None:
         self.trust_order = trust_order or ["standard", "elevated", "admin"]
         self.auxiliary_admission_policy = (
             auxiliary_admission_policy or StrictAuxiliaryAdmissionPolicy()
         )
+        self.require_effect_fencing = require_effect_fencing
 
     def check(
         self,
@@ -102,6 +104,15 @@ class FeasibilityAnalyzer:
                     missing.append(requirement.name)
                     risks.append(f"Agent {agent.agent_id} is unavailable.")
                     continue
+                if (
+                    self.require_effect_fencing
+                    and agent.availability_scope == "node_local"
+                ):
+                    authority_ok = False
+                    risks.append(
+                        f"Agent {agent.agent_id} is process-local and is not replicated "
+                        "across coordinators."
+                    )
                 skill = self._agent_skill(agent, task.capability_id)
                 capability_resolution.append(
                     {
@@ -142,6 +153,16 @@ class FeasibilityAnalyzer:
                     risks.append(
                         f"Agent {agent.agent_id} has trust {agent.trust_level}, but "
                         f"{requirement.required_trust_level} is required."
+                    )
+                if (
+                    self.require_effect_fencing
+                    and requirement.side_effect_class in {"unsafe", "unknown"}
+                    and not agent.supports_fencing
+                ):
+                    authority_ok = False
+                    risks.append(
+                        f"Agent {agent.agent_id} cannot enforce fencing for "
+                        f"{requirement.side_effect_class} side effects."
                     )
                 matched[task.task_id] = agent.agent_id
                 task_contexts[task.task_id] = {
