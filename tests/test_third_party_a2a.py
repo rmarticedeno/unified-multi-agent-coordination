@@ -21,7 +21,7 @@ from unified_multi_agent_coordination import (
 async def test_official_a2a_hello_world_sample_interoperability():
     sample = Path("vendor/a2a-samples/helloworld").resolve()
     process = subprocess.Popen(
-        [sys.executable, "server.py"],
+        [sys.executable, "__main__.py"],
         cwd=sample,
         stdout=subprocess.DEVNULL,
         stderr=subprocess.PIPE,

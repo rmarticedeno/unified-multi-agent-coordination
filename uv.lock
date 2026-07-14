@@ -1202,7 +1202,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "a2a-sdk", specifier = ">=0.3.0" },
+    { name = "a2a-sdk", specifier = "==1.1.0" },
     { name = "asyncpg", specifier = ">=0.31.0" },
     { name = "fastapi", specifier = ">=0.125.0" },
     { name = "httpx", specifier = ">=0.28.1" },

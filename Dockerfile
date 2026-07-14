@@ -1,6 +1,6 @@
-FROM gcr.io/etcd-development/etcd:v3.6.13 AS etcd
+FROM gcr.io/etcd-development/etcd:v3.6.13@sha256:24fc96ede8e787eb769e771d1245ddb2333301697a8b571e20415a0caccc375e AS etcd
 
-FROM ghcr.io/astral-sh/uv:python3.13-bookworm-slim
+FROM ghcr.io/astral-sh/uv:python3.13-bookworm-slim@sha256:531f855bda2c73cd6ef67d56b733b357cea384185b3022bd09f05e002cd144ca
 
 WORKDIR /app
 

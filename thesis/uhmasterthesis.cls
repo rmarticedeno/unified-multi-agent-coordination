@@ -180,7 +180,7 @@
       \vspace{0.1cm}{\footnotesize Repositorio de la tesis\par}%
     }
     \ifstrempty{\@repositorycommit}{}{%
-      \vspace{0.1cm}{\footnotesize Commit: \@repositorycommit\par}%
+      \vspace{0.1cm}{\footnotesize Commit evaluado: \@repositorycommit\par}%
     }
     \vspace{0.35cm}
     {\large \@date\par}

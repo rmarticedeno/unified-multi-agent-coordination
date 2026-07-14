@@ -1,0 +1,102 @@
+{
+  "version": "0.5",
+  "corpus_hash": "d3fe4e458554f174ae2040c5758e985116edd42443c8b5d6a49e501477935418",
+  "cases": [
+    {
+      "case_id": "runtime-01",
+      "category": "dependency_failure",
+      "payload": {
+        "text": "Runtime validation 1"
+      },
+      "scored_as_planning_accuracy": false
+    },
+    {
+      "case_id": "runtime-02",
+      "category": "dependency_failure",
+      "payload": {
+        "text": "Runtime validation 2"
+      },
+      "scored_as_planning_accuracy": false
+    },
+    {
+      "case_id": "runtime-03",
+      "category": "dependency_failure",
+      "payload": {
+        "text": "Runtime validation 3"
+      },
+      "scored_as_planning_accuracy": false
+    },
+    {
+      "case_id": "runtime-04",
+      "category": "timeout_unknown",
+      "payload": {
+        "text": "Runtime validation 4"
+      },
+      "scored_as_planning_accuracy": false
+    },
+    {
+      "case_id": "runtime-05",
+      "category": "timeout_unknown",
+      "payload": {
+        "text": "Runtime validation 5"
+      },
+      "scored_as_planning_accuracy": false
+    },
+    {
+      "case_id": "runtime-06",
+      "category": "timeout_unknown",
+      "payload": {
+        "text": "Runtime validation 6"
+      },
+      "scored_as_planning_accuracy": false
+    },
+    {
+      "case_id": "runtime-07",
+      "category": "retry_recovery",
+      "payload": {
+        "text": "Runtime validation 7"
+      },
+      "scored_as_planning_accuracy": false
+    },
+    {
+      "case_id": "runtime-08",
+      "category": "retry_recovery",
+      "payload": {
+        "text": "Runtime validation 8"
+      },
+      "scored_as_planning_accuracy": false
+    },
+    {
+      "case_id": "runtime-09",
+      "category": "retry_recovery",
+      "payload": {
+        "text": "Runtime validation 9"
+      },
+      "scored_as_planning_accuracy": false
+    },
+    {
+      "case_id": "runtime-10",
+      "category": "artifact_trace",
+      "payload": {
+        "text": "Runtime validation 10"
+      },
+      "scored_as_planning_accuracy": false
+    },
+    {
+      "case_id": "runtime-11",
+      "category": "artifact_trace",
+      "payload": {
+        "text": "Runtime validation 11"
+      },
+      "scored_as_planning_accuracy": false
+    },
+    {
+      "case_id": "runtime-12",
+      "category": "artifact_trace",
+      "payload": {
+        "text": "Runtime validation 12"
+      },
+      "scored_as_planning_accuracy": false
+    }
+  ]
+}

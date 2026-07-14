@@ -1,8 +1,12 @@
+import asyncio
+from datetime import datetime, timedelta, timezone
+
 import httpx
 import pytest
 from lingo.mock import MockLLM
 
 from unified_multi_agent_coordination import (
+    AgentRegistryEntry,
     CapabilityRequirement,
     CoordinationAgent,
     CoordinationPlanResult,
@@ -18,6 +22,10 @@ from unified_multi_agent_coordination import (
     SolutionProposal,
     TaskExecutionResult,
     TaskSpec,
+    FeasibilityReport,
+    ValidationContract,
+    LeaseRecord,
+    RemoteRegistryError,
 )
 
 
@@ -517,3 +525,214 @@ async def test_resume_marks_unknown_in_flight_unsafe_attempt_without_redispatch(
     assert result.task_results[0].status == "unknown"
     assert "refusing blind duplicate dispatch" in result.task_results[0].error
     assert calls == []
+
+
+def test_agent_constructor_and_execution_helper_invariants():
+    sdk = CoordinationSdk()
+    with pytest.raises(ValueError, match="must be positive"):
+        CoordinationAgent(sdk=sdk, max_concurrent_dispatches=0)
+    agent = CoordinationAgent(sdk=sdk, self_agent_id="self")
+    for status, expected in (
+        ("unknown", "task_attempt_unknown"),
+        ("completed", "task_attempt_completed"),
+        ("timeout", "task_attempt_timeout"),
+        ("failed", "task_attempt_failed"),
+    ):
+        assert agent._task_event_type(
+            TaskExecutionResult(task_id="t", agent_id="a", status=status)
+        ) == expected
+    assert agent._idempotency_key("s", "p", "t", "a") == "s:p:t:a"
+    assert agent._operation_key("s", 2, "t") == "s:2:t"
+    assert agent._jsonable(ValidationContract()).get("json_schema") == {}
+    assert agent._jsonable("plain") == "plain"
+
+
+def test_coordination_metadata_dependency_artifacts_and_completion_contract():
+    payload = CoordinationAgent._with_coordination_metadata(
+        {"_coordination": {"existing": "kept"}},
+        session_id="s",
+        plan_id="p",
+        plan_generation=2,
+        task_id="t",
+        attempt_id="a",
+        coordinator_id="c",
+        fencing_token=7,
+        idempotency_key="attempt-key",
+        operation_key="operation-key",
+        registry_revision=9,
+    )
+    assert payload["_coordination"]["existing"] == "kept"
+    assert payload["_coordination"]["fencing_token"] == 7
+    task = TaskSpec(task_id="t2", requirement_name="work", depends_on=["t1", "missing"])
+    enriched = CoordinationAgent._with_dependency_artifacts(
+        payload,
+        task,
+        {"t1": [{"name": "summary", "kind": "text"}]},
+    )
+    assert enriched["_coordination"]["inputs_by_task"]["missing"] == []
+    assert enriched["_coordination"]["previous_artifacts"][0]["name"] == "summary"
+
+    proposal = SolutionProposal(
+        tasks=[task],
+        execution_order=["t2"],
+        expected_artifacts=["summary"],
+        completion_criteria=["summary exists"],
+    )
+    completed = TaskExecutionResult(task_id="t2", agent_id="a", status="completed")
+    failed = completed.model_copy(update={"status": "failed"})
+    assert CoordinationAgent._completion_contract_satisfied(
+        proposal, [completed], [{"data": {"summary": "x"}}]
+    ) is True
+    assert CoordinationAgent._completion_contract_satisfied(proposal, [], []) is False
+    assert CoordinationAgent._completion_contract_satisfied(
+        proposal, [failed], [{"name": "summary"}]
+    ) is False
+    assert CoordinationAgent._artifact_named([{"name": "summary"}], "summary") is True
+    assert CoordinationAgent._artifact_named([{"name": "other"}], "summary") is False
+
+
+def test_direct_plan_self_filter_registry_failure_and_auxiliary_noop_paths():
+    requirement = CapabilityRequirement(
+        name="summarize",
+        input_modes=["text"],
+        output_modes=["text"],
+        validation_contract=ValidationContract(json_schema={"type": "object"}),
+    )
+    available = AgentRegistryEntry(
+        agent_id="worker",
+        name="Worker",
+        service_endpoint="http://worker",
+        skills=[requirement],
+    )
+    unavailable = available.model_copy(update={"agent_id": "down", "status": "unavailable"})
+    agent = CoordinationAgent(sdk=CoordinationSdk(), self_agent_id="worker")
+    assert agent._without_self([available, unavailable]) == [unavailable]
+    assert agent._first_exact_skill_agent("summarize", [unavailable]) is None
+    assert agent._first_exact_skill_agent("summarize", [unavailable, available]) == available
+    assert agent._direct_solution_plan(ProblemRequest(user_goal="empty"), [available]) is None
+
+    request = ProblemRequest(
+        user_goal="Summarize",
+        requirements=[requirement],
+        required_artifacts=["summary"],
+    )
+    proposal = agent._direct_solution_plan(request, [available])
+    assert proposal is not None and proposal.tasks[0].assigned_to == "worker"
+    assert agent._direct_solution_plan(request, [unavailable]) is None
+    unassigned = agent._unassigned_solution_plan(request)
+    unchanged = agent._with_auxiliary_specs(
+        request,
+        unassigned,
+        FeasibilityReport(feasible=False, missing_capabilities=[]),
+    )
+    assert unchanged == unassigned
+
+    failure = agent._registry_failure_result(
+        request,
+        {"extra": True},
+        Exception("registry offline"),  # type: ignore[arg-type]
+    )
+    assert failure.feasibility_report.feasible is False
+    assert failure.request.context["extra"] is True
+    string_failure = agent._registry_failure_result(
+        "goal", None, Exception("offline")  # type: ignore[arg-type]
+    )
+    assert string_failure.request.user_goal == "goal"
+
+
+@pytest.mark.asyncio
+async def test_registry_retry_and_lease_renewal_dispatch_paths(monkeypatch):
+    sdk = CoordinationSdk()
+    agent = CoordinationAgent(
+        sdk=sdk,
+        retry_policy=RetryPolicy(registry_retries=2, backoff_s=0),
+        lease_renew_interval_s=0.001,
+    )
+    calls = 0
+
+    async def flaky_snapshot(*, refresh=False):
+        nonlocal calls
+        calls += 1
+        if calls < 3:
+            raise RemoteRegistryError("temporary")
+        return []
+
+    monkeypatch.setattr(sdk, "registry_snapshot", flaky_snapshot)
+    assert await agent._registry_snapshot_with_retry() == []
+    assert calls == 3
+
+    now = datetime.now(timezone.utc)
+    lease = LeaseRecord(
+        session_id="s",
+        holder_id="c",
+        fencing_token=1,
+        expires_at=now + timedelta(seconds=30),
+        heartbeat_at=now,
+    )
+    task = TaskSpec(task_id="t", requirement_name="work")
+    report = FeasibilityReport(feasible=True, matched_agents={"t": "worker"})
+
+    async def completed(*args, **kwargs):
+        del args, kwargs
+        return TaskExecutionResult(task_id="t", agent_id="worker", status="completed")
+
+    monkeypatch.setattr(agent, "_bounded_send_task", completed)
+    result = await agent._send_task_with_lease_renewal(
+        report, task, {}, timeout_s=1, lease=lease
+    )
+    assert result.status == "completed"
+
+    async def slow(*args, **kwargs):
+        del args, kwargs
+        await asyncio.sleep(10)
+
+    async def renewal_failure(_lease):
+        raise RuntimeError("quorum lost during renewal")
+
+    monkeypatch.setattr(agent, "_bounded_send_task", slow)
+    monkeypatch.setattr(agent, "_lease_renewal_loop", renewal_failure)
+    with pytest.raises(RuntimeError, match="quorum lost"):
+        await agent._send_task_with_lease_renewal(
+            report, task, {}, timeout_s=1, lease=lease
+        )
+
+
+def test_fault_injection_order_payload_and_completion_helpers(monkeypatch):
+    agent = CoordinationAgent(sdk=CoordinationSdk())
+    agent._inject_fault("not-enabled")
+    monkeypatch.setenv("COORDINATION_FAULT_AT", "point")
+    monkeypatch.setenv("COORDINATION_FAULT_MODE", "abandon_lease")
+    with pytest.raises(RuntimeError, match="Injected"):
+        agent._inject_fault("point")
+    assert agent._abandon_current_lease is True
+    monkeypatch.setenv("COORDINATION_FAULT_MODE", "raise")
+    with pytest.raises(RuntimeError, match="Injected"):
+        agent._inject_fault("point")
+
+    first = TaskSpec(task_id="first", requirement_name="one")
+    second = TaskSpec(task_id="second", requirement_name="two")
+    ordered = SolutionProposal(tasks=[first, second], execution_order=["second", "missing"])
+    assert agent._ordered_tasks(ordered) == [second]
+    unordered = ordered.model_copy(update={"execution_order": []})
+    assert agent._ordered_tasks(unordered) == [first, second]
+    shared = {"_coordination": {"session_id": "s"}, "first": {"value": 1}}
+    assert agent._payload_for_task(shared, first) == {
+        "value": 1,
+        "_coordination": {"session_id": "s"},
+    }
+    assert agent._payload_for_task({}, first) == {}
+    assert agent._payload_for_task({"value": 2}, first) == {"value": 2}
+
+    no_artifacts = ProblemRequest(user_goal="work")
+    assert agent._completion_criteria(no_artifacts) == ["all task validators pass"]
+    one = CapabilityRequirement(name="one")
+    request = ProblemRequest(
+        user_goal="work", requirements=[one], required_artifacts=["result"]
+    )
+    assert agent._task_expected_artifacts(one, request) == ["result"]
+    two = CapabilityRequirement(name="two")
+    multi = ProblemRequest(
+        user_goal="work", requirements=[one, two], required_artifacts=["one"]
+    )
+    assert agent._task_expected_artifacts(one, multi) == ["one"]
+    assert agent._task_expected_artifacts(two, multi) == []

@@ -1,0 +1,16 @@
+{
+  "audit_type": "internal_consistency_only",
+  "independent_adjudication": false,
+  "case_count": 48,
+  "label_count": 48,
+  "checks": [
+    "document shape and count",
+    "unique scenario identities",
+    "public/hidden identity alignment",
+    "hash alignment",
+    "label status consistency",
+    "minimum justification presence"
+  ],
+  "passed": true,
+  "errors": []
+}

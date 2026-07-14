@@ -132,11 +132,11 @@ services:
       COORDINATION_REGISTRY_URL: http://registry:8000/agents
       COORDINATION_STORE_URL: postgresql://postgres:postgres@coordination-db:5432/coordination
       SLOW_AGENT_URL: http://slow-agent:8000
-      DISTRIBUTED_REPORT_PATH: /app/demo_runs/v0.2/preflight-20260712-07/distributed-system-report.json
+      DISTRIBUTED_REPORT_PATH: /app/evidence/distributed-system-report.json
       DISTRIBUTED_RECOVERY_WAIT_S: 3.5
       DISTRIBUTED_EXIT_RECOVERY_WAIT_S: 2.5
     volumes:
-      - ./demo_runs:/app/demo_runs
+      - ${EVIDENCE_RUN_DIR:?Set EVIDENCE_RUN_DIR to a new directory}:/app/evidence
     depends_on:
       coordination-a:
         condition: service_healthy

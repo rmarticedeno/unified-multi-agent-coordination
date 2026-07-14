@@ -124,6 +124,7 @@ class CapabilityRequirement(BaseModel):
     output_schema: JsonObject = Field(default_factory=dict)
     input_modes: list[str] = Field(default_factory=list)
     output_modes: list[str] = Field(default_factory=list)
+    depends_on_requirement_ids: list[str] = Field(default_factory=list)
     constraints: list[ConstraintSpec] = Field(default_factory=list)
     auxiliary_eligible: bool = False
     required_trust_level: str = "standard"

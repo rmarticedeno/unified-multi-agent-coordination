@@ -33,7 +33,7 @@ The specific objectives are:
   \item Critically synthesize classical multi-agent coordination, symbolic AI, LLM-agent architectures, and interoperability protocols to identify the unresolved integration gap.
   \item Define a protocol-independent theoretical framework for capabilities, tasks, authority, commitments, artifact compatibility, bounded auxiliary capabilities, and feasibility.
   \item Instantiate the framework as an implementable Python coordination agent over middleware SDK that preserves protocol-mediated interoperability while supporting remote, local, and Lingo-authored agents without coupling the theoretical contribution to a particular model provider, agent framework, or communication protocol.
-  \item Evaluate the corrected prototype with an author-labelled, label-hidden, repeated 36-case study, paired controls and ablations, deterministic scenarios, containerized A2A checks, and measured PostgreSQL crash recovery; then report the consensus-backed distributed extension as separate post-study engineering evidence.
+  \item Evaluate the corrected prototype through two evidence tracks: an author-labelled, label-hidden, repeated 36-case conformance study with paired controls and ablations; and a consensus-backed crash-fault campaign over three-, five-, and seven-voter coordinator topologies, complemented by deterministic, A2A, and PostgreSQL checks.
   \item Analyze the scope, limitations, validity threats, and practical implications of the proposed framework.
 \end{enumerate}
 
@@ -46,15 +46,16 @@ The thesis is guided by the following questions:
   \item[RQ2] How should responsibility be divided between LLM-based reasoning and symbolic validation in a heterogeneous coordination workflow?
   \item[RQ3] How can missing narrow linguistic capabilities be introduced without granting unbounded new competence or authority?
   \item[RQ4] What do the measured outcome and process results show about justified acceptance, explicit refusal, traceability, dependency discipline, and recovery relative to paired controls and ablations?
+  \item[RQ5] Under which measured crash, partition, restart, and membership-reconfiguration conditions can physically replicated coordinators preserve one logical authorization state and suppress duplicate committed effects?
 \end{description}
 
 \section{Scope and Contributions}
 
-The thesis focuses on plan-level coordination under a trusted central authorization role and distributed execution. It does not claim to verify the internal reasoning of participating agents, solve Byzantine coordination, or guarantee runtime success after authorization. Its contribution is integrative: a formal separation between linguistic proposal and symbolic authorization; typed, fail-closed feasibility and completion contracts; bounded task-local auxiliary capabilities; durable trace and measured crash recovery; a local A2A admission boundary; and a reproducible method for comparing the integration with paired controls. Established component mechanisms, the new operational integration, prototype evidence, and unproven properties are kept distinct.
+The thesis focuses on plan-level coordination under one trusted logical authorization role and physically replicated execution state. It does not claim to verify the internal reasoning of participating agents, solve Byzantine coordination, or guarantee runtime success after authorization. Its contribution is integrative: a formal separation between linguistic proposal and symbolic authorization; typed, fail-closed feasibility and completion contracts; bounded task-local auxiliary capabilities; durable trace and measured crash recovery; a local A2A admission boundary; consensus-backed replication of the authoritative path; and reproducible conformance and fault-campaign methods. Established component mechanisms, the new operational integration, prototype evidence, and unproven properties are kept distinct.
 
 \section{Methodological Approach}
 
-The research follows a design-science approach. It combines critical literature synthesis, formal and architectural modeling, implementation-oriented specification, and controlled evaluation. The evaluation separates planning feasibility from runtime success, uses pre-registered author labels hidden during inference and repeated local-model runs, tests mechanism ablations, and measures replicated-coordinator ownership through a shared durable store. Chapter~\ref{chap:methodology} explains the executed and gated stages.
+The research follows a design-science approach. It combines critical literature synthesis, formal and architectural modeling, implementation-oriented specification, and controlled evaluation. The evaluation separates planning feasibility from runtime success, uses pre-specified author labels hidden during inference and repeated local-model runs, tests mechanism ablations, and measures replicated-coordinator ownership through a shared durable store. Chapter~\ref{chap:methodology} explains the executed and gated stages.
 
 \section{Thesis Organization}
 

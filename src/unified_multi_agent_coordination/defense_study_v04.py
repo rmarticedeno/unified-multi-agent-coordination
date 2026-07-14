@@ -106,7 +106,9 @@ def collect(corpus_root: Path, output_root: Path, resume_root: Path | None = Non
         run_root.mkdir(parents=True, exist_ok=False)
         provenance = _provenance(prerequisites["corpus_hash"])
         provenance["prompt_version"] = PROMPT_VERSION
-        (run_root / "provenance.json").write_text(json.dumps(provenance, indent=2), encoding="utf-8")
+        with (run_root / "provenance.json").open("x", encoding="utf-8") as handle:
+            json.dump(provenance, handle, indent=2)
+            handle.write("\n")
     else:
         run_root = resume_root
         if (run_root / "collection-complete.json").exists():
@@ -165,12 +167,16 @@ def collect(corpus_root: Path, output_root: Path, resume_root: Path | None = Non
                         "repair_raw_response": repair_raw,
                         "evaluation_status": "raw_output_collected_not_scored",
                     }
-                    path.write_text(json.dumps(record, indent=2), encoding="utf-8")
+                    with path.open("x", encoding="utf-8") as handle:
+                        json.dump(record, handle, indent=2)
+                        handle.write("\n")
             _run(["lms", "unload", "--all"], check=False)
-    (run_root / "collection-complete.json").write_text(json.dumps({
-        "complete": True, "expected_outputs": len(MODELS) * len(SEEDS) * 36,
-        "labels_loaded_during_collection": False,
-    }, indent=2), encoding="utf-8")
+    with (run_root / "collection-complete.json").open("x", encoding="utf-8") as handle:
+        json.dump({
+            "complete": True, "expected_outputs": len(MODELS) * len(SEEDS) * 36,
+            "labels_loaded_during_collection": False,
+        }, handle, indent=2)
+        handle.write("\n")
     return run_root
 
 

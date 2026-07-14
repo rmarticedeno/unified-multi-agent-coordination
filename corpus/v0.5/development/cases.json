@@ -1,0 +1,1166 @@
+{
+  "version": "0.5",
+  "scored": false,
+  "cases": [
+    {
+      "case_id": "v05-pair-101-feasible",
+      "pair_id": "v05-pair-101",
+      "case_type": "matched_feasible",
+      "domain": "document processing",
+      "invalidity_category": "development",
+      "request_text": "Prepare and finalize the declared document processing workflow while preserving authority, data-flow, and completion contracts.",
+      "request": {
+        "user_goal": "Prepare and finalize the declared document processing workflow while preserving authority, data-flow, and completion contracts.",
+        "requirements": [
+          {
+            "name": "Prepare document processing",
+            "requirement_id": "v05-pair-101-prepare",
+            "capability_id": "v05-pair-101-prepare",
+            "input_modes": [
+              "text"
+            ],
+            "output_modes": [
+              "intermediate"
+            ],
+            "required_trust_level": "standard",
+            "side_effect_class": "read_only",
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-101-intermediate"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          },
+          {
+            "name": "Finalize document processing",
+            "requirement_id": "v05-pair-101-finalize",
+            "capability_id": "v05-pair-101-finalize",
+            "input_modes": [
+              "intermediate"
+            ],
+            "output_modes": [
+              "json"
+            ],
+            "depends_on_requirement_ids": [
+              "v05-pair-101-prepare"
+            ],
+            "required_trust_level": "standard",
+            "side_effect_class": "read_only",
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-101-result"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          }
+        ],
+        "required_artifacts": [
+          "v05-pair-101-result"
+        ],
+        "context": {
+          "approved": true,
+          "pair_number": 101
+        }
+      },
+      "registry_snapshot": [
+        {
+          "agent_id": "v05-pair-101-preparer",
+          "name": "Document Processing preparer",
+          "service_endpoint": "https://v05-pair-101-preparer.example/a2a",
+          "trust_level": "standard",
+          "status": "available",
+          "input_modes": [
+            "text"
+          ],
+          "output_modes": [
+            "intermediate"
+          ],
+          "skills": [
+            {
+              "name": "Prepare document processing",
+              "requirement_id": "v05-pair-101-prepare",
+              "capability_id": "v05-pair-101-prepare",
+              "input_modes": [
+                "text"
+              ],
+              "output_modes": [
+                "intermediate"
+              ],
+              "required_trust_level": "standard",
+              "side_effect_class": "read_only",
+              "validation_contract": {
+                "required_artifacts": [
+                  "v05-pair-101-intermediate"
+                ],
+                "json_schema": {
+                  "type": "object"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "agent_id": "v05-pair-101-finisher",
+          "name": "Document Processing finisher",
+          "service_endpoint": "https://v05-pair-101-finisher.example/a2a",
+          "trust_level": "standard",
+          "status": "available",
+          "input_modes": [
+            "intermediate"
+          ],
+          "output_modes": [
+            "json"
+          ],
+          "skills": [
+            {
+              "name": "Finalize document processing",
+              "requirement_id": "v05-pair-101-finalize",
+              "capability_id": "v05-pair-101-finalize",
+              "input_modes": [
+                "intermediate"
+              ],
+              "output_modes": [
+                "json"
+              ],
+              "depends_on_requirement_ids": [
+                "v05-pair-101-prepare"
+              ],
+              "required_trust_level": "standard",
+              "side_effect_class": "read_only",
+              "validation_contract": {
+                "required_artifacts": [
+                  "v05-pair-101-result"
+                ],
+                "json_schema": {
+                  "type": "object"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "payload": {
+        "text": "Input for document processing pair 101"
+      }
+    },
+    {
+      "case_id": "v05-pair-102-feasible",
+      "pair_id": "v05-pair-102",
+      "case_type": "matched_feasible",
+      "domain": "travel logistics",
+      "invalidity_category": "development",
+      "request_text": "Prepare and finalize the declared travel logistics workflow while preserving authority, data-flow, and completion contracts.",
+      "request": {
+        "user_goal": "Prepare and finalize the declared travel logistics workflow while preserving authority, data-flow, and completion contracts.",
+        "requirements": [
+          {
+            "name": "Prepare travel logistics",
+            "requirement_id": "v05-pair-102-prepare",
+            "capability_id": "v05-pair-102-prepare",
+            "input_modes": [
+              "text"
+            ],
+            "output_modes": [
+              "intermediate"
+            ],
+            "required_trust_level": "standard",
+            "side_effect_class": "read_only",
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-102-intermediate"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          },
+          {
+            "name": "Finalize travel logistics",
+            "requirement_id": "v05-pair-102-finalize",
+            "capability_id": "v05-pair-102-finalize",
+            "input_modes": [
+              "intermediate"
+            ],
+            "output_modes": [
+              "json"
+            ],
+            "depends_on_requirement_ids": [
+              "v05-pair-102-prepare"
+            ],
+            "required_trust_level": "standard",
+            "side_effect_class": "read_only",
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-102-result"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          }
+        ],
+        "required_artifacts": [
+          "v05-pair-102-result"
+        ],
+        "context": {
+          "approved": true,
+          "pair_number": 102
+        }
+      },
+      "registry_snapshot": [
+        {
+          "agent_id": "v05-pair-102-preparer",
+          "name": "Travel Logistics preparer",
+          "service_endpoint": "https://v05-pair-102-preparer.example/a2a",
+          "trust_level": "standard",
+          "status": "available",
+          "input_modes": [
+            "text"
+          ],
+          "output_modes": [
+            "intermediate"
+          ],
+          "skills": [
+            {
+              "name": "Prepare travel logistics",
+              "requirement_id": "v05-pair-102-prepare",
+              "capability_id": "v05-pair-102-prepare",
+              "input_modes": [
+                "text"
+              ],
+              "output_modes": [
+                "intermediate"
+              ],
+              "required_trust_level": "standard",
+              "side_effect_class": "read_only",
+              "validation_contract": {
+                "required_artifacts": [
+                  "v05-pair-102-intermediate"
+                ],
+                "json_schema": {
+                  "type": "object"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "agent_id": "v05-pair-102-finisher",
+          "name": "Travel Logistics finisher",
+          "service_endpoint": "https://v05-pair-102-finisher.example/a2a",
+          "trust_level": "standard",
+          "status": "available",
+          "input_modes": [
+            "intermediate"
+          ],
+          "output_modes": [
+            "json"
+          ],
+          "skills": [
+            {
+              "name": "Finalize travel logistics",
+              "requirement_id": "v05-pair-102-finalize",
+              "capability_id": "v05-pair-102-finalize",
+              "input_modes": [
+                "intermediate"
+              ],
+              "output_modes": [
+                "json"
+              ],
+              "depends_on_requirement_ids": [
+                "v05-pair-102-prepare"
+              ],
+              "required_trust_level": "standard",
+              "side_effect_class": "read_only",
+              "validation_contract": {
+                "required_artifacts": [
+                  "v05-pair-102-result"
+                ],
+                "json_schema": {
+                  "type": "object"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "payload": {
+        "text": "Input for travel logistics pair 102"
+      }
+    },
+    {
+      "case_id": "v05-pair-103-feasible",
+      "pair_id": "v05-pair-103",
+      "case_type": "matched_feasible",
+      "domain": "data analytics",
+      "invalidity_category": "development",
+      "request_text": "Prepare and finalize the declared data analytics workflow while preserving authority, data-flow, and completion contracts.",
+      "request": {
+        "user_goal": "Prepare and finalize the declared data analytics workflow while preserving authority, data-flow, and completion contracts.",
+        "requirements": [
+          {
+            "name": "Prepare data analytics",
+            "requirement_id": "v05-pair-103-prepare",
+            "capability_id": "v05-pair-103-prepare",
+            "input_modes": [
+              "text"
+            ],
+            "output_modes": [
+              "intermediate"
+            ],
+            "required_trust_level": "standard",
+            "side_effect_class": "read_only",
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-103-intermediate"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          },
+          {
+            "name": "Finalize data analytics",
+            "requirement_id": "v05-pair-103-finalize",
+            "capability_id": "v05-pair-103-finalize",
+            "input_modes": [
+              "intermediate"
+            ],
+            "output_modes": [
+              "json"
+            ],
+            "depends_on_requirement_ids": [
+              "v05-pair-103-prepare"
+            ],
+            "required_trust_level": "standard",
+            "side_effect_class": "read_only",
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-103-result"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          }
+        ],
+        "required_artifacts": [
+          "v05-pair-103-result"
+        ],
+        "context": {
+          "approved": true,
+          "pair_number": 103
+        }
+      },
+      "registry_snapshot": [
+        {
+          "agent_id": "v05-pair-103-preparer",
+          "name": "Data Analytics preparer",
+          "service_endpoint": "https://v05-pair-103-preparer.example/a2a",
+          "trust_level": "standard",
+          "status": "available",
+          "input_modes": [
+            "text"
+          ],
+          "output_modes": [
+            "intermediate"
+          ],
+          "skills": [
+            {
+              "name": "Prepare data analytics",
+              "requirement_id": "v05-pair-103-prepare",
+              "capability_id": "v05-pair-103-prepare",
+              "input_modes": [
+                "text"
+              ],
+              "output_modes": [
+                "intermediate"
+              ],
+              "required_trust_level": "standard",
+              "side_effect_class": "read_only",
+              "validation_contract": {
+                "required_artifacts": [
+                  "v05-pair-103-intermediate"
+                ],
+                "json_schema": {
+                  "type": "object"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "agent_id": "v05-pair-103-finisher",
+          "name": "Data Analytics finisher",
+          "service_endpoint": "https://v05-pair-103-finisher.example/a2a",
+          "trust_level": "standard",
+          "status": "available",
+          "input_modes": [
+            "intermediate"
+          ],
+          "output_modes": [
+            "json"
+          ],
+          "skills": [
+            {
+              "name": "Finalize data analytics",
+              "requirement_id": "v05-pair-103-finalize",
+              "capability_id": "v05-pair-103-finalize",
+              "input_modes": [
+                "intermediate"
+              ],
+              "output_modes": [
+                "json"
+              ],
+              "depends_on_requirement_ids": [
+                "v05-pair-103-prepare"
+              ],
+              "required_trust_level": "standard",
+              "side_effect_class": "read_only",
+              "validation_contract": {
+                "required_artifacts": [
+                  "v05-pair-103-result"
+                ],
+                "json_schema": {
+                  "type": "object"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "payload": {
+        "text": "Input for data analytics pair 103"
+      }
+    },
+    {
+      "case_id": "v05-pair-104-feasible",
+      "pair_id": "v05-pair-104",
+      "case_type": "matched_feasible",
+      "domain": "software maintenance",
+      "invalidity_category": "development",
+      "request_text": "Prepare and finalize the declared software maintenance workflow while preserving authority, data-flow, and completion contracts.",
+      "request": {
+        "user_goal": "Prepare and finalize the declared software maintenance workflow while preserving authority, data-flow, and completion contracts.",
+        "requirements": [
+          {
+            "name": "Prepare software maintenance",
+            "requirement_id": "v05-pair-104-prepare",
+            "capability_id": "v05-pair-104-prepare",
+            "input_modes": [
+              "text"
+            ],
+            "output_modes": [
+              "intermediate"
+            ],
+            "required_trust_level": "standard",
+            "side_effect_class": "read_only",
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-104-intermediate"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          },
+          {
+            "name": "Finalize software maintenance",
+            "requirement_id": "v05-pair-104-finalize",
+            "capability_id": "v05-pair-104-finalize",
+            "input_modes": [
+              "intermediate"
+            ],
+            "output_modes": [
+              "json"
+            ],
+            "depends_on_requirement_ids": [
+              "v05-pair-104-prepare"
+            ],
+            "required_trust_level": "standard",
+            "side_effect_class": "read_only",
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-104-result"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          }
+        ],
+        "required_artifacts": [
+          "v05-pair-104-result"
+        ],
+        "context": {
+          "approved": true,
+          "pair_number": 104
+        }
+      },
+      "registry_snapshot": [
+        {
+          "agent_id": "v05-pair-104-preparer",
+          "name": "Software Maintenance preparer",
+          "service_endpoint": "https://v05-pair-104-preparer.example/a2a",
+          "trust_level": "standard",
+          "status": "available",
+          "input_modes": [
+            "text"
+          ],
+          "output_modes": [
+            "intermediate"
+          ],
+          "skills": [
+            {
+              "name": "Prepare software maintenance",
+              "requirement_id": "v05-pair-104-prepare",
+              "capability_id": "v05-pair-104-prepare",
+              "input_modes": [
+                "text"
+              ],
+              "output_modes": [
+                "intermediate"
+              ],
+              "required_trust_level": "standard",
+              "side_effect_class": "read_only",
+              "validation_contract": {
+                "required_artifacts": [
+                  "v05-pair-104-intermediate"
+                ],
+                "json_schema": {
+                  "type": "object"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "agent_id": "v05-pair-104-finisher",
+          "name": "Software Maintenance finisher",
+          "service_endpoint": "https://v05-pair-104-finisher.example/a2a",
+          "trust_level": "standard",
+          "status": "available",
+          "input_modes": [
+            "intermediate"
+          ],
+          "output_modes": [
+            "json"
+          ],
+          "skills": [
+            {
+              "name": "Finalize software maintenance",
+              "requirement_id": "v05-pair-104-finalize",
+              "capability_id": "v05-pair-104-finalize",
+              "input_modes": [
+                "intermediate"
+              ],
+              "output_modes": [
+                "json"
+              ],
+              "depends_on_requirement_ids": [
+                "v05-pair-104-prepare"
+              ],
+              "required_trust_level": "standard",
+              "side_effect_class": "read_only",
+              "validation_contract": {
+                "required_artifacts": [
+                  "v05-pair-104-result"
+                ],
+                "json_schema": {
+                  "type": "object"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "payload": {
+        "text": "Input for software maintenance pair 104"
+      }
+    },
+    {
+      "case_id": "v05-pair-105-feasible",
+      "pair_id": "v05-pair-105",
+      "case_type": "matched_feasible",
+      "domain": "research administration",
+      "invalidity_category": "development",
+      "request_text": "Prepare and finalize the declared research administration workflow while preserving authority, data-flow, and completion contracts.",
+      "request": {
+        "user_goal": "Prepare and finalize the declared research administration workflow while preserving authority, data-flow, and completion contracts.",
+        "requirements": [
+          {
+            "name": "Prepare research administration",
+            "requirement_id": "v05-pair-105-prepare",
+            "capability_id": "v05-pair-105-prepare",
+            "input_modes": [
+              "text"
+            ],
+            "output_modes": [
+              "intermediate"
+            ],
+            "required_trust_level": "standard",
+            "side_effect_class": "read_only",
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-105-intermediate"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          },
+          {
+            "name": "Finalize research administration",
+            "requirement_id": "v05-pair-105-finalize",
+            "capability_id": "v05-pair-105-finalize",
+            "input_modes": [
+              "intermediate"
+            ],
+            "output_modes": [
+              "json"
+            ],
+            "depends_on_requirement_ids": [
+              "v05-pair-105-prepare"
+            ],
+            "required_trust_level": "standard",
+            "side_effect_class": "read_only",
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-105-result"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          }
+        ],
+        "required_artifacts": [
+          "v05-pair-105-result"
+        ],
+        "context": {
+          "approved": true,
+          "pair_number": 105
+        }
+      },
+      "registry_snapshot": [
+        {
+          "agent_id": "v05-pair-105-preparer",
+          "name": "Research Administration preparer",
+          "service_endpoint": "https://v05-pair-105-preparer.example/a2a",
+          "trust_level": "standard",
+          "status": "available",
+          "input_modes": [
+            "text"
+          ],
+          "output_modes": [
+            "intermediate"
+          ],
+          "skills": [
+            {
+              "name": "Prepare research administration",
+              "requirement_id": "v05-pair-105-prepare",
+              "capability_id": "v05-pair-105-prepare",
+              "input_modes": [
+                "text"
+              ],
+              "output_modes": [
+                "intermediate"
+              ],
+              "required_trust_level": "standard",
+              "side_effect_class": "read_only",
+              "validation_contract": {
+                "required_artifacts": [
+                  "v05-pair-105-intermediate"
+                ],
+                "json_schema": {
+                  "type": "object"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "agent_id": "v05-pair-105-finisher",
+          "name": "Research Administration finisher",
+          "service_endpoint": "https://v05-pair-105-finisher.example/a2a",
+          "trust_level": "standard",
+          "status": "available",
+          "input_modes": [
+            "intermediate"
+          ],
+          "output_modes": [
+            "json"
+          ],
+          "skills": [
+            {
+              "name": "Finalize research administration",
+              "requirement_id": "v05-pair-105-finalize",
+              "capability_id": "v05-pair-105-finalize",
+              "input_modes": [
+                "intermediate"
+              ],
+              "output_modes": [
+                "json"
+              ],
+              "depends_on_requirement_ids": [
+                "v05-pair-105-prepare"
+              ],
+              "required_trust_level": "standard",
+              "side_effect_class": "read_only",
+              "validation_contract": {
+                "required_artifacts": [
+                  "v05-pair-105-result"
+                ],
+                "json_schema": {
+                  "type": "object"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "payload": {
+        "text": "Input for research administration pair 105"
+      }
+    },
+    {
+      "case_id": "v05-pair-106-feasible",
+      "pair_id": "v05-pair-106",
+      "case_type": "matched_feasible",
+      "domain": "inventory management",
+      "invalidity_category": "development",
+      "request_text": "Prepare and finalize the declared inventory management workflow while preserving authority, data-flow, and completion contracts.",
+      "request": {
+        "user_goal": "Prepare and finalize the declared inventory management workflow while preserving authority, data-flow, and completion contracts.",
+        "requirements": [
+          {
+            "name": "Prepare inventory management",
+            "requirement_id": "v05-pair-106-prepare",
+            "capability_id": "v05-pair-106-prepare",
+            "input_modes": [
+              "text"
+            ],
+            "output_modes": [
+              "intermediate"
+            ],
+            "required_trust_level": "standard",
+            "side_effect_class": "read_only",
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-106-intermediate"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          },
+          {
+            "name": "Finalize inventory management",
+            "requirement_id": "v05-pair-106-finalize",
+            "capability_id": "v05-pair-106-finalize",
+            "input_modes": [
+              "intermediate"
+            ],
+            "output_modes": [
+              "json"
+            ],
+            "depends_on_requirement_ids": [
+              "v05-pair-106-prepare"
+            ],
+            "required_trust_level": "standard",
+            "side_effect_class": "read_only",
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-106-result"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          }
+        ],
+        "required_artifacts": [
+          "v05-pair-106-result"
+        ],
+        "context": {
+          "approved": true,
+          "pair_number": 106
+        }
+      },
+      "registry_snapshot": [
+        {
+          "agent_id": "v05-pair-106-preparer",
+          "name": "Inventory Management preparer",
+          "service_endpoint": "https://v05-pair-106-preparer.example/a2a",
+          "trust_level": "standard",
+          "status": "available",
+          "input_modes": [
+            "text"
+          ],
+          "output_modes": [
+            "intermediate"
+          ],
+          "skills": [
+            {
+              "name": "Prepare inventory management",
+              "requirement_id": "v05-pair-106-prepare",
+              "capability_id": "v05-pair-106-prepare",
+              "input_modes": [
+                "text"
+              ],
+              "output_modes": [
+                "intermediate"
+              ],
+              "required_trust_level": "standard",
+              "side_effect_class": "read_only",
+              "validation_contract": {
+                "required_artifacts": [
+                  "v05-pair-106-intermediate"
+                ],
+                "json_schema": {
+                  "type": "object"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "agent_id": "v05-pair-106-finisher",
+          "name": "Inventory Management finisher",
+          "service_endpoint": "https://v05-pair-106-finisher.example/a2a",
+          "trust_level": "standard",
+          "status": "available",
+          "input_modes": [
+            "intermediate"
+          ],
+          "output_modes": [
+            "json"
+          ],
+          "skills": [
+            {
+              "name": "Finalize inventory management",
+              "requirement_id": "v05-pair-106-finalize",
+              "capability_id": "v05-pair-106-finalize",
+              "input_modes": [
+                "intermediate"
+              ],
+              "output_modes": [
+                "json"
+              ],
+              "depends_on_requirement_ids": [
+                "v05-pair-106-prepare"
+              ],
+              "required_trust_level": "standard",
+              "side_effect_class": "read_only",
+              "validation_contract": {
+                "required_artifacts": [
+                  "v05-pair-106-result"
+                ],
+                "json_schema": {
+                  "type": "object"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "payload": {
+        "text": "Input for inventory management pair 106"
+      }
+    },
+    {
+      "case_id": "v05-pair-107-feasible",
+      "pair_id": "v05-pair-107",
+      "case_type": "matched_feasible",
+      "domain": "customer support",
+      "invalidity_category": "development",
+      "request_text": "Prepare and finalize the declared customer support workflow while preserving authority, data-flow, and completion contracts.",
+      "request": {
+        "user_goal": "Prepare and finalize the declared customer support workflow while preserving authority, data-flow, and completion contracts.",
+        "requirements": [
+          {
+            "name": "Prepare customer support",
+            "requirement_id": "v05-pair-107-prepare",
+            "capability_id": "v05-pair-107-prepare",
+            "input_modes": [
+              "text"
+            ],
+            "output_modes": [
+              "intermediate"
+            ],
+            "required_trust_level": "standard",
+            "side_effect_class": "read_only",
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-107-intermediate"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          },
+          {
+            "name": "Finalize customer support",
+            "requirement_id": "v05-pair-107-finalize",
+            "capability_id": "v05-pair-107-finalize",
+            "input_modes": [
+              "intermediate"
+            ],
+            "output_modes": [
+              "json"
+            ],
+            "depends_on_requirement_ids": [
+              "v05-pair-107-prepare"
+            ],
+            "required_trust_level": "standard",
+            "side_effect_class": "read_only",
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-107-result"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          }
+        ],
+        "required_artifacts": [
+          "v05-pair-107-result"
+        ],
+        "context": {
+          "approved": true,
+          "pair_number": 107
+        }
+      },
+      "registry_snapshot": [
+        {
+          "agent_id": "v05-pair-107-preparer",
+          "name": "Customer Support preparer",
+          "service_endpoint": "https://v05-pair-107-preparer.example/a2a",
+          "trust_level": "standard",
+          "status": "available",
+          "input_modes": [
+            "text"
+          ],
+          "output_modes": [
+            "intermediate"
+          ],
+          "skills": [
+            {
+              "name": "Prepare customer support",
+              "requirement_id": "v05-pair-107-prepare",
+              "capability_id": "v05-pair-107-prepare",
+              "input_modes": [
+                "text"
+              ],
+              "output_modes": [
+                "intermediate"
+              ],
+              "required_trust_level": "standard",
+              "side_effect_class": "read_only",
+              "validation_contract": {
+                "required_artifacts": [
+                  "v05-pair-107-intermediate"
+                ],
+                "json_schema": {
+                  "type": "object"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "agent_id": "v05-pair-107-finisher",
+          "name": "Customer Support finisher",
+          "service_endpoint": "https://v05-pair-107-finisher.example/a2a",
+          "trust_level": "standard",
+          "status": "available",
+          "input_modes": [
+            "intermediate"
+          ],
+          "output_modes": [
+            "json"
+          ],
+          "skills": [
+            {
+              "name": "Finalize customer support",
+              "requirement_id": "v05-pair-107-finalize",
+              "capability_id": "v05-pair-107-finalize",
+              "input_modes": [
+                "intermediate"
+              ],
+              "output_modes": [
+                "json"
+              ],
+              "depends_on_requirement_ids": [
+                "v05-pair-107-prepare"
+              ],
+              "required_trust_level": "standard",
+              "side_effect_class": "read_only",
+              "validation_contract": {
+                "required_artifacts": [
+                  "v05-pair-107-result"
+                ],
+                "json_schema": {
+                  "type": "object"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "payload": {
+        "text": "Input for customer support pair 107"
+      }
+    },
+    {
+      "case_id": "v05-pair-108-feasible",
+      "pair_id": "v05-pair-108",
+      "case_type": "matched_feasible",
+      "domain": "iot inspection",
+      "invalidity_category": "development",
+      "request_text": "Prepare and finalize the declared iot inspection workflow while preserving authority, data-flow, and completion contracts.",
+      "request": {
+        "user_goal": "Prepare and finalize the declared iot inspection workflow while preserving authority, data-flow, and completion contracts.",
+        "requirements": [
+          {
+            "name": "Prepare iot inspection",
+            "requirement_id": "v05-pair-108-prepare",
+            "capability_id": "v05-pair-108-prepare",
+            "input_modes": [
+              "text"
+            ],
+            "output_modes": [
+              "intermediate"
+            ],
+            "required_trust_level": "standard",
+            "side_effect_class": "read_only",
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-108-intermediate"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          },
+          {
+            "name": "Finalize iot inspection",
+            "requirement_id": "v05-pair-108-finalize",
+            "capability_id": "v05-pair-108-finalize",
+            "input_modes": [
+              "intermediate"
+            ],
+            "output_modes": [
+              "json"
+            ],
+            "depends_on_requirement_ids": [
+              "v05-pair-108-prepare"
+            ],
+            "required_trust_level": "standard",
+            "side_effect_class": "read_only",
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-108-result"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          }
+        ],
+        "required_artifacts": [
+          "v05-pair-108-result"
+        ],
+        "context": {
+          "approved": true,
+          "pair_number": 108
+        }
+      },
+      "registry_snapshot": [
+        {
+          "agent_id": "v05-pair-108-preparer",
+          "name": "Iot Inspection preparer",
+          "service_endpoint": "https://v05-pair-108-preparer.example/a2a",
+          "trust_level": "standard",
+          "status": "available",
+          "input_modes": [
+            "text"
+          ],
+          "output_modes": [
+            "intermediate"
+          ],
+          "skills": [
+            {
+              "name": "Prepare iot inspection",
+              "requirement_id": "v05-pair-108-prepare",
+              "capability_id": "v05-pair-108-prepare",
+              "input_modes": [
+                "text"
+              ],
+              "output_modes": [
+                "intermediate"
+              ],
+              "required_trust_level": "standard",
+              "side_effect_class": "read_only",
+              "validation_contract": {
+                "required_artifacts": [
+                  "v05-pair-108-intermediate"
+                ],
+                "json_schema": {
+                  "type": "object"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "agent_id": "v05-pair-108-finisher",
+          "name": "Iot Inspection finisher",
+          "service_endpoint": "https://v05-pair-108-finisher.example/a2a",
+          "trust_level": "standard",
+          "status": "available",
+          "input_modes": [
+            "intermediate"
+          ],
+          "output_modes": [
+            "json"
+          ],
+          "skills": [
+            {
+              "name": "Finalize iot inspection",
+              "requirement_id": "v05-pair-108-finalize",
+              "capability_id": "v05-pair-108-finalize",
+              "input_modes": [
+                "intermediate"
+              ],
+              "output_modes": [
+                "json"
+              ],
+              "depends_on_requirement_ids": [
+                "v05-pair-108-prepare"
+              ],
+              "required_trust_level": "standard",
+              "side_effect_class": "read_only",
+              "validation_contract": {
+                "required_artifacts": [
+                  "v05-pair-108-result"
+                ],
+                "json_schema": {
+                  "type": "object"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "payload": {
+        "text": "Input for iot inspection pair 108"
+      }
+    }
+  ]
+}

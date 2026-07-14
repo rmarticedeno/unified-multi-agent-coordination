@@ -98,6 +98,18 @@ class PlanHydrator:
                         requirement_id=rid,
                         message=f"Invalid dependency {dependency!r} for {rid!r}.",
                     ))
+            declared = set(requirement.depends_on_requirement_ids)
+            proposed = set(selection.depends_on_requirement_ids)
+            if (
+                "depends_on_requirement_ids" in requirement.model_fields_set
+                and declared != proposed
+            ):
+                issues.append(HydrationIssue(
+                    code="invalid_dependency",
+                    requirement_id=rid,
+                    message=(f"Dependencies for {rid!r} must equal the admitted set "
+                             f"{sorted(declared)!r}."),
+                ))
 
         if not issues and self._has_cycle(selections):
             issues.append(HydrationIssue(

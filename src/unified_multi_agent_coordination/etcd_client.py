@@ -129,6 +129,7 @@ class EtcdClient:
         """
 
         last_error: Exception | None = None
+        semantic_error: EtcdError | None = None
         for endpoint in self._ordered_endpoints():
             try:
                 async with self.http_client.stream(
@@ -149,8 +150,13 @@ class EtcdClient:
                         self._remember(endpoint)
                         return ttl
                 raise EtcdError("etcd keep-alive stream closed without a response.")
-            except (httpx.HTTPError, ValueError, EtcdError) as exc:
+            except EtcdError as exc:
+                semantic_error = exc
                 last_error = exc
+            except (httpx.HTTPError, ValueError) as exc:
+                last_error = exc
+        if semantic_error is not None and not _is_quorum_error(str(semantic_error)):
+            raise semantic_error
         raise EtcdQuorumUnavailableError(
             f"No etcd quorum endpoint renewed lease: {last_error}"
         )
@@ -250,21 +256,34 @@ class EtcdClient:
 
     async def post(self, path: str, payload: JsonObject) -> JsonObject:
         last_error: Exception | None = None
+        semantic_error: EtcdError | None = None
         for endpoint in self._ordered_endpoints():
             try:
                 response = await self.http_client.post(
                     f"{endpoint}{path}", json=payload, timeout=self.timeout_s
                 )
-                response.raise_for_status()
-                result = response.json()
+                try:
+                    result = response.json()
+                except ValueError:
+                    result = {}
+                if response.is_error:
+                    message = str(result.get("error") or result.get("message") or response.text)
+                    if 400 <= response.status_code < 500 and not _is_quorum_error(message):
+                        raise EtcdError(message or f"etcd returned HTTP {response.status_code}")
+                    response.raise_for_status()
                 if not isinstance(result, dict):
                     raise EtcdError(f"Invalid etcd response for {path}.")
                 if result.get("error"):
                     raise EtcdError(str(result["error"]))
                 self._remember(endpoint)
                 return result
-            except (httpx.HTTPError, ValueError, EtcdError) as exc:
+            except EtcdError as exc:
+                semantic_error = exc
                 last_error = exc
+            except (httpx.HTTPError, ValueError) as exc:
+                last_error = exc
+        if semantic_error is not None and not _is_quorum_error(str(semantic_error)):
+            raise semantic_error
         raise EtcdQuorumUnavailableError(
             f"No etcd quorum endpoint served {path}: {last_error}"
         )
@@ -347,3 +366,21 @@ def _prefix_end(prefix: bytes) -> bytes:
 
 def _b64(value: bytes) -> str:
     return base64.b64encode(value).decode("ascii")
+
+
+def _is_quorum_error(message: str) -> bool:
+    normalized = message.lower()
+    return any(
+        marker in normalized
+        for marker in (
+            "no leader",
+            "leader changed",
+            "request timed out",
+            "context deadline exceeded",
+            "unhealthy cluster",
+            "quorum",
+            "connection refused",
+            "connecterror",
+            "timeout",
+        )
+    )

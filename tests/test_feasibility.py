@@ -2,6 +2,7 @@ from unified_multi_agent_coordination import (
     AgentRegistryEntry,
     BoundedAuxiliaryCapabilityFactory,
     CapabilityRequirement,
+    ConstraintSpec,
     FeasibilityAnalyzer,
     ProblemRequest,
     SolutionProposal,
@@ -305,3 +306,138 @@ def test_persistent_auxiliary_spec_is_refused():
 
     assert not report.feasible
     assert any("persists" in risk for risk in report.risks)
+
+
+def _constraint(operator, expected=None):
+    return ConstraintSpec(
+        constraint_id=f"constraint-{operator}",
+        source="request_context",
+        path="/value",
+        operator=operator,
+        expected=expected,
+    )
+
+
+def test_constraint_pointer_and_operator_helpers_cover_all_predicates():
+    analyzer = FeasibilityAnalyzer()
+    value = {"nested": {"a/b": [{"~key": 7}]}, "value": 3}
+    assert analyzer._json_pointer(value, "") == (True, value)
+    assert analyzer._json_pointer(value, "/") == (True, value)
+    assert analyzer._json_pointer(value, "nested") == (False, None)
+    assert analyzer._json_pointer(value, "/nested/a~1b/0/~0key") == (True, 7)
+    assert analyzer._json_pointer(value, "/nested/a~1b/4") == (False, None)
+
+    cases = [
+        ("eq", 3, 3, True),
+        ("ne", 4, 3, True),
+        ("lt", 4, 3, True),
+        ("lte", 3, 3, True),
+        ("gt", 2, 3, True),
+        ("gte", 3, 3, True),
+        ("in", [2, 3], 3, True),
+        ("not_in", [4, 5], 3, True),
+        ("contains", 2, [1, 2], True),
+        ("matches", r"a.+", "abc", True),
+    ]
+    for operator, expected, actual, result in cases:
+        assert analyzer._compare_constraint(_constraint(operator, expected), True, actual) is result
+    assert analyzer._compare_constraint(_constraint("exists", True), True, None) is True
+    assert analyzer._compare_constraint(_constraint("exists", False), False, None) is True
+    assert analyzer._compare_constraint(_constraint("lt", "invalid"), True, 3) is False
+    assert analyzer._compare_constraint(_constraint("matches", "["), True, "x") is False
+    assert analyzer._compare_constraint(_constraint("eq", 1), False, None) is False
+
+
+def test_schema_trust_dependency_structure_order_and_cycle_helpers():
+    analyzer = FeasibilityAnalyzer()
+    assert analyzer._trust_satisfies("admin", "standard") is True
+    assert analyzer._trust_satisfies("unknown", "standard") is False
+    assert analyzer._dependency_modes_compatible(["json"], []) is True
+    assert analyzer._dependency_modes_compatible(["json"], ["text"]) is False
+    assert analyzer._schema_compatible({}, {}) is True
+    assert analyzer._schema_compatible({}, {"type": "object"}) is False
+    assert analyzer._schema_compatible({"type": "string"}, {"type": "object"}) is False
+    assert analyzer._schema_compatible(
+        {"type": "object", "required": [], "properties": {}},
+        {"type": "object", "required": ["x"], "properties": {"x": {"type": "string"}}},
+    ) is False
+    assert analyzer._schema_compatible(
+        {
+            "type": "object",
+            "required": ["x"],
+            "properties": {"x": {"type": "number"}},
+        },
+        {
+            "type": "object",
+            "required": ["x"],
+            "properties": {"x": {"type": "string"}},
+        },
+    ) is False
+
+    requirement = CapabilityRequirement(name="work")
+    missing_ids = TaskSpec(task_id="a", requirement_name="work")
+    duplicate = missing_ids.model_copy(update={"task_id": "same"})
+    risks = []
+    assert analyzer._structure_ok([], risks) is False
+    risks = []
+    assert analyzer._structure_ok([duplicate, duplicate], risks) is False
+
+    first = TaskSpec(
+        task_id="first",
+        requirement_name=requirement.name,
+        requirement_id=requirement.requirement_id,
+        capability_id=requirement.capability_id,
+        assigned_to="agent",
+    )
+    second = first.model_copy(update={"task_id": "second", "depends_on": ["first"]})
+    proposal = _proposal(first, second)
+    proposal.execution_order = ["second", "first"]
+    risks = []
+    assert analyzer._execution_order_ok(proposal, risks) is False
+    proposal.execution_order = ["first"]
+    assert analyzer._execution_order_ok(proposal, []) is False
+    assert analyzer._is_acyclic([first, second]) is True
+    cycle_first = first.model_copy(update={"depends_on": ["second"]})
+    assert analyzer._is_acyclic([cycle_first, second]) is False
+    unknown = second.model_copy(update={"depends_on": ["missing"]})
+    assert analyzer._is_acyclic([first, unknown]) is False
+
+
+def test_constraint_context_resolves_task_and_requirement_sources():
+    analyzer = FeasibilityAnalyzer()
+    requirement = CapabilityRequirement(name="work")
+    request = ProblemRequest(user_goal="work", requirements=[requirement], context={"x": 1})
+    proposal = SolutionProposal(constraint_evidence={"proof": True})
+    contexts = {
+        "task": {
+            "requirement": requirement,
+            "task": {"task_id": "task"},
+            "agent": {"agent_id": "agent"},
+            "capability": {"name": "work"},
+        }
+    }
+    request_constraint = ConstraintSpec(
+        constraint_id="request", source="request_context", path="/x", operator="eq", expected=1
+    )
+    evidence_constraint = ConstraintSpec(
+        constraint_id="evidence",
+        source="proposal_evidence",
+        path="/proof",
+        operator="eq",
+        expected=True,
+    )
+    task_constraint = ConstraintSpec(
+        constraint_id="task",
+        source="agent",
+        path="/agent_id",
+        operator="eq",
+        expected="agent",
+        requirement_id=requirement.requirement_id,
+    )
+    missing_constraint = task_constraint.model_copy(
+        update={"constraint_id": "missing", "requirement_id": "missing"}
+    )
+    assert analyzer._constraint_context(request_constraint, request, proposal, contexts) == {"x": 1}
+    assert analyzer._constraint_context(evidence_constraint, request, proposal, contexts) == {"proof": True}
+    assert analyzer._constraint_context(task_constraint, request, proposal, contexts) == {"agent_id": "agent"}
+    assert analyzer._constraint_context(missing_constraint, request, proposal, contexts) == {}

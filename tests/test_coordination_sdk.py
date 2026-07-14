@@ -1,4 +1,5 @@
 import json
+from types import SimpleNamespace
 
 import httpx
 import pytest
@@ -12,6 +13,7 @@ from unified_multi_agent_coordination import (
     RemoteRegistryError,
     SolutionProposal,
     TaskSpec,
+    ValidationContract,
 )
 
 
@@ -371,3 +373,115 @@ async def test_explicit_validation_contract_can_fail_runtime_artifacts():
     assert result.status == "failed"
     assert "label" in result.error
     assert sdk.trace()[-1].event_type == "sdk_task_validation_failed"
+
+
+@pytest.mark.asyncio
+async def test_handler_arity_json_conversion_and_artifact_helpers():
+    sdk = CoordinationSdk()
+    task = TaskSpec(task_id="t", requirement_name="work")
+
+    assert await sdk._call_handler(lambda: "zero", task, {}) == "zero"
+    assert await sdk._call_handler(lambda payload: payload["x"], task, {"x": "one"}) == "one"
+    assert await sdk._call_handler(lambda received, payload: received.task_id + payload["x"], task, {"x": "two"}) == "ttwo"
+
+    model = ValidationContract(required_artifacts=["summary"])
+    assert sdk._jsonable_output(model)["required_artifacts"] == ["summary"]
+    assert sdk._jsonable_output((1, {"x": 2})) == [1, {"x": 2}]
+    assert sdk._jsonable_output(SimpleNamespace(public="yes", _private="no")) == {"public": "yes"}
+    assert sdk._extract_artifacts(None) == []
+    assert sdk._extract_artifacts({"artifact": "value"}) == [{"kind": "value", "value": "value"}]
+    assert sdk._extract_artifacts([1, {"kind": "text"}]) == [
+        {"kind": "value", "value": 1},
+        {"kind": "text"},
+    ]
+    assert sdk._extract_artifacts("scalar") == [{"kind": "value", "value": "scalar"}]
+    assert sdk._artifact_named([{"data": {"Summary": "x"}}], "summary") is True
+    assert sdk._artifact_named([{"name": "other"}], "summary") is False
+    assert sdk._field_present([{"data": {"Score": 1}}], "score") is True
+    assert sdk._field_present([{"other": 1}], "score") is False
+
+
+def test_auxiliary_derivation_payload_and_low_level_helpers():
+    sdk = CoordinationSdk()
+    payload = {"text": "Email a@example.com, phone +1 (212) 555-0101, revenue: 1,234.50"}
+    assert sdk._derive_field("email", {}, payload) == "a@example.com"
+    assert "212" in sdk._derive_field("phone", {}, payload)
+    assert sdk._derive_field("revenue", {}, payload) == 1234.5
+    assert sdk._derive_field("unknown", {}, payload) is None
+    assert sdk._derive_field("known", {"known": 4}, payload) == 4
+    assert sdk._missing_required_fields({"required": "invalid"}, {}) == []
+    assert sdk._missing_required_fields(
+        {"required": ["a", "b"]}, {"a": 1, "data": {"b": 2}}
+    ) == []
+
+    assert sdk._payload_to_text({"text": "plain"}) == "plain"
+    assert sdk._payload_to_text({"value": 1}) == '{"value": 1}'
+    encoded = sdk._payload_to_text({"text": "x", "_coordination": {"session_id": "s"}})
+    assert "_coordination" in encoded
+    assert sdk._idempotency_key_from_payload({}) == ""
+    assert sdk._idempotency_key_from_payload({"_coordination": "invalid"}) == ""
+    assert sdk._idempotency_key_from_payload(
+        {"_coordination": {"idempotency_key": "key"}}
+    ) == "key"
+    assert sdk._coordination_identity({"_coordination": "invalid"}) == {}
+    assert sdk._normalize_agent_id("  Weird Agent!  ") == "weird-agent"
+    assert sdk._normalize_agent_id("!!!") == "agent"
+    assert sdk._capability_modes(
+        [
+            CapabilityRequirement(name="a", input_modes=["text", "json"]),
+            CapabilityRequirement(name="b", input_modes=["json", "audio"]),
+        ],
+        "input_modes",
+    ) == ["text", "json", "audio"]
+
+
+class _ProtoLike:
+    def HasField(self, field):
+        if field == "bad":
+            raise ValueError("not a message field")
+        return field == "present"
+
+
+def test_protocol_registry_and_http_error_helpers():
+    assert CoordinationSdk._has_proto_field(_ProtoLike(), "present") is True
+    assert CoordinationSdk._has_proto_field(_ProtoLike(), "bad") is False
+    assert CoordinationSdk._has_proto_field(SimpleNamespace(value=1), "value") is True
+    assert CoordinationSdk._has_proto_field(SimpleNamespace(), "value") is False
+    assert CoordinationSdk._select_registry_url(None, None) is None
+    assert CoordinationSdk._select_registry_url("same", "same") == "same"
+    with pytest.raises(RemoteRegistryError, match="must be a list"):
+        CoordinationSdk._require_list({}, "agents")
+    with pytest.raises(RemoteRegistryError, match="HTTP error: 503"):
+        CoordinationSdk._raise_for_status(SimpleNamespace(status_code=503))
+    assert CoordinationSdk._looks_like_card({"name": "agent"}) is True
+    assert CoordinationSdk._looks_like_card({"unrelated": True}) is False
+
+
+@pytest.mark.asyncio
+async def test_unknown_agent_timeout_and_local_idempotency_paths():
+    sdk = CoordinationSdk()
+    task = TaskSpec(task_id="t", requirement_name="work")
+    unknown = await sdk.invoke_agent("missing", task, {})
+    assert unknown.status == "failed"
+
+    async def slow(payload):
+        del payload
+        await __import__("asyncio").sleep(0.05)
+        return {"artifacts": []}
+
+    entry = sdk.register_local_agent("Slow", [], slow)
+    timeout = await sdk.invoke_agent(entry.agent_id, task, {}, timeout_s=0.001)
+    assert timeout.status == "timeout"
+
+    calls = []
+    cached = sdk.register_local_agent(
+        "Cached",
+        [],
+        lambda payload: calls.append(payload) or {"artifacts": []},
+    )
+    payload = {"_coordination": {"idempotency_key": "stable"}}
+    first = await sdk.invoke_agent(cached.agent_id, task, payload)
+    second = await sdk.invoke_agent(cached.agent_id, task, payload)
+    assert first == second
+    assert len(calls) == 1
+    assert sdk.trace()[-1].event_type == "sdk_duplicate_task_returned"

@@ -1,0 +1,90 @@
+{
+  "version": "0.5",
+  "corpus_hash": "d3fe4e458554f174ae2040c5758e985116edd42443c8b5d6a49e501477935418",
+  "labels": [
+    {
+      "case_id": "runtime-01",
+      "required_checks": [
+        "authorization_before_dispatch",
+        "trace_order_complete"
+      ]
+    },
+    {
+      "case_id": "runtime-02",
+      "required_checks": [
+        "authorization_before_dispatch",
+        "trace_order_complete"
+      ]
+    },
+    {
+      "case_id": "runtime-03",
+      "required_checks": [
+        "authorization_before_dispatch",
+        "trace_order_complete"
+      ]
+    },
+    {
+      "case_id": "runtime-04",
+      "required_checks": [
+        "authorization_before_dispatch",
+        "trace_order_complete"
+      ]
+    },
+    {
+      "case_id": "runtime-05",
+      "required_checks": [
+        "authorization_before_dispatch",
+        "trace_order_complete"
+      ]
+    },
+    {
+      "case_id": "runtime-06",
+      "required_checks": [
+        "authorization_before_dispatch",
+        "trace_order_complete"
+      ]
+    },
+    {
+      "case_id": "runtime-07",
+      "required_checks": [
+        "authorization_before_dispatch",
+        "trace_order_complete"
+      ]
+    },
+    {
+      "case_id": "runtime-08",
+      "required_checks": [
+        "authorization_before_dispatch",
+        "trace_order_complete"
+      ]
+    },
+    {
+      "case_id": "runtime-09",
+      "required_checks": [
+        "authorization_before_dispatch",
+        "trace_order_complete"
+      ]
+    },
+    {
+      "case_id": "runtime-10",
+      "required_checks": [
+        "authorization_before_dispatch",
+        "trace_order_complete"
+      ]
+    },
+    {
+      "case_id": "runtime-11",
+      "required_checks": [
+        "authorization_before_dispatch",
+        "trace_order_complete"
+      ]
+    },
+    {
+      "case_id": "runtime-12",
+      "required_checks": [
+        "authorization_before_dispatch",
+        "trace_order_complete"
+      ]
+    }
+  ]
+}

@@ -240,15 +240,20 @@ def build_corpus() -> list[dict[str, Any]]:
     return bases + variations
 
 
-def audit_corpus(public_document: dict[str, Any], labels_document: dict[str, Any]) -> dict[str, Any]:
+def audit_corpus(
+    public_document: dict[str, Any],
+    labels_document: dict[str, Any],
+    *,
+    expected_count: int = 36,
+) -> dict[str, Any]:
     """Check internal consistency; this is not independent label adjudication."""
     cases = public_document.get("cases", [])
     labels = labels_document.get("labels", [])
     errors: list[str] = []
     case_ids = [item.get("case_id") for item in cases]
     label_ids = [item.get("case_id") for item in labels]
-    if len(cases) != 36:
-        errors.append(f"expected 36 public cases, found {len(cases)}")
+    if len(cases) != expected_count:
+        errors.append(f"expected {expected_count} public cases, found {len(cases)}")
     if len(set(case_ids)) != len(case_ids):
         errors.append("duplicate public case_id")
     if len(set(label_ids)) != len(label_ids):

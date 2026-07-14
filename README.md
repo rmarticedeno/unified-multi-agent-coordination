@@ -37,7 +37,7 @@ uv run --with-editable . unified-coordination-scenarios --showcase
 ## Version 0.3 Defense Study
 
 Version 0.2 is preserved as historical evidence. Final study numbers must come
-from `demo_runs/v0.3/`. Generate the author-labelled, pre-registered corpus with:
+from `demo_runs/v0.3/`. Generate the historical author-labelled, pre-specified corpus with:
 
 ```powershell
 uv run unified-generate-defense-corpus --output corpus/v0.3
@@ -95,6 +95,26 @@ uv run unified-runtime-ablation-study --output-dir demo_runs/runtime_ablation/<r
 Runtime-only dependency, auxiliary-admission, and trace-evidence controls are
 reported separately from planning comparisons. Unsafe controls are explicit
 experimental classes; production constructors retain secure defaults.
+
+## Version 0.5 Primary Comparison
+
+The defense comparison is the frozen v0.5 dual-arm study. It contains 48
+held-out cases (24 feasible/infeasible matched pairs), eight unscored
+development examples, and 12 separately scored runtime cases. The hybrid and
+direct-LLM arms receive identical public request, registry, payload, and schema
+inputs and at most one schema/referential repair call. Hidden author labels are
+not opened until the exact 1,440-output collection is complete.
+
+```powershell
+uv run unified-generate-defense-corpus-v05 --output corpus/v0.5
+uv run unified-defense-study-v05 --corpus corpus/v0.5 --check
+uv run unified-defense-study-v05 --corpus corpus/v0.5 --collect
+uv run unified-analyze-defense-study-v05 --run demo_runs/v0.5/<run-id> --corpus corpus/v0.5
+```
+
+v0.3 and v0.4 remain immutable historical development evidence. A failed
+pre-specified v0.5 criterion remains valid evidence when source provenance,
+matrix completeness, artifact hashes, and protocol identity all validate.
 
 ## Service
 
@@ -187,10 +207,11 @@ inside the Docker network; they do not inject SDK objects in-process.
 Acceptance command:
 
 ```powershell
+$env:EVIDENCE_RUN_DIR="demo_runs/system/<new-run-id>"
 docker compose -f docker-compose.system.yml up --build --abort-on-container-exit --exit-code-from system-tests
 ```
 
-The test runner writes to the configured immutable version 0.2 preflight path. The harness is
+The test runner requires a new output directory and refuses overwrite. The harness is
 deliberately deterministic: it uses local fixture services, no external LLM or
 vendor cloud calls, and no Kubernetes or service mesh.
 
@@ -199,10 +220,11 @@ store, three coordinator replicas with distinct coordinator ids, and controlled
 lease/fencing recovery checks:
 
 ```powershell
+$env:EVIDENCE_RUN_DIR="demo_runs/postgres/<new-run-id>"
 docker compose -f docker-compose.distributed.yml up --build --abort-on-container-exit --exit-code-from distributed-system-tests
 ```
 
-The runner writes to the configured immutable version 0.2 preflight path with lease
+The runner writes immutable evidence with lease
 conflicts, process-exit recovery, stale-fence rejection, PostgreSQL invariant
 checks, fixture-agent duplicate-dispatch counters, recovery latency, and
 terminal correctness. It targets crash-fault-tolerant replicated execution; it
@@ -245,16 +267,20 @@ operation results; agents without fence support are limited to read-only or
 explicitly idempotent work. Process-local handlers are rejected from
 fault-tolerant plans unless represented as replicated providers.
 
-Run the three-voter smoke harness with:
+Run the repeatable 3/5/7 campaign with:
 
 ```powershell
-docker compose -f docker-compose.etcd-distributed.yml up --build `
-  --abort-on-container-exit --exit-code-from etcd-system-tests
+uv run unified-consensus-matrix `
+  --output-dir demo_runs/consensus/<new-run-id> --trials 3 `
+  --promotion-candidate
 ```
 
-The report is written to
-`demo_runs/etcd-distributed-system-report.json`. It records voter status,
-membership history, leader and revision observations, discovery paths, lease
-conflict behavior, duplicate-effect counts, and terminal correctness. The
-existing JSONL and PostgreSQL harnesses remain supported during evidence-parity
-work.
+The campaign creates isolated Compose project names, fresh volumes, unique
+evidence directories, and separate network faults. It exercises formation at
+three, five, and seven voters, reconfiguration, leader and partition faults,
+quorum restoration, restart and replacement, audit-sink failure, concurrent
+ownership, and controlled crash windows. It records source and dependency
+hashes, image/container identities, topology, timing, fences, terminal state,
+and duplicate-effect observations. Dirty-source output is retained as
+historical but cannot be accepted. The existing JSONL and PostgreSQL harnesses
+remain supported as non-consensus adapters and audit projections.

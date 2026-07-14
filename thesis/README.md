@@ -17,11 +17,7 @@ This directory contains the LaTeX source for the master's thesis associated with
 From this directory:
 
 ```powershell
-New-Item -ItemType Directory -Force build | Out-Null
-pdflatex -output-directory=build main.tex
-bibtex build/main
-pdflatex -output-directory=build main.tex
-pdflatex -output-directory=build main.tex
+latexmk -lualatex -bibtex -interaction=nonstopmode -halt-on-error main.tex
 ```
 
 Generated build output is intentionally ignored by Git.
@@ -35,8 +31,11 @@ root's `demo_runs/` directory:
 - `docker_system_report.json`: Docker A2A system harness report.
 - `distributed_system_report.json`: PostgreSQL-backed replicated-coordinator
   harness report.
-- `etcd-distributed-system-report.json`: three-voter consensus-backed
-  coordinator and distributed-registry smoke report.
+- `v0.4/<run-id>/analysis-v0.4.1-*.json`: corrected immutable comparison
+  analyses; deterministic controls have 36 case rows and model configurations
+  have 540 repeated observations.
+- `consensus/<run-id>/`: immutable 3/5/7 consensus campaign reports. No
+  accepted campaign exists until a clean-source full run passes.
 - `local_llm/`: batched local LLM reference reports for `qwen/qwen3-1.7b`
   and `google/gemma-4-e2b`.
 - `baselines/baseline_report.json`: paired hybrid, rule-only, and LLM-only
@@ -46,12 +45,13 @@ root's `demo_runs/` directory:
 Regenerate the analysis from the repository root with:
 
 ```powershell
-uv run --with-editable . unified-baseline-evaluation
-uv run --with-editable . unified-thesis-results
+uv run unified-analyze-defense-study-v04 --run demo_runs/v0.4/<run-id> `
+  --corpus corpus/v0.4 --output demo_runs/v0.4/<run-id>/<new-analysis>.json
+uv run unified-evidence-preflight --corpus corpus/v0.4 --repository .
 ```
 
 ## Argument structure
 
-The thesis follows this research sequence: introduction and problem formulation; critical state of the art; research methodology; proposed protocol-independent theoretical framework; protocol-adaptable system design; evaluation and results; discussion; and conclusions. The evaluation chapter reports the frozen linguistic studies, the PostgreSQL lease-backed recovery harness, and the later etcd consensus smoke report as distinct evidence sets. It does not treat the post-study distributed extension as part of the pre-registered model comparison or as Byzantine or production validation.
+The thesis follows this research sequence: introduction and problem formulation; critical state of the art; research methodology; proposed protocol-independent theoretical framework; protocol-adaptable system design; evaluation and results; discussion; and conclusions. The evaluation has two core tracks: the frozen linguistic conformance studies and a consensus-backed crash-fault campaign. They remain statistically separate. The current manuscript reports the 3/5/7 campaign as an open evidence gate and does not claim Byzantine, multi-host, or production validation.
 
 The cover follows the University of Havana and Faculty of Mathematics and Computer Science branding supplied in the curated template. Its QR code is generated at compile time from the repository URL declared with `\repositoryurl{...}` in `main.tex`; no separately generated QR image is required.

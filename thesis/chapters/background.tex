@@ -98,6 +98,8 @@ The most relevant pattern for this thesis is a hybrid execution loop. The agent 
 
 Formal-LLM supervises LLM plan generation with a developer-supplied automaton, directly addressing invalid plan sequences \cite{li2024formalllm}. Metagent-P combines LLM world knowledge, symbolic cognitive architecture, and metacognitive verification for open-world planning \cite{zhou2025metagentp}. Verified Multi-Agent Orchestration uses a plan--execute--verify--replan loop and an LLM-based completeness verifier over a question DAG \cite{zhang2026vmao}. The formal-methods position of Zhang et al. argues more broadly that trustworthy agents require integration between LLMs and formal methods \cite{zhang2025trustworthy}. These works make a generic ``neuro-symbolic'' novelty claim untenable; the remaining gap is narrower and operational.
 
+Recent neighboring systems narrow that gap further. LOOP iteratively exchanges PDDL specifications and symbolic feedback rather than performing one-shot translation \cite{virwani2025loop}. Cornelio et al. combine hierarchical decomposition, knowledge-graph RAG, and a symbolic validator that also detects execution failure \cite{cornelio2025hierarchical}. Chimera combines an LLM strategist, symbolic constraints, and causal inference for multi-objective decision making \cite{akarlar2025chimera}. The distinction claimed here is therefore not neuro-symbolic planning in general. It is the joint treatment of heterogeneous agent admission, canonical authority, artifact contracts, refusal before dispatch, receiver-observed operation fencing, and consensus replication of the authorization state.
+
 \begin{table}[htbp]
 \centering
 \caption{Closest verification-first work and the remaining thesis distinction.}

@@ -6,7 +6,8 @@ from contextlib import asynccontextmanager
 import os
 from typing import Any, Literal, cast
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
 from .coordination_agent import CoordinationAgent
@@ -21,13 +22,14 @@ from .coordination_store import (
 from .agent_registry import EtcdAgentRegistry, RegisteredAgent
 from .cluster import (
     ClusterConfiguration,
+    ConfigurationConflictError,
     CoordinatorNodeRecord,
     HmacAuthenticator,
     MembershipManager,
     SignedEnvelope,
 )
 from .cluster_discovery import MulticastDiscoveryResponder
-from .etcd_client import EtcdClient, EtcdUnavailableError
+from .etcd_client import EtcdClient, EtcdQuorumUnavailableError
 from .etcd_store import etcd_endpoints_from_url
 from .models import (
     AgentRegistryEntry,
@@ -185,6 +187,20 @@ def create_app(
         ),
     }
 
+    @app.exception_handler(EtcdQuorumUnavailableError)
+    async def quorum_unavailable_handler(
+        _request: Request, exc: EtcdQuorumUnavailableError
+    ) -> JSONResponse:
+        _increment(app, "quorum_unavailable")
+        return JSONResponse(
+            status_code=503,
+            content={
+                "code": "quorum_unavailable",
+                "retryable": True,
+                "message": str(exc),
+            },
+        )
+
     @app.get("/health")
     async def health() -> dict[str, str]:
         return {"status": "ok", "service": "unified-multi-agent-coordination"}
@@ -206,8 +222,8 @@ def create_app(
             )
             return {"status": "ready", "cluster": cluster_status}
         except Exception as exc:
-            if isinstance(exc, EtcdUnavailableError):
-                _increment(app, "quorum_unavailable")
+            if isinstance(exc, EtcdQuorumUnavailableError):
+                raise
             raise HTTPException(status_code=503, detail=str(exc)) from exc
 
     @app.get("/metrics")
@@ -225,8 +241,8 @@ def create_app(
             }
         try:
             return await app.state.membership.status()
-        except EtcdUnavailableError as exc:
-            raise HTTPException(status_code=503, detail=str(exc)) from exc
+        except EtcdQuorumUnavailableError:
+            raise
 
     @app.post("/internal/cluster/join")
     async def cluster_join(request: SignedEnvelope) -> SignedEnvelope:
@@ -292,10 +308,19 @@ def create_app(
             raw_target = request.payload.get("voter_target")
             if raw_target is None:
                 raise ValueError("voter_target is required.")
+            raw_generation = request.payload.get("expected_generation")
+            if raw_generation is None:
+                raise ValueError("expected_generation is required.")
             target = int(raw_target)
-            updated = await app.state.membership.update_voter_target(target)
+            updated = await app.state.membership.update_voter_target(
+                target,
+                expected_generation=int(raw_generation),
+                updated_by=request.node_id,
+            )
             _increment(app, "configuration_changes")
             return updated
+        except ConfigurationConflictError as exc:
+            raise HTTPException(status_code=409, detail=str(exc)) from exc
         except (TypeError, ValueError) as exc:
             raise HTTPException(status_code=422, detail=str(exc)) from exc
 
@@ -368,6 +393,8 @@ def create_app(
                 timeout_s=request.timeout_s,
                 session_id=request.session_id,
             )
+        except EtcdQuorumUnavailableError:
+            raise
         except (LeaseConflictError, StaleFenceError) as exc:
             _increment(
                 app,
@@ -385,6 +412,8 @@ def create_app(
                 payload=request.payload if request is not None else None,
                 timeout_s=request.timeout_s if request is not None else 30.0,
             )
+        except EtcdQuorumUnavailableError:
+            raise
         except (LeaseConflictError, StaleFenceError) as exc:
             _increment(
                 app,
@@ -445,6 +474,15 @@ def _distributed_components_from_env() -> tuple[
         EtcdClient(etcd_endpoints_from_url(store_url)),
         configuration,
         current_node,
+        reconcile_interval_s=float(
+            os.getenv("COORDINATION_MEMBERSHIP_RECONCILE_INTERVAL_S", "2.0")
+        ),
+        registration_ttl_s=float(
+            os.getenv("COORDINATION_NODE_REGISTRATION_TTL_S", "15.0")
+        ),
+        failed_voter_grace_s=float(
+            os.getenv("COORDINATION_FAILED_VOTER_GRACE_S", "60.0")
+        ),
     )
     def response_payload() -> dict[str, str]:
         return {

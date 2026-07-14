@@ -1,13 +1,13 @@
 x-coordinator-node: &coordinator-node
   build:
     context: .
-  image: unified-multi-agent-coordination:etcd-distributed
+  image: ${COORDINATION_IMAGE:-unified-multi-agent-coordination:etcd-distributed}
   command: ["/app/.venv/bin/unified-coordinator-node"]
   environment: &coordinator-environment
     COORDINATION_CLUSTER_ID: thesis-coordination
     COORDINATION_CLUSTER_SECRET: development-cluster-secret
     COORDINATION_AGENT_REGISTRATION_SECRET: development-agent-secret
-    COORDINATION_VOTER_TARGET: "3"
+    COORDINATION_VOTER_TARGET: ${COORDINATION_VOTER_TARGET:-3}
     COORDINATION_LEASE_TTL_S: "5"
     COORDINATION_LEASE_RENEW_INTERVAL_S: "1"
     COORDINATION_SERVICE_HOST: 0.0.0.0
@@ -16,6 +16,10 @@ x-coordinator-node: &coordinator-node
     COORDINATION_MULTICAST_PORT: "7947"
     COORDINATION_ALLOW_INSECURE_A2A: "true"
     COORDINATION_LEAVE_ON_SHUTDOWN: "false"
+    COORDINATION_MEMBERSHIP_RECONCILE_INTERVAL_S: "1"
+    COORDINATION_NODE_REGISTRATION_TTL_S: "6"
+    COORDINATION_FAILED_VOTER_GRACE_S: "8"
+    COORDINATION_AUDIT_STORE_URL: ${COORDINATION_AUDIT_STORE_URL:-}
   healthcheck:
     test:
       [
@@ -32,7 +36,7 @@ x-coordinator-node: &coordinator-node
 x-agent: &agent
   build:
     context: .
-  image: unified-multi-agent-coordination:etcd-distributed
+  image: ${COORDINATION_IMAGE:-unified-multi-agent-coordination:etcd-distributed}
   command: ["/app/.venv/bin/unified-a2a-fixture-agent"]
   environment: &agent-environment
     COORDINATION_CLUSTER_ID: thesis-coordination
@@ -83,6 +87,8 @@ services:
     depends_on:
       coordination-a:
         condition: service_started
+    ports:
+      - "8001:8000"
 
   coordination-c:
     <<: *coordinator-node
@@ -99,6 +105,106 @@ services:
     depends_on:
       coordination-b:
         condition: service_started
+    ports:
+      - "8002:8000"
+
+  coordination-d:
+    <<: *coordinator-node
+    profiles: ["five", "seven"]
+    environment:
+      <<: *coordinator-environment
+      COORDINATION_NODE_ID: coordination-d
+      COORDINATION_COORDINATOR_ID: coordination-d
+      COORDINATION_DISCOVERY_SEEDS: http://coordination-a:8000,http://coordination-b:8000
+      COORDINATION_ADVERTISE_API_URL: http://coordination-d:8000
+      COORDINATION_ADVERTISE_CLIENT_URL: http://coordination-d:2379
+      COORDINATION_ADVERTISE_PEER_URL: http://coordination-d:2380
+    volumes:
+      - coordination-d-data:/var/lib/unified-coordination/etcd
+    depends_on:
+      coordination-c:
+        condition: service_started
+    ports:
+      - "8003:8000"
+
+  coordination-e:
+    <<: *coordinator-node
+    profiles: ["five", "seven"]
+    environment:
+      <<: *coordinator-environment
+      COORDINATION_NODE_ID: coordination-e
+      COORDINATION_COORDINATOR_ID: coordination-e
+      COORDINATION_DISCOVERY_SEEDS: http://coordination-a:8000,http://coordination-b:8000
+      COORDINATION_ADVERTISE_API_URL: http://coordination-e:8000
+      COORDINATION_ADVERTISE_CLIENT_URL: http://coordination-e:2379
+      COORDINATION_ADVERTISE_PEER_URL: http://coordination-e:2380
+    volumes:
+      - coordination-e-data:/var/lib/unified-coordination/etcd
+    depends_on:
+      coordination-c:
+        condition: service_started
+    ports:
+      - "8004:8000"
+
+  coordination-f:
+    <<: *coordinator-node
+    profiles: ["seven"]
+    environment:
+      <<: *coordinator-environment
+      COORDINATION_NODE_ID: coordination-f
+      COORDINATION_COORDINATOR_ID: coordination-f
+      COORDINATION_DISCOVERY_SEEDS: http://coordination-a:8000,http://coordination-b:8000
+      COORDINATION_ADVERTISE_API_URL: http://coordination-f:8000
+      COORDINATION_ADVERTISE_CLIENT_URL: http://coordination-f:2379
+      COORDINATION_ADVERTISE_PEER_URL: http://coordination-f:2380
+    volumes:
+      - coordination-f-data:/var/lib/unified-coordination/etcd
+    depends_on:
+      coordination-c:
+        condition: service_started
+    ports:
+      - "8005:8000"
+
+  coordination-g:
+    <<: *coordinator-node
+    profiles: ["seven"]
+    environment:
+      <<: *coordinator-environment
+      COORDINATION_NODE_ID: coordination-g
+      COORDINATION_COORDINATOR_ID: coordination-g
+      COORDINATION_DISCOVERY_SEEDS: http://coordination-a:8000,http://coordination-b:8000
+      COORDINATION_ADVERTISE_API_URL: http://coordination-g:8000
+      COORDINATION_ADVERTISE_CLIENT_URL: http://coordination-g:2379
+      COORDINATION_ADVERTISE_PEER_URL: http://coordination-g:2380
+    volumes:
+      - coordination-g-data:/var/lib/unified-coordination/etcd
+    depends_on:
+      coordination-c:
+        condition: service_started
+    ports:
+      - "8006:8000"
+
+  coordination-fault:
+    <<: *coordinator-node
+    profiles: ["chaos"]
+    environment:
+      <<: *coordinator-environment
+      COORDINATION_NODE_ID: coordination-fault
+      COORDINATION_COORDINATOR_ID: coordination-fault
+      COORDINATION_DISCOVERY_SEEDS: http://coordination-a:8000,http://coordination-b:8000
+      COORDINATION_ADVERTISE_API_URL: http://coordination-fault:8000
+      COORDINATION_ADVERTISE_CLIENT_URL: http://coordination-fault:2379
+      COORDINATION_ADVERTISE_PEER_URL: http://coordination-fault:2380
+      COORDINATION_FAULT_AT: ${COORDINATION_FAULT_AT:-after_external_dispatch}
+      COORDINATION_FAULT_MODE: exit
+      COORDINATION_FAULT_EXIT_CODE: "91"
+    volumes:
+      - coordination-fault-data:/var/lib/unified-coordination/etcd
+    depends_on:
+      coordination-c:
+        condition: service_started
+    ports:
+      - "8010:8000"
 
   summarizer:
     <<: *agent
@@ -118,6 +224,8 @@ services:
     depends_on:
       coordination-a:
         condition: service_healthy
+    ports:
+      - "8100:8000"
 
   slow-agent:
     <<: *agent
@@ -151,9 +259,9 @@ services:
       ETCD_ENDPOINTS: http://coordination-a:2379,http://coordination-b:2379,http://coordination-c:2379
       SUMMARIZER_URL: http://summarizer:8000
       SLOW_AGENT_URL: http://slow-agent:8000
-      ETCD_REPORT_PATH: /app/demo_runs/etcd-distributed-system-report.json
+      ETCD_REPORT_PATH: /app/evidence/etcd-distributed-system-report.json
     volumes:
-      - ./demo_runs:/app/demo_runs
+      - ${EVIDENCE_RUN_DIR:?Set EVIDENCE_RUN_DIR to a new directory}:/app/evidence
     depends_on:
       coordination-a:
         condition: service_healthy
@@ -170,5 +278,10 @@ volumes:
   coordination-a-data:
   coordination-b-data:
   coordination-c-data:
+  coordination-d-data:
+  coordination-e-data:
+  coordination-f-data:
+  coordination-g-data:
+  coordination-fault-data:
   summarizer-data:
   slow-agent-data:

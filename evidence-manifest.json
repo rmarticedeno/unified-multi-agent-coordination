@@ -1,75 +1,73 @@
 {
-  "schema_version": "0.4.0",
+  "schema_version": "0.6.0",
   "release_status": "candidate-blocked",
-  "source_commit": "UNFROZEN",
+  "technical_status": "implementation-in-progress",
+  "evaluated_source_commit": "UNFROZEN",
+  "packaging_commit": "UNFROZEN",
   "dirty_state": true,
-  "accepted_evidence": [
-    "demo_runs/v0.3/20260713T013624Z-b9fd8b6f83/provenance.json",
-    "demo_runs/v0.3/20260713T013624Z-b9fd8b6f83/collection-complete.json",
-    "demo_runs/v0.3/20260713T013624Z-b9fd8b6f83/analysis.json",
-    "demo_runs/v0.4/20260713T121506Z-a0ecd2bf0e/provenance.json",
-    "demo_runs/v0.4/20260713T121506Z-a0ecd2bf0e/collection-complete.json",
-    "demo_runs/v0.4/20260713T121506Z-a0ecd2bf0e/analysis.json",
-    "demo_runs/runtime_ablation/v1/analysis.json"
-  ],
-  "study_evidence": {
-    "run_id": "20260713T013624Z-b9fd8b6f83",
-    "case_outputs": 540,
-    "identity_matrix_complete": true,
-    "analysis_sha256": "b70a169d8527b2f4b95a5ef1a7ac083e0eb81874c896f50412352b37b14b03a3",
-    "analysis_reproduction": "two reruns produced the same digest",
-    "claim_boundary": "author-designed and author-labelled conformance corpus; no independent adjudication",
-    "headline_results": {
-      "hybrid_accuracy": 0.5833333333333334,
-      "hybrid_false_acceptance": 0,
-      "hybrid_false_refusal": 225,
-      "llm_only_accuracy": 0.4388888888888889,
-      "llm_only_false_acceptance": 303,
-      "llm_only_false_refusal": 0,
-      "structured_oracle_accuracy": 1.0
+  "accepted_evidence": [],
+  "historical_study_evidence": {
+    "bridge_v03": {
+      "run_id": "20260713T013624Z-b9fd8b6f83",
+      "source_commit": "7d3cb575511f356a94f8ae1e1b297d80a90470a5",
+      "dirty_state": true,
+      "case_outputs": 540,
+      "classification": "historical_dirty_provenance"
+    },
+    "bridge_v04": {
+      "run_id": "20260713T121506Z-a0ecd2bf0e",
+      "source_commit": "7d3cb575511f356a94f8ae1e1b297d80a90470a5",
+      "dirty_state": true,
+      "case_outputs": 540,
+      "analysis_file": "analysis-v0.4.1-final.json",
+      "analysis_sha256": "16a1faf6b3fff50affb8c2a07b9351f37dc90d06a8e766403b8defbdad96c527",
+      "analysis_reproduction": "two reruns using the calibrated timing file produced the same digest",
+      "classification": "historical_dirty_provenance",
+      "claim_boundary": "author-designed and author-labelled conformance corpus; no independent adjudication",
+      "headline_results": {
+        "hybrid_accuracy": 0.9,
+        "hybrid_recall": 0.76,
+        "hybrid_false_acceptance": 0,
+        "hybrid_false_refusal": 54,
+        "llm_only_accuracy": 0.5537037037037037,
+        "llm_only_false_acceptance": 66,
+        "llm_only_false_refusal": 175,
+        "rule_only_case_accuracy": 0.5833333333333334,
+        "structured_oracle_case_accuracy": 1.0,
+        "feasible_cases_with_majority_acceptance": 15,
+        "qwen_1_7b_recall": 0.28,
+        "gemma_e2b_recall": 1.0,
+        "qwen_8b_recall": 1.0,
+        "all_preregistered_criteria_met": false
+      }
     }
   },
-  "bridge_redesign_evidence": {
-    "run_id": "20260713T121506Z-a0ecd2bf0e",
-    "corpus_version": "0.4",
-    "corpus_hash": "a0ecd2bf0ebc6740a205108e45385eb1e2e7d7ae00dacab38bc123c8ca49aa2d",
-    "case_outputs": 540,
-    "bounded_repairs": 424,
-    "identity_matrix_complete": true,
-    "analysis_sha256": "1823095063a91ba21df8ff31fd5580b451f594e80f51197032aca7ebdb093c9e",
-    "analysis_reproduction": "two reruns produced the same digest",
-    "headline_results": {
-      "hybrid_accuracy": 0.9,
-      "hybrid_recall": 0.76,
-      "hybrid_false_acceptance": 0,
-      "hybrid_false_refusal": 54,
-      "feasible_cases_with_majority_acceptance": 15,
-      "qwen_1_7b_recall": 0.28,
-      "gemma_e2b_recall": 1.0,
-      "qwen_8b_recall": 1.0,
-      "all_preregistered_criteria_met": false
-    }
-  },
+  "clean_replication_evidence": null,
+  "v05_study_evidence": null,
   "runtime_ablation_evidence": {
+    "analysis_file": "demo_runs/runtime_ablation/v1/analysis.json",
     "observations": 350,
     "secure_default_violations": 0,
     "without_dependency_gating_violations": 40,
     "without_auxiliary_bounds_violations": 40,
     "without_durable_trace_evidence_violations": 50,
-    "observations_sha256": "7617bb8da5308b9a22a7ed7fe12c93d7e0b80484b2a18de2ee44ea3d2e3b7bbf"
+    "observations_sha256": "7617bb8da5308b9a22a7ed7fe12c93d7e0b80484b2a18de2ee44ea3d2e3b7bbf",
+    "classification": "historical_missing_clean_source_attestation"
   },
-  "preflight_evidence": {
-    "corpus_version": "0.3",
-    "corpus_hash": "b9fd8b6f8398eaf33b8676e14288f0d3c4956cca5a9b915ca7b68990167c9c1d",
-    "label_provenance": "author_labeled; frozen; no independent adjudication",
-    "tests": "95 passing",
-    "coverage": "60 percent overall; release threshold not met",
-    "deterministic": "7/7",
-    "docker_a2a": "demo_runs/v0.2/preflight-20260712-03/docker-system-report.json",
-    "distributed": "demo_runs/v0.2/preflight-20260712-07/distributed-system-report.json",
-    "third_party_a2a": "official vendored Hello World sample test passing",
-    "system_image": "sha256:4719ab3b6c19e1f4d99eadb80eeb0f41573508182197ce0af6715d63bb515f3a",
-    "distributed_image": "sha256:d852c6dc8dbe67e349d0f551da3d98860c621261de80631bddb62c32cd71203d"
+  "consensus_campaign_evidence": null,
+  "historical_system_evidence": [
+    "demo_runs/v0.2/preflight-20260712-03/docker-system-report.json",
+    "demo_runs/v0.2/preflight-20260712-07/distributed-system-report.json",
+    "demo_runs/etcd-distributed-system-report.json"
+  ],
+  "current_local_validation": {
+    "test_count": 213,
+    "production_branch_coverage_percent": 90.15,
+    "tests": "213 passing on Windows",
+    "coverage": "90.15 percent production branch coverage; every declared production aggregate and critical-module threshold passes; the all-source report is 80.19 percent because it includes historical and executable evidence modules outside the production aggregate",
+    "deterministic": "historical 7/7",
+    "third_party_a2a": "upstream-derived fixture pinned to a2a-samples commit 1bb0871294af52fdb2c7e5173e43fade0eb008ba",
+    "consensus_smoke": "campaign machinery preserved three failed dirty-source trials; Docker image resolution was blocked by GHCR TLS timeouts and no safety observation was counted"
   },
   "legacy_evidence": [
     "demo_runs/end_to_end_scenarios.json",
@@ -80,8 +78,10 @@
     "demo_runs/thesis_analysis"
   ],
   "open_gates": [
-    "coverage thresholds",
-    "final institutional metadata",
-    "clean frozen commit and Docker digests"
+    "technical: clean complete v0.5 dual-arm collection from an evidence-candidate commit",
+    "technical: accepted clean-source 3/5/7 consensus campaign",
+    "technical: final immutable Docker A2A and PostgreSQL evidence",
+    "administrative: advisor and tribunal metadata",
+    "administrative: final repository commit, tag, push, and container digests"
   ]
 }

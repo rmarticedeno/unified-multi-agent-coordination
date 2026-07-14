@@ -8,6 +8,8 @@ __pycache__/
 .mypy_cache/
 .ruff_cache/
 .coverage
+coverage.json
+*-coverage.json
 htmlcov/
 dist/
 build/
@@ -31,4 +33,24 @@ build/
 *.synctex.gz
 *.toc
 thesis/build/
-a2a-samples/
+tmp/
+local-artifacts/
+
+# Local upstream checkout used only to establish vendoring provenance. The
+# reproducible fixture itself lives under vendor/a2a-samples/ and is tracked.
+/a2a-samples/
+
+# Historical/local convenience outputs are regenerated and are not primary
+# immutable evidence. Versioned evidence referenced by the manifest remains
+# tracked explicitly.
+/demo_runs/baselines/
+/demo_runs/distributed_system_report.json
+/demo_runs/docker-bad-registry-ledger.jsonl
+/demo_runs/docker-ledger.jsonl
+/demo_runs/docker_system_report.json
+/demo_runs/local_llm/
+/demo_runs/thesis_analysis/
+/demo_runs/v0.3/20260713T013428Z-b9fd8b6f83/
+/demo_runs/v0.3/20260713T013453Z-b9fd8b6f83/
+/demo_runs/v0.3/20260713T013517Z-b9fd8b6f83/
+/demo_runs/v0.3/20260713T013540Z-b9fd8b6f83/

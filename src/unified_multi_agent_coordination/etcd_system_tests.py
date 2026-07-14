@@ -80,6 +80,12 @@ async def run_etcd_system_tests() -> JsonObject:
 
     checks = {
         "three_voters": all(item.get("active_voters") == 3 for item in statuses),
+        "membership_steady_state": all(
+            item.get("steady_state") is True
+            and item.get("pending_membership_changes") == 0
+            and item.get("role") == "voter"
+            for item in statuses
+        ),
         "registry_is_cluster_wide": any(
             item.get("agent_id") == "summarizer" for item in registry.get("agents", [])
         ),
@@ -131,7 +137,8 @@ async def _wait_for_voters(
             if all(
                 response.status_code == 200
                 and body.get("active_voters") == target
-                and not body.get("degraded")
+                and body.get("steady_state") is True
+                and body.get("pending_membership_changes") == 0
                 for response, body in zip(responses, last, strict=True)
             ):
                 return last
@@ -197,7 +204,9 @@ def main() -> None:
     report = asyncio.run(run_etcd_system_tests())
     path = Path(os.getenv("ETCD_REPORT_PATH", "demo_runs/etcd-system-report.json"))
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(report, indent=2, sort_keys=True), encoding="utf-8")
+    with path.open("x", encoding="utf-8") as handle:
+        json.dump(report, handle, indent=2, sort_keys=True)
+        handle.write("\n")
     if not report["passed"]:
         raise SystemExit(1)
 

@@ -1,0 +1,25 @@
+{
+  "repository": "https://github.com/a2aproject/a2a-samples.git",
+  "commit": "1bb0871294af52fdb2c7e5173e43fade0eb008ba",
+  "commit_date": "2026-07-07T14:12:01+02:00",
+  "source_path": "samples/python/agents/helloworld",
+  "sdk_version": "1.1.0",
+  "license": "Apache-2.0",
+  "license_file": "../../../LICENSE",
+  "upstream_git_blobs": {
+    "__main__.py": "git-blob-sha1:1e6f0e573b6053d65918e3ef408c991ff36ae636",
+    "agent_executor.py": "git-blob-sha1:9e6bb4dd3b0d50d7aba6b4b10a7eb3b1677b969a",
+    "requirements.txt": "git-blob-sha1:15bc913ad3952fb26b5d670aaa549612c0cd7ca8"
+  },
+  "local_sha256": {
+    "__main__.py": "d2e8f20f467530cc9339bb69146e21174a01dfff9349325fa586c3dd29e26e49",
+    "agent_executor.py": "b5637892848ee421284c8088848007febf27aa601a2d20606823837358dd258f",
+    "requirements.txt": "7688e3cd447ea6e76a0db0dc561404d3206a76929eac2f184953b8031a5195fb",
+    "README.md": "37bd7a8c340d07ba245f1b9addd3ad454ec0dd89518be481d3b035437803ce8b"
+  },
+  "license_sha256": "151e04da69f213571dc0e237dd4973be4ca3806b25f82b765caf292d97f0c63a",
+  "local_adaptations": [
+    "Upstream instructional comments were removed from __main__.py and agent_executor.py; executable behavior and protocol objects are unchanged.",
+    "The repository test launches __main__.py directly and supplies its own A2A client."
+  ]
+}

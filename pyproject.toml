@@ -5,7 +5,7 @@ description = "Fail-closed neuro-symbolic coordination for heterogeneous autonom
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
-    "a2a-sdk>=0.3.0",
+    "a2a-sdk==1.1.0",
     "asyncpg>=0.31.0",
     "fastapi>=0.125.0",
     "httpx>=0.28.1",
@@ -34,9 +34,14 @@ unified-defense-study = "unified_multi_agent_coordination.defense_study:main"
 unified-analyze-defense-study = "unified_multi_agent_coordination.study_analysis:main"
 unified-evidence-preflight = "unified_multi_agent_coordination.evidence_preflight:main"
 unified-runtime-ablation-study = "unified_multi_agent_coordination.runtime_ablation_study:main"
+unified-consensus-matrix = "unified_multi_agent_coordination.consensus_campaign:main"
 unified-generate-defense-corpus-v04 = "unified_multi_agent_coordination.corpus_v04:main"
 unified-defense-study-v04 = "unified_multi_agent_coordination.defense_study_v04:main"
 unified-analyze-defense-study-v04 = "unified_multi_agent_coordination.study_analysis_v04:main"
+unified-generate-defense-corpus-v05 = "unified_multi_agent_coordination.corpus_v05:main"
+unified-defense-study-v05 = "unified_multi_agent_coordination.defense_study_v05:main"
+unified-analyze-defense-study-v05 = "unified_multi_agent_coordination.study_analysis_v05:main"
+unified-thesis-evidence = "unified_multi_agent_coordination.thesis_evidence:main"
 
 [build-system]
 requires = ["hatchling"]
@@ -56,10 +61,24 @@ dev = [
 
 [tool.coverage.run]
 source = ["unified_multi_agent_coordination"]
+branch = true
+omit = [
+    "*/a2a_fixture_agent.py",
+    "*/distributed_system_tests.py",
+    "*/docker_system_tests.py",
+    "*/end_to_end_scenarios.py",
+    "*/etcd_system_tests.py",
+    "*/fixture_registry.py",
+    "*/thesis_results.py",
+]
 
 [tool.coverage.report]
 show_missing = true
 skip_covered = true
+# The all-source report includes historical studies and executable evidence
+# harnesses. scripts/check_coverage.py is the authoritative production and
+# per-module gate.
+fail_under = 0
 
 [tool.ruff]
 line-length = 100

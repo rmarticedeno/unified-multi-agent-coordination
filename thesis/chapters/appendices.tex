@@ -9,14 +9,18 @@ The repository root contains \texttt{REPRODUCING.md}, \texttt{evidence-manifest.
 uv sync --locked --group dev
 uv run ruff check src tests scripts
 uv run mypy src/unified_multi_agent_coordination
-uv run pytest --cov
+uv run pytest --cov --cov-branch --cov-report=json
+uv run python scripts/check_coverage.py coverage.json
 uv run unified-coordination-scenarios --no-output
+$env:EVIDENCE_RUN_DIR="demo_runs/system/<new-run-id>"
 docker compose -f docker-compose.system.yml up --build \
   --abort-on-container-exit --exit-code-from system-tests
+$env:EVIDENCE_RUN_DIR="demo_runs/postgres/<new-run-id>"
 docker compose -f docker-compose.distributed.yml up --build \
   --abort-on-container-exit --exit-code-from distributed-system-tests
-docker compose -f docker-compose.etcd-distributed.yml up --build \
-  --abort-on-container-exit --exit-code-from etcd-system-tests
+uv run unified-consensus-matrix \
+  --output-dir demo_runs/consensus/<new-run-id> --trials 3 \
+  --promotion-candidate
 uv run unified-defense-study --check
 uv run unified-analyze-defense-study \
   demo_runs/v0.3/20260713T013624Z-b9fd8b6f83 \
@@ -25,14 +29,17 @@ uv run unified-analyze-defense-study \
 uv run unified-defense-study-v04 --corpus corpus/v0.4 --check
 uv run unified-analyze-defense-study-v04 \
   --run demo_runs/v0.4/20260713T121506Z-a0ecd2bf0e \
-  --corpus corpus/v0.4
+  --corpus corpus/v0.4 \
+  --output demo_runs/v0.4/20260713T121506Z-a0ecd2bf0e/<new-analysis>.json
 uv run unified-runtime-ablation-study \
   --output-dir demo_runs/runtime_ablation/<new-run-id>
+uv run unified-evidence-preflight --require-release \
+  --corpus corpus/v0.5 --repository .
 \end{Verbatim}
 
 \chapter{Predicate Refinement and Claim--Evidence Matrix}
 
-\begin{longtable}{p{0.22\textwidth}p{0.35\textwidth}p{0.33\textwidth}}
+\begin{longtable}{>{\raggedright\arraybackslash}p{0.22\textwidth}>{\raggedright\arraybackslash}p{0.35\textwidth}>{\raggedright\arraybackslash}p{0.33\textwidth}}
 \toprule
 \textbf{Claim or predicate} & \textbf{Implementation refinement} & \textbf{Evidence required} \\
 \midrule
@@ -43,11 +50,28 @@ Verifiability & Task, requirement or capability validation contract & Validatorl
 Dependency safety & Completed prerequisites and declared artifacts only & Failure/timeout/unknown branch tests \\
 Traceability & Persisted session, plan, task and attempt events & Ordering, restart and isolation tests \\
 Recovery & Lease, fencing, idempotency and unknown-side-effect policy & PostgreSQL crash-fault harness \\
-Distributed authority & etcd/Raft state, learner-first membership, odd voter target and quorum fail-closed behavior & Three-voter report plus planned partition and resize matrix \\
-RQ4 comparison & Author-labelled, label-hidden v0.3 and v0.4 studies & Two immutable 540-output matrices and reproducible digests \\
+Distributed authority & etcd/Raft state, learner-first membership, generation CAS, resumable phases, and quorum fail-closed behavior & Historical three-voter report plus required clean 3/5/7 campaign \\
+RQ4 comparison & Fresh author-labelled, label-hidden v0.5 matched-pair study & Exact 1,440-output dual-arm matrix, deterministic analysis, and reproducible digest \\
 Runtime mechanisms & Secure-default policy surfaces and explicit negative controls & Separate 350-observation runtime-only bundle \\
 \bottomrule
 \end{longtable}
+
+\section{Research-Question Traceability}
+
+\begingroup
+\setlength{\tabcolsep}{3pt}
+\begin{longtable}{>{\raggedright\arraybackslash}p{0.08\textwidth}>{\raggedright\arraybackslash}p{0.27\textwidth}>{\raggedright\arraybackslash}p{0.27\textwidth}>{\raggedright\arraybackslash}p{0.28\textwidth}}
+\toprule
+\textbf{RQ} & \textbf{Claim} & \textbf{Mechanism and evidence} & \textbf{Current boundary} \\
+\midrule
+RQ1 & Executability requires explicit identity, coverage, authority, dependencies, artifacts, validation, and completion. & Typed models, feasibility predicates, hydration, artifact and trace tests. & Prototype predicates; no proof for arbitrary domains. \\
+RQ2 & Linguistic proposal can be separated from deterministic authorization. & Non-authoritative drafts, symbolic gate, authorization-before-dispatch tests, and four v0.5 analysis views. & Author-labelled cases and small local models; final clean matrix pending. \\
+RQ3 & Temporary language capabilities can be bounded and auditable. & Task-local auxiliary specification, admission and expiry tests, separate runtime ablation. & Read-only fixture scope; no hostile generated code. \\
+RQ4 & The constrained bridge is compared fairly with a direct LLM coordinator. & Fresh v0.5 matched pairs, equal public inputs and call budgets, within-model McNemar tests, and pair-cluster bootstrap. & Exact clean 1,440-output matrix pending; no independent labels. \\
+RQ5 & A replicated coordinator should preserve one authorization state under measured crash and reconfiguration faults while a majority survives. & etcd store, monotonic fences, durable membership state machine, quorum error contract, 3/5/7 campaign. & Mechanism and unit evidence exist; clean full campaign absent, so the empirical answer is open. \\
+\bottomrule
+\end{longtable}
+\endgroup
 
 \chapter{Tribunal Questions and Defensible Boundaries}
 
@@ -59,7 +83,8 @@ Runtime mechanisms & Secure-default policy surfaces and explicit negative contro
   \item[Is fencing consensus?] Fencing alone is not consensus. The legacy PostgreSQL mode serializes through one database; the etcd mode separately uses Raft consensus to order authoritative state. Fencing then prevents stale session owners from committing and must also be enforced by effectful receivers.
   \item[Does the cluster scale automatically?] Membership of already running coordinator nodes is discovered and reconciled automatically. The software does not provision compute, and permanent majority loss requires operator-led disaster recovery.
   \item[Is there no single point of failure?] With at least three voters placed in independent failure domains, no single coordinator or etcd-member crash stops the authoritative path. One voter, one Docker host, shared network infrastructure, and a cluster-wide secret remain single-failure or correlated-failure risks.
-  \item[How broad is A2A interoperability?] Controlled fixtures plus one vendored official sample. This is evidence of concrete compatibility, not universal conformance.
-  \item[Did the hybrid work empirically?] Version 0.3 universally refused feasible observations. The constrained v0.4 bridge reached 90.0\% accuracy, 76.0\% feasible recall, zero false acceptance, and majority acceptance for all feasible cases. It still failed the pre-registered per-model floor because Qwen3 1.7B recall was 28\%.
+  \item[How broad is A2A interoperability?] Controlled fixtures plus one vendored, upstream-derived sample pinned to an upstream commit. This is evidence of concrete compatibility, not universal conformance.
+  \item[Did the hybrid work empirically?] Version 0.3 universally refused feasible observations, while v0.4 improved but failed its pre-specified per-model floor. Those are historical development results. The defensible RQ4 answer must come from the first complete clean v0.5 dual-arm matrix, including an unfavorable or non-significant result if that is what the frozen protocol produces.
   \item[Why trust the comparison?] The corpus and author labels were frozen before collection, labels were hidden during inference, all 540 identities were verified, and analysis is deterministic. However, labels were not independently adjudicated, so claims remain limited to framework conformance on this designed corpus.
+  \item[Is RQ5 answered?] Not yet in the current artifact state. The state machine, error contract, tests, and repeatable campaign exist, but only a clean, complete 3/5/7 campaign can support the empirical answer. The historical three-voter smoke report is development evidence, not a substitute.
 \end{description}

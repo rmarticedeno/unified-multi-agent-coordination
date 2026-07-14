@@ -290,6 +290,35 @@ The framework has several limitations. Its contractual reasoning depends on the 
 
 The coordinator is a logical concentration of authority and state. This simplifies accountability and makes the feasibility decision explicit, but it creates a bottleneck and a single point of failure if realized as one volatile process or one non-replicated database. The implementation mitigates this physical failure mode by replicating authoritative registry and session state through etcd/Raft and fencing session ownership. The request, registry snapshot, authorization decision, commitments, observations, artifacts, attempts, terminal result, and trace can therefore survive a coordinator crash while a majority of voters remains available. This is crash-fault tolerance, not Byzantine agreement; majority loss stops progress, and malicious coordinators, adversarial registries, and compromised consensus members remain outside the framework.
 
+\section{Consensus-Backed Safety and Conditional Liveness}
+
+Replication does not change the logical authorization model: it supplies one ordered authoritative history to multiple physical coordinator processes. The implementation therefore relies on two classes of property. Safety properties must hold in every measured execution, including when progress stops. Liveness properties are conditional on eventual communication, a surviving voter majority, functioning storage, and agents that eventually answer or time out. Raft ordering is inherited from the pinned etcd implementation; the application remains responsible for the state-machine predicates layered above that order.
+
+\begin{table}[htbp]
+\centering
+\caption{Distributed properties, enforcement mechanisms, and evidence boundaries.}
+\label{tab:distributed-properties}
+\begingroup
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.16\textwidth}>{\raggedright\arraybackslash}p{0.33\textwidth}>{\raggedright\arraybackslash}p{0.22\textwidth}>{\raggedright\arraybackslash}p{0.20\textwidth}}
+\toprule
+\textbf{Property} & \textbf{Mechanism} & \textbf{Campaign observation} & \textbf{Boundary} \\
+\midrule
+Single owner & Lease acquisition and revision-checked owner comparison & Concurrent same-session requests & One committed owner, not one network request \\
+Monotonic fence & Authoritative revision token checked on every mutation & Stale-owner takeover and write & External agents must enforce the fence \\
+Attempt order & Attempt-start invariant before result commitment & Crash-window recovery & Does not prove agent-side semantic correctness \\
+Terminal uniqueness & Compare-and-swap terminal record & Resume after coordinator crash & Duplicate responses may still occur \\
+Quorum safety & Linearizable etcd operations with no fallback backend & Majority loss and restoration & Crash/omission faults only \\
+Membership serialization & Lease-held reconciler, configuration generation, and resumable operation record & $3\leftrightarrow5$ and $5\leftrightarrow7$ & Running nodes are supplied externally \\
+Effect suppression & Stable operation key plus receiver-side durable deduplication and fence & Crash after external dispatch & Not an exactly-once guarantee for arbitrary agents \\
+Conditional progress & Raft election, endpoint rotation, lease expiry, and recovery rules & Leader kill, minority partition, restart & Requires eventual synchrony and majority \\
+\bottomrule
+\end{tabular}
+\endgroup
+\end{table}
+
+No mutation is authorized from a stale or non-quorate snapshot, and no process may silently fall back from etcd to JSONL or PostgreSQL when etcd is configured as authoritative. Membership change is itself state: configuration updates carry an expected generation, and an add, promotion, or removal is represented by one durable operation whose phase can be reconciled against the actual etcd member list after coordinator failure.
+
 Deterministic validation has a deliberately limited meaning. A validator can confirm contract conformance and available evidence; it cannot guarantee the truth, usefulness, or safety of every semantically open-ended artifact. Human review, redundant agents, domain-specific verification, or runtime monitoring may be required for high-impact tasks. Likewise, an accepted plan establishes pre-execution justification rather than guaranteed completion. Agents can fail, networks can partition, and external resources can change after authorization. The definitions and predicates are therefore an executable formalization of the proposed boundary, not a proof of global soundness, completeness, decidability limits, or computational complexity for arbitrary agent ecosystems.
 
 Auxiliary capabilities are intentionally conservative. Restricting them to approved methods prevents the framework from treating code generation or model generation as an unbounded source of new competence, but it also means that some technically solvable requests will be rejected until a suitable method or agent is admitted. This is a purposeful tradeoff: the framework values a defensible boundary over maximal apparent coverage.

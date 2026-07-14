@@ -54,8 +54,12 @@ def validate_frozen_labels(corpus_root: Path) -> dict[str, Any]:
     public = json.loads((corpus_root / "public/cases.json").read_text(encoding="utf-8"))
     hidden = json.loads((corpus_root / "hidden/reference-labels.json").read_text(encoding="utf-8"))
     provenance = json.loads((corpus_root / "label-provenance.json").read_text(encoding="utf-8"))
-    if len(public.get("cases", [])) != 36:
-        raise RuntimeError("The public corpus must contain exactly 36 cases.")
+    manifest_path = corpus_root / "manifest.json"
+    expected_count = 36
+    if manifest_path.is_file():
+        expected_count = int(json.loads(manifest_path.read_text(encoding="utf-8"))["case_count"])
+    if len(public.get("cases", [])) != expected_count:
+        raise RuntimeError(f"The public corpus must contain exactly {expected_count} cases.")
     hashes = {public.get("corpus_hash"), hidden.get("corpus_hash"), provenance.get("corpus_hash")}
     if len(hashes) != 1:
         raise RuntimeError("Public cases, hidden labels, and provenance hashes differ.")

@@ -636,7 +636,9 @@ def main() -> None:
         os.getenv("DISTRIBUTED_REPORT_PATH", "demo_runs/distributed_system_report.json")
     )
     report_path.parent.mkdir(parents=True, exist_ok=True)
-    report_path.write_text(json.dumps(report, indent=2, sort_keys=True), encoding="utf-8")
+    with report_path.open("x", encoding="utf-8") as handle:
+        json.dump(report, handle, indent=2, sort_keys=True)
+        handle.write("\n")
     if not report["passed"]:
         raise SystemExit(1)
 

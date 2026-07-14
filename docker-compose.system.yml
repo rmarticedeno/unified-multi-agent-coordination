@@ -26,13 +26,13 @@ services:
       COORDINATION_REGISTRY_RETRIES: 1
       COORDINATION_TASK_RETRIES: 0
       COORDINATION_RETRY_BACKOFF_S: 0.05
-      COORDINATION_LEDGER_PATH: /app/demo_runs/v0.2/preflight-20260712-03/docker-ledger.jsonl
+      COORDINATION_LEDGER_PATH: /app/evidence/docker-ledger.jsonl
       COORDINATION_SERVICE_HOST: 0.0.0.0
       COORDINATION_SERVICE_PORT: 8000
     ports:
       - "8010:8000"
     volumes:
-      - ./demo_runs:/app/demo_runs
+      - ${EVIDENCE_RUN_DIR:?Set EVIDENCE_RUN_DIR to a new directory}:/app/evidence
     depends_on:
       registry:
         condition: service_healthy
@@ -46,11 +46,11 @@ services:
       COORDINATION_ALLOW_INSECURE_A2A: "true"
       COORDINATION_REGISTRY_RETRIES: 0
       COORDINATION_TASK_RETRIES: 0
-      COORDINATION_LEDGER_PATH: /app/demo_runs/v0.2/preflight-20260712-03/docker-bad-registry-ledger.jsonl
+      COORDINATION_LEDGER_PATH: /app/evidence/docker-bad-registry-ledger.jsonl
       COORDINATION_SERVICE_HOST: 0.0.0.0
       COORDINATION_SERVICE_PORT: 8000
     volumes:
-      - ./demo_runs:/app/demo_runs
+      - ${EVIDENCE_RUN_DIR:?Set EVIDENCE_RUN_DIR to a new directory}:/app/evidence
     healthcheck: *http-healthcheck
 
   registry:
@@ -175,9 +175,9 @@ services:
     environment:
       COORDINATION_BASE_URL: http://coordination-service:8000
       BAD_REGISTRY_BASE_URL: http://coordination-bad-registry:8000
-      SYSTEM_REPORT_PATH: /app/demo_runs/v0.2/preflight-20260712-03/docker-system-report.json
+      SYSTEM_REPORT_PATH: /app/evidence/docker-system-report.json
     volumes:
-      - ./demo_runs:/app/demo_runs
+      - ${EVIDENCE_RUN_DIR:?Set EVIDENCE_RUN_DIR to a new directory}:/app/evidence
     depends_on:
       coordination-service:
         condition: service_healthy

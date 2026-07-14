@@ -639,7 +639,9 @@ def main() -> None:
         os.getenv("SYSTEM_REPORT_PATH", "demo_runs/docker_system_report.json")
     )
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    output_path.write_text(json.dumps(report, indent=2), encoding="utf-8")
+    with output_path.open("x", encoding="utf-8") as handle:
+        json.dump(report, handle, indent=2)
+        handle.write("\n")
     for scenario in report["scenarios"]:
         print(
             f"{scenario['id']}: {scenario['observed_status']} "

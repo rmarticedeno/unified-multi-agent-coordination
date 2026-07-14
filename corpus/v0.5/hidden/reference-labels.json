@@ -1,0 +1,3258 @@
+{
+  "version": "0.5",
+  "corpus_hash": "d3fe4e458554f174ae2040c5758e985116edd42443c8b5d6a49e501477935418",
+  "labels": [
+    {
+      "case_id": "v05-pair-01-feasible",
+      "pair_id": "v05-pair-01",
+      "domain": "document processing",
+      "invalidity_category": "missing_capability",
+      "oracle_proposal": {
+        "tasks": [
+          {
+            "task_id": "t1",
+            "requirement_name": "Prepare document processing",
+            "requirement_id": "v05-pair-01-prepare",
+            "capability_id": "v05-pair-01-prepare",
+            "assigned_to": "v05-pair-01-preparer",
+            "expected_artifacts": [
+              "v05-pair-01-intermediate"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-01-intermediate"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          },
+          {
+            "task_id": "t2",
+            "requirement_name": "Finalize document processing",
+            "requirement_id": "v05-pair-01-finalize",
+            "capability_id": "v05-pair-01-finalize",
+            "assigned_to": "v05-pair-01-finisher",
+            "depends_on": [
+              "t1"
+            ],
+            "expected_artifacts": [
+              "v05-pair-01-result"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-01-result"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          }
+        ],
+        "execution_order": [
+          "t1",
+          "t2"
+        ],
+        "expected_artifacts": [
+          "v05-pair-01-result"
+        ],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [
+            "v05-pair-01-result"
+          ],
+          "require_all_task_validators": true
+        }
+      },
+      "feasible": true,
+      "status": "completed",
+      "minimum_justification": "All admitted predicates and contracts are satisfied."
+    },
+    {
+      "case_id": "v05-pair-01-infeasible",
+      "pair_id": "v05-pair-01",
+      "domain": "document processing",
+      "invalidity_category": "missing_capability",
+      "oracle_proposal": {
+        "tasks": [
+          {
+            "task_id": "t1",
+            "requirement_name": "Prepare document processing",
+            "requirement_id": "v05-pair-01-prepare",
+            "capability_id": "v05-pair-01-prepare",
+            "assigned_to": "v05-pair-01-preparer",
+            "expected_artifacts": [
+              "v05-pair-01-intermediate"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-01-intermediate"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          },
+          {
+            "task_id": "t2",
+            "requirement_name": "Finalize document processing",
+            "requirement_id": "v05-pair-01-finalize",
+            "capability_id": "v05-pair-01-finalize-missing",
+            "assigned_to": "v05-pair-01-finisher",
+            "depends_on": [
+              "t1"
+            ],
+            "expected_artifacts": [
+              "v05-pair-01-result"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-01-result"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          }
+        ],
+        "execution_order": [
+          "t1",
+          "t2"
+        ],
+        "expected_artifacts": [
+          "v05-pair-01-result"
+        ],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [
+            "v05-pair-01-result"
+          ],
+          "require_all_task_validators": true
+        }
+      },
+      "feasible": false,
+      "status": "infeasible",
+      "minimum_justification": "No admitted agent advertises the exact required capability."
+    },
+    {
+      "case_id": "v05-pair-02-feasible",
+      "pair_id": "v05-pair-02",
+      "domain": "document processing",
+      "invalidity_category": "incompatible_modality",
+      "oracle_proposal": {
+        "tasks": [
+          {
+            "task_id": "t1",
+            "requirement_name": "Prepare document processing",
+            "requirement_id": "v05-pair-02-prepare",
+            "capability_id": "v05-pair-02-prepare",
+            "assigned_to": "v05-pair-02-preparer",
+            "expected_artifacts": [
+              "v05-pair-02-intermediate"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-02-intermediate"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          },
+          {
+            "task_id": "t2",
+            "requirement_name": "Finalize document processing",
+            "requirement_id": "v05-pair-02-finalize",
+            "capability_id": "v05-pair-02-finalize",
+            "assigned_to": "v05-pair-02-finisher",
+            "depends_on": [
+              "t1"
+            ],
+            "expected_artifacts": [
+              "v05-pair-02-result"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-02-result"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          }
+        ],
+        "execution_order": [
+          "t1",
+          "t2"
+        ],
+        "expected_artifacts": [
+          "v05-pair-02-result"
+        ],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [
+            "v05-pair-02-result"
+          ],
+          "require_all_task_validators": true
+        }
+      },
+      "feasible": true,
+      "status": "completed",
+      "minimum_justification": "All admitted predicates and contracts are satisfied."
+    },
+    {
+      "case_id": "v05-pair-02-infeasible",
+      "pair_id": "v05-pair-02",
+      "domain": "document processing",
+      "invalidity_category": "incompatible_modality",
+      "oracle_proposal": {
+        "tasks": [
+          {
+            "task_id": "t1",
+            "requirement_name": "Prepare document processing",
+            "requirement_id": "v05-pair-02-prepare",
+            "capability_id": "v05-pair-02-prepare",
+            "assigned_to": "v05-pair-02-preparer",
+            "expected_artifacts": [
+              "v05-pair-02-intermediate"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-02-intermediate"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          },
+          {
+            "task_id": "t2",
+            "requirement_name": "Finalize document processing",
+            "requirement_id": "v05-pair-02-finalize",
+            "capability_id": "v05-pair-02-finalize",
+            "assigned_to": "v05-pair-02-finisher",
+            "depends_on": [
+              "t1"
+            ],
+            "expected_artifacts": [
+              "v05-pair-02-result"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-02-result"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          }
+        ],
+        "execution_order": [
+          "t1",
+          "t2"
+        ],
+        "expected_artifacts": [
+          "v05-pair-02-result"
+        ],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [
+            "v05-pair-02-result"
+          ],
+          "require_all_task_validators": true
+        }
+      },
+      "feasible": false,
+      "status": "infeasible",
+      "minimum_justification": "The provider cannot consume the required intermediate modality."
+    },
+    {
+      "case_id": "v05-pair-03-feasible",
+      "pair_id": "v05-pair-03",
+      "domain": "document processing",
+      "invalidity_category": "invalid_artifact_contract",
+      "oracle_proposal": {
+        "tasks": [
+          {
+            "task_id": "t1",
+            "requirement_name": "Prepare document processing",
+            "requirement_id": "v05-pair-03-prepare",
+            "capability_id": "v05-pair-03-prepare",
+            "assigned_to": "v05-pair-03-preparer",
+            "expected_artifacts": [
+              "v05-pair-03-intermediate"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-03-intermediate"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          },
+          {
+            "task_id": "t2",
+            "requirement_name": "Finalize document processing",
+            "requirement_id": "v05-pair-03-finalize",
+            "capability_id": "v05-pair-03-finalize",
+            "assigned_to": "v05-pair-03-finisher",
+            "depends_on": [
+              "t1"
+            ],
+            "expected_artifacts": [
+              "v05-pair-03-result"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-03-result"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          }
+        ],
+        "execution_order": [
+          "t1",
+          "t2"
+        ],
+        "expected_artifacts": [
+          "v05-pair-03-result"
+        ],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [
+            "v05-pair-03-result"
+          ],
+          "require_all_task_validators": true
+        }
+      },
+      "feasible": true,
+      "status": "completed",
+      "minimum_justification": "All admitted predicates and contracts are satisfied."
+    },
+    {
+      "case_id": "v05-pair-03-infeasible",
+      "pair_id": "v05-pair-03",
+      "domain": "document processing",
+      "invalidity_category": "invalid_artifact_contract",
+      "oracle_proposal": {
+        "tasks": [
+          {
+            "task_id": "t1",
+            "requirement_name": "Prepare document processing",
+            "requirement_id": "v05-pair-03-prepare",
+            "capability_id": "v05-pair-03-prepare",
+            "assigned_to": "v05-pair-03-preparer",
+            "expected_artifacts": [
+              "v05-pair-03-intermediate"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-03-intermediate"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          },
+          {
+            "task_id": "t2",
+            "requirement_name": "Finalize document processing",
+            "requirement_id": "v05-pair-03-finalize",
+            "capability_id": "v05-pair-03-finalize",
+            "assigned_to": "v05-pair-03-finisher",
+            "depends_on": [
+              "t1"
+            ],
+            "expected_artifacts": [
+              "v05-pair-03-result"
+            ],
+            "validation_contract": {}
+          }
+        ],
+        "execution_order": [
+          "t1",
+          "t2"
+        ],
+        "expected_artifacts": [
+          "v05-pair-03-result"
+        ],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [
+            "v05-pair-03-result"
+          ],
+          "require_all_task_validators": true
+        }
+      },
+      "feasible": false,
+      "status": "infeasible",
+      "minimum_justification": "The required terminal artifact has no enforceable validator contract."
+    },
+    {
+      "case_id": "v05-pair-04-feasible",
+      "pair_id": "v05-pair-04",
+      "domain": "travel logistics",
+      "invalidity_category": "unavailable_agent",
+      "oracle_proposal": {
+        "tasks": [
+          {
+            "task_id": "t1",
+            "requirement_name": "Prepare travel logistics",
+            "requirement_id": "v05-pair-04-prepare",
+            "capability_id": "v05-pair-04-prepare",
+            "assigned_to": "v05-pair-04-preparer",
+            "expected_artifacts": [
+              "v05-pair-04-intermediate"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-04-intermediate"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          },
+          {
+            "task_id": "t2",
+            "requirement_name": "Finalize travel logistics",
+            "requirement_id": "v05-pair-04-finalize",
+            "capability_id": "v05-pair-04-finalize",
+            "assigned_to": "v05-pair-04-finisher",
+            "depends_on": [
+              "t1"
+            ],
+            "expected_artifacts": [
+              "v05-pair-04-result"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-04-result"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          }
+        ],
+        "execution_order": [
+          "t1",
+          "t2"
+        ],
+        "expected_artifacts": [
+          "v05-pair-04-result"
+        ],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [
+            "v05-pair-04-result"
+          ],
+          "require_all_task_validators": true
+        }
+      },
+      "feasible": true,
+      "status": "completed",
+      "minimum_justification": "All admitted predicates and contracts are satisfied."
+    },
+    {
+      "case_id": "v05-pair-04-infeasible",
+      "pair_id": "v05-pair-04",
+      "domain": "travel logistics",
+      "invalidity_category": "unavailable_agent",
+      "oracle_proposal": {
+        "tasks": [
+          {
+            "task_id": "t1",
+            "requirement_name": "Prepare travel logistics",
+            "requirement_id": "v05-pair-04-prepare",
+            "capability_id": "v05-pair-04-prepare",
+            "assigned_to": "v05-pair-04-preparer",
+            "expected_artifacts": [
+              "v05-pair-04-intermediate"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-04-intermediate"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          },
+          {
+            "task_id": "t2",
+            "requirement_name": "Finalize travel logistics",
+            "requirement_id": "v05-pair-04-finalize",
+            "capability_id": "v05-pair-04-finalize",
+            "assigned_to": "v05-pair-04-finisher",
+            "depends_on": [
+              "t1"
+            ],
+            "expected_artifacts": [
+              "v05-pair-04-result"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-04-result"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          }
+        ],
+        "execution_order": [
+          "t1",
+          "t2"
+        ],
+        "expected_artifacts": [
+          "v05-pair-04-result"
+        ],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [
+            "v05-pair-04-result"
+          ],
+          "require_all_task_validators": true
+        }
+      },
+      "feasible": false,
+      "status": "infeasible",
+      "minimum_justification": "The only canonical provider is unavailable."
+    },
+    {
+      "case_id": "v05-pair-05-feasible",
+      "pair_id": "v05-pair-05",
+      "domain": "travel logistics",
+      "invalidity_category": "typed_constraint_violation",
+      "oracle_proposal": {
+        "tasks": [
+          {
+            "task_id": "t1",
+            "requirement_name": "Prepare travel logistics",
+            "requirement_id": "v05-pair-05-prepare",
+            "capability_id": "v05-pair-05-prepare",
+            "assigned_to": "v05-pair-05-preparer",
+            "expected_artifacts": [
+              "v05-pair-05-intermediate"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-05-intermediate"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          },
+          {
+            "task_id": "t2",
+            "requirement_name": "Finalize travel logistics",
+            "requirement_id": "v05-pair-05-finalize",
+            "capability_id": "v05-pair-05-finalize",
+            "assigned_to": "v05-pair-05-finisher",
+            "depends_on": [
+              "t1"
+            ],
+            "expected_artifacts": [
+              "v05-pair-05-result"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-05-result"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          }
+        ],
+        "execution_order": [
+          "t1",
+          "t2"
+        ],
+        "expected_artifacts": [
+          "v05-pair-05-result"
+        ],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [
+            "v05-pair-05-result"
+          ],
+          "require_all_task_validators": true
+        }
+      },
+      "feasible": true,
+      "status": "completed",
+      "minimum_justification": "All admitted predicates and contracts are satisfied."
+    },
+    {
+      "case_id": "v05-pair-05-infeasible",
+      "pair_id": "v05-pair-05",
+      "domain": "travel logistics",
+      "invalidity_category": "typed_constraint_violation",
+      "oracle_proposal": {
+        "tasks": [
+          {
+            "task_id": "t1",
+            "requirement_name": "Prepare travel logistics",
+            "requirement_id": "v05-pair-05-prepare",
+            "capability_id": "v05-pair-05-prepare",
+            "assigned_to": "v05-pair-05-preparer",
+            "expected_artifacts": [
+              "v05-pair-05-intermediate"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-05-intermediate"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          },
+          {
+            "task_id": "t2",
+            "requirement_name": "Finalize travel logistics",
+            "requirement_id": "v05-pair-05-finalize",
+            "capability_id": "v05-pair-05-finalize",
+            "assigned_to": "v05-pair-05-finisher",
+            "depends_on": [
+              "t1"
+            ],
+            "expected_artifacts": [
+              "v05-pair-05-result"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-05-result"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          }
+        ],
+        "execution_order": [
+          "t1",
+          "t2"
+        ],
+        "expected_artifacts": [
+          "v05-pair-05-result"
+        ],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [
+            "v05-pair-05-result"
+          ],
+          "require_all_task_validators": true
+        }
+      },
+      "feasible": false,
+      "status": "infeasible",
+      "minimum_justification": "A typed request-context constraint evaluates false."
+    },
+    {
+      "case_id": "v05-pair-06-feasible",
+      "pair_id": "v05-pair-06",
+      "domain": "travel logistics",
+      "invalidity_category": "dependency_order_error",
+      "oracle_proposal": {
+        "tasks": [
+          {
+            "task_id": "t1",
+            "requirement_name": "Prepare travel logistics",
+            "requirement_id": "v05-pair-06-prepare",
+            "capability_id": "v05-pair-06-prepare",
+            "assigned_to": "v05-pair-06-preparer",
+            "expected_artifacts": [
+              "v05-pair-06-intermediate"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-06-intermediate"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          },
+          {
+            "task_id": "t2",
+            "requirement_name": "Finalize travel logistics",
+            "requirement_id": "v05-pair-06-finalize",
+            "capability_id": "v05-pair-06-finalize",
+            "assigned_to": "v05-pair-06-finisher",
+            "depends_on": [
+              "t1"
+            ],
+            "expected_artifacts": [
+              "v05-pair-06-result"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-06-result"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          }
+        ],
+        "execution_order": [
+          "t1",
+          "t2"
+        ],
+        "expected_artifacts": [
+          "v05-pair-06-result"
+        ],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [
+            "v05-pair-06-result"
+          ],
+          "require_all_task_validators": true
+        }
+      },
+      "feasible": true,
+      "status": "completed",
+      "minimum_justification": "All admitted predicates and contracts are satisfied."
+    },
+    {
+      "case_id": "v05-pair-06-infeasible",
+      "pair_id": "v05-pair-06",
+      "domain": "travel logistics",
+      "invalidity_category": "dependency_order_error",
+      "oracle_proposal": {
+        "tasks": [
+          {
+            "task_id": "t1",
+            "requirement_name": "Prepare travel logistics",
+            "requirement_id": "v05-pair-06-prepare",
+            "capability_id": "v05-pair-06-prepare",
+            "assigned_to": "v05-pair-06-preparer",
+            "expected_artifacts": [
+              "v05-pair-06-intermediate"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-06-intermediate"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            },
+            "depends_on": [
+              "t2"
+            ]
+          },
+          {
+            "task_id": "t2",
+            "requirement_name": "Finalize travel logistics",
+            "requirement_id": "v05-pair-06-finalize",
+            "capability_id": "v05-pair-06-finalize",
+            "assigned_to": "v05-pair-06-finisher",
+            "depends_on": [
+              "t1"
+            ],
+            "expected_artifacts": [
+              "v05-pair-06-result"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-06-result"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          }
+        ],
+        "execution_order": [
+          "t1",
+          "t2"
+        ],
+        "expected_artifacts": [
+          "v05-pair-06-result"
+        ],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [
+            "v05-pair-06-result"
+          ],
+          "require_all_task_validators": true
+        }
+      },
+      "feasible": false,
+      "status": "infeasible",
+      "minimum_justification": "The admitted requirement dependencies form a cycle."
+    },
+    {
+      "case_id": "v05-pair-07-feasible",
+      "pair_id": "v05-pair-07",
+      "domain": "data analytics",
+      "invalidity_category": "insufficient_trust",
+      "oracle_proposal": {
+        "tasks": [
+          {
+            "task_id": "t1",
+            "requirement_name": "Prepare data analytics",
+            "requirement_id": "v05-pair-07-prepare",
+            "capability_id": "v05-pair-07-prepare",
+            "assigned_to": "v05-pair-07-preparer",
+            "expected_artifacts": [
+              "v05-pair-07-intermediate"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-07-intermediate"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          },
+          {
+            "task_id": "t2",
+            "requirement_name": "Finalize data analytics",
+            "requirement_id": "v05-pair-07-finalize",
+            "capability_id": "v05-pair-07-finalize",
+            "assigned_to": "v05-pair-07-finisher",
+            "depends_on": [
+              "t1"
+            ],
+            "expected_artifacts": [
+              "v05-pair-07-result"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-07-result"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          }
+        ],
+        "execution_order": [
+          "t1",
+          "t2"
+        ],
+        "expected_artifacts": [
+          "v05-pair-07-result"
+        ],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [
+            "v05-pair-07-result"
+          ],
+          "require_all_task_validators": true
+        }
+      },
+      "feasible": true,
+      "status": "completed",
+      "minimum_justification": "All admitted predicates and contracts are satisfied."
+    },
+    {
+      "case_id": "v05-pair-07-infeasible",
+      "pair_id": "v05-pair-07",
+      "domain": "data analytics",
+      "invalidity_category": "insufficient_trust",
+      "oracle_proposal": {
+        "tasks": [
+          {
+            "task_id": "t1",
+            "requirement_name": "Prepare data analytics",
+            "requirement_id": "v05-pair-07-prepare",
+            "capability_id": "v05-pair-07-prepare",
+            "assigned_to": "v05-pair-07-preparer",
+            "expected_artifacts": [
+              "v05-pair-07-intermediate"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-07-intermediate"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          },
+          {
+            "task_id": "t2",
+            "requirement_name": "Finalize data analytics",
+            "requirement_id": "v05-pair-07-finalize",
+            "capability_id": "v05-pair-07-finalize",
+            "assigned_to": "v05-pair-07-finisher",
+            "depends_on": [
+              "t1"
+            ],
+            "expected_artifacts": [
+              "v05-pair-07-result"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-07-result"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          }
+        ],
+        "execution_order": [
+          "t1",
+          "t2"
+        ],
+        "expected_artifacts": [
+          "v05-pair-07-result"
+        ],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [
+            "v05-pair-07-result"
+          ],
+          "require_all_task_validators": true
+        }
+      },
+      "feasible": false,
+      "status": "infeasible",
+      "minimum_justification": "The available provider does not satisfy required trust."
+    },
+    {
+      "case_id": "v05-pair-08-feasible",
+      "pair_id": "v05-pair-08",
+      "domain": "data analytics",
+      "invalidity_category": "invalid_artifact_contract",
+      "oracle_proposal": {
+        "tasks": [
+          {
+            "task_id": "t1",
+            "requirement_name": "Prepare data analytics",
+            "requirement_id": "v05-pair-08-prepare",
+            "capability_id": "v05-pair-08-prepare",
+            "assigned_to": "v05-pair-08-preparer",
+            "expected_artifacts": [
+              "v05-pair-08-intermediate"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-08-intermediate"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          },
+          {
+            "task_id": "t2",
+            "requirement_name": "Finalize data analytics",
+            "requirement_id": "v05-pair-08-finalize",
+            "capability_id": "v05-pair-08-finalize",
+            "assigned_to": "v05-pair-08-finisher",
+            "depends_on": [
+              "t1"
+            ],
+            "expected_artifacts": [
+              "v05-pair-08-result"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-08-result"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          }
+        ],
+        "execution_order": [
+          "t1",
+          "t2"
+        ],
+        "expected_artifacts": [
+          "v05-pair-08-result"
+        ],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [
+            "v05-pair-08-result"
+          ],
+          "require_all_task_validators": true
+        }
+      },
+      "feasible": true,
+      "status": "completed",
+      "minimum_justification": "All admitted predicates and contracts are satisfied."
+    },
+    {
+      "case_id": "v05-pair-08-infeasible",
+      "pair_id": "v05-pair-08",
+      "domain": "data analytics",
+      "invalidity_category": "invalid_artifact_contract",
+      "oracle_proposal": {
+        "tasks": [
+          {
+            "task_id": "t1",
+            "requirement_name": "Prepare data analytics",
+            "requirement_id": "v05-pair-08-prepare",
+            "capability_id": "v05-pair-08-prepare",
+            "assigned_to": "v05-pair-08-preparer",
+            "expected_artifacts": [
+              "v05-pair-08-intermediate"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-08-intermediate"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          },
+          {
+            "task_id": "t2",
+            "requirement_name": "Finalize data analytics",
+            "requirement_id": "v05-pair-08-finalize",
+            "capability_id": "v05-pair-08-finalize",
+            "assigned_to": "v05-pair-08-finisher",
+            "depends_on": [
+              "t1"
+            ],
+            "expected_artifacts": [
+              "v05-pair-08-result"
+            ],
+            "validation_contract": {}
+          }
+        ],
+        "execution_order": [
+          "t1",
+          "t2"
+        ],
+        "expected_artifacts": [
+          "v05-pair-08-result"
+        ],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [
+            "v05-pair-08-result"
+          ],
+          "require_all_task_validators": true
+        }
+      },
+      "feasible": false,
+      "status": "infeasible",
+      "minimum_justification": "The required terminal artifact has no enforceable validator contract."
+    },
+    {
+      "case_id": "v05-pair-09-feasible",
+      "pair_id": "v05-pair-09",
+      "domain": "data analytics",
+      "invalidity_category": "auxiliary_overreach",
+      "oracle_proposal": {
+        "tasks": [
+          {
+            "task_id": "t1",
+            "requirement_name": "Prepare data analytics",
+            "requirement_id": "v05-pair-09-prepare",
+            "capability_id": "v05-pair-09-prepare",
+            "assigned_to": "v05-pair-09-preparer",
+            "expected_artifacts": [
+              "v05-pair-09-intermediate"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-09-intermediate"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          },
+          {
+            "task_id": "t2",
+            "requirement_name": "Finalize data analytics",
+            "requirement_id": "v05-pair-09-finalize",
+            "capability_id": "v05-pair-09-finalize",
+            "assigned_to": "v05-pair-09-finisher",
+            "depends_on": [
+              "t1"
+            ],
+            "expected_artifacts": [
+              "v05-pair-09-result"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-09-result"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          }
+        ],
+        "execution_order": [
+          "t1",
+          "t2"
+        ],
+        "expected_artifacts": [
+          "v05-pair-09-result"
+        ],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [
+            "v05-pair-09-result"
+          ],
+          "require_all_task_validators": true
+        }
+      },
+      "feasible": true,
+      "status": "completed",
+      "minimum_justification": "All admitted predicates and contracts are satisfied."
+    },
+    {
+      "case_id": "v05-pair-09-infeasible",
+      "pair_id": "v05-pair-09",
+      "domain": "data analytics",
+      "invalidity_category": "auxiliary_overreach",
+      "oracle_proposal": {
+        "tasks": [
+          {
+            "task_id": "t1",
+            "requirement_name": "Prepare data analytics",
+            "requirement_id": "v05-pair-09-prepare",
+            "capability_id": "v05-pair-09-prepare",
+            "assigned_to": "v05-pair-09-preparer",
+            "expected_artifacts": [
+              "v05-pair-09-intermediate"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-09-intermediate"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          },
+          {
+            "task_id": "t2",
+            "requirement_name": "Finalize data analytics",
+            "requirement_id": "v05-pair-09-finalize",
+            "capability_id": "v05-pair-09-finalize-unadmitted-auxiliary",
+            "assigned_to": "v05-pair-09-finisher",
+            "depends_on": [
+              "t1"
+            ],
+            "expected_artifacts": [
+              "v05-pair-09-result"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-09-result"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          }
+        ],
+        "execution_order": [
+          "t1",
+          "t2"
+        ],
+        "expected_artifacts": [
+          "v05-pair-09-result"
+        ],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [
+            "v05-pair-09-result"
+          ],
+          "require_all_task_validators": true
+        }
+      },
+      "feasible": false,
+      "status": "infeasible",
+      "minimum_justification": "The missing capability is explicitly ineligible for auxiliary synthesis."
+    },
+    {
+      "case_id": "v05-pair-10-feasible",
+      "pair_id": "v05-pair-10",
+      "domain": "software maintenance",
+      "invalidity_category": "incompatible_modality",
+      "oracle_proposal": {
+        "tasks": [
+          {
+            "task_id": "t1",
+            "requirement_name": "Prepare software maintenance",
+            "requirement_id": "v05-pair-10-prepare",
+            "capability_id": "v05-pair-10-prepare",
+            "assigned_to": "v05-pair-10-preparer",
+            "expected_artifacts": [
+              "v05-pair-10-intermediate"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-10-intermediate"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          },
+          {
+            "task_id": "t2",
+            "requirement_name": "Finalize software maintenance",
+            "requirement_id": "v05-pair-10-finalize",
+            "capability_id": "v05-pair-10-finalize",
+            "assigned_to": "v05-pair-10-finisher",
+            "depends_on": [
+              "t1"
+            ],
+            "expected_artifacts": [
+              "v05-pair-10-result"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-10-result"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          }
+        ],
+        "execution_order": [
+          "t1",
+          "t2"
+        ],
+        "expected_artifacts": [
+          "v05-pair-10-result"
+        ],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [
+            "v05-pair-10-result"
+          ],
+          "require_all_task_validators": true
+        }
+      },
+      "feasible": true,
+      "status": "completed",
+      "minimum_justification": "All admitted predicates and contracts are satisfied."
+    },
+    {
+      "case_id": "v05-pair-10-infeasible",
+      "pair_id": "v05-pair-10",
+      "domain": "software maintenance",
+      "invalidity_category": "incompatible_modality",
+      "oracle_proposal": {
+        "tasks": [
+          {
+            "task_id": "t1",
+            "requirement_name": "Prepare software maintenance",
+            "requirement_id": "v05-pair-10-prepare",
+            "capability_id": "v05-pair-10-prepare",
+            "assigned_to": "v05-pair-10-preparer",
+            "expected_artifacts": [
+              "v05-pair-10-intermediate"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-10-intermediate"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          },
+          {
+            "task_id": "t2",
+            "requirement_name": "Finalize software maintenance",
+            "requirement_id": "v05-pair-10-finalize",
+            "capability_id": "v05-pair-10-finalize",
+            "assigned_to": "v05-pair-10-finisher",
+            "depends_on": [
+              "t1"
+            ],
+            "expected_artifacts": [
+              "v05-pair-10-result"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-10-result"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          }
+        ],
+        "execution_order": [
+          "t1",
+          "t2"
+        ],
+        "expected_artifacts": [
+          "v05-pair-10-result"
+        ],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [
+            "v05-pair-10-result"
+          ],
+          "require_all_task_validators": true
+        }
+      },
+      "feasible": false,
+      "status": "infeasible",
+      "minimum_justification": "The provider cannot consume the required intermediate modality."
+    },
+    {
+      "case_id": "v05-pair-11-feasible",
+      "pair_id": "v05-pair-11",
+      "domain": "software maintenance",
+      "invalidity_category": "dependency_order_error",
+      "oracle_proposal": {
+        "tasks": [
+          {
+            "task_id": "t1",
+            "requirement_name": "Prepare software maintenance",
+            "requirement_id": "v05-pair-11-prepare",
+            "capability_id": "v05-pair-11-prepare",
+            "assigned_to": "v05-pair-11-preparer",
+            "expected_artifacts": [
+              "v05-pair-11-intermediate"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-11-intermediate"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          },
+          {
+            "task_id": "t2",
+            "requirement_name": "Finalize software maintenance",
+            "requirement_id": "v05-pair-11-finalize",
+            "capability_id": "v05-pair-11-finalize",
+            "assigned_to": "v05-pair-11-finisher",
+            "depends_on": [
+              "t1"
+            ],
+            "expected_artifacts": [
+              "v05-pair-11-result"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-11-result"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          }
+        ],
+        "execution_order": [
+          "t1",
+          "t2"
+        ],
+        "expected_artifacts": [
+          "v05-pair-11-result"
+        ],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [
+            "v05-pair-11-result"
+          ],
+          "require_all_task_validators": true
+        }
+      },
+      "feasible": true,
+      "status": "completed",
+      "minimum_justification": "All admitted predicates and contracts are satisfied."
+    },
+    {
+      "case_id": "v05-pair-11-infeasible",
+      "pair_id": "v05-pair-11",
+      "domain": "software maintenance",
+      "invalidity_category": "dependency_order_error",
+      "oracle_proposal": {
+        "tasks": [
+          {
+            "task_id": "t1",
+            "requirement_name": "Prepare software maintenance",
+            "requirement_id": "v05-pair-11-prepare",
+            "capability_id": "v05-pair-11-prepare",
+            "assigned_to": "v05-pair-11-preparer",
+            "expected_artifacts": [
+              "v05-pair-11-intermediate"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-11-intermediate"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            },
+            "depends_on": [
+              "t2"
+            ]
+          },
+          {
+            "task_id": "t2",
+            "requirement_name": "Finalize software maintenance",
+            "requirement_id": "v05-pair-11-finalize",
+            "capability_id": "v05-pair-11-finalize",
+            "assigned_to": "v05-pair-11-finisher",
+            "depends_on": [
+              "t1"
+            ],
+            "expected_artifacts": [
+              "v05-pair-11-result"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-11-result"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          }
+        ],
+        "execution_order": [
+          "t1",
+          "t2"
+        ],
+        "expected_artifacts": [
+          "v05-pair-11-result"
+        ],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [
+            "v05-pair-11-result"
+          ],
+          "require_all_task_validators": true
+        }
+      },
+      "feasible": false,
+      "status": "infeasible",
+      "minimum_justification": "The admitted requirement dependencies form a cycle."
+    },
+    {
+      "case_id": "v05-pair-12-feasible",
+      "pair_id": "v05-pair-12",
+      "domain": "software maintenance",
+      "invalidity_category": "missing_capability",
+      "oracle_proposal": {
+        "tasks": [
+          {
+            "task_id": "t1",
+            "requirement_name": "Prepare software maintenance",
+            "requirement_id": "v05-pair-12-prepare",
+            "capability_id": "v05-pair-12-prepare",
+            "assigned_to": "v05-pair-12-preparer",
+            "expected_artifacts": [
+              "v05-pair-12-intermediate"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-12-intermediate"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          },
+          {
+            "task_id": "t2",
+            "requirement_name": "Finalize software maintenance",
+            "requirement_id": "v05-pair-12-finalize",
+            "capability_id": "v05-pair-12-finalize",
+            "assigned_to": "v05-pair-12-finisher",
+            "depends_on": [
+              "t1"
+            ],
+            "expected_artifacts": [
+              "v05-pair-12-result"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-12-result"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          }
+        ],
+        "execution_order": [
+          "t1",
+          "t2"
+        ],
+        "expected_artifacts": [
+          "v05-pair-12-result"
+        ],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [
+            "v05-pair-12-result"
+          ],
+          "require_all_task_validators": true
+        }
+      },
+      "feasible": true,
+      "status": "completed",
+      "minimum_justification": "All admitted predicates and contracts are satisfied."
+    },
+    {
+      "case_id": "v05-pair-12-infeasible",
+      "pair_id": "v05-pair-12",
+      "domain": "software maintenance",
+      "invalidity_category": "missing_capability",
+      "oracle_proposal": {
+        "tasks": [
+          {
+            "task_id": "t1",
+            "requirement_name": "Prepare software maintenance",
+            "requirement_id": "v05-pair-12-prepare",
+            "capability_id": "v05-pair-12-prepare",
+            "assigned_to": "v05-pair-12-preparer",
+            "expected_artifacts": [
+              "v05-pair-12-intermediate"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-12-intermediate"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          },
+          {
+            "task_id": "t2",
+            "requirement_name": "Finalize software maintenance",
+            "requirement_id": "v05-pair-12-finalize",
+            "capability_id": "v05-pair-12-finalize-missing",
+            "assigned_to": "v05-pair-12-finisher",
+            "depends_on": [
+              "t1"
+            ],
+            "expected_artifacts": [
+              "v05-pair-12-result"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-12-result"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          }
+        ],
+        "execution_order": [
+          "t1",
+          "t2"
+        ],
+        "expected_artifacts": [
+          "v05-pair-12-result"
+        ],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [
+            "v05-pair-12-result"
+          ],
+          "require_all_task_validators": true
+        }
+      },
+      "feasible": false,
+      "status": "infeasible",
+      "minimum_justification": "No admitted agent advertises the exact required capability."
+    },
+    {
+      "case_id": "v05-pair-13-feasible",
+      "pair_id": "v05-pair-13",
+      "domain": "research administration",
+      "invalidity_category": "typed_constraint_violation",
+      "oracle_proposal": {
+        "tasks": [
+          {
+            "task_id": "t1",
+            "requirement_name": "Prepare research administration",
+            "requirement_id": "v05-pair-13-prepare",
+            "capability_id": "v05-pair-13-prepare",
+            "assigned_to": "v05-pair-13-preparer",
+            "expected_artifacts": [
+              "v05-pair-13-intermediate"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-13-intermediate"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          },
+          {
+            "task_id": "t2",
+            "requirement_name": "Finalize research administration",
+            "requirement_id": "v05-pair-13-finalize",
+            "capability_id": "v05-pair-13-finalize",
+            "assigned_to": "v05-pair-13-finisher",
+            "depends_on": [
+              "t1"
+            ],
+            "expected_artifacts": [
+              "v05-pair-13-result"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-13-result"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          }
+        ],
+        "execution_order": [
+          "t1",
+          "t2"
+        ],
+        "expected_artifacts": [
+          "v05-pair-13-result"
+        ],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [
+            "v05-pair-13-result"
+          ],
+          "require_all_task_validators": true
+        }
+      },
+      "feasible": true,
+      "status": "completed",
+      "minimum_justification": "All admitted predicates and contracts are satisfied."
+    },
+    {
+      "case_id": "v05-pair-13-infeasible",
+      "pair_id": "v05-pair-13",
+      "domain": "research administration",
+      "invalidity_category": "typed_constraint_violation",
+      "oracle_proposal": {
+        "tasks": [
+          {
+            "task_id": "t1",
+            "requirement_name": "Prepare research administration",
+            "requirement_id": "v05-pair-13-prepare",
+            "capability_id": "v05-pair-13-prepare",
+            "assigned_to": "v05-pair-13-preparer",
+            "expected_artifacts": [
+              "v05-pair-13-intermediate"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-13-intermediate"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          },
+          {
+            "task_id": "t2",
+            "requirement_name": "Finalize research administration",
+            "requirement_id": "v05-pair-13-finalize",
+            "capability_id": "v05-pair-13-finalize",
+            "assigned_to": "v05-pair-13-finisher",
+            "depends_on": [
+              "t1"
+            ],
+            "expected_artifacts": [
+              "v05-pair-13-result"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-13-result"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          }
+        ],
+        "execution_order": [
+          "t1",
+          "t2"
+        ],
+        "expected_artifacts": [
+          "v05-pair-13-result"
+        ],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [
+            "v05-pair-13-result"
+          ],
+          "require_all_task_validators": true
+        }
+      },
+      "feasible": false,
+      "status": "infeasible",
+      "minimum_justification": "A typed request-context constraint evaluates false."
+    },
+    {
+      "case_id": "v05-pair-14-feasible",
+      "pair_id": "v05-pair-14",
+      "domain": "research administration",
+      "invalidity_category": "auxiliary_overreach",
+      "oracle_proposal": {
+        "tasks": [
+          {
+            "task_id": "t1",
+            "requirement_name": "Prepare research administration",
+            "requirement_id": "v05-pair-14-prepare",
+            "capability_id": "v05-pair-14-prepare",
+            "assigned_to": "v05-pair-14-preparer",
+            "expected_artifacts": [
+              "v05-pair-14-intermediate"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-14-intermediate"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          },
+          {
+            "task_id": "t2",
+            "requirement_name": "Finalize research administration",
+            "requirement_id": "v05-pair-14-finalize",
+            "capability_id": "v05-pair-14-finalize",
+            "assigned_to": "v05-pair-14-finisher",
+            "depends_on": [
+              "t1"
+            ],
+            "expected_artifacts": [
+              "v05-pair-14-result"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-14-result"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          }
+        ],
+        "execution_order": [
+          "t1",
+          "t2"
+        ],
+        "expected_artifacts": [
+          "v05-pair-14-result"
+        ],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [
+            "v05-pair-14-result"
+          ],
+          "require_all_task_validators": true
+        }
+      },
+      "feasible": true,
+      "status": "completed",
+      "minimum_justification": "All admitted predicates and contracts are satisfied."
+    },
+    {
+      "case_id": "v05-pair-14-infeasible",
+      "pair_id": "v05-pair-14",
+      "domain": "research administration",
+      "invalidity_category": "auxiliary_overreach",
+      "oracle_proposal": {
+        "tasks": [
+          {
+            "task_id": "t1",
+            "requirement_name": "Prepare research administration",
+            "requirement_id": "v05-pair-14-prepare",
+            "capability_id": "v05-pair-14-prepare",
+            "assigned_to": "v05-pair-14-preparer",
+            "expected_artifacts": [
+              "v05-pair-14-intermediate"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-14-intermediate"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          },
+          {
+            "task_id": "t2",
+            "requirement_name": "Finalize research administration",
+            "requirement_id": "v05-pair-14-finalize",
+            "capability_id": "v05-pair-14-finalize-unadmitted-auxiliary",
+            "assigned_to": "v05-pair-14-finisher",
+            "depends_on": [
+              "t1"
+            ],
+            "expected_artifacts": [
+              "v05-pair-14-result"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-14-result"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          }
+        ],
+        "execution_order": [
+          "t1",
+          "t2"
+        ],
+        "expected_artifacts": [
+          "v05-pair-14-result"
+        ],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [
+            "v05-pair-14-result"
+          ],
+          "require_all_task_validators": true
+        }
+      },
+      "feasible": false,
+      "status": "infeasible",
+      "minimum_justification": "The missing capability is explicitly ineligible for auxiliary synthesis."
+    },
+    {
+      "case_id": "v05-pair-15-feasible",
+      "pair_id": "v05-pair-15",
+      "domain": "research administration",
+      "invalidity_category": "unavailable_agent",
+      "oracle_proposal": {
+        "tasks": [
+          {
+            "task_id": "t1",
+            "requirement_name": "Prepare research administration",
+            "requirement_id": "v05-pair-15-prepare",
+            "capability_id": "v05-pair-15-prepare",
+            "assigned_to": "v05-pair-15-preparer",
+            "expected_artifacts": [
+              "v05-pair-15-intermediate"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-15-intermediate"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          },
+          {
+            "task_id": "t2",
+            "requirement_name": "Finalize research administration",
+            "requirement_id": "v05-pair-15-finalize",
+            "capability_id": "v05-pair-15-finalize",
+            "assigned_to": "v05-pair-15-finisher",
+            "depends_on": [
+              "t1"
+            ],
+            "expected_artifacts": [
+              "v05-pair-15-result"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-15-result"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          }
+        ],
+        "execution_order": [
+          "t1",
+          "t2"
+        ],
+        "expected_artifacts": [
+          "v05-pair-15-result"
+        ],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [
+            "v05-pair-15-result"
+          ],
+          "require_all_task_validators": true
+        }
+      },
+      "feasible": true,
+      "status": "completed",
+      "minimum_justification": "All admitted predicates and contracts are satisfied."
+    },
+    {
+      "case_id": "v05-pair-15-infeasible",
+      "pair_id": "v05-pair-15",
+      "domain": "research administration",
+      "invalidity_category": "unavailable_agent",
+      "oracle_proposal": {
+        "tasks": [
+          {
+            "task_id": "t1",
+            "requirement_name": "Prepare research administration",
+            "requirement_id": "v05-pair-15-prepare",
+            "capability_id": "v05-pair-15-prepare",
+            "assigned_to": "v05-pair-15-preparer",
+            "expected_artifacts": [
+              "v05-pair-15-intermediate"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-15-intermediate"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          },
+          {
+            "task_id": "t2",
+            "requirement_name": "Finalize research administration",
+            "requirement_id": "v05-pair-15-finalize",
+            "capability_id": "v05-pair-15-finalize",
+            "assigned_to": "v05-pair-15-finisher",
+            "depends_on": [
+              "t1"
+            ],
+            "expected_artifacts": [
+              "v05-pair-15-result"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-15-result"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          }
+        ],
+        "execution_order": [
+          "t1",
+          "t2"
+        ],
+        "expected_artifacts": [
+          "v05-pair-15-result"
+        ],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [
+            "v05-pair-15-result"
+          ],
+          "require_all_task_validators": true
+        }
+      },
+      "feasible": false,
+      "status": "infeasible",
+      "minimum_justification": "The only canonical provider is unavailable."
+    },
+    {
+      "case_id": "v05-pair-16-feasible",
+      "pair_id": "v05-pair-16",
+      "domain": "inventory management",
+      "invalidity_category": "invalid_artifact_contract",
+      "oracle_proposal": {
+        "tasks": [
+          {
+            "task_id": "t1",
+            "requirement_name": "Prepare inventory management",
+            "requirement_id": "v05-pair-16-prepare",
+            "capability_id": "v05-pair-16-prepare",
+            "assigned_to": "v05-pair-16-preparer",
+            "expected_artifacts": [
+              "v05-pair-16-intermediate"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-16-intermediate"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          },
+          {
+            "task_id": "t2",
+            "requirement_name": "Finalize inventory management",
+            "requirement_id": "v05-pair-16-finalize",
+            "capability_id": "v05-pair-16-finalize",
+            "assigned_to": "v05-pair-16-finisher",
+            "depends_on": [
+              "t1"
+            ],
+            "expected_artifacts": [
+              "v05-pair-16-result"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-16-result"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          }
+        ],
+        "execution_order": [
+          "t1",
+          "t2"
+        ],
+        "expected_artifacts": [
+          "v05-pair-16-result"
+        ],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [
+            "v05-pair-16-result"
+          ],
+          "require_all_task_validators": true
+        }
+      },
+      "feasible": true,
+      "status": "completed",
+      "minimum_justification": "All admitted predicates and contracts are satisfied."
+    },
+    {
+      "case_id": "v05-pair-16-infeasible",
+      "pair_id": "v05-pair-16",
+      "domain": "inventory management",
+      "invalidity_category": "invalid_artifact_contract",
+      "oracle_proposal": {
+        "tasks": [
+          {
+            "task_id": "t1",
+            "requirement_name": "Prepare inventory management",
+            "requirement_id": "v05-pair-16-prepare",
+            "capability_id": "v05-pair-16-prepare",
+            "assigned_to": "v05-pair-16-preparer",
+            "expected_artifacts": [
+              "v05-pair-16-intermediate"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-16-intermediate"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          },
+          {
+            "task_id": "t2",
+            "requirement_name": "Finalize inventory management",
+            "requirement_id": "v05-pair-16-finalize",
+            "capability_id": "v05-pair-16-finalize",
+            "assigned_to": "v05-pair-16-finisher",
+            "depends_on": [
+              "t1"
+            ],
+            "expected_artifacts": [
+              "v05-pair-16-result"
+            ],
+            "validation_contract": {}
+          }
+        ],
+        "execution_order": [
+          "t1",
+          "t2"
+        ],
+        "expected_artifacts": [
+          "v05-pair-16-result"
+        ],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [
+            "v05-pair-16-result"
+          ],
+          "require_all_task_validators": true
+        }
+      },
+      "feasible": false,
+      "status": "infeasible",
+      "minimum_justification": "The required terminal artifact has no enforceable validator contract."
+    },
+    {
+      "case_id": "v05-pair-17-feasible",
+      "pair_id": "v05-pair-17",
+      "domain": "inventory management",
+      "invalidity_category": "missing_capability",
+      "oracle_proposal": {
+        "tasks": [
+          {
+            "task_id": "t1",
+            "requirement_name": "Prepare inventory management",
+            "requirement_id": "v05-pair-17-prepare",
+            "capability_id": "v05-pair-17-prepare",
+            "assigned_to": "v05-pair-17-preparer",
+            "expected_artifacts": [
+              "v05-pair-17-intermediate"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-17-intermediate"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          },
+          {
+            "task_id": "t2",
+            "requirement_name": "Finalize inventory management",
+            "requirement_id": "v05-pair-17-finalize",
+            "capability_id": "v05-pair-17-finalize",
+            "assigned_to": "v05-pair-17-finisher",
+            "depends_on": [
+              "t1"
+            ],
+            "expected_artifacts": [
+              "v05-pair-17-result"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-17-result"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          }
+        ],
+        "execution_order": [
+          "t1",
+          "t2"
+        ],
+        "expected_artifacts": [
+          "v05-pair-17-result"
+        ],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [
+            "v05-pair-17-result"
+          ],
+          "require_all_task_validators": true
+        }
+      },
+      "feasible": true,
+      "status": "completed",
+      "minimum_justification": "All admitted predicates and contracts are satisfied."
+    },
+    {
+      "case_id": "v05-pair-17-infeasible",
+      "pair_id": "v05-pair-17",
+      "domain": "inventory management",
+      "invalidity_category": "missing_capability",
+      "oracle_proposal": {
+        "tasks": [
+          {
+            "task_id": "t1",
+            "requirement_name": "Prepare inventory management",
+            "requirement_id": "v05-pair-17-prepare",
+            "capability_id": "v05-pair-17-prepare",
+            "assigned_to": "v05-pair-17-preparer",
+            "expected_artifacts": [
+              "v05-pair-17-intermediate"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-17-intermediate"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          },
+          {
+            "task_id": "t2",
+            "requirement_name": "Finalize inventory management",
+            "requirement_id": "v05-pair-17-finalize",
+            "capability_id": "v05-pair-17-finalize-missing",
+            "assigned_to": "v05-pair-17-finisher",
+            "depends_on": [
+              "t1"
+            ],
+            "expected_artifacts": [
+              "v05-pair-17-result"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-17-result"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          }
+        ],
+        "execution_order": [
+          "t1",
+          "t2"
+        ],
+        "expected_artifacts": [
+          "v05-pair-17-result"
+        ],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [
+            "v05-pair-17-result"
+          ],
+          "require_all_task_validators": true
+        }
+      },
+      "feasible": false,
+      "status": "infeasible",
+      "minimum_justification": "No admitted agent advertises the exact required capability."
+    },
+    {
+      "case_id": "v05-pair-18-feasible",
+      "pair_id": "v05-pair-18",
+      "domain": "inventory management",
+      "invalidity_category": "insufficient_trust",
+      "oracle_proposal": {
+        "tasks": [
+          {
+            "task_id": "t1",
+            "requirement_name": "Prepare inventory management",
+            "requirement_id": "v05-pair-18-prepare",
+            "capability_id": "v05-pair-18-prepare",
+            "assigned_to": "v05-pair-18-preparer",
+            "expected_artifacts": [
+              "v05-pair-18-intermediate"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-18-intermediate"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          },
+          {
+            "task_id": "t2",
+            "requirement_name": "Finalize inventory management",
+            "requirement_id": "v05-pair-18-finalize",
+            "capability_id": "v05-pair-18-finalize",
+            "assigned_to": "v05-pair-18-finisher",
+            "depends_on": [
+              "t1"
+            ],
+            "expected_artifacts": [
+              "v05-pair-18-result"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-18-result"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          }
+        ],
+        "execution_order": [
+          "t1",
+          "t2"
+        ],
+        "expected_artifacts": [
+          "v05-pair-18-result"
+        ],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [
+            "v05-pair-18-result"
+          ],
+          "require_all_task_validators": true
+        }
+      },
+      "feasible": true,
+      "status": "completed",
+      "minimum_justification": "All admitted predicates and contracts are satisfied."
+    },
+    {
+      "case_id": "v05-pair-18-infeasible",
+      "pair_id": "v05-pair-18",
+      "domain": "inventory management",
+      "invalidity_category": "insufficient_trust",
+      "oracle_proposal": {
+        "tasks": [
+          {
+            "task_id": "t1",
+            "requirement_name": "Prepare inventory management",
+            "requirement_id": "v05-pair-18-prepare",
+            "capability_id": "v05-pair-18-prepare",
+            "assigned_to": "v05-pair-18-preparer",
+            "expected_artifacts": [
+              "v05-pair-18-intermediate"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-18-intermediate"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          },
+          {
+            "task_id": "t2",
+            "requirement_name": "Finalize inventory management",
+            "requirement_id": "v05-pair-18-finalize",
+            "capability_id": "v05-pair-18-finalize",
+            "assigned_to": "v05-pair-18-finisher",
+            "depends_on": [
+              "t1"
+            ],
+            "expected_artifacts": [
+              "v05-pair-18-result"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-18-result"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          }
+        ],
+        "execution_order": [
+          "t1",
+          "t2"
+        ],
+        "expected_artifacts": [
+          "v05-pair-18-result"
+        ],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [
+            "v05-pair-18-result"
+          ],
+          "require_all_task_validators": true
+        }
+      },
+      "feasible": false,
+      "status": "infeasible",
+      "minimum_justification": "The available provider does not satisfy required trust."
+    },
+    {
+      "case_id": "v05-pair-19-feasible",
+      "pair_id": "v05-pair-19",
+      "domain": "customer support",
+      "invalidity_category": "dependency_order_error",
+      "oracle_proposal": {
+        "tasks": [
+          {
+            "task_id": "t1",
+            "requirement_name": "Prepare customer support",
+            "requirement_id": "v05-pair-19-prepare",
+            "capability_id": "v05-pair-19-prepare",
+            "assigned_to": "v05-pair-19-preparer",
+            "expected_artifacts": [
+              "v05-pair-19-intermediate"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-19-intermediate"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          },
+          {
+            "task_id": "t2",
+            "requirement_name": "Finalize customer support",
+            "requirement_id": "v05-pair-19-finalize",
+            "capability_id": "v05-pair-19-finalize",
+            "assigned_to": "v05-pair-19-finisher",
+            "depends_on": [
+              "t1"
+            ],
+            "expected_artifacts": [
+              "v05-pair-19-result"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-19-result"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          }
+        ],
+        "execution_order": [
+          "t1",
+          "t2"
+        ],
+        "expected_artifacts": [
+          "v05-pair-19-result"
+        ],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [
+            "v05-pair-19-result"
+          ],
+          "require_all_task_validators": true
+        }
+      },
+      "feasible": true,
+      "status": "completed",
+      "minimum_justification": "All admitted predicates and contracts are satisfied."
+    },
+    {
+      "case_id": "v05-pair-19-infeasible",
+      "pair_id": "v05-pair-19",
+      "domain": "customer support",
+      "invalidity_category": "dependency_order_error",
+      "oracle_proposal": {
+        "tasks": [
+          {
+            "task_id": "t1",
+            "requirement_name": "Prepare customer support",
+            "requirement_id": "v05-pair-19-prepare",
+            "capability_id": "v05-pair-19-prepare",
+            "assigned_to": "v05-pair-19-preparer",
+            "expected_artifacts": [
+              "v05-pair-19-intermediate"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-19-intermediate"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            },
+            "depends_on": [
+              "t2"
+            ]
+          },
+          {
+            "task_id": "t2",
+            "requirement_name": "Finalize customer support",
+            "requirement_id": "v05-pair-19-finalize",
+            "capability_id": "v05-pair-19-finalize",
+            "assigned_to": "v05-pair-19-finisher",
+            "depends_on": [
+              "t1"
+            ],
+            "expected_artifacts": [
+              "v05-pair-19-result"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-19-result"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          }
+        ],
+        "execution_order": [
+          "t1",
+          "t2"
+        ],
+        "expected_artifacts": [
+          "v05-pair-19-result"
+        ],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [
+            "v05-pair-19-result"
+          ],
+          "require_all_task_validators": true
+        }
+      },
+      "feasible": false,
+      "status": "infeasible",
+      "minimum_justification": "The admitted requirement dependencies form a cycle."
+    },
+    {
+      "case_id": "v05-pair-20-feasible",
+      "pair_id": "v05-pair-20",
+      "domain": "customer support",
+      "invalidity_category": "unavailable_agent",
+      "oracle_proposal": {
+        "tasks": [
+          {
+            "task_id": "t1",
+            "requirement_name": "Prepare customer support",
+            "requirement_id": "v05-pair-20-prepare",
+            "capability_id": "v05-pair-20-prepare",
+            "assigned_to": "v05-pair-20-preparer",
+            "expected_artifacts": [
+              "v05-pair-20-intermediate"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-20-intermediate"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          },
+          {
+            "task_id": "t2",
+            "requirement_name": "Finalize customer support",
+            "requirement_id": "v05-pair-20-finalize",
+            "capability_id": "v05-pair-20-finalize",
+            "assigned_to": "v05-pair-20-finisher",
+            "depends_on": [
+              "t1"
+            ],
+            "expected_artifacts": [
+              "v05-pair-20-result"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-20-result"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          }
+        ],
+        "execution_order": [
+          "t1",
+          "t2"
+        ],
+        "expected_artifacts": [
+          "v05-pair-20-result"
+        ],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [
+            "v05-pair-20-result"
+          ],
+          "require_all_task_validators": true
+        }
+      },
+      "feasible": true,
+      "status": "completed",
+      "minimum_justification": "All admitted predicates and contracts are satisfied."
+    },
+    {
+      "case_id": "v05-pair-20-infeasible",
+      "pair_id": "v05-pair-20",
+      "domain": "customer support",
+      "invalidity_category": "unavailable_agent",
+      "oracle_proposal": {
+        "tasks": [
+          {
+            "task_id": "t1",
+            "requirement_name": "Prepare customer support",
+            "requirement_id": "v05-pair-20-prepare",
+            "capability_id": "v05-pair-20-prepare",
+            "assigned_to": "v05-pair-20-preparer",
+            "expected_artifacts": [
+              "v05-pair-20-intermediate"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-20-intermediate"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          },
+          {
+            "task_id": "t2",
+            "requirement_name": "Finalize customer support",
+            "requirement_id": "v05-pair-20-finalize",
+            "capability_id": "v05-pair-20-finalize",
+            "assigned_to": "v05-pair-20-finisher",
+            "depends_on": [
+              "t1"
+            ],
+            "expected_artifacts": [
+              "v05-pair-20-result"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-20-result"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          }
+        ],
+        "execution_order": [
+          "t1",
+          "t2"
+        ],
+        "expected_artifacts": [
+          "v05-pair-20-result"
+        ],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [
+            "v05-pair-20-result"
+          ],
+          "require_all_task_validators": true
+        }
+      },
+      "feasible": false,
+      "status": "infeasible",
+      "minimum_justification": "The only canonical provider is unavailable."
+    },
+    {
+      "case_id": "v05-pair-21-feasible",
+      "pair_id": "v05-pair-21",
+      "domain": "customer support",
+      "invalidity_category": "incompatible_modality",
+      "oracle_proposal": {
+        "tasks": [
+          {
+            "task_id": "t1",
+            "requirement_name": "Prepare customer support",
+            "requirement_id": "v05-pair-21-prepare",
+            "capability_id": "v05-pair-21-prepare",
+            "assigned_to": "v05-pair-21-preparer",
+            "expected_artifacts": [
+              "v05-pair-21-intermediate"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-21-intermediate"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          },
+          {
+            "task_id": "t2",
+            "requirement_name": "Finalize customer support",
+            "requirement_id": "v05-pair-21-finalize",
+            "capability_id": "v05-pair-21-finalize",
+            "assigned_to": "v05-pair-21-finisher",
+            "depends_on": [
+              "t1"
+            ],
+            "expected_artifacts": [
+              "v05-pair-21-result"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-21-result"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          }
+        ],
+        "execution_order": [
+          "t1",
+          "t2"
+        ],
+        "expected_artifacts": [
+          "v05-pair-21-result"
+        ],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [
+            "v05-pair-21-result"
+          ],
+          "require_all_task_validators": true
+        }
+      },
+      "feasible": true,
+      "status": "completed",
+      "minimum_justification": "All admitted predicates and contracts are satisfied."
+    },
+    {
+      "case_id": "v05-pair-21-infeasible",
+      "pair_id": "v05-pair-21",
+      "domain": "customer support",
+      "invalidity_category": "incompatible_modality",
+      "oracle_proposal": {
+        "tasks": [
+          {
+            "task_id": "t1",
+            "requirement_name": "Prepare customer support",
+            "requirement_id": "v05-pair-21-prepare",
+            "capability_id": "v05-pair-21-prepare",
+            "assigned_to": "v05-pair-21-preparer",
+            "expected_artifacts": [
+              "v05-pair-21-intermediate"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-21-intermediate"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          },
+          {
+            "task_id": "t2",
+            "requirement_name": "Finalize customer support",
+            "requirement_id": "v05-pair-21-finalize",
+            "capability_id": "v05-pair-21-finalize",
+            "assigned_to": "v05-pair-21-finisher",
+            "depends_on": [
+              "t1"
+            ],
+            "expected_artifacts": [
+              "v05-pair-21-result"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-21-result"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          }
+        ],
+        "execution_order": [
+          "t1",
+          "t2"
+        ],
+        "expected_artifacts": [
+          "v05-pair-21-result"
+        ],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [
+            "v05-pair-21-result"
+          ],
+          "require_all_task_validators": true
+        }
+      },
+      "feasible": false,
+      "status": "infeasible",
+      "minimum_justification": "The provider cannot consume the required intermediate modality."
+    },
+    {
+      "case_id": "v05-pair-22-feasible",
+      "pair_id": "v05-pair-22",
+      "domain": "iot inspection",
+      "invalidity_category": "auxiliary_overreach",
+      "oracle_proposal": {
+        "tasks": [
+          {
+            "task_id": "t1",
+            "requirement_name": "Prepare iot inspection",
+            "requirement_id": "v05-pair-22-prepare",
+            "capability_id": "v05-pair-22-prepare",
+            "assigned_to": "v05-pair-22-preparer",
+            "expected_artifacts": [
+              "v05-pair-22-intermediate"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-22-intermediate"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          },
+          {
+            "task_id": "t2",
+            "requirement_name": "Finalize iot inspection",
+            "requirement_id": "v05-pair-22-finalize",
+            "capability_id": "v05-pair-22-finalize",
+            "assigned_to": "v05-pair-22-finisher",
+            "depends_on": [
+              "t1"
+            ],
+            "expected_artifacts": [
+              "v05-pair-22-result"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-22-result"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          }
+        ],
+        "execution_order": [
+          "t1",
+          "t2"
+        ],
+        "expected_artifacts": [
+          "v05-pair-22-result"
+        ],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [
+            "v05-pair-22-result"
+          ],
+          "require_all_task_validators": true
+        }
+      },
+      "feasible": true,
+      "status": "completed",
+      "minimum_justification": "All admitted predicates and contracts are satisfied."
+    },
+    {
+      "case_id": "v05-pair-22-infeasible",
+      "pair_id": "v05-pair-22",
+      "domain": "iot inspection",
+      "invalidity_category": "auxiliary_overreach",
+      "oracle_proposal": {
+        "tasks": [
+          {
+            "task_id": "t1",
+            "requirement_name": "Prepare iot inspection",
+            "requirement_id": "v05-pair-22-prepare",
+            "capability_id": "v05-pair-22-prepare",
+            "assigned_to": "v05-pair-22-preparer",
+            "expected_artifacts": [
+              "v05-pair-22-intermediate"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-22-intermediate"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          },
+          {
+            "task_id": "t2",
+            "requirement_name": "Finalize iot inspection",
+            "requirement_id": "v05-pair-22-finalize",
+            "capability_id": "v05-pair-22-finalize-unadmitted-auxiliary",
+            "assigned_to": "v05-pair-22-finisher",
+            "depends_on": [
+              "t1"
+            ],
+            "expected_artifacts": [
+              "v05-pair-22-result"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-22-result"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          }
+        ],
+        "execution_order": [
+          "t1",
+          "t2"
+        ],
+        "expected_artifacts": [
+          "v05-pair-22-result"
+        ],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [
+            "v05-pair-22-result"
+          ],
+          "require_all_task_validators": true
+        }
+      },
+      "feasible": false,
+      "status": "infeasible",
+      "minimum_justification": "The missing capability is explicitly ineligible for auxiliary synthesis."
+    },
+    {
+      "case_id": "v05-pair-23-feasible",
+      "pair_id": "v05-pair-23",
+      "domain": "iot inspection",
+      "invalidity_category": "insufficient_trust",
+      "oracle_proposal": {
+        "tasks": [
+          {
+            "task_id": "t1",
+            "requirement_name": "Prepare iot inspection",
+            "requirement_id": "v05-pair-23-prepare",
+            "capability_id": "v05-pair-23-prepare",
+            "assigned_to": "v05-pair-23-preparer",
+            "expected_artifacts": [
+              "v05-pair-23-intermediate"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-23-intermediate"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          },
+          {
+            "task_id": "t2",
+            "requirement_name": "Finalize iot inspection",
+            "requirement_id": "v05-pair-23-finalize",
+            "capability_id": "v05-pair-23-finalize",
+            "assigned_to": "v05-pair-23-finisher",
+            "depends_on": [
+              "t1"
+            ],
+            "expected_artifacts": [
+              "v05-pair-23-result"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-23-result"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          }
+        ],
+        "execution_order": [
+          "t1",
+          "t2"
+        ],
+        "expected_artifacts": [
+          "v05-pair-23-result"
+        ],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [
+            "v05-pair-23-result"
+          ],
+          "require_all_task_validators": true
+        }
+      },
+      "feasible": true,
+      "status": "completed",
+      "minimum_justification": "All admitted predicates and contracts are satisfied."
+    },
+    {
+      "case_id": "v05-pair-23-infeasible",
+      "pair_id": "v05-pair-23",
+      "domain": "iot inspection",
+      "invalidity_category": "insufficient_trust",
+      "oracle_proposal": {
+        "tasks": [
+          {
+            "task_id": "t1",
+            "requirement_name": "Prepare iot inspection",
+            "requirement_id": "v05-pair-23-prepare",
+            "capability_id": "v05-pair-23-prepare",
+            "assigned_to": "v05-pair-23-preparer",
+            "expected_artifacts": [
+              "v05-pair-23-intermediate"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-23-intermediate"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          },
+          {
+            "task_id": "t2",
+            "requirement_name": "Finalize iot inspection",
+            "requirement_id": "v05-pair-23-finalize",
+            "capability_id": "v05-pair-23-finalize",
+            "assigned_to": "v05-pair-23-finisher",
+            "depends_on": [
+              "t1"
+            ],
+            "expected_artifacts": [
+              "v05-pair-23-result"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-23-result"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          }
+        ],
+        "execution_order": [
+          "t1",
+          "t2"
+        ],
+        "expected_artifacts": [
+          "v05-pair-23-result"
+        ],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [
+            "v05-pair-23-result"
+          ],
+          "require_all_task_validators": true
+        }
+      },
+      "feasible": false,
+      "status": "infeasible",
+      "minimum_justification": "The available provider does not satisfy required trust."
+    },
+    {
+      "case_id": "v05-pair-24-feasible",
+      "pair_id": "v05-pair-24",
+      "domain": "iot inspection",
+      "invalidity_category": "typed_constraint_violation",
+      "oracle_proposal": {
+        "tasks": [
+          {
+            "task_id": "t1",
+            "requirement_name": "Prepare iot inspection",
+            "requirement_id": "v05-pair-24-prepare",
+            "capability_id": "v05-pair-24-prepare",
+            "assigned_to": "v05-pair-24-preparer",
+            "expected_artifacts": [
+              "v05-pair-24-intermediate"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-24-intermediate"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          },
+          {
+            "task_id": "t2",
+            "requirement_name": "Finalize iot inspection",
+            "requirement_id": "v05-pair-24-finalize",
+            "capability_id": "v05-pair-24-finalize",
+            "assigned_to": "v05-pair-24-finisher",
+            "depends_on": [
+              "t1"
+            ],
+            "expected_artifacts": [
+              "v05-pair-24-result"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-24-result"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          }
+        ],
+        "execution_order": [
+          "t1",
+          "t2"
+        ],
+        "expected_artifacts": [
+          "v05-pair-24-result"
+        ],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [
+            "v05-pair-24-result"
+          ],
+          "require_all_task_validators": true
+        }
+      },
+      "feasible": true,
+      "status": "completed",
+      "minimum_justification": "All admitted predicates and contracts are satisfied."
+    },
+    {
+      "case_id": "v05-pair-24-infeasible",
+      "pair_id": "v05-pair-24",
+      "domain": "iot inspection",
+      "invalidity_category": "typed_constraint_violation",
+      "oracle_proposal": {
+        "tasks": [
+          {
+            "task_id": "t1",
+            "requirement_name": "Prepare iot inspection",
+            "requirement_id": "v05-pair-24-prepare",
+            "capability_id": "v05-pair-24-prepare",
+            "assigned_to": "v05-pair-24-preparer",
+            "expected_artifacts": [
+              "v05-pair-24-intermediate"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-24-intermediate"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          },
+          {
+            "task_id": "t2",
+            "requirement_name": "Finalize iot inspection",
+            "requirement_id": "v05-pair-24-finalize",
+            "capability_id": "v05-pair-24-finalize",
+            "assigned_to": "v05-pair-24-finisher",
+            "depends_on": [
+              "t1"
+            ],
+            "expected_artifacts": [
+              "v05-pair-24-result"
+            ],
+            "validation_contract": {
+              "required_artifacts": [
+                "v05-pair-24-result"
+              ],
+              "json_schema": {
+                "type": "object"
+              }
+            }
+          }
+        ],
+        "execution_order": [
+          "t1",
+          "t2"
+        ],
+        "expected_artifacts": [
+          "v05-pair-24-result"
+        ],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [
+            "v05-pair-24-result"
+          ],
+          "require_all_task_validators": true
+        }
+      },
+      "feasible": false,
+      "status": "infeasible",
+      "minimum_justification": "A typed request-context constraint evaluates false."
+    }
+  ]
+}
