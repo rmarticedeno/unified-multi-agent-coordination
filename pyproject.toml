@@ -41,6 +41,9 @@ unified-analyze-defense-study-v04 = "unified_multi_agent_coordination.study_anal
 unified-generate-defense-corpus-v05 = "unified_multi_agent_coordination.corpus_v05:main"
 unified-defense-study-v05 = "unified_multi_agent_coordination.defense_study_v05:main"
 unified-analyze-defense-study-v05 = "unified_multi_agent_coordination.study_analysis_v05:main"
+unified-generate-defense-corpus-v06 = "unified_multi_agent_coordination.corpus_v06:main"
+unified-defense-study-v06 = "unified_multi_agent_coordination.defense_study_v06:main"
+unified-analyze-defense-study-v06 = "unified_multi_agent_coordination.study_analysis_v06:main"
 unified-thesis-evidence = "unified_multi_agent_coordination.thesis_evidence:main"
 
 [build-system]

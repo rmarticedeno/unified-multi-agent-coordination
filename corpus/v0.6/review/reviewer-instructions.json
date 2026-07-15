@@ -1,0 +1,12 @@
+{
+  "version": "0.6",
+  "blind": true,
+  "author_labels_included": false,
+  "instructions": [
+    "Judge feasibility using only the request and public environment.",
+    "Enter exactly true or false in reviewer_feasible for every case.",
+    "Give a short predicate-level justification.",
+    "Return the completed CSV with reviewer identity and date separately."
+  ],
+  "status": "awaiting_independent_reviewer"
+}

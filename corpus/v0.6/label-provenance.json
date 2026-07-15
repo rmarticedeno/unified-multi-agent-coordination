@@ -1,0 +1,13 @@
+{
+  "annotation_type": "author_labeled",
+  "author": "Roberto Marti Cedeno",
+  "annotation_date": "2026-07-15T18:12:19.315638+00:00",
+  "labeling_protocol_version": "raw-language-matched-pairs-v1",
+  "corpus_version": "0.6",
+  "corpus_hash": "ecd694bf8fe6a9c157b197ffd0e1f316c78cf21c351afa8aea28ec31a234dbc3",
+  "frozen": true,
+  "pre_specified_before_collection": true,
+  "label_hidden_during_inference": true,
+  "independent_adjudication": false,
+  "limitation": "Author-only labels are not an independent benchmark."
+}

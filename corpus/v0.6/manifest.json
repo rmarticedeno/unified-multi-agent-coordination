@@ -1,0 +1,25 @@
+{
+  "version": "0.6",
+  "generated_at": "2026-07-15T18:12:19.315638+00:00",
+  "corpus_hash": "ecd694bf8fe6a9c157b197ffd0e1f316c78cf21c351afa8aea28ec31a234dbc3",
+  "case_count": 80,
+  "matched_pair_count": 40,
+  "feasible_case_count": 40,
+  "infeasible_case_count": 40,
+  "category_case_counts": {
+    "ambiguity": 12,
+    "artifact_schema": 14,
+    "dependencies": 14,
+    "negation": 12,
+    "paraphrase": 14,
+    "trust_policy": 14
+  },
+  "primary_statistical_unit": "matched case pair",
+  "repeated_measurements": [
+    "arm",
+    "model",
+    "requested_seed"
+  ],
+  "expected_llm_outputs": 2400,
+  "labels_exposed_during_collection": false
+}

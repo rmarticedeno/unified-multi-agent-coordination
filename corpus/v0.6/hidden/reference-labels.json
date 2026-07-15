@@ -1,0 +1,1736 @@
+{
+  "version": "0.6",
+  "corpus_hash": "ecd694bf8fe6a9c157b197ffd0e1f316c78cf21c351afa8aea28ec31a234dbc3",
+  "labels": [
+    {
+      "case_id": "v06-pair-01-feasible",
+      "pair_id": "v06-pair-01",
+      "category": "paraphrase",
+      "feasible": true,
+      "minimum_justification": "The public registry and policy satisfy the request.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-01-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-01-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-01-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-01-infeasible",
+      "pair_id": "v06-pair-01",
+      "category": "paraphrase",
+      "feasible": false,
+      "minimum_justification": "No admitted agent provides the requested archival capability.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-01-archive"
+        ],
+        "required_policy_ids": [
+          "v06-pair-01-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-01-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-02-feasible",
+      "pair_id": "v06-pair-02",
+      "category": "dependencies",
+      "feasible": true,
+      "minimum_justification": "The public registry and policy satisfy the request.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-02-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-02-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-02-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-02-infeasible",
+      "pair_id": "v06-pair-02",
+      "category": "dependencies",
+      "feasible": false,
+      "minimum_justification": "A required dependency is explicitly forbidden.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-02-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-02-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-02-contract-json"
+        ],
+        "forbidden_capability_ids": [
+          "v06-pair-02-prepare"
+        ],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-03-feasible",
+      "pair_id": "v06-pair-03",
+      "category": "trust_policy",
+      "feasible": true,
+      "minimum_justification": "The public registry and policy satisfy the request.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-03-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-03-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-03-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-03-infeasible",
+      "pair_id": "v06-pair-03",
+      "category": "trust_policy",
+      "feasible": false,
+      "minimum_justification": "No provider satisfies the requested high-assurance policy.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-03-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-03-trust-high"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-03-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-04-feasible",
+      "pair_id": "v06-pair-04",
+      "category": "artifact_schema",
+      "feasible": true,
+      "minimum_justification": "The public registry and policy satisfy the request.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-04-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-04-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-04-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-04-infeasible",
+      "pair_id": "v06-pair-04",
+      "category": "artifact_schema",
+      "feasible": false,
+      "minimum_justification": "The selected providers cannot produce the required signed-PDF mode.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-04-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-04-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-04-contract-signed-pdf"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-05-feasible",
+      "pair_id": "v06-pair-05",
+      "category": "ambiguity",
+      "feasible": true,
+      "minimum_justification": "The public registry and policy satisfy the request.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-05-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-05-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-05-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-05-infeasible",
+      "pair_id": "v06-pair-05",
+      "category": "ambiguity",
+      "feasible": false,
+      "minimum_justification": "The final operation is explicitly unresolved between two public capabilities.",
+      "typed_reference_request": {
+        "interpretation_status": "ambiguous",
+        "goal_capability_ids": [
+          "v06-pair-05-deliver",
+          "v06-pair-05-archive"
+        ],
+        "required_policy_ids": [
+          "v06-pair-05-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-05-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-06-feasible",
+      "pair_id": "v06-pair-06",
+      "category": "negation",
+      "feasible": true,
+      "minimum_justification": "The public registry and policy satisfy the request.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-06-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-06-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-06-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [
+          "v06-pair-06-delivery-b"
+        ]
+      }
+    },
+    {
+      "case_id": "v06-pair-06-infeasible",
+      "pair_id": "v06-pair-06",
+      "category": "negation",
+      "feasible": false,
+      "minimum_justification": "Every admitted provider of the goal capability is explicitly forbidden.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-06-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-06-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-06-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [
+          "v06-pair-06-delivery-a",
+          "v06-pair-06-delivery-b"
+        ]
+      }
+    },
+    {
+      "case_id": "v06-pair-07-feasible",
+      "pair_id": "v06-pair-07",
+      "category": "paraphrase",
+      "feasible": true,
+      "minimum_justification": "The public registry and policy satisfy the request.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-07-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-07-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-07-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-07-infeasible",
+      "pair_id": "v06-pair-07",
+      "category": "paraphrase",
+      "feasible": false,
+      "minimum_justification": "No admitted agent provides the requested archival capability.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-07-archive"
+        ],
+        "required_policy_ids": [
+          "v06-pair-07-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-07-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-08-feasible",
+      "pair_id": "v06-pair-08",
+      "category": "dependencies",
+      "feasible": true,
+      "minimum_justification": "The public registry and policy satisfy the request.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-08-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-08-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-08-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-08-infeasible",
+      "pair_id": "v06-pair-08",
+      "category": "dependencies",
+      "feasible": false,
+      "minimum_justification": "A required dependency is explicitly forbidden.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-08-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-08-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-08-contract-json"
+        ],
+        "forbidden_capability_ids": [
+          "v06-pair-08-prepare"
+        ],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-09-feasible",
+      "pair_id": "v06-pair-09",
+      "category": "trust_policy",
+      "feasible": true,
+      "minimum_justification": "The public registry and policy satisfy the request.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-09-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-09-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-09-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-09-infeasible",
+      "pair_id": "v06-pair-09",
+      "category": "trust_policy",
+      "feasible": false,
+      "minimum_justification": "No provider satisfies the requested high-assurance policy.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-09-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-09-trust-high"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-09-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-10-feasible",
+      "pair_id": "v06-pair-10",
+      "category": "artifact_schema",
+      "feasible": true,
+      "minimum_justification": "The public registry and policy satisfy the request.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-10-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-10-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-10-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-10-infeasible",
+      "pair_id": "v06-pair-10",
+      "category": "artifact_schema",
+      "feasible": false,
+      "minimum_justification": "The selected providers cannot produce the required signed-PDF mode.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-10-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-10-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-10-contract-signed-pdf"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-11-feasible",
+      "pair_id": "v06-pair-11",
+      "category": "ambiguity",
+      "feasible": true,
+      "minimum_justification": "The public registry and policy satisfy the request.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-11-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-11-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-11-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-11-infeasible",
+      "pair_id": "v06-pair-11",
+      "category": "ambiguity",
+      "feasible": false,
+      "minimum_justification": "The final operation is explicitly unresolved between two public capabilities.",
+      "typed_reference_request": {
+        "interpretation_status": "ambiguous",
+        "goal_capability_ids": [
+          "v06-pair-11-deliver",
+          "v06-pair-11-archive"
+        ],
+        "required_policy_ids": [
+          "v06-pair-11-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-11-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-12-feasible",
+      "pair_id": "v06-pair-12",
+      "category": "negation",
+      "feasible": true,
+      "minimum_justification": "The public registry and policy satisfy the request.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-12-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-12-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-12-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [
+          "v06-pair-12-delivery-b"
+        ]
+      }
+    },
+    {
+      "case_id": "v06-pair-12-infeasible",
+      "pair_id": "v06-pair-12",
+      "category": "negation",
+      "feasible": false,
+      "minimum_justification": "Every admitted provider of the goal capability is explicitly forbidden.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-12-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-12-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-12-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [
+          "v06-pair-12-delivery-a",
+          "v06-pair-12-delivery-b"
+        ]
+      }
+    },
+    {
+      "case_id": "v06-pair-13-feasible",
+      "pair_id": "v06-pair-13",
+      "category": "paraphrase",
+      "feasible": true,
+      "minimum_justification": "The public registry and policy satisfy the request.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-13-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-13-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-13-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-13-infeasible",
+      "pair_id": "v06-pair-13",
+      "category": "paraphrase",
+      "feasible": false,
+      "minimum_justification": "No admitted agent provides the requested archival capability.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-13-archive"
+        ],
+        "required_policy_ids": [
+          "v06-pair-13-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-13-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-14-feasible",
+      "pair_id": "v06-pair-14",
+      "category": "dependencies",
+      "feasible": true,
+      "minimum_justification": "The public registry and policy satisfy the request.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-14-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-14-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-14-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-14-infeasible",
+      "pair_id": "v06-pair-14",
+      "category": "dependencies",
+      "feasible": false,
+      "minimum_justification": "A required dependency is explicitly forbidden.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-14-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-14-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-14-contract-json"
+        ],
+        "forbidden_capability_ids": [
+          "v06-pair-14-prepare"
+        ],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-15-feasible",
+      "pair_id": "v06-pair-15",
+      "category": "trust_policy",
+      "feasible": true,
+      "minimum_justification": "The public registry and policy satisfy the request.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-15-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-15-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-15-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-15-infeasible",
+      "pair_id": "v06-pair-15",
+      "category": "trust_policy",
+      "feasible": false,
+      "minimum_justification": "No provider satisfies the requested high-assurance policy.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-15-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-15-trust-high"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-15-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-16-feasible",
+      "pair_id": "v06-pair-16",
+      "category": "artifact_schema",
+      "feasible": true,
+      "minimum_justification": "The public registry and policy satisfy the request.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-16-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-16-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-16-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-16-infeasible",
+      "pair_id": "v06-pair-16",
+      "category": "artifact_schema",
+      "feasible": false,
+      "minimum_justification": "The selected providers cannot produce the required signed-PDF mode.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-16-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-16-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-16-contract-signed-pdf"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-17-feasible",
+      "pair_id": "v06-pair-17",
+      "category": "ambiguity",
+      "feasible": true,
+      "minimum_justification": "The public registry and policy satisfy the request.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-17-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-17-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-17-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-17-infeasible",
+      "pair_id": "v06-pair-17",
+      "category": "ambiguity",
+      "feasible": false,
+      "minimum_justification": "The final operation is explicitly unresolved between two public capabilities.",
+      "typed_reference_request": {
+        "interpretation_status": "ambiguous",
+        "goal_capability_ids": [
+          "v06-pair-17-deliver",
+          "v06-pair-17-archive"
+        ],
+        "required_policy_ids": [
+          "v06-pair-17-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-17-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-18-feasible",
+      "pair_id": "v06-pair-18",
+      "category": "negation",
+      "feasible": true,
+      "minimum_justification": "The public registry and policy satisfy the request.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-18-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-18-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-18-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [
+          "v06-pair-18-delivery-b"
+        ]
+      }
+    },
+    {
+      "case_id": "v06-pair-18-infeasible",
+      "pair_id": "v06-pair-18",
+      "category": "negation",
+      "feasible": false,
+      "minimum_justification": "Every admitted provider of the goal capability is explicitly forbidden.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-18-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-18-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-18-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [
+          "v06-pair-18-delivery-a",
+          "v06-pair-18-delivery-b"
+        ]
+      }
+    },
+    {
+      "case_id": "v06-pair-19-feasible",
+      "pair_id": "v06-pair-19",
+      "category": "paraphrase",
+      "feasible": true,
+      "minimum_justification": "The public registry and policy satisfy the request.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-19-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-19-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-19-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-19-infeasible",
+      "pair_id": "v06-pair-19",
+      "category": "paraphrase",
+      "feasible": false,
+      "minimum_justification": "No admitted agent provides the requested archival capability.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-19-archive"
+        ],
+        "required_policy_ids": [
+          "v06-pair-19-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-19-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-20-feasible",
+      "pair_id": "v06-pair-20",
+      "category": "dependencies",
+      "feasible": true,
+      "minimum_justification": "The public registry and policy satisfy the request.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-20-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-20-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-20-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-20-infeasible",
+      "pair_id": "v06-pair-20",
+      "category": "dependencies",
+      "feasible": false,
+      "minimum_justification": "A required dependency is explicitly forbidden.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-20-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-20-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-20-contract-json"
+        ],
+        "forbidden_capability_ids": [
+          "v06-pair-20-prepare"
+        ],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-21-feasible",
+      "pair_id": "v06-pair-21",
+      "category": "trust_policy",
+      "feasible": true,
+      "minimum_justification": "The public registry and policy satisfy the request.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-21-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-21-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-21-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-21-infeasible",
+      "pair_id": "v06-pair-21",
+      "category": "trust_policy",
+      "feasible": false,
+      "minimum_justification": "No provider satisfies the requested high-assurance policy.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-21-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-21-trust-high"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-21-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-22-feasible",
+      "pair_id": "v06-pair-22",
+      "category": "artifact_schema",
+      "feasible": true,
+      "minimum_justification": "The public registry and policy satisfy the request.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-22-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-22-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-22-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-22-infeasible",
+      "pair_id": "v06-pair-22",
+      "category": "artifact_schema",
+      "feasible": false,
+      "minimum_justification": "The selected providers cannot produce the required signed-PDF mode.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-22-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-22-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-22-contract-signed-pdf"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-23-feasible",
+      "pair_id": "v06-pair-23",
+      "category": "ambiguity",
+      "feasible": true,
+      "minimum_justification": "The public registry and policy satisfy the request.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-23-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-23-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-23-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-23-infeasible",
+      "pair_id": "v06-pair-23",
+      "category": "ambiguity",
+      "feasible": false,
+      "minimum_justification": "The final operation is explicitly unresolved between two public capabilities.",
+      "typed_reference_request": {
+        "interpretation_status": "ambiguous",
+        "goal_capability_ids": [
+          "v06-pair-23-deliver",
+          "v06-pair-23-archive"
+        ],
+        "required_policy_ids": [
+          "v06-pair-23-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-23-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-24-feasible",
+      "pair_id": "v06-pair-24",
+      "category": "negation",
+      "feasible": true,
+      "minimum_justification": "The public registry and policy satisfy the request.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-24-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-24-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-24-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [
+          "v06-pair-24-delivery-b"
+        ]
+      }
+    },
+    {
+      "case_id": "v06-pair-24-infeasible",
+      "pair_id": "v06-pair-24",
+      "category": "negation",
+      "feasible": false,
+      "minimum_justification": "Every admitted provider of the goal capability is explicitly forbidden.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-24-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-24-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-24-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [
+          "v06-pair-24-delivery-a",
+          "v06-pair-24-delivery-b"
+        ]
+      }
+    },
+    {
+      "case_id": "v06-pair-25-feasible",
+      "pair_id": "v06-pair-25",
+      "category": "paraphrase",
+      "feasible": true,
+      "minimum_justification": "The public registry and policy satisfy the request.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-25-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-25-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-25-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-25-infeasible",
+      "pair_id": "v06-pair-25",
+      "category": "paraphrase",
+      "feasible": false,
+      "minimum_justification": "No admitted agent provides the requested archival capability.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-25-archive"
+        ],
+        "required_policy_ids": [
+          "v06-pair-25-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-25-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-26-feasible",
+      "pair_id": "v06-pair-26",
+      "category": "dependencies",
+      "feasible": true,
+      "minimum_justification": "The public registry and policy satisfy the request.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-26-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-26-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-26-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-26-infeasible",
+      "pair_id": "v06-pair-26",
+      "category": "dependencies",
+      "feasible": false,
+      "minimum_justification": "A required dependency is explicitly forbidden.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-26-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-26-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-26-contract-json"
+        ],
+        "forbidden_capability_ids": [
+          "v06-pair-26-prepare"
+        ],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-27-feasible",
+      "pair_id": "v06-pair-27",
+      "category": "trust_policy",
+      "feasible": true,
+      "minimum_justification": "The public registry and policy satisfy the request.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-27-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-27-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-27-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-27-infeasible",
+      "pair_id": "v06-pair-27",
+      "category": "trust_policy",
+      "feasible": false,
+      "minimum_justification": "No provider satisfies the requested high-assurance policy.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-27-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-27-trust-high"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-27-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-28-feasible",
+      "pair_id": "v06-pair-28",
+      "category": "artifact_schema",
+      "feasible": true,
+      "minimum_justification": "The public registry and policy satisfy the request.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-28-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-28-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-28-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-28-infeasible",
+      "pair_id": "v06-pair-28",
+      "category": "artifact_schema",
+      "feasible": false,
+      "minimum_justification": "The selected providers cannot produce the required signed-PDF mode.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-28-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-28-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-28-contract-signed-pdf"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-29-feasible",
+      "pair_id": "v06-pair-29",
+      "category": "ambiguity",
+      "feasible": true,
+      "minimum_justification": "The public registry and policy satisfy the request.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-29-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-29-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-29-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-29-infeasible",
+      "pair_id": "v06-pair-29",
+      "category": "ambiguity",
+      "feasible": false,
+      "minimum_justification": "The final operation is explicitly unresolved between two public capabilities.",
+      "typed_reference_request": {
+        "interpretation_status": "ambiguous",
+        "goal_capability_ids": [
+          "v06-pair-29-deliver",
+          "v06-pair-29-archive"
+        ],
+        "required_policy_ids": [
+          "v06-pair-29-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-29-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-30-feasible",
+      "pair_id": "v06-pair-30",
+      "category": "negation",
+      "feasible": true,
+      "minimum_justification": "The public registry and policy satisfy the request.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-30-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-30-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-30-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [
+          "v06-pair-30-delivery-b"
+        ]
+      }
+    },
+    {
+      "case_id": "v06-pair-30-infeasible",
+      "pair_id": "v06-pair-30",
+      "category": "negation",
+      "feasible": false,
+      "minimum_justification": "Every admitted provider of the goal capability is explicitly forbidden.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-30-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-30-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-30-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [
+          "v06-pair-30-delivery-a",
+          "v06-pair-30-delivery-b"
+        ]
+      }
+    },
+    {
+      "case_id": "v06-pair-31-feasible",
+      "pair_id": "v06-pair-31",
+      "category": "paraphrase",
+      "feasible": true,
+      "minimum_justification": "The public registry and policy satisfy the request.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-31-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-31-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-31-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-31-infeasible",
+      "pair_id": "v06-pair-31",
+      "category": "paraphrase",
+      "feasible": false,
+      "minimum_justification": "No admitted agent provides the requested archival capability.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-31-archive"
+        ],
+        "required_policy_ids": [
+          "v06-pair-31-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-31-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-32-feasible",
+      "pair_id": "v06-pair-32",
+      "category": "dependencies",
+      "feasible": true,
+      "minimum_justification": "The public registry and policy satisfy the request.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-32-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-32-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-32-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-32-infeasible",
+      "pair_id": "v06-pair-32",
+      "category": "dependencies",
+      "feasible": false,
+      "minimum_justification": "A required dependency is explicitly forbidden.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-32-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-32-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-32-contract-json"
+        ],
+        "forbidden_capability_ids": [
+          "v06-pair-32-prepare"
+        ],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-33-feasible",
+      "pair_id": "v06-pair-33",
+      "category": "trust_policy",
+      "feasible": true,
+      "minimum_justification": "The public registry and policy satisfy the request.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-33-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-33-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-33-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-33-infeasible",
+      "pair_id": "v06-pair-33",
+      "category": "trust_policy",
+      "feasible": false,
+      "minimum_justification": "No provider satisfies the requested high-assurance policy.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-33-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-33-trust-high"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-33-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-34-feasible",
+      "pair_id": "v06-pair-34",
+      "category": "artifact_schema",
+      "feasible": true,
+      "minimum_justification": "The public registry and policy satisfy the request.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-34-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-34-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-34-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-34-infeasible",
+      "pair_id": "v06-pair-34",
+      "category": "artifact_schema",
+      "feasible": false,
+      "minimum_justification": "The selected providers cannot produce the required signed-PDF mode.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-34-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-34-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-34-contract-signed-pdf"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-35-feasible",
+      "pair_id": "v06-pair-35",
+      "category": "ambiguity",
+      "feasible": true,
+      "minimum_justification": "The public registry and policy satisfy the request.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-35-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-35-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-35-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-35-infeasible",
+      "pair_id": "v06-pair-35",
+      "category": "ambiguity",
+      "feasible": false,
+      "minimum_justification": "The final operation is explicitly unresolved between two public capabilities.",
+      "typed_reference_request": {
+        "interpretation_status": "ambiguous",
+        "goal_capability_ids": [
+          "v06-pair-35-deliver",
+          "v06-pair-35-archive"
+        ],
+        "required_policy_ids": [
+          "v06-pair-35-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-35-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-36-feasible",
+      "pair_id": "v06-pair-36",
+      "category": "negation",
+      "feasible": true,
+      "minimum_justification": "The public registry and policy satisfy the request.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-36-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-36-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-36-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [
+          "v06-pair-36-delivery-b"
+        ]
+      }
+    },
+    {
+      "case_id": "v06-pair-36-infeasible",
+      "pair_id": "v06-pair-36",
+      "category": "negation",
+      "feasible": false,
+      "minimum_justification": "Every admitted provider of the goal capability is explicitly forbidden.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-36-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-36-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-36-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [
+          "v06-pair-36-delivery-a",
+          "v06-pair-36-delivery-b"
+        ]
+      }
+    },
+    {
+      "case_id": "v06-pair-37-feasible",
+      "pair_id": "v06-pair-37",
+      "category": "paraphrase",
+      "feasible": true,
+      "minimum_justification": "The public registry and policy satisfy the request.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-37-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-37-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-37-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-37-infeasible",
+      "pair_id": "v06-pair-37",
+      "category": "paraphrase",
+      "feasible": false,
+      "minimum_justification": "No admitted agent provides the requested archival capability.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-37-archive"
+        ],
+        "required_policy_ids": [
+          "v06-pair-37-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-37-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-38-feasible",
+      "pair_id": "v06-pair-38",
+      "category": "dependencies",
+      "feasible": true,
+      "minimum_justification": "The public registry and policy satisfy the request.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-38-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-38-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-38-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-38-infeasible",
+      "pair_id": "v06-pair-38",
+      "category": "dependencies",
+      "feasible": false,
+      "minimum_justification": "A required dependency is explicitly forbidden.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-38-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-38-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-38-contract-json"
+        ],
+        "forbidden_capability_ids": [
+          "v06-pair-38-prepare"
+        ],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-39-feasible",
+      "pair_id": "v06-pair-39",
+      "category": "trust_policy",
+      "feasible": true,
+      "minimum_justification": "The public registry and policy satisfy the request.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-39-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-39-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-39-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-39-infeasible",
+      "pair_id": "v06-pair-39",
+      "category": "trust_policy",
+      "feasible": false,
+      "minimum_justification": "No provider satisfies the requested high-assurance policy.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-39-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-39-trust-high"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-39-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-40-feasible",
+      "pair_id": "v06-pair-40",
+      "category": "artifact_schema",
+      "feasible": true,
+      "minimum_justification": "The public registry and policy satisfy the request.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-40-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-40-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-40-contract-json"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": []
+      }
+    },
+    {
+      "case_id": "v06-pair-40-infeasible",
+      "pair_id": "v06-pair-40",
+      "category": "artifact_schema",
+      "feasible": false,
+      "minimum_justification": "The selected providers cannot produce the required signed-PDF mode.",
+      "typed_reference_request": {
+        "interpretation_status": "resolved",
+        "goal_capability_ids": [
+          "v06-pair-40-deliver"
+        ],
+        "required_policy_ids": [
+          "v06-pair-40-trust-standard"
+        ],
+        "required_artifact_contract_ids": [
+          "v06-pair-40-contract-signed-pdf"
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": []
+      }
+    }
+  ]
+}
