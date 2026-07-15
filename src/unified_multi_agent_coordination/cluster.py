@@ -66,9 +66,7 @@ class MembershipOperation(BaseModel):
     node_id: str
     member_id: int = 0
     peer_url: str = ""
-    phase: Literal["intent_recorded", "backend_applied", "assignment_applied"] = (
-        "intent_recorded"
-    )
+    phase: Literal["intent_recorded", "backend_applied", "assignment_applied"] = "intent_recorded"
     started_revision: int = 0
     latest_revision: int = 0
     status: Literal["pending", "completed"] = "pending"
@@ -247,8 +245,7 @@ class MembershipManager:
                 member
                 for member in members
                 if peer_url
-                and peer_url
-                in (member.get("peerURLs") or member.get("peer_urls") or [])
+                and peer_url in (member.get("peerURLs") or member.get("peer_urls") or [])
             ),
             None,
         )
@@ -333,9 +330,7 @@ class MembershipManager:
                 "Cluster configuration changed concurrently; reload and retry."
             )
         self.configuration = updated
-        self.current_node = self.current_node.model_copy(
-            update={"voter_target": voter_target}
-        )
+        self.current_node = self.current_node.model_copy(update={"voter_target": voter_target})
         for prefix in ("nodes/", "membership/intents/"):
             records = await self.client.range(self._key(prefix), prefix=True)
             for item in records.values:
@@ -391,18 +386,18 @@ class MembershipManager:
                         intent_by_node[node.node_id].role == "client"
                         and intent_by_node[node.node_id].member_id == 0
                     )
-                    or backend_role_by_member.get(
-                        intent_by_node[node.node_id].member_id
-                    )
+                    or backend_role_by_member.get(intent_by_node[node.node_id].member_id)
                     == intent_by_node[node.node_id].role
                 )
             )
             for node in nodes
         }
         unresolved_roles = sum(not value for value in role_agreement.values())
-        pending_changes = int(operation is not None) + sum(
-            node.role in {"learner", "draining"} for node in nodes
-        ) + unresolved_roles
+        pending_changes = (
+            int(operation is not None)
+            + sum(node.role in {"learner", "draining"} for node in nodes)
+            + unresolved_roles
+        )
         steady_state = (
             quorum_available
             and not development_target
@@ -441,9 +436,7 @@ class MembershipManager:
             "quorum_available": quorum_available,
             "leader": int(backend_status.get("leader") or 0),
             "revision": int((backend_status.get("header") or {}).get("revision") or 0),
-            "discovery_method": os.getenv(
-                "COORDINATION_DISCOVERY_METHOD", "configured"
-            ),
+            "discovery_method": os.getenv("COORDINATION_DISCOVERY_METHOD", "configured"),
             "pending_membership_changes": pending_changes,
             "pending_membership_operation": (
                 operation.model_dump(mode="json") if operation is not None else None
@@ -471,9 +464,7 @@ class MembershipManager:
 
     async def _register_current_node(self) -> None:
         lease_id = await self.client.grant_lease(self.registration_ttl_s)
-        self.current_node = self.current_node.model_copy(
-            update={"backend_lease_id": lease_id}
-        )
+        self.current_node = self.current_node.model_copy(update={"backend_lease_id": lease_id})
         await self.client.put(
             self._key(f"nodes/{self.current_node.node_id}"),
             self.current_node.model_dump_json().encode(),
@@ -526,6 +517,8 @@ class MembershipManager:
                 self.configuration = authoritative
             members = await self.member_records()
             if await self._recover_membership_operation(members):
+                return
+            if await self._repair_authoritative_roles(members):
                 return
             voters = [member for member in members if not member.get("isLearner", False)]
             learners = [member for member in members if member.get("isLearner", False)]
@@ -592,6 +585,27 @@ class MembershipManager:
                     sort_keys=True,
                 ).encode(),
             )
+
+    async def _repair_authoritative_roles(self, members: list[JsonObject]) -> bool:
+        """Repair durable intent roles after a backend-applied operation loses its marker."""
+        backend_roles = {
+            int(member.get("ID") or member.get("id") or 0): (
+                "learner" if member.get("isLearner", False) else "voter"
+            )
+            for member in members
+        }
+        repaired = False
+        intents = await self.client.range(self._key("membership/intents/"), prefix=True)
+        for item in intents.values:
+            record = CoordinatorNodeRecord.model_validate_json(item.value)
+            authoritative_role = backend_roles.get(record.member_id)
+            if authoritative_role is None or record.role == authoritative_role:
+                continue
+            synchronized = record.model_copy(update={"role": authoritative_role})
+            await self.client.put(item.key, synchronized.model_dump_json().encode())
+            await self._record_history("member_role_repaired", synchronized)
+            repaired = True
+        return repaired
 
     async def _assign_client_as_learner(self, members: list[JsonObject]) -> None:
         active_nodes = await self.node_records()
@@ -712,9 +726,7 @@ class MembershipManager:
     ) -> bool:
         active_nodes = await self.node_records()
         active_member_ids = {node.member_id for node in active_nodes if node.member_id}
-        voter_ids = {
-            int(member.get("ID") or member.get("id") or 0) for member in voters
-        }
+        voter_ids = {int(member.get("ID") or member.get("id") or 0) for member in voters}
         healthy_voters = voter_ids & active_member_ids
         quorum = len(voters) // 2 + 1
         if len(healthy_voters) < quorum:
@@ -863,9 +875,7 @@ class MembershipManager:
             self._key("membership/operation"), changed.model_dump_json().encode()
         )
         changed = changed.model_copy(update={"latest_revision": revision})
-        await self.client.put(
-            self._key("membership/operation"), changed.model_dump_json().encode()
-        )
+        await self.client.put(self._key("membership/operation"), changed.model_dump_json().encode())
         return changed
 
     async def _complete_membership_operation(self, operation: MembershipOperation) -> None:
@@ -891,8 +901,7 @@ class MembershipManager:
                 if int(item.get("ID") or item.get("id") or 0) == operation.member_id
                 or (
                     operation.peer_url
-                    and operation.peer_url
-                    in (item.get("peerURLs") or item.get("peer_urls") or [])
+                    and operation.peer_url in (item.get("peerURLs") or item.get("peer_urls") or [])
                 )
             ),
             None,
@@ -950,9 +959,7 @@ class MembershipManager:
             return None
         return CoordinatorNodeRecord.model_validate_json(result.values[0].value)
 
-    def _assignment(
-        self, record: CoordinatorNodeRecord, members: list[JsonObject]
-    ) -> JsonObject:
+    def _assignment(self, record: CoordinatorNodeRecord, members: list[JsonObject]) -> JsonObject:
         return {
             "role": record.role,
             "member_id": record.member_id,
@@ -965,9 +972,7 @@ class MembershipManager:
             "voter_target": self.configuration.voter_target,
         }
 
-    async def _record_history(
-        self, event: str, record: CoordinatorNodeRecord
-    ) -> None:
+    async def _record_history(self, event: str, record: CoordinatorNodeRecord) -> None:
         await self.client.put(
             self._key(f"membership/history/{uuid.uuid4().hex}"),
             json.dumps(

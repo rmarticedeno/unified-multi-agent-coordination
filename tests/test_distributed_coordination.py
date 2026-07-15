@@ -67,9 +67,7 @@ def test_hmac_rejects_tampering_replay_expiry_and_wrong_cluster() -> None:
     with pytest.raises(ValueError, match="replayed"):
         authenticator.verify(signed, expected_cluster_id="alpha")
 
-    tampered = signed.model_copy(
-        update={"nonce": "different", "payload": {"peer_url": "forged"}}
-    )
+    tampered = signed.model_copy(update={"nonce": "different", "payload": {"peer_url": "forged"}})
     with pytest.raises(ValueError, match="signature"):
         authenticator.verify(tampered, expected_cluster_id="alpha")
 
@@ -376,17 +374,13 @@ async def test_membership_configuration_uses_generation_compare_and_swap() -> No
     )
     await manager.initialize()
 
-    updated = await manager.update_voter_target(
-        5, expected_generation=0, updated_by="operator"
-    )
+    updated = await manager.update_voter_target(5, expected_generation=0, updated_by="operator")
 
     assert updated.voter_target == 5
     assert updated.generation == 1
     assert updated.updated_by == "operator"
     with pytest.raises(ConfigurationConflictError, match="stale"):
-        await manager.update_voter_target(
-            7, expected_generation=0, updated_by="stale-operator"
-        )
+        await manager.update_voter_target(7, expected_generation=0, updated_by="stale-operator")
 
 
 @pytest.mark.asyncio
@@ -457,6 +451,43 @@ async def test_membership_reconciliation_adds_promotes_and_reaches_steady_state(
     assert status["steady_state"] is True
     assert status["active_voters"] == 3
     assert status["pending_membership_changes"] == 0
+
+
+@pytest.mark.asyncio
+async def test_reconciliation_repairs_stale_learner_intent_after_backend_promotion() -> None:
+    backend = FakeEtcdClient()
+    backend.members = [
+        {"ID": 1, "isLearner": False, "peerURLs": ["http://a:2380"]},
+        {"ID": 2, "isLearner": False, "peerURLs": ["http://b:2380"]},
+        {"ID": 3, "isLearner": False, "peerURLs": ["http://c:2380"]},
+    ]
+    manager = MembershipManager(
+        backend,
+        ClusterConfiguration(cluster_id="role-repair", voter_target=3),
+        CoordinatorNodeRecord(
+            node_id="node-a",
+            api_url="http://a",
+            peer_url="http://a:2380",
+            role="voter",
+            member_id=1,
+        ),
+    )
+    await manager.initialize()
+    stale = CoordinatorNodeRecord(
+        node_id="node-b",
+        api_url="http://b",
+        peer_url="http://b:2380",
+        role="learner",
+        member_id=2,
+        voter_target=3,
+    )
+    await backend.put(manager._key("membership/intents/node-b"), stale.model_dump_json().encode())
+
+    assert await manager._repair_authoritative_roles(list(backend.members)) is True
+    repaired = await manager._intent("node-b")
+    assert repaired is not None
+    assert repaired.role == "voter"
+    assert await manager._repair_authoritative_roles(list(backend.members)) is False
 
 
 @pytest.mark.asyncio
@@ -588,9 +619,7 @@ async def test_excess_and_failed_voters_are_removed_without_removing_leader() ->
     manager = MembershipManager(
         backend,
         ClusterConfiguration(cluster_id="removal", voter_target=3),
-        CoordinatorNodeRecord(
-            node_id="node-1", api_url="http://node-1", member_id=1, role="voter"
-        ),
+        CoordinatorNodeRecord(node_id="node-1", api_url="http://node-1", member_id=1, role="voter"),
         failed_voter_grace_s=0,
     )
     await manager.initialize()
@@ -657,9 +686,7 @@ async def test_membership_operation_recovers_idempotently_in_each_phase(action: 
         role="client" if action == "add_learner" else "learner",
         member_id=0 if action == "add_learner" else 2,
     )
-    await backend.put(
-        manager._key("membership/intents/node-b"), intent.model_dump_json().encode()
-    )
+    await backend.put(manager._key("membership/intents/node-b"), intent.model_dump_json().encode())
     if action != "add_learner":
         backend.members = [
             {
@@ -676,9 +703,7 @@ async def test_membership_operation_recovers_idempotently_in_each_phase(action: 
         member_id=intent.member_id,
         peer_url=intent.peer_url,
     )
-    await backend.put(
-        manager._key("membership/operation"), operation.model_dump_json().encode()
-    )
+    await backend.put(manager._key("membership/operation"), operation.model_dump_json().encode())
 
     assert await manager._recover_membership_operation(list(backend.members)) is True
     assert await manager._membership_operation() is None
@@ -714,9 +739,7 @@ async def test_reconciler_removes_stranded_learner_once_voter_target_is_met() ->
         member_id=4,
         role="learner",
     )
-    await backend.put(
-        manager._key("membership/intents/node-4"), learner.model_dump_json().encode()
-    )
+    await backend.put(manager._key("membership/intents/node-4"), learner.model_dump_json().encode())
 
     await manager._remove_excess_learner([backend.members[-1]])
 
@@ -806,9 +829,7 @@ async def test_etcd_store_rejects_lease_and_transaction_invariant_violations() -
             lease,
         )
 
-    await store.append_event(
-        LedgerEvent(event_type="run_failed", session_id="session"), lease
-    )
+    await store.append_event(LedgerEvent(event_type="run_failed", session_id="session"), lease)
     with pytest.raises(StoreInvariantError, match="terminal"):
         await store.append_event(
             LedgerEvent(event_type="run_completed", session_id="session"), lease
@@ -918,15 +939,13 @@ async def test_membership_noop_safety_guards_and_assignment_sync() -> None:
 
     await backend.delete(manager._key("membership/intents/node-a"))
     await manager._sync_assignment()
-    same = manager.current_node.model_copy(update={"backend_lease_id": manager.current_node.backend_lease_id})
-    await backend.put(
-        manager._key("membership/intents/node-a"), same.model_dump_json().encode()
+    same = manager.current_node.model_copy(
+        update={"backend_lease_id": manager.current_node.backend_lease_id}
     )
+    await backend.put(manager._key("membership/intents/node-a"), same.model_dump_json().encode())
     await manager._sync_assignment()
     changed = same.model_copy(update={"role": "client", "member_id": 0})
-    await backend.put(
-        manager._key("membership/intents/node-a"), changed.model_dump_json().encode()
-    )
+    await backend.put(manager._key("membership/intents/node-a"), changed.model_dump_json().encode())
     await manager._sync_assignment()
     assert manager.current_node.role == "client"
 
@@ -946,9 +965,7 @@ async def test_membership_operation_completed_and_invalid_recovery_paths() -> No
         node_id="node-b",
         status="completed",
     )
-    await backend.put(
-        manager._key("membership/operation"), completed.model_dump_json().encode()
-    )
+    await backend.put(manager._key("membership/operation"), completed.model_dump_json().encode())
     assert await manager._recover_membership_operation([]) is True
     assert await manager._recover_membership_operation([]) is False
 
