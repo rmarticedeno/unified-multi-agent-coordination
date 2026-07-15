@@ -1,3 +1,5 @@
+import asyncio
+
 import httpx
 import pytest
 from fastapi import FastAPI
@@ -240,6 +242,25 @@ async def test_coordinate_endpoint_returns_machine_readable_quorum_error(
         "retryable": True,
         "message": "etcdserver: no leader",
     }
+
+
+@pytest.mark.asyncio
+async def test_readiness_timeout_returns_machine_readable_quorum_error(
+    monkeypatch: pytest.MonkeyPatch,
+):
+    app, membership, _, _ = _distributed_app()
+
+    async def blocked_status():
+        await asyncio.sleep(1)
+
+    membership.status = blocked_status
+    monkeypatch.setenv("COORDINATION_READINESS_TIMEOUT_S", "0.01")
+    async with _client(app) as client:
+        response = await client.get("/health/ready")
+
+    assert response.status_code == 503
+    assert response.json()["code"] == "quorum_unavailable"
+    assert response.json()["retryable"] is True
 
 
 @pytest.mark.asyncio

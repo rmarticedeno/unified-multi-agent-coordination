@@ -4,7 +4,11 @@ import subprocess
 
 import pytest
 
-from unified_multi_agent_coordination.consensus_campaign import expected_scenarios
+from unified_multi_agent_coordination.consensus_campaign import (
+    TrialResult,
+    _expected_checks,
+    expected_scenarios,
+)
 from unified_multi_agent_coordination.evidence_preflight import (
     _json,
     _validate_consensus,
@@ -32,9 +36,7 @@ def test_v05_preflight_accepts_complete_clean_matrix_independent_of_outcome(tmp_
         )
     )
     commit = "a" * 40
-    (run / "provenance.json").write_text(
-        json.dumps({"dirty_state": False, "git_sha": commit})
-    )
+    (run / "provenance.json").write_text(json.dumps({"dirty_state": False, "git_sha": commit}))
     for index in range(1440):
         path = run / "outputs" / "arm" / "model" / "seed-1" / f"case-{index}.json"
         path.parent.mkdir(parents=True, exist_ok=True)
@@ -86,8 +88,28 @@ def test_v05_preflight_accepts_complete_clean_matrix_independent_of_outcome(tmp_
 
 
 def test_consensus_preflight_accepts_valid_failed_outcome_and_rejects_wrong_image(tmp_path):
+    scenarios = []
+    for trial in range(1, 4):
+        scenarios.extend((f"formation-{topology}", trial) for topology in (3, 5, 7))
+        scenarios.extend(
+            (
+                ("reconfigure-3-5-3", trial),
+                ("reconfigure-5-7-5", trial),
+                ("leader-partition-quorum-concurrency", trial),
+                ("audit-sink-unavailable", trial),
+                ("failed-voter-replacement", trial),
+            )
+        )
+        scenarios.extend(
+            (f"crash-{fault_point}", trial)
+            for fault_point in (
+                "after_task_attempt_start",
+                "after_external_dispatch",
+                "during_aggregation",
+            )
+        )
     results = []
-    for scenario, trial in expected_scenarios(3, smoke=False):
+    for scenario, trial in scenarios:
         checks = ["check"]
         results.append(
             {
@@ -133,6 +155,78 @@ def test_consensus_preflight_accepts_valid_failed_outcome_and_rejects_wrong_imag
     campaign_path.write_text(json.dumps(campaign))
     manifest["consensus_campaign_evidence"]["sha256"] = _digest(campaign_path)
     with pytest.raises(RuntimeError, match="wrong-image"):
+        _validate_consensus(tmp_path, manifest)
+
+
+def test_consensus_preflight_validates_v3_condition_summaries(tmp_path):
+    results = []
+    conditions = {}
+    supplementary_name = "leader-partition-quorum-concurrency"
+    for scenario, trial in expected_scenarios(3, smoke=False):
+        checks = _expected_checks(scenario)
+        primary = scenario != supplementary_name
+        result = TrialResult(
+            scenario=scenario,
+            trial=trial,
+            topology=3,
+            passed=True,
+            duration_s=0,
+            status="passed",
+            expected_checks=checks,
+            executed_checks=checks,
+            checks={check: True for check in checks},
+            primary=primary,
+        )
+        results.append(result.__dict__)
+        if primary:
+            summary = conditions.setdefault(
+                scenario,
+                {
+                    "trial_count": 0,
+                    "passed_trials": 0,
+                    "invariant_failed_trials": 0,
+                    "infrastructure_failed_trials": 0,
+                    "checks_expected": 0,
+                    "checks_executed": 0,
+                    "violations": 0,
+                    "supported": True,
+                },
+            )
+            summary["trial_count"] += 1
+            summary["passed_trials"] += 1
+            summary["checks_expected"] += len(checks)
+            summary["checks_executed"] += len(checks)
+    campaign_path = tmp_path / "campaign-v3.json"
+    campaign = {
+        "schema_version": "consensus-campaign-v3",
+        "provenance": {
+            "dirty_state": False,
+            "image": {"image_id": "sha256:image"},
+        },
+        "evidence_valid": True,
+        "outcome": "passed",
+        "claim_status": "supported",
+        "trial_count": 45,
+        "primary_trial_count": 42,
+        "supplementary_trial_count": 3,
+        "condition_results": conditions,
+        "results": results,
+    }
+    campaign_path.write_text(json.dumps(campaign))
+    manifest = {
+        "consensus_campaign_evidence": {
+            "campaign_file": "campaign-v3.json",
+            "sha256": _digest(campaign_path),
+            "evidence_valid": True,
+            "accepted": True,
+        }
+    }
+
+    assert _validate_consensus(tmp_path, manifest)["evidence_valid"] is True
+    campaign["condition_results"]["leader-termination"]["trial_count"] = 2
+    campaign_path.write_text(json.dumps(campaign))
+    manifest["consensus_campaign_evidence"]["sha256"] = _digest(campaign_path)
+    with pytest.raises(RuntimeError, match="incomplete"):
         _validate_consensus(tmp_path, manifest)
 
 

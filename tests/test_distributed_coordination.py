@@ -639,7 +639,9 @@ async def test_excess_and_failed_voters_are_removed_without_removing_leader() ->
 
 
 @pytest.mark.asyncio
-@pytest.mark.parametrize("action", ["add_learner", "promote_learner", "remove_voter"])
+@pytest.mark.parametrize(
+    "action", ["add_learner", "promote_learner", "remove_voter", "remove_member"]
+)
 async def test_membership_operation_recovers_idempotently_in_each_phase(action: str) -> None:
     backend = FakeEtcdClient()
     manager = MembershipManager(
@@ -684,12 +686,45 @@ async def test_membership_operation_recovers_idempotently_in_each_phase(action: 
     assert recovered is not None
     if action == "promote_learner":
         assert recovered.role == "voter"
-    elif action == "remove_voter":
+    elif action in {"remove_voter", "remove_member"}:
         assert recovered.role == "client"
         assert recovered.member_id == 0
     else:
         assert recovered.role == "learner"
         assert recovered.member_id > 0
+
+
+@pytest.mark.asyncio
+async def test_reconciler_removes_stranded_learner_once_voter_target_is_met() -> None:
+    backend = FakeEtcdClient()
+    manager = MembershipManager(
+        backend,
+        ClusterConfiguration(cluster_id="stranded-learner", voter_target=3),
+        CoordinatorNodeRecord(node_id="node-a", api_url="http://a"),
+    )
+    await manager.initialize()
+    backend.members = [
+        {"ID": member_id, "peerURLs": [f"http://node-{member_id}:2380"], "isLearner": False}
+        for member_id in (1, 2, 3)
+    ] + [{"ID": 4, "peerURLs": ["http://node-4:2380"], "isLearner": True}]
+    learner = CoordinatorNodeRecord(
+        node_id="node-4",
+        api_url="http://node-4",
+        peer_url="http://node-4:2380",
+        member_id=4,
+        role="learner",
+    )
+    await backend.put(
+        manager._key("membership/intents/node-4"), learner.model_dump_json().encode()
+    )
+
+    await manager._remove_excess_learner([backend.members[-1]])
+
+    assert not any(member["ID"] == 4 for member in backend.members)
+    recovered = await manager._intent("node-4")
+    assert recovered is not None
+    assert recovered.role == "client"
+    assert recovered.member_id == 0
 
 
 @pytest.mark.asyncio
@@ -839,6 +874,14 @@ async def test_membership_background_lifecycle_and_non_owner_reconcile(monkeypat
     manager.current_node = manager.current_node.model_copy(update={"backend_lease_id": 123})
     manager._sync_assignment = AsyncMock()  # type: ignore[method-assign]
     await manager._heartbeat_loop()
+    manager._sync_assignment.assert_awaited_once()  # type: ignore[attr-defined]
+
+    manager._stopping.clear()
+    manager._sync_assignment.reset_mock()  # type: ignore[attr-defined]
+    manager._register_current_node = AsyncMock()  # type: ignore[method-assign]
+    backend.keep_alive = AsyncMock(side_effect=RuntimeError("partition"))  # type: ignore[method-assign]
+    await manager._heartbeat_once()
+    manager._register_current_node.assert_awaited_once()  # type: ignore[attr-defined]
     manager._sync_assignment.assert_awaited_once()  # type: ignore[attr-defined]
 
     manager._stopping.clear()

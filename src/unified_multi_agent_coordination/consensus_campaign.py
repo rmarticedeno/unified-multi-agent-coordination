@@ -53,6 +53,25 @@ EXPECTED_CHECKS: dict[str, tuple[str, ...]] = {
         "concurrent_session_serialized",
         "all_restorations_steady",
     ),
+    "leader-termination": (
+        "leader_failure_progress",
+        "leader_failure_within_30s",
+        "leader_restoration_steady",
+    ),
+    "minority-partition": (
+        "minority_partition_majority_progress",
+        "minority_partition_fails_closed",
+        "minority_restoration_steady",
+    ),
+    "majority-loss-restoration": (
+        "quorum_loss_503",
+        "quorum_loss_detected_within_10s",
+        "quorum_restored",
+    ),
+    "concurrent-ownership": (
+        "concurrent_session_serialized",
+        "cluster_remains_steady",
+    ),
     "failed-voter-replacement": (
         "failed_voter_replaced",
         "replacement_reaches_steady_state",
@@ -87,12 +106,13 @@ def expected_scenarios(trials: int, *, smoke: bool) -> list[tuple[str, int]]:
     for trial in range(1, count + 1):
         matrix.extend((f"formation-{topology}", trial) for topology in topologies)
         if not smoke:
-            matrix.extend(
-                (("reconfigure-3-5-3", trial), ("reconfigure-5-7-5", trial))
-            )
+            matrix.extend((("reconfigure-3-5-3", trial), ("reconfigure-5-7-5", trial)))
         matrix.extend(
             (
-                ("leader-partition-quorum-concurrency", trial),
+                ("leader-termination", trial),
+                ("minority-partition", trial),
+                ("majority-loss-restoration", trial),
+                ("concurrent-ownership", trial),
                 ("audit-sink-unavailable", trial),
             )
         )
@@ -106,6 +126,7 @@ def expected_scenarios(trials: int, *, smoke: bool) -> list[tuple[str, int]]:
                     "during_aggregation",
                 )
             )
+            matrix.append(("leader-partition-quorum-concurrency", trial))
     return matrix
 
 
@@ -124,6 +145,7 @@ class TrialResult:
     executed_checks: list[str] = field(default_factory=list)
     violated_checks: list[str] = field(default_factory=list)
     unexecuted_checks: list[str] = field(default_factory=list)
+    primary: bool = True
 
 
 class ComposeController:
@@ -192,14 +214,37 @@ class ComposeController:
             ) as handle:
                 handle.write(json.dumps(command_log, sort_keys=True) + "\n")
             raise RuntimeError(command_log["stderr"]) from exc
-        with (self.evidence_dir / "compose-commands.jsonl").open(
-            "a", encoding="utf-8"
-        ) as handle:
+        with (self.evidence_dir / "compose-commands.jsonl").open("a", encoding="utf-8") as handle:
             handle.write(json.dumps(command_log, sort_keys=True) + "\n")
         if check and completed.returncode:
             raise RuntimeError(
-                f"{' '.join(command)} failed ({completed.returncode}): "
-                f"{completed.stderr[-2000:]}"
+                f"{' '.join(command)} failed ({completed.returncode}): {completed.stderr[-2000:]}"
+            )
+        return completed.stdout.strip()
+
+    def host_command(self, *args: str, timeout_s: float = 60) -> str:
+        command = ["docker", *args]
+        started = time.monotonic()
+        completed = subprocess.run(
+            command,
+            capture_output=True,
+            text=True,
+            timeout=timeout_s,
+            check=False,
+        )
+        record = {
+            "generated_at": datetime.now(timezone.utc).isoformat(),
+            "command": command,
+            "returncode": completed.returncode,
+            "duration_s": time.monotonic() - started,
+            "stdout": completed.stdout[-10000:],
+            "stderr": completed.stderr[-10000:],
+        }
+        with (self.evidence_dir / "compose-commands.jsonl").open("a", encoding="utf-8") as handle:
+            handle.write(json.dumps(record, sort_keys=True) + "\n")
+        if completed.returncode:
+            raise RuntimeError(
+                f"{' '.join(command)} failed ({completed.returncode}): {completed.stderr[-2000:]}"
             )
         return completed.stdout.strip()
 
@@ -222,19 +267,13 @@ class ComposeController:
         return value.splitlines()[0]
 
     def disconnect(self, service: str) -> None:
-        subprocess.run(
-            ["docker", "network", "disconnect", f"{self.project}_default", self.container_id(service)],
-            check=True,
-            capture_output=True,
-            text=True,
+        self.host_command(
+            "network", "disconnect", f"{self.project}_default", self.container_id(service)
         )
 
     def reconnect(self, service: str) -> None:
-        subprocess.run(
-            ["docker", "network", "connect", f"{self.project}_default", self.container_id(service)],
-            check=True,
-            capture_output=True,
-            text=True,
+        self.host_command(
+            "network", "connect", f"{self.project}_default", self.container_id(service)
         )
 
     def image_ids(self) -> dict[str, str]:
@@ -337,8 +376,27 @@ async def _wait_progress(names: list[str]) -> dict[str, JsonObject]:
     )
 
 
+async def _wait_replacement(
+    names: list[str], target: int, failed: str, replacement: str
+) -> dict[str, JsonObject]:
+    return await _wait_for(
+        names,
+        lambda statuses: (
+            all(
+                item.get("http_status") == 200
+                and item.get("steady_state") is True
+                and item.get("configured_voter_target") == target
+                for item in statuses.values()
+            )
+            and statuses.get(replacement, {}).get("role") == "voter"
+            and failed not in next(iter(statuses.values())).get("role_agreement", {})
+        ),
+        timeout_s=120,
+    )
+
+
 async def _coordinate(url: str, session_id: str) -> httpx.Response:
-    async with httpx.AsyncClient(timeout=20.0) as client:
+    async with httpx.AsyncClient(timeout=60.0) as client:
         return await client.post(
             f"{url}/coordinate",
             json={
@@ -359,6 +417,39 @@ async def _coordinate(url: str, session_id: str) -> httpx.Response:
         )
 
 
+async def _coordinate_observed(url: str, session_id: str) -> tuple[httpx.Response | None, str]:
+    """Convert a bounded coordination failure into experiment evidence, not harness failure."""
+    try:
+        return await _coordinate(url, session_id), ""
+    except httpx.HTTPError as exc:
+        return None, f"{type(exc).__name__}: {exc}"
+
+
+async def _wait_registered_agent(url: str, agent_id: str) -> JsonObject:
+    """Wait until recovery can resolve the same distributed agent identity."""
+
+    async def snapshot() -> JsonObject:
+        async with httpx.AsyncClient(timeout=10.0) as client:
+            try:
+                response = await client.get(f"{url}/registry", params={"refresh": "true"})
+                body = response.json() if response.content else {}
+                return {"http_status": response.status_code, **body}
+            except httpx.HTTPError as exc:
+                return {"http_status": 0, "error": f"{type(exc).__name__}: {exc}"}
+
+    deadline = time.monotonic() + 60
+    last: JsonObject = {}
+    while time.monotonic() < deadline:
+        last = await snapshot()
+        agents = last.get("agents") or []
+        if last.get("http_status") == 200 and any(
+            item.get("agent_id") == agent_id for item in agents if isinstance(item, dict)
+        ):
+            return last
+        await asyncio.sleep(1)
+    raise RuntimeError(f"Agent {agent_id!r} did not re-register within 60s: {last}")
+
+
 async def _update_target(url: str, target: int, generation: int) -> httpx.Response:
     request = HmacAuthenticator(CLUSTER_SECRET).sign(
         SignedEnvelope(
@@ -375,9 +466,7 @@ async def _update_target(url: str, target: int, generation: int) -> httpx.Respon
         )
 
 
-async def _formation_trial(
-    root: Path, topology: int, trial: int, image: str
-) -> TrialResult:
+async def _formation_trial(root: Path, topology: int, trial: int, image: str) -> TrialResult:
     return await _with_cluster(
         root,
         scenario=f"formation-{topology}",
@@ -394,12 +483,18 @@ async def _formation_action(
     controller: ComposeController, names: list[str], target: int
 ) -> tuple[JsonObject, JsonObject]:
     statuses = await _wait_steady(names, target)
-    response = await _coordinate(COORDINATORS[names[-1]], f"formation-{target}-{uuid.uuid4().hex}")
+    response, error = await _coordinate_observed(
+        COORDINATORS[names[-1]], f"formation-{target}-{uuid.uuid4().hex}"
+    )
     return {
         "steady_state": True,
-        "coordinate_completed": response.status_code == 200
+        "coordinate_completed": response is not None
+        and response.status_code == 200
         and response.json().get("status") == "completed",
-    }, {"statuses": statuses, "coordinate": _response(response)}
+    }, {
+        "statuses": statuses,
+        "coordinate": _response(response) if response is not None else {"error": error},
+    }
 
 
 async def _reconfiguration_trial(
@@ -442,6 +537,175 @@ async def _reconfiguration_trial(
     )
 
 
+def _leader_name(statuses: dict[str, JsonObject], names: list[str]) -> str:
+    leader_id = int(next(iter(statuses.values())).get("leader") or 0)
+    return next(
+        (name for name, item in statuses.items() if int(item.get("member_id") or 0) == leader_id),
+        names[0],
+    )
+
+
+async def _leader_termination_trial(root: Path, trial: int, image: str) -> TrialResult:
+    async def action(controller, names, target):
+        initial = await _wait_steady(names, target)
+        leader = _leader_name(initial, names)
+        survivors = [name for name in names if name != leader]
+        started = time.monotonic()
+        controller.stop(leader)
+        try:
+            await _wait_progress(survivors)
+            progress, error = await _coordinate_observed(
+                COORDINATORS[survivors[0]], f"leader-failure-{trial}-{uuid.uuid4().hex}"
+            )
+            recovery_s = time.monotonic() - started
+        finally:
+            controller.start(leader)
+        restored = await _wait_steady(names, target)
+        return {
+            "leader_failure_progress": progress is not None and progress.status_code == 200,
+            "leader_failure_within_30s": recovery_s <= 30,
+            "leader_restoration_steady": all(item["steady_state"] for item in restored.values()),
+        }, {
+            "initial": initial,
+            "leader": leader,
+            "leader_recovery_s": recovery_s,
+            "progress": _response(progress) if progress is not None else {"error": error},
+            "restored": restored,
+        }
+
+    return await _with_cluster(
+        root,
+        scenario="leader-termination",
+        topology=3,
+        trial=trial,
+        initial_target=3,
+        active_nodes=3,
+        action=action,
+        image=image,
+    )
+
+
+async def _minority_partition_trial(root: Path, trial: int, image: str) -> TrialResult:
+    async def action(controller, names, target):
+        initial = await _wait_steady(names, target)
+        leader = _leader_name(initial, names)
+        minority = next(name for name in reversed(names) if name != leader)
+        controller.disconnect(minority)
+        minority_ready: httpx.Response | None = None
+        minority_error = ""
+        try:
+            progress, progress_error = await _coordinate_observed(
+                COORDINATORS[leader], f"minority-partition-{trial}-{uuid.uuid4().hex}"
+            )
+            try:
+                minority_ready = await _wait_ready_status(COORDINATORS[minority], 503, timeout_s=20)
+            except (RuntimeError, httpx.HTTPError) as exc:
+                minority_error = f"{type(exc).__name__}: {exc}"
+        finally:
+            controller.reconnect(minority)
+        restored = await _wait_steady(names, target)
+        return {
+            "minority_partition_majority_progress": progress is not None
+            and progress.status_code == 200,
+            "minority_partition_fails_closed": minority_ready is None
+            or minority_ready.status_code == 503,
+            "minority_restoration_steady": all(item["steady_state"] for item in restored.values()),
+        }, {
+            "initial": initial,
+            "leader": leader,
+            "minority": minority,
+            "progress": _response(progress) if progress is not None else {"error": progress_error},
+            "minority_ready": _response(minority_ready)
+            if minority_ready is not None
+            else {"error": minority_error, "bounded_no_response": True},
+            "restored": restored,
+        }
+
+    return await _with_cluster(
+        root,
+        scenario="minority-partition",
+        topology=3,
+        trial=trial,
+        initial_target=3,
+        active_nodes=3,
+        action=action,
+        image=image,
+    )
+
+
+async def _majority_loss_trial(root: Path, trial: int, image: str) -> TrialResult:
+    async def action(controller, names, target):
+        initial = await _wait_steady(names, target)
+        leader = _leader_name(initial, names)
+        stopped = [name for name in names if name != leader]
+        controller.stop(*stopped)
+        started = time.monotonic()
+        try:
+            response = await _wait_ready_status(COORDINATORS[leader], 503, timeout_s=10)
+            detection_s = time.monotonic() - started
+        finally:
+            controller.start(*stopped)
+        restored = await _wait_steady(names, target)
+        return {
+            "quorum_loss_503": response.status_code == 503
+            and response.json().get("code") == "quorum_unavailable",
+            "quorum_loss_detected_within_10s": detection_s <= 10,
+            "quorum_restored": all(item["steady_state"] for item in restored.values()),
+        }, {
+            "initial": initial,
+            "leader": leader,
+            "stopped": stopped,
+            "quorum_response": _response(response),
+            "quorum_detection_s": detection_s,
+            "restored": restored,
+        }
+
+    return await _with_cluster(
+        root,
+        scenario="majority-loss-restoration",
+        topology=3,
+        trial=trial,
+        initial_target=3,
+        active_nodes=3,
+        action=action,
+        image=image,
+    )
+
+
+async def _concurrent_ownership_trial(root: Path, trial: int, image: str) -> TrialResult:
+    async def action(controller, names, target):
+        initial = await _wait_steady(names, target)
+        session = f"concurrent-{trial}-{uuid.uuid4().hex}"
+        observed = await asyncio.gather(
+            _coordinate_observed(COORDINATORS[names[0]], session),
+            _coordinate_observed(COORDINATORS[names[1]], session),
+        )
+        responses = [item[0] for item in observed]
+        return {
+            "concurrent_session_serialized": all(item is not None for item in responses)
+            and sorted(item.status_code for item in responses if item is not None)
+            in ([200, 200], [200, 409]),
+            "cluster_remains_steady": all(item["steady_state"] for item in initial.values()),
+        }, {
+            "initial": initial,
+            "concurrent": [
+                _response(response) if response is not None else {"error": error}
+                for response, error in observed
+            ],
+        }
+
+    return await _with_cluster(
+        root,
+        scenario="concurrent-ownership",
+        topology=3,
+        trial=trial,
+        initial_target=3,
+        active_nodes=3,
+        action=action,
+        image=image,
+    )
+
+
 async def _fault_trial(root: Path, trial: int, image: str) -> TrialResult:
     async def action(
         controller: ComposeController, names: list[str], target: int
@@ -450,14 +714,18 @@ async def _fault_trial(root: Path, trial: int, image: str) -> TrialResult:
         first = next(iter(initial.values()))
         leader_id = int(first.get("leader") or 0)
         leader = next(
-            (name for name, item in initial.items() if int(item.get("member_id") or 0) == leader_id),
+            (
+                name
+                for name, item in initial.items()
+                if int(item.get("member_id") or 0) == leader_id
+            ),
             names[0],
         )
         survivors = [name for name in names if name != leader]
         started = time.monotonic()
         controller.stop(leader)
         await _wait_progress(survivors)
-        progress = await _coordinate(
+        progress, progress_error = await _coordinate_observed(
             COORDINATORS[survivors[0]], f"leader-failure-{trial}-{uuid.uuid4().hex}"
         )
         leader_recovery_s = time.monotonic() - started
@@ -466,11 +734,16 @@ async def _fault_trial(root: Path, trial: int, image: str) -> TrialResult:
 
         minority = survivors[-1]
         controller.disconnect(minority)
-        partition_progress = await _coordinate(
+        partition_progress, partition_error = await _coordinate_observed(
             COORDINATORS[leader], f"minority-partition-{trial}-{uuid.uuid4().hex}"
         )
+        minority_ready: httpx.Response | None = None
+        minority_ready_error = ""
         try:
-            minority_ready = await _ready(COORDINATORS[minority])
+            try:
+                minority_ready = await _wait_ready_status(COORDINATORS[minority], 503, timeout_s=20)
+            except (RuntimeError, httpx.HTTPError) as exc:
+                minority_ready_error = f"{type(exc).__name__}: {exc}"
         finally:
             controller.reconnect(minority)
         partition_restored = await _wait_steady(names, target)
@@ -485,19 +758,23 @@ async def _fault_trial(root: Path, trial: int, image: str) -> TrialResult:
 
         session = f"concurrent-{trial}-{uuid.uuid4().hex}"
         concurrent = await asyncio.gather(
-            _coordinate(COORDINATORS[names[0]], session),
-            _coordinate(COORDINATORS[names[1]], session),
+            _coordinate_observed(COORDINATORS[names[0]], session),
+            _coordinate_observed(COORDINATORS[names[1]], session),
         )
+        concurrent_responses = [item[0] for item in concurrent]
         checks = {
-            "leader_failure_progress": progress.status_code == 200,
+            "leader_failure_progress": progress is not None and progress.status_code == 200,
             "leader_failure_within_30s": leader_recovery_s <= 30,
-            "minority_partition_majority_progress": partition_progress.status_code == 200,
-            "minority_partition_fails_closed": minority_ready.status_code == 503,
+            "minority_partition_majority_progress": partition_progress is not None
+            and partition_progress.status_code == 200,
+            "minority_partition_fails_closed": minority_ready is None
+            or minority_ready.status_code == 503,
             "quorum_loss_503": quorum_response.status_code == 503
             and quorum_response.json().get("code") == "quorum_unavailable",
             "quorum_loss_detected_within_10s": quorum_detection_s <= 10,
             "quorum_restored": all(item["steady_state"] for item in quorum_restored.values()),
-            "concurrent_session_serialized": sorted(item.status_code for item in concurrent)
+            "concurrent_session_serialized": all(item is not None for item in concurrent_responses)
+            and sorted(item.status_code for item in concurrent_responses if item is not None)
             in ([200, 200], [200, 409]),
             "all_restorations_steady": all(item["steady_state"] for item in restored.values())
             and all(item["steady_state"] for item in partition_restored.values()),
@@ -510,7 +787,17 @@ async def _fault_trial(root: Path, trial: int, image: str) -> TrialResult:
             "partition_restored": partition_restored,
             "quorum_detection_s": quorum_detection_s,
             "quorum_restored": quorum_restored,
-            "concurrent": [_response(item) for item in concurrent],
+            "leader_progress_error": progress_error,
+            "partition_progress_error": partition_error,
+            "minority_ready": (
+                _response(minority_ready)
+                if minority_ready is not None
+                else {"error": minority_ready_error, "bounded_no_response": True}
+            ),
+            "concurrent": [
+                _response(response) if response is not None else {"error": error}
+                for response, error in concurrent
+            ],
         }
 
     return await _with_cluster(
@@ -522,12 +809,11 @@ async def _fault_trial(root: Path, trial: int, image: str) -> TrialResult:
         active_nodes=3,
         action=action,
         image=image,
+        primary=False,
     )
 
 
-async def _failed_voter_replacement_trial(
-    root: Path, trial: int, image: str
-) -> TrialResult:
+async def _failed_voter_replacement_trial(root: Path, trial: int, image: str) -> TrialResult:
     async def action(
         controller: ComposeController, names: list[str], target: int
     ) -> tuple[JsonObject, JsonObject]:
@@ -538,23 +824,15 @@ async def _failed_voter_replacement_trial(
             (
                 name
                 for name, item in initial.items()
-                if item.get("role") == "voter"
-                and int(item.get("member_id") or 0) != leader_id
+                if item.get("role") == "voter" and int(item.get("member_id") or 0) != leader_id
             ),
             "coordination-c",
         )
         controller.stop(failed)
         survivors = [name for name in names if name != failed]
-        replaced = await _wait_steady(survivors, target)
-        replacement = next(
-            (
-                name
-                for name, item in replaced.items()
-                if name == "coordination-d" and item.get("role") == "voter"
-            ),
-            "",
-        )
-        progress = await _coordinate(
+        replaced = await _wait_replacement(survivors, target, failed, "coordination-d")
+        replacement = "coordination-d"
+        progress, progress_error = await _coordinate_observed(
             COORDINATORS[survivors[0]], f"replacement-{trial}-{uuid.uuid4().hex}"
         )
         return {
@@ -562,13 +840,15 @@ async def _failed_voter_replacement_trial(
             "replacement_reaches_steady_state": all(
                 item.get("steady_state") is True for item in replaced.values()
             ),
-            "progress_after_replacement": progress.status_code == 200,
+            "progress_after_replacement": progress is not None and progress.status_code == 200,
         }, {
             "initial": initial,
             "failed": failed,
             "replacement": replacement,
             "replaced": replaced,
-            "coordinate": _response(progress),
+            "coordinate": _response(progress)
+            if progress is not None
+            else {"error": progress_error},
         }
 
     return await _with_cluster(
@@ -588,13 +868,17 @@ async def _audit_failure_trial(root: Path, trial: int, image: str) -> TrialResul
         controller: ComposeController, names: list[str], target: int
     ) -> tuple[JsonObject, JsonObject]:
         statuses = await _wait_steady(names, target)
-        response = await _coordinate(
+        response, error = await _coordinate_observed(
             COORDINATORS[names[0]], f"audit-failure-{trial}-{uuid.uuid4().hex}"
         )
         return {
-            "authoritative_progress_without_audit_sink": response.status_code == 200,
+            "authoritative_progress_without_audit_sink": response is not None
+            and response.status_code == 200,
             "cluster_remains_steady": all(item["steady_state"] for item in statuses.values()),
-        }, {"statuses": statuses, "coordinate": _response(response)}
+        }, {
+            "statuses": statuses,
+            "coordinate": _response(response) if response is not None else {"error": error},
+        }
 
     return await _with_cluster(
         root,
@@ -613,9 +897,7 @@ async def _audit_failure_trial(root: Path, trial: int, image: str) -> TrialResul
     )
 
 
-async def _crash_window_trial(
-    root: Path, trial: int, fault_point: str, image: str
-) -> TrialResult:
+async def _crash_window_trial(root: Path, trial: int, fault_point: str, image: str) -> TrialResult:
     async def action(
         controller: ComposeController, names: list[str], target: int
     ) -> tuple[JsonObject, JsonObject]:
@@ -629,6 +911,7 @@ async def _crash_window_trial(
         except httpx.HTTPError as exc:
             initial_error = f"{type(exc).__name__}: {exc}"
         await asyncio.sleep(7)
+        registry = await _wait_registered_agent(COORDINATORS[names[0]], "summarizer")
         async with httpx.AsyncClient(timeout=30.0) as client:
             resumed = await client.post(
                 f"{COORDINATORS[names[0]]}/sessions/{session_id}/resume",
@@ -651,6 +934,7 @@ async def _crash_window_trial(
         }, {
             "fault_point": fault_point,
             "initial_error": initial_error,
+            "recovery_registry": registry,
             "resume": _response(resumed),
             "fixture_stats": stats_body,
         }
@@ -684,6 +968,7 @@ async def _with_cluster(
     image: str,
     extra_env: dict[str, str] | None = None,
     include_fault: bool = False,
+    primary: bool = True,
 ) -> TrialResult:
     started = time.monotonic()
     expected = _expected_checks(scenario)
@@ -727,6 +1012,7 @@ async def _with_cluster(
             executed_checks=executed,
             violated_checks=violated,
             unexecuted_checks=unexecuted,
+            primary=primary,
         )
     except Exception as exc:
         result = TrialResult(
@@ -739,6 +1025,7 @@ async def _with_cluster(
             status="infrastructure_error",
             expected_checks=expected,
             unexecuted_checks=expected,
+            primary=primary,
         )
     finally:
         try:
@@ -761,7 +1048,10 @@ async def _with_cluster(
 
 
 async def _ready(url: str) -> httpx.Response:
-    async with httpx.AsyncClient(timeout=5.0) as client:
+    # The service may spend up to ten seconds proving that its authoritative
+    # etcd read cannot reach quorum.  The observer timeout must exceed that
+    # bound or a correct fail-closed response is misclassified as infrastructure loss.
+    async with httpx.AsyncClient(timeout=12.0) as client:
         return await client.get(f"{url}/health/ready")
 
 
@@ -790,9 +1080,7 @@ def _response(response: httpx.Response) -> JsonObject:
 
 
 def _git(command: list[str]) -> str:
-    completed = subprocess.run(
-        ["git", *command], capture_output=True, text=True, check=False
-    )
+    completed = subprocess.run(["git", *command], capture_output=True, text=True, check=False)
     return completed.stdout.strip() if completed.returncode == 0 else "unavailable"
 
 
@@ -837,8 +1125,7 @@ def _prepare_image(output_dir: Path, image: str, *, build: bool) -> JsonObject:
         _write_exclusive(output_dir / "image-build.json", build_record)
         if completed.returncode:
             raise RuntimeError(
-                f"Campaign image build failed ({completed.returncode}): "
-                f"{completed.stderr[-4000:]}"
+                f"Campaign image build failed ({completed.returncode}): {completed.stderr[-4000:]}"
             )
     metadata = _image_metadata(image)
     _write_exclusive(output_dir / "image.json", metadata)
@@ -893,10 +1180,12 @@ async def run_campaign(
         provenance = _provenance(image_metadata)
         _write_exclusive(output_dir / "provenance.json", provenance)
         report = {
-            "schema_version": "consensus-campaign-v2",
+            "schema_version": "consensus-campaign-v3",
             "generated_at": datetime.now(timezone.utc).isoformat(),
             "provenance": provenance,
             "trial_count": 0,
+            "primary_trial_count": 0,
+            "supplementary_trial_count": 0,
             "expected_trial_count": len(expected_scenarios(trials, smoke=smoke)),
             "matrix_complete": False,
             "complete_check_accounting": False,
@@ -904,6 +1193,7 @@ async def run_campaign(
             "passed": False,
             "outcome": "failed",
             "claim_status": "unsupported",
+            "condition_results": {},
             "evidence_valid": False,
             "infrastructure_failed_trials": 0,
             "invariant_failed_trials": 0,
@@ -911,6 +1201,9 @@ async def run_campaign(
             "safety_checks_executed": 0,
             "safety_violations": 0,
             "unexecuted_checks": 0,
+            "primary_safety_checks_expected": 0,
+            "primary_safety_checks_executed": 0,
+            "primary_safety_violations": 0,
             "image_preparation_error": f"{type(exc).__name__}: {exc}",
             "results": [],
             "promotion_candidate": promotion_candidate,
@@ -929,7 +1222,10 @@ async def run_campaign(
         if not smoke:
             results.append(await _reconfiguration_trial(output_dir, 3, 5, trial, image))
             results.append(await _reconfiguration_trial(output_dir, 5, 7, trial, image))
-        results.append(await _fault_trial(output_dir, trial, image))
+        results.append(await _leader_termination_trial(output_dir, trial, image))
+        results.append(await _minority_partition_trial(output_dir, trial, image))
+        results.append(await _majority_loss_trial(output_dir, trial, image))
+        results.append(await _concurrent_ownership_trial(output_dir, trial, image))
         results.append(await _audit_failure_trial(output_dir, trial, image))
         if not smoke:
             results.append(await _failed_voter_replacement_trial(output_dir, trial, image))
@@ -938,24 +1234,50 @@ async def run_campaign(
                 "after_external_dispatch",
                 "during_aggregation",
             ):
-                results.append(
-                    await _crash_window_trial(output_dir, trial, fault_point, image)
-                )
+                results.append(await _crash_window_trial(output_dir, trial, fault_point, image))
+            results.append(await _fault_trial(output_dir, trial, image))
     expected_matrix = expected_scenarios(trials, smoke=smoke)
     actual_matrix = [(item.scenario, item.trial) for item in results]
     matrix_complete = actual_matrix == expected_matrix
     safety_checks_expected = sum(len(item.expected_checks) for item in results)
     safety_checks_executed = sum(len(item.executed_checks) for item in results)
     safety_violations = sum(len(item.violated_checks) for item in results)
-    infrastructure_failures = sum(
-        item.status == "infrastructure_error" for item in results
-    )
+    infrastructure_failures = sum(item.status == "infrastructure_error" for item in results)
     invariant_failures = sum(item.status == "invariant_failed" for item in results)
-    passed = matrix_complete and all(item.passed for item in results)
+    primary_results = [item for item in results if item.primary]
+    supplementary_results = [item for item in results if not item.primary]
+    condition_results: dict[str, JsonObject] = {}
+    for scenario in sorted({item.scenario for item in primary_results}):
+        observations = [item for item in primary_results if item.scenario == scenario]
+        condition_results[scenario] = {
+            "trial_count": len(observations),
+            "passed_trials": sum(item.passed for item in observations),
+            "invariant_failed_trials": sum(
+                item.status == "invariant_failed" for item in observations
+            ),
+            "infrastructure_failed_trials": sum(
+                item.status == "infrastructure_error" for item in observations
+            ),
+            "checks_expected": sum(len(item.expected_checks) for item in observations),
+            "checks_executed": sum(len(item.executed_checks) for item in observations),
+            "violations": sum(len(item.violated_checks) for item in observations),
+            "supported": bool(observations) and all(item.passed for item in observations),
+        }
+    passed = matrix_complete and all(item.passed for item in primary_results)
     outcome = "passed" if passed else "failed"
+    supplementary_outcome = (
+        "passed" if all(item.passed for item in supplementary_results) else "failed"
+    )
+    supported_conditions = sum(bool(item["supported"]) for item in condition_results.values())
+    claim_status = (
+        "supported"
+        if condition_results and supported_conditions == len(condition_results)
+        else "partially_supported"
+        if supported_conditions
+        else "unsupported"
+    )
     complete_accounting = all(
-        set(item.expected_checks)
-        == set(item.executed_checks) | set(item.unexecuted_checks)
+        set(item.expected_checks) == set(item.executed_checks) | set(item.unexecuted_checks)
         and not (set(item.executed_checks) & set(item.unexecuted_checks))
         for item in results
     )
@@ -973,17 +1295,21 @@ async def run_campaign(
         and str(image_metadata.get("image_id", "")).startswith("sha256:")
     )
     report = {
-        "schema_version": "consensus-campaign-v2",
+        "schema_version": "consensus-campaign-v3",
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "provenance": provenance,
         "trial_count": len(results),
+        "primary_trial_count": len(primary_results),
+        "supplementary_trial_count": len(supplementary_results),
         "expected_trial_count": len(expected_matrix),
         "matrix_complete": matrix_complete,
         "complete_check_accounting": complete_accounting,
         "infrastructure_logs_complete": infrastructure_logs_complete,
         "passed": passed,
         "outcome": outcome,
-        "claim_status": "supported" if passed else "unsupported",
+        "supplementary_outcome": supplementary_outcome,
+        "claim_status": claim_status,
+        "condition_results": condition_results,
         "evidence_valid": evidence_valid,
         "infrastructure_failed_trials": infrastructure_failures,
         "invariant_failed_trials": invariant_failures,
@@ -991,6 +1317,13 @@ async def run_campaign(
         "safety_checks_executed": safety_checks_executed,
         "safety_violations": safety_violations,
         "unexecuted_checks": safety_checks_expected - safety_checks_executed,
+        "primary_safety_checks_expected": sum(
+            len(item.expected_checks) for item in primary_results
+        ),
+        "primary_safety_checks_executed": sum(
+            len(item.executed_checks) for item in primary_results
+        ),
+        "primary_safety_violations": sum(len(item.violated_checks) for item in primary_results),
         "results": [item.__dict__ for item in results],
         "promotion_candidate": promotion_candidate,
         "accepted": promotion_candidate

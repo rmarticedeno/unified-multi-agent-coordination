@@ -14,12 +14,22 @@ from unified_multi_agent_coordination.consensus_campaign import (
 )
 
 
-def test_full_consensus_campaign_constructs_exact_33_trial_matrix():
+def test_full_consensus_campaign_constructs_exact_v3_trial_matrix():
     matrix = expected_scenarios(3, smoke=False)
-    assert len(matrix) == 33
-    assert len(set(matrix)) == 33
+    assert len(matrix) == 45
+    assert len(set(matrix)) == 45
     assert sum(scenario.startswith("formation-") for scenario, _ in matrix) == 9
     assert sum(scenario.startswith("crash-") for scenario, _ in matrix) == 9
+    assert sum(scenario == "leader-partition-quorum-concurrency" for scenario, _ in matrix) == 3
+    assert all(
+        sum(candidate == scenario for candidate, _ in matrix) == 3
+        for scenario in (
+            "leader-termination",
+            "minority-partition",
+            "majority-loss-restoration",
+            "concurrent-ownership",
+        )
+    )
 
 
 def test_compose_trials_always_use_prebuilt_image_and_no_build(tmp_path, monkeypatch):
@@ -44,10 +54,12 @@ def test_compose_trials_always_use_prebuilt_image_and_no_build(tmp_path, monkeyp
     assert controller.env["COORDINATION_IMAGE"] == "image@sha256:abc"
 
 
-def test_infrastructure_failure_never_counts_unexecuted_checks_as_passed(
-    tmp_path, monkeypatch
-):
-    monkeypatch.setattr(ComposeController, "up", lambda *_args, **_kwargs: (_ for _ in ()).throw(RuntimeError("offline")))
+def test_infrastructure_failure_never_counts_unexecuted_checks_as_passed(tmp_path, monkeypatch):
+    monkeypatch.setattr(
+        ComposeController,
+        "up",
+        lambda *_args, **_kwargs: (_ for _ in ()).throw(RuntimeError("offline")),
+    )
     monkeypatch.setattr(ComposeController, "down", lambda *_args, **_kwargs: None)
 
     async def action(*_args):
@@ -72,9 +84,7 @@ def test_infrastructure_failure_never_counts_unexecuted_checks_as_passed(
     assert result.unexecuted_checks == result.expected_checks
 
 
-def test_evidence_acceptance_is_independent_of_favorable_outcome(
-    tmp_path, monkeypatch
-):
+def test_evidence_acceptance_is_independent_of_favorable_outcome(tmp_path, monkeypatch):
     monkeypatch.setattr(
         consensus_campaign,
         "_prepare_image",
@@ -111,14 +121,33 @@ def test_evidence_acceptance_is_independent_of_favorable_outcome(
     async def formation(root, topology, trial, _image):
         return await failed(root, f"formation-{topology}", topology, trial)
 
-    async def fault(root, trial, _image):
-        return await failed(root, "leader-partition-quorum-concurrency", 3, trial)
+    async def atomic(root, trial, _image, scenario):
+        return await failed(root, scenario, 3, trial)
 
     async def audit(root, trial, _image):
         return await failed(root, "audit-sink-unavailable", 3, trial)
 
     monkeypatch.setattr(consensus_campaign, "_formation_trial", formation)
-    monkeypatch.setattr(consensus_campaign, "_fault_trial", fault)
+    monkeypatch.setattr(
+        consensus_campaign,
+        "_leader_termination_trial",
+        lambda root, trial, image: atomic(root, trial, image, "leader-termination"),
+    )
+    monkeypatch.setattr(
+        consensus_campaign,
+        "_minority_partition_trial",
+        lambda root, trial, image: atomic(root, trial, image, "minority-partition"),
+    )
+    monkeypatch.setattr(
+        consensus_campaign,
+        "_majority_loss_trial",
+        lambda root, trial, image: atomic(root, trial, image, "majority-loss-restoration"),
+    )
+    monkeypatch.setattr(
+        consensus_campaign,
+        "_concurrent_ownership_trial",
+        lambda root, trial, image: atomic(root, trial, image, "concurrent-ownership"),
+    )
     monkeypatch.setattr(consensus_campaign, "_audit_failure_trial", audit)
     report = asyncio.run(
         run_campaign(tmp_path / "campaign", 1, smoke=True, promotion_candidate=False)
@@ -174,9 +203,7 @@ def _response(status=200, body=None):
     )
 
 
-def test_all_consensus_scenario_actions_execute_with_controlled_observations(
-    tmp_path, monkeypatch
-):
+def test_all_consensus_scenario_actions_execute_with_controlled_observations(tmp_path, monkeypatch):
     controllers = []
 
     async def with_cluster(
@@ -231,6 +258,11 @@ def test_all_consensus_scenario_actions_execute_with_controlled_observations(
 
     monkeypatch.setattr(consensus_campaign, "_wait_steady", steady)
     monkeypatch.setattr(consensus_campaign, "_wait_progress", lambda _names: steady(_names, 3))
+    monkeypatch.setattr(
+        consensus_campaign,
+        "_wait_replacement",
+        lambda names, target, _failed, _replacement: steady(names, target),
+    )
     monkeypatch.setattr(consensus_campaign, "_coordinate", coordinate)
     monkeypatch.setattr(consensus_campaign, "_update_target", update)
     monkeypatch.setattr(consensus_campaign, "_ready", lambda _url: _return(_response(503)))
@@ -243,10 +275,12 @@ def test_all_consensus_scenario_actions_execute_with_controlled_observations(
     )
 
     formation = asyncio.run(consensus_campaign._formation_trial(tmp_path, 3, 1, "image"))
-    reconfigure = asyncio.run(
-        consensus_campaign._reconfiguration_trial(tmp_path, 3, 5, 1, "image")
-    )
+    reconfigure = asyncio.run(consensus_campaign._reconfiguration_trial(tmp_path, 3, 5, 1, "image"))
     fault = asyncio.run(consensus_campaign._fault_trial(tmp_path, 1, "image"))
+    leader = asyncio.run(consensus_campaign._leader_termination_trial(tmp_path, 1, "image"))
+    minority = asyncio.run(consensus_campaign._minority_partition_trial(tmp_path, 1, "image"))
+    majority = asyncio.run(consensus_campaign._majority_loss_trial(tmp_path, 1, "image"))
+    concurrent = asyncio.run(consensus_campaign._concurrent_ownership_trial(tmp_path, 1, "image"))
     audit = asyncio.run(consensus_campaign._audit_failure_trial(tmp_path, 1, "image"))
     replacement = asyncio.run(
         consensus_campaign._failed_voter_replacement_trial(tmp_path, 1, "image")
@@ -255,9 +289,15 @@ def test_all_consensus_scenario_actions_execute_with_controlled_observations(
     assert formation.checks["coordinate_completed"]
     assert all(reconfigure.checks.values())
     assert all(fault.checks.values())
+    assert all(leader.checks.values())
+    assert all(minority.checks.values())
+    assert all(majority.checks.values())
+    assert all(concurrent.checks.values())
     assert all(audit.checks.values())
     assert all(replacement.checks.values())
-    assert any(event[0] == "disconnect" for controller in controllers for event in controller.events)
+    assert any(
+        event[0] == "disconnect" for controller in controllers for event in controller.events
+    )
 
 
 def test_crash_window_records_receiver_operation_and_fencing_evidence(tmp_path, monkeypatch):
@@ -315,6 +355,11 @@ def test_crash_window_records_receiver_operation_and_fencing_evidence(tmp_path, 
     monkeypatch.setattr(consensus_campaign, "_with_cluster", with_cluster)
     monkeypatch.setattr(consensus_campaign, "_wait_steady", lambda *_args: _return({}))
     monkeypatch.setattr(
+        consensus_campaign,
+        "_wait_registered_agent",
+        lambda *_args: _return({"agents": [{"agent_id": "summarizer"}]}),
+    )
+    monkeypatch.setattr(
         consensus_campaign, "_wait_ready_status", lambda *_args, **_kwargs: _return(_response())
     )
     monkeypatch.setattr(consensus_campaign, "_coordinate", crash_coordinate)
@@ -322,14 +367,25 @@ def test_crash_window_records_receiver_operation_and_fencing_evidence(tmp_path, 
     monkeypatch.setattr(consensus_campaign.httpx, "AsyncClient", Client)
 
     result = asyncio.run(
-        consensus_campaign._crash_window_trial(
-            tmp_path, 1, "after_external_dispatch", "image"
-        )
+        consensus_campaign._crash_window_trial(tmp_path, 1, "after_external_dispatch", "image")
     )
 
     assert result.passed
     assert result.checks["receiver_operation_keys_observed"]
     assert result.checks["receiver_fencing_tokens_positive"]
+
+
+def test_coordinate_http_failure_is_preserved_as_liveness_observation(monkeypatch):
+    async def fail(_url, _session):
+        raise httpx.ReadTimeout("bounded timeout")
+
+    monkeypatch.setattr(consensus_campaign, "_coordinate", fail)
+    response, error = asyncio.run(
+        consensus_campaign._coordinate_observed("http://coordinator", "session")
+    )
+
+    assert response is None
+    assert error == "ReadTimeout: bounded timeout"
 
 
 async def _immediate():
@@ -362,7 +418,9 @@ def test_campaign_http_helpers_and_image_metadata(monkeypatch):
             "_ready",
             lambda _url: _return(responses.pop(0)),
         )
-        assert (await consensus_campaign._wait_ready_status("url", 200, timeout_s=1)).status_code == 200
+        assert (
+            await consensus_campaign._wait_ready_status("url", 200, timeout_s=1)
+        ).status_code == 200
 
     asyncio.run(helpers())
 
@@ -447,7 +505,12 @@ def test_full_campaign_report_preserves_failed_but_valid_matrix(tmp_path, monkey
         return await result(root, f"reconfigure-{initial}-{expanded}-{initial}", expanded, trial)
 
     async def fault(root, trial, _image):
-        return await result(root, "leader-partition-quorum-concurrency", 3, trial)
+        outcome = await result(root, "leader-partition-quorum-concurrency", 3, trial)
+        outcome.primary = False
+        return outcome
+
+    async def atomic(root, trial, _image, scenario):
+        return await result(root, scenario, 3, trial)
 
     async def audit(root, trial, _image):
         return await result(root, "audit-sink-unavailable", 3, trial)
@@ -460,6 +523,26 @@ def test_full_campaign_report_preserves_failed_but_valid_matrix(tmp_path, monkey
 
     monkeypatch.setattr(consensus_campaign, "_formation_trial", formation)
     monkeypatch.setattr(consensus_campaign, "_reconfiguration_trial", reconfigure)
+    monkeypatch.setattr(
+        consensus_campaign,
+        "_leader_termination_trial",
+        lambda root, trial, image: atomic(root, trial, image, "leader-termination"),
+    )
+    monkeypatch.setattr(
+        consensus_campaign,
+        "_minority_partition_trial",
+        lambda root, trial, image: atomic(root, trial, image, "minority-partition"),
+    )
+    monkeypatch.setattr(
+        consensus_campaign,
+        "_majority_loss_trial",
+        lambda root, trial, image: atomic(root, trial, image, "majority-loss-restoration"),
+    )
+    monkeypatch.setattr(
+        consensus_campaign,
+        "_concurrent_ownership_trial",
+        lambda root, trial, image: atomic(root, trial, image, "concurrent-ownership"),
+    )
     monkeypatch.setattr(consensus_campaign, "_fault_trial", fault)
     monkeypatch.setattr(consensus_campaign, "_audit_failure_trial", audit)
     monkeypatch.setattr(consensus_campaign, "_failed_voter_replacement_trial", replacement)
@@ -468,7 +551,11 @@ def test_full_campaign_report_preserves_failed_but_valid_matrix(tmp_path, monkey
         run_campaign(tmp_path / "full", 3, promotion_candidate=True, build_image=False)
     )
 
-    assert report["trial_count"] == 33
+    assert report["schema_version"] == "consensus-campaign-v3"
+    assert report["trial_count"] == 45
+    assert report["primary_trial_count"] == 42
+    assert report["supplementary_trial_count"] == 3
+    assert all(item["supported"] for item in report["condition_results"].values())
     assert report["safety_checks_executed"] == report["safety_checks_expected"]
     assert report["evidence_valid"] is True
     assert report["accepted"] is True
@@ -542,5 +629,7 @@ def test_compose_command_records_process_errors_and_nonzero_status(tmp_path, mon
         controller.command("ps")
     except RuntimeError as exc:
         assert "docker missing" in str(exc)
-    records = [json.loads(line) for line in (tmp_path / "compose-commands.jsonl").read_text().splitlines()]
+    records = [
+        json.loads(line) for line in (tmp_path / "compose-commands.jsonl").read_text().splitlines()
+    ]
     assert records[-1]["returncode"] is None

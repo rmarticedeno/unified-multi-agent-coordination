@@ -184,7 +184,15 @@ def _validate_vendor(repository_root: Path) -> dict[str, Any]:
         str(path.relative_to(resolved_repository))
         for path in tracked_files
         if subprocess.run(
-            ["git", "-C", str(resolved_repository), "ls-files", "--error-unmatch", "--", str(path.relative_to(resolved_repository))],
+            [
+                "git",
+                "-C",
+                str(resolved_repository),
+                "ls-files",
+                "--error-unmatch",
+                "--",
+                str(path.relative_to(resolved_repository)),
+            ],
             capture_output=True,
             text=True,
             check=False,
@@ -202,9 +210,7 @@ def _validate_vendor(repository_root: Path) -> dict[str, Any]:
     }
 
 
-def _validate_consensus(
-    repository_root: Path, manifest: dict[str, Any]
-) -> dict[str, Any]:
+def _validate_consensus(repository_root: Path, manifest: dict[str, Any]) -> dict[str, Any]:
     item = manifest.get("consensus_campaign_evidence")
     if not item:
         return {"present": False, "accepted": False}
@@ -212,32 +218,91 @@ def _validate_consensus(
     campaign = _json(path)
     if _sha256(path) != str(item["sha256"]).lower():
         raise RuntimeError("Consensus campaign digest differs from the manifest.")
-    if campaign.get("schema_version") != "consensus-campaign-v2":
+    schema_version = campaign.get("schema_version")
+    if schema_version not in {"consensus-campaign-v2", "consensus-campaign-v3"}:
         raise RuntimeError("Consensus campaign uses an unsupported schema.")
-    expected = expected_scenarios(3, smoke=False)
+    if schema_version == "consensus-campaign-v2":
+        expected: list[tuple[str, int]] = []
+        for trial in range(1, 4):
+            expected.extend((f"formation-{topology}", trial) for topology in (3, 5, 7))
+            expected.extend(
+                (
+                    ("reconfigure-3-5-3", trial),
+                    ("reconfigure-5-7-5", trial),
+                    ("leader-partition-quorum-concurrency", trial),
+                    ("audit-sink-unavailable", trial),
+                    ("failed-voter-replacement", trial),
+                )
+            )
+            expected.extend(
+                (f"crash-{fault_point}", trial)
+                for fault_point in (
+                    "after_task_attempt_start",
+                    "after_external_dispatch",
+                    "during_aggregation",
+                )
+            )
+    else:
+        expected = expected_scenarios(3, smoke=False)
     results = campaign.get("results") or []
     actual = [(result.get("scenario"), result.get("trial")) for result in results]
     accounting = all(
         set(result.get("expected_checks") or [])
         == set(result.get("executed_checks") or []) | set(result.get("unexecuted_checks") or [])
         and not (
-            set(result.get("executed_checks") or [])
-            & set(result.get("unexecuted_checks") or [])
+            set(result.get("executed_checks") or []) & set(result.get("unexecuted_checks") or [])
         )
         for result in results
     )
     image_id = str(campaign.get("provenance", {}).get("image", {}).get("image_id", ""))
     clean = campaign.get("provenance", {}).get("dirty_state") is False
+    v3_conditions_valid = True
+    if schema_version == "consensus-campaign-v3":
+        primary = [result for result in results if result.get("primary", True)]
+        supplementary = [result for result in results if not result.get("primary", True)]
+        reported_conditions = campaign.get("condition_results")
+        derived_conditions: dict[str, dict[str, Any]] = {}
+        for scenario in sorted({str(result.get("scenario")) for result in primary}):
+            observations = [result for result in primary if result.get("scenario") == scenario]
+            derived_conditions[scenario] = {
+                "trial_count": len(observations),
+                "passed_trials": sum(result.get("passed") is True for result in observations),
+                "invariant_failed_trials": sum(
+                    result.get("status") == "invariant_failed" for result in observations
+                ),
+                "infrastructure_failed_trials": sum(
+                    result.get("status") == "infrastructure_error" for result in observations
+                ),
+                "checks_expected": sum(
+                    len(result.get("expected_checks") or []) for result in observations
+                ),
+                "checks_executed": sum(
+                    len(result.get("executed_checks") or []) for result in observations
+                ),
+                "violations": sum(
+                    len(result.get("violated_checks") or []) for result in observations
+                ),
+                "supported": bool(observations)
+                and all(result.get("passed") is True for result in observations),
+            }
+        v3_conditions_valid = (
+            reported_conditions == derived_conditions
+            and campaign.get("primary_trial_count") == len(primary) == 42
+            and campaign.get("supplementary_trial_count") == len(supplementary) == 3
+        )
     evidence_valid = (
         actual == expected
-        and len(results) == 33
+        and len(results) == len(expected)
         and accounting
         and image_id.startswith("sha256:")
         and clean
+        and v3_conditions_valid
         and campaign.get("evidence_valid") is True
     )
     if item.get("evidence_valid") is True and not evidence_valid:
-        raise RuntimeError("Manifest accepts an incomplete, dirty, or wrong-image consensus campaign.")
+        raise RuntimeError(
+            "Manifest accepts an incomplete, dirty, or wrong-image consensus campaign."
+        )
     return {
         "present": True,
         "evidence_valid": evidence_valid,

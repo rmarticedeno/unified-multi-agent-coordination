@@ -62,7 +62,7 @@ class MembershipOperation(BaseModel):
 
     operation_id: str = Field(default_factory=lambda: uuid.uuid4().hex)
     generation: int = Field(ge=0)
-    action: Literal["add_learner", "promote_learner", "remove_voter"]
+    action: Literal["add_learner", "promote_learner", "remove_voter", "remove_member"]
     node_id: str
     member_id: int = 0
     peer_url: str = ""
@@ -483,8 +483,20 @@ class MembershipManager:
     async def _heartbeat_loop(self) -> None:
         while not self._stopping.is_set():
             await asyncio.sleep(max(self.registration_ttl_s / 3, 1.0))
+            try:
+                await self._heartbeat_once()
+            except Exception:
+                # A partition may outlive the registration lease.  Keep the
+                # background task alive so the node can reacquire a lease and
+                # republish its identity after authoritative storage returns.
+                continue
+
+    async def _heartbeat_once(self) -> None:
+        try:
             await self.client.keep_alive(self.current_node.backend_lease_id)
-            await self._sync_assignment()
+        except Exception:
+            await self._register_current_node()
+        await self._sync_assignment()
 
     async def _reconcile_loop(self) -> None:
         while not self._stopping.is_set():
@@ -518,6 +530,9 @@ class MembershipManager:
             voters = [member for member in members if not member.get("isLearner", False)]
             learners = [member for member in members if member.get("isLearner", False)]
             if await self._replace_failed_voter(voters, learners):
+                return
+            if len(voters) >= self.configuration.voter_target and learners:
+                await self._remove_excess_learner(learners)
                 return
             if len(voters) < self.configuration.voter_target and learners:
                 member_id = int(learners[0].get("ID") or learners[0].get("id") or 0)
@@ -655,6 +670,35 @@ class MembershipManager:
         client = draining.model_copy(
             update={"role": "client", "member_id": 0, "initial_cluster": ""}
         )
+        await self.client.put(
+            self._key(f"membership/intents/{node.node_id}"),
+            client.model_dump_json().encode(),
+        )
+        await self._complete_membership_operation(operation)
+
+    async def _remove_excess_learner(self, learners: list[JsonObject]) -> None:
+        """Remove a learner left behind after a target reduction or interrupted expansion."""
+        if not learners:
+            return
+        member_id = int(learners[-1].get("ID") or learners[-1].get("id") or 0)
+        if not member_id:
+            return
+        node = await self._intent_by_member(member_id)
+        if node is None:
+            return
+        operation = await self._begin_membership_operation(
+            MembershipOperation(
+                generation=self.configuration.generation,
+                action="remove_member",
+                node_id=node.node_id,
+                member_id=member_id,
+                peer_url=node.peer_url,
+            )
+        )
+        await self.client.member_remove(member_id)
+        await self._advance_membership_operation(operation, "backend_applied")
+        await self._record_history("excess_learner_removed", node)
+        client = node.model_copy(update={"role": "client", "member_id": 0, "initial_cluster": ""})
         await self.client.put(
             self._key(f"membership/intents/{node.node_id}"),
             client.model_dump_json().encode(),

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import asyncio
 from contextlib import asynccontextmanager
 import os
 from typing import Any, Literal, cast
@@ -212,15 +213,21 @@ def create_app(
     @app.get("/health/ready")
     async def health_ready() -> dict[str, Any]:
         try:
-            ready = getattr(app.state.agent.store, "ready", None)
-            if ready is not None:
-                await ready()
-            cluster_status = (
-                await app.state.membership.status()
-                if app.state.membership is not None
-                else None
-            )
+            timeout_s = float(os.getenv("COORDINATION_READINESS_TIMEOUT_S", "8"))
+            async with asyncio.timeout(timeout_s):
+                ready = getattr(app.state.agent.store, "ready", None)
+                if ready is not None:
+                    await ready()
+                cluster_status = (
+                    await app.state.membership.status()
+                    if app.state.membership is not None
+                    else None
+                )
             return {"status": "ready", "cluster": cluster_status}
+        except TimeoutError as exc:
+            raise EtcdQuorumUnavailableError(
+                f"Authoritative readiness probe exceeded {timeout_s:g}s."
+            ) from exc
         except Exception as exc:
             if isinstance(exc, EtcdQuorumUnavailableError):
                 raise
