@@ -241,8 +241,7 @@ def analyze(run_root: Path, corpus_root: Path) -> dict[str, Any]:
     labels = {item["case_id"]: item for item in hidden["labels"]}
     validate_collection(run_root, list(cases.values()))
     records = [
-        json.loads(path.read_text(encoding="utf-8"))
-        for path in run_root.glob("outputs/*/*/seed-*/*.json")
+        json.loads(path.read_text(encoding="utf-8")) for path in run_root.glob("o/*/*/s*/*.json")
     ]
     records.sort(
         key=lambda item: (

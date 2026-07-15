@@ -352,7 +352,7 @@ def validate_collection(run_root: Path, cases: list[dict[str, Any]]) -> dict[str
     bad_budget: list[str] = []
     bad_input: list[str] = []
     case_map = {case["case_id"]: case for case in cases}
-    for path in run_root.glob("outputs/*/*/seed-*/*.json"):
+    for path in run_root.glob("o/*/*/s*/*.json"):
         record = json.loads(path.read_text(encoding="utf-8"))
         identity = record["identity"]
         key = (
@@ -386,6 +386,25 @@ def validate_collection(run_root: Path, cases: list[dict[str, Any]]) -> dict[str
         "equal_llm_arm_privileges": True,
         "rule_arm_llm_calls": 0,
     }
+
+
+def output_path(
+    run_root: Path,
+    *,
+    arm: str,
+    model: str,
+    seed: int,
+    case_index: int,
+) -> Path:
+    """Use compact storage names so immutable records fit legacy Windows path limits."""
+    return (
+        run_root
+        / "o"
+        / ("h" if arm == LLM_ARMS[0] else "d")
+        / f"m{MODELS.index(model)}"
+        / f"s{seed}"
+        / f"{case_index:03d}.json"
+    )
 
 
 def _ordered_capabilities(case: dict[str, Any], goals: list[str]) -> list[str]:
@@ -617,13 +636,12 @@ def collect(corpus_root: Path, output_root: Path, resume_root: Path | None = Non
                 for case_index, case in enumerate(cases):
                     arm_order = LLM_ARMS if (case_index + seed) % 2 == 0 else LLM_ARMS[::-1]
                     for arm in arm_order:
-                        path = (
-                            run_root
-                            / "outputs"
-                            / arm
-                            / model.replace("/", "__")
-                            / f"seed-{seed}"
-                            / f"{case['case_id']}.json"
+                        path = output_path(
+                            run_root,
+                            arm=arm,
+                            model=model,
+                            seed=seed,
+                            case_index=case_index,
                         )
                         path.parent.mkdir(parents=True, exist_ok=True)
                         if path.exists():

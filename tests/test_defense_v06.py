@@ -2,6 +2,7 @@ import csv
 import io
 import json
 from collections import Counter
+from pathlib import Path
 
 import pytest
 
@@ -19,6 +20,7 @@ from unified_multi_agent_coordination.defense_study_v06 import (
     _public_payload,
     freeze_protocol,
     lexical_selection,
+    output_path,
     selection_schema,
     symbolic_authorization,
     validate_collection,
@@ -136,7 +138,7 @@ def test_v06_collection_matrix_rejects_bad_budget_and_public_input(tmp_path, mon
     ]
     root = tmp_path / "run"
     for arm in defense_study_v06.LLM_ARMS:
-        path = root / "outputs" / arm / "model" / "seed-11" / "a.json"
+        path = output_path(root, arm=arm, model="model", seed=11, case_index=0)
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(
             json.dumps(
@@ -153,12 +155,24 @@ def test_v06_collection_matrix_rejects_bad_budget_and_public_input(tmp_path, mon
             )
         )
     assert validate_collection(root, cases)["observed_outputs"] == 2
-    first = next(root.glob("outputs/*/*/seed-*/*.json"))
+    first = next(root.glob("o/*/*/s*/*.json"))
     record = json.loads(first.read_text())
     record["call_count"] = 3
     first.write_text(json.dumps(record))
     with pytest.raises(RuntimeError, match="bad_call_budget=1"):
         validate_collection(root, cases)
+
+
+def test_v06_compact_output_paths_fit_legacy_windows_limits(monkeypatch):
+    monkeypatch.setattr(defense_study_v06, "MODELS", ("model",))
+    path = output_path(
+        Path("run"),
+        arm=LLM_ARMS[0],
+        model="model",
+        seed=11,
+        case_index=79,
+    )
+    assert len(str(path)) < 30
 
 
 def test_v06_metrics_bootstrap_and_zero_event_bound_are_deterministic():
