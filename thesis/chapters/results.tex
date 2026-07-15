@@ -1,9 +1,13 @@
 \chapter{Evaluation and Results}
 \label{chap:results}
 
+This chapter reports the empirical and implementation evidence used to answer the research questions. Its goal is not to turn reproducibility into a positive result: it distinguishes evidence validity from claim support and therefore reports failed criteria, unsafe ablations, infrastructure failures, and unexecuted checks alongside successful tests.
+
+The chapter first establishes the status and provenance of every evidence family. It then reports the fail-closed boundary, dependency and recovery behavior, end-to-end harnesses, and consensus campaign. Runtime-only ablations are kept separate from the comparative planning study. The final three sections preserve the historical v0.3 and v0.4 findings before presenting v0.5 as the primary comparison, including the direct-LLM control, repair behavior, statistical uncertainty, and the negative outcome for the proposed comparative advantage.
+
 \section{Evidence Status}
 
-This chapter distinguishes historical version 0.2--0.4 evidence from the accepted version~0.5 primary comparison and two clean 33-trial consensus campaigns. Earlier reports remain development artifacts and are excluded from the final RQ4 comparison. The v0.5 corpus is author-labelled, pre-specified, frozen, and label-hidden during inference; no independent adjudicator was available. Evidence validity is separated from outcome: the v0.5 result is valid but mixed, and both complete consensus campaigns are valid but failed.
+The evidence base distinguishes historical version 0.2--0.4 artifacts from the accepted version~0.5 primary comparison and two clean 33-trial consensus campaigns. Earlier reports remain development artifacts and are excluded from the final RQ4 comparison. The v0.5 corpus is author-labelled, pre-specified, frozen, and label-hidden during inference; no independent adjudicator was available. Evidence validity is separated from outcome: the v0.5 result is valid but mixed, and both complete consensus campaigns are valid but failed.
 
 \begin{table}[htbp]
 \centering

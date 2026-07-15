@@ -88,3 +88,43 @@ RQ5 & A replicated coordinator should preserve one authorization state under mea
   \item[Why trust the comparison?] The corpus and author labels were frozen before collection, labels were hidden until both arms completed, all 1,440 identities and equal call budgets were verified, and independent analysis runs reproduced the same digest. Labels were not independently adjudicated, so claims remain limited to framework conformance on this designed corpus.
   \item[Is RQ5 answered?] Yes, negatively. The clean campaign was complete and valid, but only 20 of 33 trials passed; seven violated invariants and six had infrastructure errors. The measured implementation does not support the full RQ5 claim.
 \end{description}
+
+\chapter{Disclosure of Artificial Intelligence Use}
+\label{app:ai-disclosure}
+
+Artificial-intelligence systems were used in two distinct roles during this thesis: as experimental subjects whose outputs form part of the evaluation, and as assistive tools used during research, software development, and manuscript revision. These roles must not be conflated. Experimental model outputs are immutable study observations; assistive outputs are suggestions that remain subject to author review. In every role, responsibility for the research design, reference labels, source selection, implementation, interpretation, claims, and submitted text remains with the author.
+
+\clearpage
+\section{Systems, Tools, and Purposes}
+
+\begingroup
+\setlength{\tabcolsep}{4pt}
+\begin{longtable}{>{\raggedright\arraybackslash}p{0.19\textwidth}>{\raggedright\arraybackslash}p{0.28\textwidth}>{\raggedright\arraybackslash}p{0.43\textwidth}}
+\toprule
+\textbf{System or tool} & \textbf{Role} & \textbf{Use in the thesis} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{System or tool} & \textbf{Role} & \textbf{Use in the thesis} \\
+\midrule
+\endhead
+OpenAI Codex (GPT-5-based project sessions) & Interactive research, writing, and software-development assistant & Used to critique chapter structure and claims; assist with literature discovery and source triage; draft or revise prose, documentation, and the bilingual abstract; propose code, refactorings, tests, evaluation scripts, CI checks, and reproducibility instructions; inspect claim--evidence consistency; and assist with LaTeX/PDF quality review. Suggested citations were not accepted as evidence without inspection of the underlying source. All changes remained visible in the repository and were reviewed against tests, static checks, evidence files, or the compiled manuscript. \\
+LM Studio & Local model-serving environment & Used to load and serve the pinned local models through an OpenAI-compatible HTTP interface for the v0.3--v0.5 collection protocols. It provided the execution environment for study inference; it was not treated as an author, adjudicator, or source of scientific claims. \\
+Qwen3 1.7B, Gemma 4 E2B, and Qwen3 8B & Experimental language models & Used as study subjects to produce non-authoritative linguistic drafts or direct coordination decisions under frozen prompts, schemas, cases, arms, and requested seeds. Raw and repaired responses were preserved and scored only after collection completion. These models did not receive hidden labels and were not used as independent validators of those labels. \\
+Lingo & Typed linguistic-application framework & Used inside the prototype to expose bounded interpretation, extraction, classification, and candidate-planning capabilities through explicit state and schemas. Lingo is implementation middleware rather than the source of the evaluated model weights or an authority over coordination decisions. \\
+OpenAI-compatible client interfaces & Model-transport interface & Used to send local requests to LM Studio and record responses, metadata, latency, and errors. Use of the interface does not imply that hosted OpenAI models generated the experimental observations. \\
+\bottomrule
+\end{longtable}
+\endgroup
+
+AI assistance also contributed to exploratory scenario, prompt, baseline, and test-design critique. The author selected the final protocol, determined and froze the reference labels, and accepted responsibility for their correctness. AI assistance is therefore not presented as independent annotation or adjudication; the absence of an independent human adjudicator remains a threat to validity.
+
+\section{Authorial Control and Verification}
+
+AI-generated or AI-revised material was not accepted solely because it was fluent or technically plausible. Manuscript changes were checked against primary sources and repository evidence. Code changes were inspected and exercised through the applicable Ruff, mypy, pytest, coverage, deterministic, container, and evidence-preflight checks. Numerical statements were derived from immutable JSON evidence or generated LaTeX macros. Statistical analyses were implemented as deterministic programs and reproduced by digest. Figures in the submitted manuscript are repository-authored LaTeX/TikZ artifacts; no generative image system was used for the current figures.
+
+The AI assistants did not determine the final research questions, authorize execution in the evaluated system, alter collected model outputs, fabricate measurements, select favorable runs, assign themselves authorship, or replace the author's interpretation of negative outcomes. Working conversations with an assistant may contain provisional ideas and rejected text; they are not research evidence. The version-controlled manuscript, source code, frozen protocols, raw outputs, analysis programs, manifests, and accepted reports are the auditable artifacts.
+
+For clarity, the principal non-AI tools used to construct and validate the artifact include Python and \texttt{uv}; Pydantic, FastAPI, HTTPX, and Uvicorn; pytest, coverage.py, Ruff, and mypy; Git and GitHub Actions; Docker Compose; PostgreSQL; etcd/Raft; the A2A SDK and upstream-derived sample; JSON Schema; and LuaLaTeX, BibTeX, TikZ, Poppler, and PDF inspection tools. These tools execute deterministic software, infrastructure, validation, or document-processing functions and are not reported as generative-AI authorship assistance.
+
+No other generative-AI assistant is documented in the project record. If an additional assistant was used outside that record, it must be added to this disclosure before submission. This statement is intended to make the role of AI inspectable without transferring scholarly responsibility away from the author.

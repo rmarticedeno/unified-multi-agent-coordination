@@ -1,6 +1,10 @@
 \chapter{Research Methodology}
 \label{chap:methodology}
 
+This chapter describes the design-science method used to construct and evaluate the proposed coordination boundary. Its goal is to translate the research questions into observable units, controlled comparisons, fault scenarios, metrics, and release criteria while keeping planning quality, runtime safety, and distributed recovery as distinct forms of evidence.
+
+The chapter is organized as follows. The study-design section defines the unit of analysis and the staged evaluation. The corpus section explains the versioned, pre-specified, and label-hidden cases. The configurations-and-fairness section defines the hybrid, direct-LLM, deterministic, and ablation controls. The local-model protocol then specifies collection, followed by the statistical measures and analysis procedure. The consensus campaign section defines the separate crash-fault evaluation, and the final sections establish provenance, reproducibility, and validity boundaries. Disclosure of AI systems used as experimental subjects or research assistants is provided in Appendix~\ref{app:ai-disclosure}.
+
 \section{Study Design}
 
 The thesis follows design science: it constructs a protocol-adaptable coordination boundary and evaluates whether the implementation exhibits the declared authorization, refusal, execution, and recovery behavior. The unit of analysis is one coordination attempt, comprising the natural-language request, admitted registry snapshot, typed request, non-authoritative proposal, symbolic predicates, authorization decision, task attempts, artifacts, and persisted trace. Outcome correctness and process correctness are analyzed separately.
