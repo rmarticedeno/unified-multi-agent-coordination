@@ -1,0 +1,138 @@
+{
+  "schema_version": "0.5.0",
+  "identity": {
+    "arm": "hybrid_bridge_v05",
+    "case_id": "v05-pair-22-feasible",
+    "model_id": "google/gemma-4-e2b",
+    "seed": 11
+  },
+  "temperature": 0,
+  "prompt_version": "defense-v0.5-dual-arm-v1",
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Return a non-executable linguistic plan draft. Select every admitted requirement_id exactly once and only its declared capability_id. Copy only request-declared dependency requirement IDs. Report genuine ambiguity in unresolved_terms. Do not create task IDs, agents, authority, contracts, schemas, or artifacts. You do not decide feasibility and reference labels are unavailable."
+    },
+    {
+      "role": "user",
+      "content": "{\"request_text\":\"Prepare and finalize the declared iot inspection workflow while preserving authority, data-flow, and completion contracts.\",\"admitted_request\":{\"user_goal\":\"Prepare and finalize the declared iot inspection workflow while preserving authority, data-flow, and completion contracts.\",\"requirements\":[{\"name\":\"Prepare iot inspection\",\"requirement_id\":\"v05-pair-22-prepare\",\"capability_id\":\"v05-pair-22-prepare\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-22-intermediate\"],\"json_schema\":{\"type\":\"object\"}}},{\"name\":\"Finalize iot inspection\",\"requirement_id\":\"v05-pair-22-finalize\",\"capability_id\":\"v05-pair-22-finalize\",\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"depends_on_requirement_ids\":[\"v05-pair-22-prepare\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-22-result\"],\"json_schema\":{\"type\":\"object\"}}}],\"required_artifacts\":[\"v05-pair-22-result\"],\"context\":{\"approved\":true,\"pair_number\":22}},\"registry_snapshot\":[{\"agent_id\":\"v05-pair-22-preparer\",\"name\":\"Iot Inspection preparer\",\"service_endpoint\":\"https://v05-pair-22-preparer.example/a2a\",\"trust_level\":\"standard\",\"status\":\"available\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"skills\":[{\"name\":\"Prepare iot inspection\",\"requirement_id\":\"v05-pair-22-prepare\",\"capability_id\":\"v05-pair-22-prepare\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-22-intermediate\"],\"json_schema\":{\"type\":\"object\"}}}]},{\"agent_id\":\"v05-pair-22-finisher\",\"name\":\"Iot Inspection finisher\",\"service_endpoint\":\"https://v05-pair-22-finisher.example/a2a\",\"trust_level\":\"standard\",\"status\":\"available\",\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"skills\":[{\"name\":\"Finalize iot inspection\",\"requirement_id\":\"v05-pair-22-finalize\",\"capability_id\":\"v05-pair-22-finalize\",\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"depends_on_requirement_ids\":[\"v05-pair-22-prepare\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-22-result\"],\"json_schema\":{\"type\":\"object\"}}}]}],\"payload\":{\"text\":\"Input for iot inspection pair 22\"}}"
+    }
+  ],
+  "initial_raw_response": {
+    "id": "chatcmpl-55e0ald4ojl3dcr4300cdg",
+    "object": "chat.completion",
+    "created": 1784065101,
+    "model": "google/gemma-4-e2b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\": {\n  \"selections\": [\n    {\"requirement_id\": \"v05-pair-22-prepare\", \"capability_id\": \"v05-pair-22-prepare\"},\n    {\"requirement_id\": \"v05-pair-22-finalize\", \"capability_id\": \"v05-pair-22-finalize\"}\n  ],\n  \"unresolved_terms\": [\n    \"The specific format of the 'authority', 'data-flow', and 'completion contracts' that must be preserved is not explicitly defined beyond their general preservation.\"\n  ],\n  \"rationale\": \"The request asks to prepare and finalize an IoT inspection workflow while preserving authority, data-flow, and completion contracts. This maps directly to the two defined requirements: 'Prepare iot inspection' and 'Finalize iot inspection'. These are selected as they constitute the core steps of the requested workflow. The dependency structure is respected (finalize depends on prepare). No task IDs, agents, authority, contracts, schemas, or artifacts were created.\"\n}}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 754,
+      "completion_tokens": 230,
+      "total_tokens": 984,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "google/gemma-4-e2b"
+  },
+  "initial_parsed_object": {
+    "draft": {
+      "selections": [
+        {
+          "requirement_id": "v05-pair-22-prepare",
+          "capability_id": "v05-pair-22-prepare",
+          "depends_on_requirement_ids": []
+        },
+        {
+          "requirement_id": "v05-pair-22-finalize",
+          "capability_id": "v05-pair-22-finalize",
+          "depends_on_requirement_ids": []
+        }
+      ],
+      "unresolved_terms": [
+        "The specific format of the 'authority', 'data-flow', and 'completion contracts' that must be preserved is not explicitly defined beyond their general preservation."
+      ],
+      "rationale": "The request asks to prepare and finalize an IoT inspection workflow while preserving authority, data-flow, and completion contracts. This maps directly to the two defined requirements: 'Prepare iot inspection' and 'Finalize iot inspection'. These are selected as they constitute the core steps of the requested workflow. The dependency structure is respected (finalize depends on prepare). No task IDs, agents, authority, contracts, schemas, or artifacts were created."
+    }
+  },
+  "initial_latency_ms": 4278.97149999626,
+  "repair_attempted": true,
+  "repair_trigger_issues": [
+    {
+      "code": "unresolved_term",
+      "message": "Unresolved linguistic term: The specific format of the 'authority', 'data-flow', and 'completion contracts' that must be preserved is not explicitly defined beyond their general preservation.",
+      "requirement_id": ""
+    },
+    {
+      "code": "invalid_dependency",
+      "message": "Dependencies for 'v05-pair-22-finalize' must equal the admitted set ['v05-pair-22-prepare'].",
+      "requirement_id": "v05-pair-22-finalize"
+    }
+  ],
+  "repair_raw_response": {
+    "id": "chatcmpl-k9bj720bfhcxcpg6vbvm3",
+    "object": "chat.completion",
+    "created": 1784065105,
+    "model": "google/gemma-4-e2b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\":{\"selections\":[{\"requirement_id\":\"v05-pair-22-prepare\",\"capability_id\":\"v05-pair-22-prepare\",\"depends_on_requirement_ids\":[]},{\"requirement_id\":\"v05-pair-22-finalize\",\"capability_id\":\"v05-pair-22-finalize\",\"depends_on_requirement_ids\":[\"v05-pair-22-prepare\"]}],\"unresolved_terms\":[\"The specific format of the 'authority', 'data-flow', and 'completion contracts' that must be preserved is not explicitly defined beyond their general preservation.\"],\"rationale\":\"The previous draft was corrected based on the provided error feedback. The dependency for 'v05-pair-22-finalize' is now correctly set to depend on 'v05-pair-22-prepare', resolving the invalid_dependency error. The unresolved term remains as it reflects genuine ambiguity in the original request regarding the preservation of abstract concepts (authority, data-flow, contracts).\"}}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 1115,
+      "completion_tokens": 219,
+      "total_tokens": 1334,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "google/gemma-4-e2b"
+  },
+  "repaired_parsed_object": {
+    "draft": {
+      "selections": [
+        {
+          "requirement_id": "v05-pair-22-prepare",
+          "capability_id": "v05-pair-22-prepare",
+          "depends_on_requirement_ids": []
+        },
+        {
+          "requirement_id": "v05-pair-22-finalize",
+          "capability_id": "v05-pair-22-finalize",
+          "depends_on_requirement_ids": [
+            "v05-pair-22-prepare"
+          ]
+        }
+      ],
+      "unresolved_terms": [
+        "The specific format of the 'authority', 'data-flow', and 'completion contracts' that must be preserved is not explicitly defined beyond their general preservation."
+      ],
+      "rationale": "The previous draft was corrected based on the provided error feedback. The dependency for 'v05-pair-22-finalize' is now correctly set to depend on 'v05-pair-22-prepare', resolving the invalid_dependency error. The unresolved term remains as it reflects genuine ambiguity in the original request regarding the preservation of abstract concepts (authority, data-flow, contracts)."
+    }
+  },
+  "repair_latency_ms": 3048.212399939075,
+  "call_count": 2,
+  "evaluation_status": "raw_output_collected_not_scored"
+}

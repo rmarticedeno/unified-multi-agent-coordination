@@ -1,0 +1,110 @@
+{
+  "schema_version": "0.5.0",
+  "identity": {
+    "arm": "hybrid_bridge_v05",
+    "case_id": "v05-pair-10-feasible",
+    "model_id": "qwen/qwen3-1.7b",
+    "seed": 11
+  },
+  "temperature": 0,
+  "prompt_version": "defense-v0.5-dual-arm-v1",
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Return a non-executable linguistic plan draft. Select every admitted requirement_id exactly once and only its declared capability_id. Copy only request-declared dependency requirement IDs. Report genuine ambiguity in unresolved_terms. Do not create task IDs, agents, authority, contracts, schemas, or artifacts. You do not decide feasibility and reference labels are unavailable."
+    },
+    {
+      "role": "user",
+      "content": "{\"request_text\":\"Prepare and finalize the declared software maintenance workflow while preserving authority, data-flow, and completion contracts.\",\"admitted_request\":{\"user_goal\":\"Prepare and finalize the declared software maintenance workflow while preserving authority, data-flow, and completion contracts.\",\"requirements\":[{\"name\":\"Prepare software maintenance\",\"requirement_id\":\"v05-pair-10-prepare\",\"capability_id\":\"v05-pair-10-prepare\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-10-intermediate\"],\"json_schema\":{\"type\":\"object\"}}},{\"name\":\"Finalize software maintenance\",\"requirement_id\":\"v05-pair-10-finalize\",\"capability_id\":\"v05-pair-10-finalize\",\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"depends_on_requirement_ids\":[\"v05-pair-10-prepare\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-10-result\"],\"json_schema\":{\"type\":\"object\"}}}],\"required_artifacts\":[\"v05-pair-10-result\"],\"context\":{\"approved\":true,\"pair_number\":10}},\"registry_snapshot\":[{\"agent_id\":\"v05-pair-10-preparer\",\"name\":\"Software Maintenance preparer\",\"service_endpoint\":\"https://v05-pair-10-preparer.example/a2a\",\"trust_level\":\"standard\",\"status\":\"available\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"skills\":[{\"name\":\"Prepare software maintenance\",\"requirement_id\":\"v05-pair-10-prepare\",\"capability_id\":\"v05-pair-10-prepare\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-10-intermediate\"],\"json_schema\":{\"type\":\"object\"}}}]},{\"agent_id\":\"v05-pair-10-finisher\",\"name\":\"Software Maintenance finisher\",\"service_endpoint\":\"https://v05-pair-10-finisher.example/a2a\",\"trust_level\":\"standard\",\"status\":\"available\",\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"skills\":[{\"name\":\"Finalize software maintenance\",\"requirement_id\":\"v05-pair-10-finalize\",\"capability_id\":\"v05-pair-10-finalize\",\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"depends_on_requirement_ids\":[\"v05-pair-10-prepare\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-10-result\"],\"json_schema\":{\"type\":\"object\"}}}]}],\"payload\":{\"text\":\"Input for software maintenance pair 10\"}}"
+    }
+  ],
+  "initial_raw_response": {
+    "id": "chatcmpl-w0arxxxrqompk46j00muqs",
+    "object": "chat.completion",
+    "created": 1784062850,
+    "model": "qwen/qwen3-1.7b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\":{}}\n",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 684,
+      "completion_tokens": 6,
+      "total_tokens": 690,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-1.7b"
+  },
+  "initial_parsed_object": {
+    "draft": {
+      "selections": [],
+      "unresolved_terms": [],
+      "rationale": ""
+    }
+  },
+  "initial_latency_ms": 478.6108999978751,
+  "repair_attempted": true,
+  "repair_trigger_issues": [
+    {
+      "code": "missing_requirement",
+      "message": "Draft omits requirement 'v05-pair-10-prepare'.",
+      "requirement_id": "v05-pair-10-prepare"
+    },
+    {
+      "code": "missing_requirement",
+      "message": "Draft omits requirement 'v05-pair-10-finalize'.",
+      "requirement_id": "v05-pair-10-finalize"
+    }
+  ],
+  "repair_raw_response": {
+    "id": "chatcmpl-80jpi7x7vh7a1w9cnz0wav",
+    "object": "chat.completion",
+    "created": 1784062851,
+    "model": "qwen/qwen3-1.7b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\":{\"selections\":[],\"unresolved_terms\":[],\"rationale\":\"\"}}\n",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 820,
+      "completion_tokens": 17,
+      "total_tokens": 837,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-1.7b"
+  },
+  "repaired_parsed_object": {
+    "draft": {
+      "selections": [],
+      "unresolved_terms": [],
+      "rationale": ""
+    }
+  },
+  "repair_latency_ms": 300.80199986696243,
+  "call_count": 2,
+  "evaluation_status": "raw_output_collected_not_scored"
+}

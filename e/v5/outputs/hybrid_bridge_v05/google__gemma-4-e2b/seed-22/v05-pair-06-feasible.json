@@ -1,0 +1,121 @@
+{
+  "schema_version": "0.5.0",
+  "identity": {
+    "arm": "hybrid_bridge_v05",
+    "case_id": "v05-pair-06-feasible",
+    "model_id": "google/gemma-4-e2b",
+    "seed": 22
+  },
+  "temperature": 0,
+  "prompt_version": "defense-v0.5-dual-arm-v1",
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Return a non-executable linguistic plan draft. Select every admitted requirement_id exactly once and only its declared capability_id. Copy only request-declared dependency requirement IDs. Report genuine ambiguity in unresolved_terms. Do not create task IDs, agents, authority, contracts, schemas, or artifacts. You do not decide feasibility and reference labels are unavailable."
+    },
+    {
+      "role": "user",
+      "content": "{\"request_text\":\"Prepare and finalize the declared travel logistics workflow while preserving authority, data-flow, and completion contracts.\",\"admitted_request\":{\"user_goal\":\"Prepare and finalize the declared travel logistics workflow while preserving authority, data-flow, and completion contracts.\",\"requirements\":[{\"name\":\"Prepare travel logistics\",\"requirement_id\":\"v05-pair-06-prepare\",\"capability_id\":\"v05-pair-06-prepare\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-06-intermediate\"],\"json_schema\":{\"type\":\"object\"}}},{\"name\":\"Finalize travel logistics\",\"requirement_id\":\"v05-pair-06-finalize\",\"capability_id\":\"v05-pair-06-finalize\",\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"depends_on_requirement_ids\":[\"v05-pair-06-prepare\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-06-result\"],\"json_schema\":{\"type\":\"object\"}}}],\"required_artifacts\":[\"v05-pair-06-result\"],\"context\":{\"approved\":true,\"pair_number\":6}},\"registry_snapshot\":[{\"agent_id\":\"v05-pair-06-preparer\",\"name\":\"Travel Logistics preparer\",\"service_endpoint\":\"https://v05-pair-06-preparer.example/a2a\",\"trust_level\":\"standard\",\"status\":\"available\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"skills\":[{\"name\":\"Prepare travel logistics\",\"requirement_id\":\"v05-pair-06-prepare\",\"capability_id\":\"v05-pair-06-prepare\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-06-intermediate\"],\"json_schema\":{\"type\":\"object\"}}}]},{\"agent_id\":\"v05-pair-06-finisher\",\"name\":\"Travel Logistics finisher\",\"service_endpoint\":\"https://v05-pair-06-finisher.example/a2a\",\"trust_level\":\"standard\",\"status\":\"available\",\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"skills\":[{\"name\":\"Finalize travel logistics\",\"requirement_id\":\"v05-pair-06-finalize\",\"capability_id\":\"v05-pair-06-finalize\",\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"depends_on_requirement_ids\":[\"v05-pair-06-prepare\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-06-result\"],\"json_schema\":{\"type\":\"object\"}}}]}],\"payload\":{\"text\":\"Input for travel logistics pair 6\"}}"
+    }
+  ],
+  "initial_raw_response": {
+    "id": "chatcmpl-hg53vteto0rnfyot3tual",
+    "object": "chat.completion",
+    "created": 1784065277,
+    "model": "google/gemma-4-e2b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\": {\n  \"rationale\": \"The request asks to prepare and finalize a travel logistics workflow while preserving authority, data-flow, and completion contracts. This involves executing two sequential requirements: 'Prepare travel logistics' followed by 'Finalize travel logistics'. The dependency structure is explicitly defined in the requirements: 'Finalize travel logistics' depends on 'Prepare travel logistics'. The required artifacts are 'v05-pair-06-result'.\\n\\n**Admitted Requirements and Capabilities:**\\n1.  **Requirement ID:** v05-pair-06-prepare $\\rightarrow$ **Capability ID:** v05-pair-06-prepare\\n2.  **Requirement ID:** v05-pair-06-finalize $\\rightarrow$ **Capability ID:** v05-pair-06-finalize\\n\\n**Declared Dependency Requirement IDs (from 'Finalize travel logistics'):**\\n*   v05-pair-06-prepare\\n\\n**Unresolved Terms/Ambiguity:**\\nNo genuine ambiguity was detected in the provided structure. The flow is clearly defined by the dependencies and the requested actions.\\n\\n**Execution Plan Draft (Linguistic):**\\n1.  Execute 'Prepare travel logistics' (v05-pair-06-prepare) using the input 'Input for travel logistics pair 6'. This will generate an intermediate artifact, assumed to be v05-pair-06-intermediate.\\n2.  Execute 'Finalize travel logistics' (v05-pair-06-finalize), which depends on the output of step 1 (v05-pair-06-intermediate), to produce the final result artifact, v05-pair-06-result.\\n\\n**Artifact Flow:**\\n*   Input $\\rightarrow$ v05-pair-06-prepare $\\rightarrow$ v05-pair-06-intermediate $\\rightarrow$ v05-pair-06-finalize $\\rightarrow$ v05-pair-06-result\"\n}}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 750,
+      "completion_tokens": 445,
+      "total_tokens": 1195,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "google/gemma-4-e2b"
+  },
+  "initial_parsed_object": {
+    "draft": {
+      "selections": [],
+      "unresolved_terms": [],
+      "rationale": "The request asks to prepare and finalize a travel logistics workflow while preserving authority, data-flow, and completion contracts. This involves executing two sequential requirements: 'Prepare travel logistics' followed by 'Finalize travel logistics'. The dependency structure is explicitly defined in the requirements: 'Finalize travel logistics' depends on 'Prepare travel logistics'. The required artifacts are 'v05-pair-06-result'.\n\n**Admitted Requirements and Capabilities:**\n1.  **Requirement ID:** v05-pair-06-prepare $\rightarrow$ **Capability ID:** v05-pair-06-prepare\n2.  **Requirement ID:** v05-pair-06-finalize $\rightarrow$ **Capability ID:** v05-pair-06-finalize\n\n**Declared Dependency Requirement IDs (from 'Finalize travel logistics'):**\n*   v05-pair-06-prepare\n\n**Unresolved Terms/Ambiguity:**\nNo genuine ambiguity was detected in the provided structure. The flow is clearly defined by the dependencies and the requested actions.\n\n**Execution Plan Draft (Linguistic):**\n1.  Execute 'Prepare travel logistics' (v05-pair-06-prepare) using the input 'Input for travel logistics pair 6'. This will generate an intermediate artifact, assumed to be v05-pair-06-intermediate.\n2.  Execute 'Finalize travel logistics' (v05-pair-06-finalize), which depends on the output of step 1 (v05-pair-06-intermediate), to produce the final result artifact, v05-pair-06-result.\n\n**Artifact Flow:**\n*   Input $\rightarrow$ v05-pair-06-prepare $\rightarrow$ v05-pair-06-intermediate $\rightarrow$ v05-pair-06-finalize $\rightarrow$ v05-pair-06-result"
+    }
+  },
+  "initial_latency_ms": 7739.35729986988,
+  "repair_attempted": true,
+  "repair_trigger_issues": [
+    {
+      "code": "missing_requirement",
+      "message": "Draft omits requirement 'v05-pair-06-prepare'.",
+      "requirement_id": "v05-pair-06-prepare"
+    },
+    {
+      "code": "missing_requirement",
+      "message": "Draft omits requirement 'v05-pair-06-finalize'.",
+      "requirement_id": "v05-pair-06-finalize"
+    }
+  ],
+  "repair_raw_response": {
+    "id": "chatcmpl-cryb8621vtv3wod0fp67s3",
+    "object": "chat.completion",
+    "created": 1784065285,
+    "model": "google/gemma-4-e2b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\":{\"selections\":[{\"requirement_id\":\"v05-pair-06-prepare\",\"capability_id\":\"v05-pair-06-prepare\"},{\"requirement_id\":\"v05-pair-06-finalize\",\"capability_id\":\"v05-pair-06-finalize\"}],\"unresolved_terms\":[],\"rationale\":\"The user requested a correction to the previous output, specifically addressing missing requirement IDs. The original instruction was to select every admitted requirement_id exactly once and only its declared capability_id, and copy only request-declared dependency requirement IDs. The provided error messages indicate that the draft omitted 'v05-pair-06-prepare' and 'v05-pair-06-finalize'.\\n\\n**Correction based on Admitted Requirements:**\\n1.  **Requirement ID:** v05-pair-06-prepare $\\rightarrow$ **Capability ID:** v05-pair-06-prepare\\n2.  **Requirement ID:** v05-pair-06-finalize $\\rightarrow$ **Capability ID:** v05-pair-06-finalize\\n\\n**Dependency Requirement IDs (from 'Finalize travel logistics'):**\\n*   v05-pair-06-prepare\\n\\n**Execution Plan Draft (Linguistic):**\\n1.  Execute 'Prepare travel logistics' (v05-pair-06-prepare) using the input 'Input for travel logistics pair 6'. This will generate an intermediate artifact, assumed to be v05-pair-06-intermediate.\\n2.  Execute 'Finalize travel logistics' (v05-pair-06-finalize), which depends on the output of step 1 (v05-pair-06-intermediate), to produce the final result artifact, v05-pair-06-result.\\n\\n**Artifact Flow:**\\n*   Input $\\rightarrow$ v05-pair-06-prepare $\\rightarrow$ v05-pair-06-intermediate $\\rightarrow$ v05-pair-06-finalize $\\rightarrow$ v05-pair-06-result\"}}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 1316,
+      "completion_tokens": 469,
+      "total_tokens": 1785,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "google/gemma-4-e2b"
+  },
+  "repaired_parsed_object": {
+    "draft": {
+      "selections": [
+        {
+          "requirement_id": "v05-pair-06-prepare",
+          "capability_id": "v05-pair-06-prepare",
+          "depends_on_requirement_ids": []
+        },
+        {
+          "requirement_id": "v05-pair-06-finalize",
+          "capability_id": "v05-pair-06-finalize",
+          "depends_on_requirement_ids": []
+        }
+      ],
+      "unresolved_terms": [],
+      "rationale": "The user requested a correction to the previous output, specifically addressing missing requirement IDs. The original instruction was to select every admitted requirement_id exactly once and only its declared capability_id, and copy only request-declared dependency requirement IDs. The provided error messages indicate that the draft omitted 'v05-pair-06-prepare' and 'v05-pair-06-finalize'.\n\n**Correction based on Admitted Requirements:**\n1.  **Requirement ID:** v05-pair-06-prepare $\rightarrow$ **Capability ID:** v05-pair-06-prepare\n2.  **Requirement ID:** v05-pair-06-finalize $\rightarrow$ **Capability ID:** v05-pair-06-finalize\n\n**Dependency Requirement IDs (from 'Finalize travel logistics'):**\n*   v05-pair-06-prepare\n\n**Execution Plan Draft (Linguistic):**\n1.  Execute 'Prepare travel logistics' (v05-pair-06-prepare) using the input 'Input for travel logistics pair 6'. This will generate an intermediate artifact, assumed to be v05-pair-06-intermediate.\n2.  Execute 'Finalize travel logistics' (v05-pair-06-finalize), which depends on the output of step 1 (v05-pair-06-intermediate), to produce the final result artifact, v05-pair-06-result.\n\n**Artifact Flow:**\n*   Input $\rightarrow$ v05-pair-06-prepare $\rightarrow$ v05-pair-06-intermediate $\rightarrow$ v05-pair-06-finalize $\rightarrow$ v05-pair-06-result"
+    }
+  },
+  "repair_latency_ms": 6508.569600060582,
+  "call_count": 2,
+  "evaluation_status": "raw_output_collected_not_scored"
+}

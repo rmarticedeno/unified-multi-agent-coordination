@@ -1,0 +1,20 @@
+{
+  "dependency_lock_sha256": "00616a22ac6915d0b4bc58f9bada90e19a1fbc466d20435d32843f4925ee67ca",
+  "dirty_state": false,
+  "docker_version": "29.6.1",
+  "dockerfile_sha256": "42b86cd9634c24639ba75562c5c9aff566b33901989537186b7249e020aed610",
+  "etcd_version": "3.6.13",
+  "failure_domain": "single Docker host",
+  "generated_at": "2026-07-15T02:27:27.259656+00:00",
+  "image": {
+    "image_id": "sha256:573293cdc992ce0494986e70c25dd8cf3ba59e1ae52c9ce26a4dc16e54eca410",
+    "reference": "unified-multi-agent-coordination:etcd-distributed",
+    "repo_digests": []
+  },
+  "source_commit": "3f8093af1ecc7c49312ac34856bba825bd81f381",
+  "topology_scope": [
+    3,
+    5,
+    7
+  ]
+}

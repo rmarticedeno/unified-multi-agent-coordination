@@ -1,0 +1,130 @@
+{
+  "schema_version": "0.5.0",
+  "identity": {
+    "arm": "hybrid_bridge_v05",
+    "case_id": "v05-pair-03-infeasible",
+    "model_id": "google/gemma-4-e2b",
+    "seed": 55
+  },
+  "temperature": 0,
+  "prompt_version": "defense-v0.5-dual-arm-v1",
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Return a non-executable linguistic plan draft. Select every admitted requirement_id exactly once and only its declared capability_id. Copy only request-declared dependency requirement IDs. Report genuine ambiguity in unresolved_terms. Do not create task IDs, agents, authority, contracts, schemas, or artifacts. You do not decide feasibility and reference labels are unavailable."
+    },
+    {
+      "role": "user",
+      "content": "{\"request_text\":\"Prepare and finalize the declared document processing workflow while preserving authority, data-flow, and completion contracts.\",\"admitted_request\":{\"user_goal\":\"Prepare and finalize the declared document processing workflow while preserving authority, data-flow, and completion contracts.\",\"requirements\":[{\"name\":\"Prepare document processing\",\"requirement_id\":\"v05-pair-03-prepare\",\"capability_id\":\"v05-pair-03-prepare\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-03-intermediate\"],\"json_schema\":{\"type\":\"object\"}}},{\"name\":\"Finalize document processing\",\"requirement_id\":\"v05-pair-03-finalize\",\"capability_id\":\"v05-pair-03-finalize\",\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"depends_on_requirement_ids\":[\"v05-pair-03-prepare\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{}}],\"required_artifacts\":[\"v05-pair-03-result\"],\"context\":{\"approved\":true,\"pair_number\":3}},\"registry_snapshot\":[{\"agent_id\":\"v05-pair-03-preparer\",\"name\":\"Document Processing preparer\",\"service_endpoint\":\"https://v05-pair-03-preparer.example/a2a\",\"trust_level\":\"standard\",\"status\":\"available\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"skills\":[{\"name\":\"Prepare document processing\",\"requirement_id\":\"v05-pair-03-prepare\",\"capability_id\":\"v05-pair-03-prepare\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-03-intermediate\"],\"json_schema\":{\"type\":\"object\"}}}]},{\"agent_id\":\"v05-pair-03-finisher\",\"name\":\"Document Processing finisher\",\"service_endpoint\":\"https://v05-pair-03-finisher.example/a2a\",\"trust_level\":\"standard\",\"status\":\"available\",\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"skills\":[{\"name\":\"Finalize document processing\",\"requirement_id\":\"v05-pair-03-finalize\",\"capability_id\":\"v05-pair-03-finalize\",\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"depends_on_requirement_ids\":[\"v05-pair-03-prepare\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{}}]}],\"payload\":{\"text\":\"Input for document processing pair 3\"}}"
+    }
+  ],
+  "initial_raw_response": {
+    "id": "chatcmpl-85u3fj0q6etvz5he9sfrmb",
+    "object": "chat.completion",
+    "created": 1784066838,
+    "model": "google/gemma-4-e2b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\": {\n  \"unresolved_terms\": [\n    \"completion contracts\"\n  ]\n}}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 707,
+      "completion_tokens": 27,
+      "total_tokens": 734,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "google/gemma-4-e2b"
+  },
+  "initial_parsed_object": {
+    "draft": {
+      "selections": [],
+      "unresolved_terms": [
+        "completion contracts"
+      ],
+      "rationale": ""
+    }
+  },
+  "initial_latency_ms": 1094.0497999545187,
+  "repair_attempted": true,
+  "repair_trigger_issues": [
+    {
+      "code": "missing_requirement",
+      "message": "Draft omits requirement 'v05-pair-03-prepare'.",
+      "requirement_id": "v05-pair-03-prepare"
+    },
+    {
+      "code": "missing_requirement",
+      "message": "Draft omits requirement 'v05-pair-03-finalize'.",
+      "requirement_id": "v05-pair-03-finalize"
+    },
+    {
+      "code": "unresolved_term",
+      "message": "Unresolved linguistic term: completion contracts",
+      "requirement_id": ""
+    }
+  ],
+  "repair_raw_response": {
+    "id": "chatcmpl-hkfus9x54ivwin926kamdp",
+    "object": "chat.completion",
+    "created": 1784066840,
+    "model": "google/gemma-4-e2b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\":{\"selections\":[{\"requirement_id\":\"v05-pair-03-prepare\",\"capability_id\":\"v05-pair-03-prepare\"},{\"requirement_id\":\"v05-pair-03-finalize\",\"capability_id\":\"v05-pair-03-finalize\"}],\"unresolved_terms\":[\"completion contracts\"],\"rationale\":\"The request explicitly asks to select every admitted requirement_id exactly once and only its declared capability_id, and to copy only request-declared dependency requirement IDs. The original input contained requirements 'v05-pair-03-prepare' and 'v05-pair-03-finalize', which were implicitly requested by the user goal and present in the admitted request. These are selected along with their respective capability IDs.\"}}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 870,
+      "completion_tokens": 167,
+      "total_tokens": 1037,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "google/gemma-4-e2b"
+  },
+  "repaired_parsed_object": {
+    "draft": {
+      "selections": [
+        {
+          "requirement_id": "v05-pair-03-prepare",
+          "capability_id": "v05-pair-03-prepare",
+          "depends_on_requirement_ids": []
+        },
+        {
+          "requirement_id": "v05-pair-03-finalize",
+          "capability_id": "v05-pair-03-finalize",
+          "depends_on_requirement_ids": []
+        }
+      ],
+      "unresolved_terms": [
+        "completion contracts"
+      ],
+      "rationale": "The request explicitly asks to select every admitted requirement_id exactly once and only its declared capability_id, and to copy only request-declared dependency requirement IDs. The original input contained requirements 'v05-pair-03-prepare' and 'v05-pair-03-finalize', which were implicitly requested by the user goal and present in the admitted request. These are selected along with their respective capability IDs."
+    }
+  },
+  "repair_latency_ms": 2894.8768000118434,
+  "call_count": 2,
+  "evaluation_status": "raw_output_collected_not_scored"
+}

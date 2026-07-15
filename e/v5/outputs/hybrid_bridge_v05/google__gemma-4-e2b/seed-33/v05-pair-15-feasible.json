@@ -1,0 +1,121 @@
+{
+  "schema_version": "0.5.0",
+  "identity": {
+    "arm": "hybrid_bridge_v05",
+    "case_id": "v05-pair-15-feasible",
+    "model_id": "google/gemma-4-e2b",
+    "seed": 33
+  },
+  "temperature": 0,
+  "prompt_version": "defense-v0.5-dual-arm-v1",
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Return a non-executable linguistic plan draft. Select every admitted requirement_id exactly once and only its declared capability_id. Copy only request-declared dependency requirement IDs. Report genuine ambiguity in unresolved_terms. Do not create task IDs, agents, authority, contracts, schemas, or artifacts. You do not decide feasibility and reference labels are unavailable."
+    },
+    {
+      "role": "user",
+      "content": "{\"request_text\":\"Prepare and finalize the declared research administration workflow while preserving authority, data-flow, and completion contracts.\",\"admitted_request\":{\"user_goal\":\"Prepare and finalize the declared research administration workflow while preserving authority, data-flow, and completion contracts.\",\"requirements\":[{\"name\":\"Prepare research administration\",\"requirement_id\":\"v05-pair-15-prepare\",\"capability_id\":\"v05-pair-15-prepare\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-15-intermediate\"],\"json_schema\":{\"type\":\"object\"}}},{\"name\":\"Finalize research administration\",\"requirement_id\":\"v05-pair-15-finalize\",\"capability_id\":\"v05-pair-15-finalize\",\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"depends_on_requirement_ids\":[\"v05-pair-15-prepare\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-15-result\"],\"json_schema\":{\"type\":\"object\"}}}],\"required_artifacts\":[\"v05-pair-15-result\"],\"context\":{\"approved\":true,\"pair_number\":15}},\"registry_snapshot\":[{\"agent_id\":\"v05-pair-15-preparer\",\"name\":\"Research Administration preparer\",\"service_endpoint\":\"https://v05-pair-15-preparer.example/a2a\",\"trust_level\":\"standard\",\"status\":\"available\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"skills\":[{\"name\":\"Prepare research administration\",\"requirement_id\":\"v05-pair-15-prepare\",\"capability_id\":\"v05-pair-15-prepare\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-15-intermediate\"],\"json_schema\":{\"type\":\"object\"}}}]},{\"agent_id\":\"v05-pair-15-finisher\",\"name\":\"Research Administration finisher\",\"service_endpoint\":\"https://v05-pair-15-finisher.example/a2a\",\"trust_level\":\"standard\",\"status\":\"available\",\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"skills\":[{\"name\":\"Finalize research administration\",\"requirement_id\":\"v05-pair-15-finalize\",\"capability_id\":\"v05-pair-15-finalize\",\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"depends_on_requirement_ids\":[\"v05-pair-15-prepare\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-15-result\"],\"json_schema\":{\"type\":\"object\"}}}]}],\"payload\":{\"text\":\"Input for research administration pair 15\"}}"
+    }
+  ],
+  "initial_raw_response": {
+    "id": "chatcmpl-s1j9h4m9lbr50pn9zyyd1a",
+    "object": "chat.completion",
+    "created": 1784066031,
+    "model": "google/gemma-4-e2b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\": {\n  \"rationale\": \"The user goal is to prepare and finalize a research administration workflow while preserving authority, data-flow, and completion contracts. This requires executing the 'Prepare research administration' step followed by the 'Finalize research administration' step, respecting their defined dependencies and artifacts. The plan follows the dependency chain explicitly defined in the requirements and registry snapshot for the specified pair number 15.\\n\\n**Execution Plan:**\\n1. **Execute `v05-pair-15-prepare`**: This step prepares the research administration data, generating an intermediate artifact (`v05-pair-15-intermediate`).\\n2. **Execute `v05-pair-15-finalize`**: This step finalizes the workflow, depending on the output of the preparation step (`v05-pair-15-prepare`), and generates the final result artifact (`v05-pair-15-result`).\\n\\n**Dependency Mapping:**\\n*   `v05-pair-15-finalize` depends on `v05-pair-15-prepare`.\\n*   The required output artifact is `v05-pair-15-result`.\\n\\n**Unresolved Terms/Ambiguity:**\\nNo genuine ambiguity was found in the request or the provided structure. The plan directly maps the requested workflow to the available capabilities and dependencies.\\n\\n**Selected Requirements and Capabilities:**\\n*   `v05-pair-15-prepare`: capability `v05-pair-15-prepare`\\n*   `v05-pair-15-finalize`: capability `v05-pair-15-finalize`\\n\\n**Declared Dependency Requirement IDs:**\\n*   `v05-pair-15-finalize` depends on `v05-pair-15-prepare`.\"\n}}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 752,
+      "completion_tokens": 413,
+      "total_tokens": 1165,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "google/gemma-4-e2b"
+  },
+  "initial_parsed_object": {
+    "draft": {
+      "selections": [],
+      "unresolved_terms": [],
+      "rationale": "The user goal is to prepare and finalize a research administration workflow while preserving authority, data-flow, and completion contracts. This requires executing the 'Prepare research administration' step followed by the 'Finalize research administration' step, respecting their defined dependencies and artifacts. The plan follows the dependency chain explicitly defined in the requirements and registry snapshot for the specified pair number 15.\n\n**Execution Plan:**\n1. **Execute `v05-pair-15-prepare`**: This step prepares the research administration data, generating an intermediate artifact (`v05-pair-15-intermediate`).\n2. **Execute `v05-pair-15-finalize`**: This step finalizes the workflow, depending on the output of the preparation step (`v05-pair-15-prepare`), and generates the final result artifact (`v05-pair-15-result`).\n\n**Dependency Mapping:**\n*   `v05-pair-15-finalize` depends on `v05-pair-15-prepare`.\n*   The required output artifact is `v05-pair-15-result`.\n\n**Unresolved Terms/Ambiguity:**\nNo genuine ambiguity was found in the request or the provided structure. The plan directly maps the requested workflow to the available capabilities and dependencies.\n\n**Selected Requirements and Capabilities:**\n*   `v05-pair-15-prepare`: capability `v05-pair-15-prepare`\n*   `v05-pair-15-finalize`: capability `v05-pair-15-finalize`\n\n**Declared Dependency Requirement IDs:**\n*   `v05-pair-15-finalize` depends on `v05-pair-15-prepare`."
+    }
+  },
+  "initial_latency_ms": 8028.190799988806,
+  "repair_attempted": true,
+  "repair_trigger_issues": [
+    {
+      "code": "missing_requirement",
+      "message": "Draft omits requirement 'v05-pair-15-prepare'.",
+      "requirement_id": "v05-pair-15-prepare"
+    },
+    {
+      "code": "missing_requirement",
+      "message": "Draft omits requirement 'v05-pair-15-finalize'.",
+      "requirement_id": "v05-pair-15-finalize"
+    }
+  ],
+  "repair_raw_response": {
+    "id": "chatcmpl-dz5uzrg0s86u3jcjzplkyr",
+    "object": "chat.completion",
+    "created": 1784066039,
+    "model": "google/gemma-4-e2b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\":{\"selections\":[{\"requirement_id\":\"v05-pair-15-prepare\",\"capability_id\":\"v05-pair-15-prepare\"},{\"requirement_id\":\"v05-pair-15-finalize\",\"capability_id\":\"v05-pair-15-finalize\"}],\"unresolved_terms\":[],\"rationale\":\"The previous draft omitted the explicit selection of all requirements mentioned in the input structure, despite them being central to the user goal. The instruction allows for one repair call to correct JSON/public referential errors by ensuring all admitted requirement IDs are selected exactly once with their declared capability IDs.\\n\\nThe required artifacts were `v05-pair-15-result`. The workflow requires both preparation and finalization steps.\\n\\n**Selected Requirements and Capabilities:**\\n*   `v05-pair-15-prepare`: capability `v05-pair-15-prepare`\\n*   `v05-pair-15-finalize`: capability `v05-pair-15-finalize`\\n\\n**Declared Dependency Requirement IDs:**\\n*   `v05-pair-15-finalize` depends on `v05-pair-15-prepare`.\"}}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 1287,
+      "completion_tokens": 270,
+      "total_tokens": 1557,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "google/gemma-4-e2b"
+  },
+  "repaired_parsed_object": {
+    "draft": {
+      "selections": [
+        {
+          "requirement_id": "v05-pair-15-prepare",
+          "capability_id": "v05-pair-15-prepare",
+          "depends_on_requirement_ids": []
+        },
+        {
+          "requirement_id": "v05-pair-15-finalize",
+          "capability_id": "v05-pair-15-finalize",
+          "depends_on_requirement_ids": []
+        }
+      ],
+      "unresolved_terms": [],
+      "rationale": "The previous draft omitted the explicit selection of all requirements mentioned in the input structure, despite them being central to the user goal. The instruction allows for one repair call to correct JSON/public referential errors by ensuring all admitted requirement IDs are selected exactly once with their declared capability IDs.\n\nThe required artifacts were `v05-pair-15-result`. The workflow requires both preparation and finalization steps.\n\n**Selected Requirements and Capabilities:**\n*   `v05-pair-15-prepare`: capability `v05-pair-15-prepare`\n*   `v05-pair-15-finalize`: capability `v05-pair-15-finalize`\n\n**Declared Dependency Requirement IDs:**\n*   `v05-pair-15-finalize` depends on `v05-pair-15-prepare`."
+    }
+  },
+  "repair_latency_ms": 3780.7541999500245,
+  "call_count": 2,
+  "evaluation_status": "raw_output_collected_not_scored"
+}

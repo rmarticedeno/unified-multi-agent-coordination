@@ -1,0 +1,10 @@
+# Evidence is byte-addressed. Never rewrite line endings on checkout.
+e/** -text
+demo_runs/consensus/20260715T014124Z-7a31b42-v1/** -text
+demo_runs/consensus/20260715T022727Z-3f8093a-v2/** -text
+demo_runs/deterministic/20260715T0255Z-3f8093a/** -text
+demo_runs/postgres/20260715T0214Z-7a31b42-failed/** -text
+demo_runs/postgres/20260715T0225Z-3f8093a-passed/** -text
+demo_runs/system/20260715T0212Z-7a31b42/** -text
+
+*.pdf binary

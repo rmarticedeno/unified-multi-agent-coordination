@@ -1,0 +1,121 @@
+{
+  "schema_version": "0.5.0",
+  "identity": {
+    "arm": "hybrid_bridge_v05",
+    "case_id": "v05-pair-09-feasible",
+    "model_id": "google/gemma-4-e2b",
+    "seed": 11
+  },
+  "temperature": 0,
+  "prompt_version": "defense-v0.5-dual-arm-v1",
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Return a non-executable linguistic plan draft. Select every admitted requirement_id exactly once and only its declared capability_id. Copy only request-declared dependency requirement IDs. Report genuine ambiguity in unresolved_terms. Do not create task IDs, agents, authority, contracts, schemas, or artifacts. You do not decide feasibility and reference labels are unavailable."
+    },
+    {
+      "role": "user",
+      "content": "{\"request_text\":\"Prepare and finalize the declared data analytics workflow while preserving authority, data-flow, and completion contracts.\",\"admitted_request\":{\"user_goal\":\"Prepare and finalize the declared data analytics workflow while preserving authority, data-flow, and completion contracts.\",\"requirements\":[{\"name\":\"Prepare data analytics\",\"requirement_id\":\"v05-pair-09-prepare\",\"capability_id\":\"v05-pair-09-prepare\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-09-intermediate\"],\"json_schema\":{\"type\":\"object\"}}},{\"name\":\"Finalize data analytics\",\"requirement_id\":\"v05-pair-09-finalize\",\"capability_id\":\"v05-pair-09-finalize\",\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"depends_on_requirement_ids\":[\"v05-pair-09-prepare\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-09-result\"],\"json_schema\":{\"type\":\"object\"}}}],\"required_artifacts\":[\"v05-pair-09-result\"],\"context\":{\"approved\":true,\"pair_number\":9}},\"registry_snapshot\":[{\"agent_id\":\"v05-pair-09-preparer\",\"name\":\"Data Analytics preparer\",\"service_endpoint\":\"https://v05-pair-09-preparer.example/a2a\",\"trust_level\":\"standard\",\"status\":\"available\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"skills\":[{\"name\":\"Prepare data analytics\",\"requirement_id\":\"v05-pair-09-prepare\",\"capability_id\":\"v05-pair-09-prepare\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-09-intermediate\"],\"json_schema\":{\"type\":\"object\"}}}]},{\"agent_id\":\"v05-pair-09-finisher\",\"name\":\"Data Analytics finisher\",\"service_endpoint\":\"https://v05-pair-09-finisher.example/a2a\",\"trust_level\":\"standard\",\"status\":\"available\",\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"skills\":[{\"name\":\"Finalize data analytics\",\"requirement_id\":\"v05-pair-09-finalize\",\"capability_id\":\"v05-pair-09-finalize\",\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"depends_on_requirement_ids\":[\"v05-pair-09-prepare\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-09-result\"],\"json_schema\":{\"type\":\"object\"}}}]}],\"payload\":{\"text\":\"Input for data analytics pair 9\"}}"
+    }
+  ],
+  "initial_raw_response": {
+    "id": "chatcmpl-8czuzipgi63yezyh9cyzgf",
+    "object": "chat.completion",
+    "created": 1784064829,
+    "model": "google/gemma-4-e2b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\": {\n  \"rationale\": \"The user goal is to prepare and finalize a data analytics workflow while preserving authority, data-flow, and completion contracts. This requires executing the defined requirements sequentially: first 'Prepare data analytics' and then 'Finalize data analytics'. The dependency structure is explicitly defined in the requirements for 'Finalize data analytics', which depends on the output of 'Prepare data analytics'.\\n\\n**Admitted Requirements and Capabilities:**\\n1.  **Requirement ID:** `v05-pair-09-prepare` $\\rightarrow$ **Capability ID:** `v05-pair-09-prepare` (from requirement: Prepare data analytics)\\n2.  **Requirement ID:** `v05-pair-09-finalize` $\\rightarrow$ **Capability ID:** `v05-pair-09-finalize` (from requirement: Finalize data analytics)\\n\\n**Declared Dependency Requirement IDs:**\\n*   The requirement `v05-pair-09-finalize` explicitly depends on `v05-pair-09-prepare`.\\n\\n**Ambiguity Report:**\\nNo genuine ambiguity was found in the provided terms or requirements. The flow is clearly defined as a sequential execution of two dependent steps.\\n\\n**Workflow Draft (Linguistic Plan):**\\n1. Execute `v05-pair-09-prepare` using the input provided in the payload.\\n2. Use the intermediate result from step 1 to execute `v05-pair-09-finalize`.\\n3. The final output artifact required is `v05-pair-09-result`.\"\n}}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 750,
+      "completion_tokens": 360,
+      "total_tokens": 1110,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "google/gemma-4-e2b"
+  },
+  "initial_parsed_object": {
+    "draft": {
+      "selections": [],
+      "unresolved_terms": [],
+      "rationale": "The user goal is to prepare and finalize a data analytics workflow while preserving authority, data-flow, and completion contracts. This requires executing the defined requirements sequentially: first 'Prepare data analytics' and then 'Finalize data analytics'. The dependency structure is explicitly defined in the requirements for 'Finalize data analytics', which depends on the output of 'Prepare data analytics'.\n\n**Admitted Requirements and Capabilities:**\n1.  **Requirement ID:** `v05-pair-09-prepare` $\rightarrow$ **Capability ID:** `v05-pair-09-prepare` (from requirement: Prepare data analytics)\n2.  **Requirement ID:** `v05-pair-09-finalize` $\rightarrow$ **Capability ID:** `v05-pair-09-finalize` (from requirement: Finalize data analytics)\n\n**Declared Dependency Requirement IDs:**\n*   The requirement `v05-pair-09-finalize` explicitly depends on `v05-pair-09-prepare`.\n\n**Ambiguity Report:**\nNo genuine ambiguity was found in the provided terms or requirements. The flow is clearly defined as a sequential execution of two dependent steps.\n\n**Workflow Draft (Linguistic Plan):**\n1. Execute `v05-pair-09-prepare` using the input provided in the payload.\n2. Use the intermediate result from step 1 to execute `v05-pair-09-finalize`.\n3. The final output artifact required is `v05-pair-09-result`."
+    }
+  },
+  "initial_latency_ms": 6305.266400100663,
+  "repair_attempted": true,
+  "repair_trigger_issues": [
+    {
+      "code": "missing_requirement",
+      "message": "Draft omits requirement 'v05-pair-09-prepare'.",
+      "requirement_id": "v05-pair-09-prepare"
+    },
+    {
+      "code": "missing_requirement",
+      "message": "Draft omits requirement 'v05-pair-09-finalize'.",
+      "requirement_id": "v05-pair-09-finalize"
+    }
+  ],
+  "repair_raw_response": {
+    "id": "chatcmpl-nydbtw7uctt7trec8k23",
+    "object": "chat.completion",
+    "created": 1784064835,
+    "model": "google/gemma-4-e2b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\":{\"selections\":[{\"requirement_id\":\"v05-pair-09-prepare\",\"capability_id\":\"v05-pair-09-prepare\"},{\"requirement_id\":\"v05-pair-09-finalize\",\"capability_id\":\"v05-pair-09-finalize\"}],\"unresolved_terms\":[],\"rationale\":\"The previous draft correctly identified the required requirements and capabilities based on the input. The repair call indicates that the draft omitted these specific requirements, which contradicts the instruction to select every admitted requirement_id exactly once. This correction ensures all explicitly mentioned requirements are selected.\\n\\n**Admitted Requirements and Capabilities (Corrected):**\\n1.  **Requirement ID:** `v05-pair-09-prepare` $\\rightarrow$ **Capability ID:** `v05-pair-09-prepare`\\n2.  **Requirement ID:** `v05-pair-09-finalize` $\\rightarrow$ **Capability ID:** `v05-pair-09-finalize`\\n\\n**Declared Dependency Requirement IDs:**\\n*   The requirement `v05-pair-09-finalize` explicitly depends on `v05-pair-09-prepare`.\\n\\n**Ambiguity Report:**\\nNo genuine ambiguity was found. The flow is a direct sequence of the two required steps.\\n\\n**Workflow Draft (Linguistic Plan):**\\n1. Execute `v05-pair-09-prepare`.\\n2. Execute `v05-pair-09-finalize`, dependent on the result of step 1.\"}}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 1232,
+      "completion_tokens": 350,
+      "total_tokens": 1582,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "google/gemma-4-e2b"
+  },
+  "repaired_parsed_object": {
+    "draft": {
+      "selections": [
+        {
+          "requirement_id": "v05-pair-09-prepare",
+          "capability_id": "v05-pair-09-prepare",
+          "depends_on_requirement_ids": []
+        },
+        {
+          "requirement_id": "v05-pair-09-finalize",
+          "capability_id": "v05-pair-09-finalize",
+          "depends_on_requirement_ids": []
+        }
+      ],
+      "unresolved_terms": [],
+      "rationale": "The previous draft correctly identified the required requirements and capabilities based on the input. The repair call indicates that the draft omitted these specific requirements, which contradicts the instruction to select every admitted requirement_id exactly once. This correction ensures all explicitly mentioned requirements are selected.\n\n**Admitted Requirements and Capabilities (Corrected):**\n1.  **Requirement ID:** `v05-pair-09-prepare` $\rightarrow$ **Capability ID:** `v05-pair-09-prepare`\n2.  **Requirement ID:** `v05-pair-09-finalize` $\rightarrow$ **Capability ID:** `v05-pair-09-finalize`\n\n**Declared Dependency Requirement IDs:**\n*   The requirement `v05-pair-09-finalize` explicitly depends on `v05-pair-09-prepare`.\n\n**Ambiguity Report:**\nNo genuine ambiguity was found. The flow is a direct sequence of the two required steps.\n\n**Workflow Draft (Linguistic Plan):**\n1. Execute `v05-pair-09-prepare`.\n2. Execute `v05-pair-09-finalize`, dependent on the result of step 1."
+    }
+  },
+  "repair_latency_ms": 4697.953799972311,
+  "call_count": 2,
+  "evaluation_status": "raw_output_collected_not_scored"
+}

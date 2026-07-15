@@ -1,0 +1,23 @@
+{
+  "checks": {},
+  "duration_s": 137.6546374997124,
+  "error": "RuntimeError: Cluster condition did not converge in 120s: {'coordination-a': {'http_status': 200, 'cluster_id': 'thesis-coordination', 'node_id': 'coordination-a', 'member_id': 18292091069950412911, 'role': 'voter', 'state': 'bootstrapping', 'steady_state': False, 'configuration_generation': 0, 'configured_voter_target': 3, 'authoritative_voters': 3, 'active_voters': 2, 'live_voters': 2, 'learners': 0, 'coordinator_nodes': 2, 'coordinator_only_nodes': 0, 'quorum': 2, 'quorum_available': True, 'leader': 18292091069950412911, 'revision': 810, 'discovery_method': 'none', 'pending_membership_changes': 0, 'pending_membership_operation': None, 'role_agreement': {'coordination-a': True, 'coordination-c': True}, 'degraded': True, 'degraded_reason': 'active voter count is below configured target'}, 'coordination-c': {'http_status': 200, 'cluster_id': 'thesis-coordination', 'node_id': 'coordination-c', 'member_id': 15737537368895390134, 'role': 'voter', 'state': 'bootstrapping', 'steady_state': False, 'configuration_generation': 0, 'configured_voter_target': 3, 'authoritative_voters': 3, 'active_voters': 2, 'live_voters': 2, 'learners': 0, 'coordinator_nodes': 2, 'coordinator_only_nodes': 0, 'quorum': 2, 'quorum_available': True, 'leader': 18292091069950412911, 'revision': 810, 'discovery_method': 'multicast', 'pending_membership_changes': 0, 'pending_membership_operation': None, 'role_agreement': {'coordination-a': True, 'coordination-c': True}, 'degraded': True, 'degraded_reason': 'active voter count is below configured target'}, 'coordination-d': {'http_status': 200, 'cluster_id': 'thesis-coordination', 'node_id': 'coordination-d', 'member_id': 0, 'role': 'client', 'state': 'bootstrapping', 'steady_state': False, 'configuration_generation': 0, 'configured_voter_target': 3, 'authoritative_voters': 3, 'active_voters': 2, 'live_voters': 2, 'learners': 0, 'coordinator_nodes': 2, 'coordinator_only_nodes': 0, 'quorum': 2, 'quorum_available': True, 'leader': 18292091069950412911, 'revision': 810, 'discovery_method': 'multicast', 'pending_membership_changes': 0, 'pending_membership_operation': None, 'role_agreement': {'coordination-a': True, 'coordination-c': True}, 'degraded': True, 'degraded_reason': 'active voter count is below configured target'}}",
+  "executed_checks": [],
+  "expected_checks": [
+    "failed_voter_replaced",
+    "replacement_reaches_steady_state",
+    "progress_after_replacement"
+  ],
+  "observations": {},
+  "passed": false,
+  "scenario": "failed-voter-replacement",
+  "status": "infrastructure_error",
+  "topology": 3,
+  "trial": 1,
+  "unexecuted_checks": [
+    "failed_voter_replaced",
+    "replacement_reaches_steady_state",
+    "progress_after_replacement"
+  ],
+  "violated_checks": []
+}

@@ -1,0 +1,110 @@
+{
+  "schema_version": "0.5.0",
+  "identity": {
+    "arm": "hybrid_bridge_v05",
+    "case_id": "v05-pair-23-infeasible",
+    "model_id": "qwen/qwen3-1.7b",
+    "seed": 22
+  },
+  "temperature": 0,
+  "prompt_version": "defense-v0.5-dual-arm-v1",
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Return a non-executable linguistic plan draft. Select every admitted requirement_id exactly once and only its declared capability_id. Copy only request-declared dependency requirement IDs. Report genuine ambiguity in unresolved_terms. Do not create task IDs, agents, authority, contracts, schemas, or artifacts. You do not decide feasibility and reference labels are unavailable."
+    },
+    {
+      "role": "user",
+      "content": "{\"request_text\":\"Prepare and finalize the declared iot inspection workflow while preserving authority, data-flow, and completion contracts.\",\"admitted_request\":{\"user_goal\":\"Prepare and finalize the declared iot inspection workflow while preserving authority, data-flow, and completion contracts.\",\"requirements\":[{\"name\":\"Prepare iot inspection\",\"requirement_id\":\"v05-pair-23-prepare\",\"capability_id\":\"v05-pair-23-prepare\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-23-intermediate\"],\"json_schema\":{\"type\":\"object\"}}},{\"name\":\"Finalize iot inspection\",\"requirement_id\":\"v05-pair-23-finalize\",\"capability_id\":\"v05-pair-23-finalize\",\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"depends_on_requirement_ids\":[\"v05-pair-23-prepare\"],\"required_trust_level\":\"high\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-23-result\"],\"json_schema\":{\"type\":\"object\"}}}],\"required_artifacts\":[\"v05-pair-23-result\"],\"context\":{\"approved\":true,\"pair_number\":23}},\"registry_snapshot\":[{\"agent_id\":\"v05-pair-23-preparer\",\"name\":\"Iot Inspection preparer\",\"service_endpoint\":\"https://v05-pair-23-preparer.example/a2a\",\"trust_level\":\"standard\",\"status\":\"available\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"skills\":[{\"name\":\"Prepare iot inspection\",\"requirement_id\":\"v05-pair-23-prepare\",\"capability_id\":\"v05-pair-23-prepare\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-23-intermediate\"],\"json_schema\":{\"type\":\"object\"}}}]},{\"agent_id\":\"v05-pair-23-finisher\",\"name\":\"Iot Inspection finisher\",\"service_endpoint\":\"https://v05-pair-23-finisher.example/a2a\",\"trust_level\":\"standard\",\"status\":\"available\",\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"skills\":[{\"name\":\"Finalize iot inspection\",\"requirement_id\":\"v05-pair-23-finalize\",\"capability_id\":\"v05-pair-23-finalize\",\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"depends_on_requirement_ids\":[\"v05-pair-23-prepare\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-23-result\"],\"json_schema\":{\"type\":\"object\"}}}]}],\"payload\":{\"text\":\"Input for iot inspection pair 23\"}}"
+    }
+  ],
+  "initial_raw_response": {
+    "id": "chatcmpl-vko34dmjcjuk7t0kzbj5",
+    "object": "chat.completion",
+    "created": 1784063391,
+    "model": "qwen/qwen3-1.7b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\":{}}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 693,
+      "completion_tokens": 6,
+      "total_tokens": 699,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-1.7b"
+  },
+  "initial_parsed_object": {
+    "draft": {
+      "selections": [],
+      "unresolved_terms": [],
+      "rationale": ""
+    }
+  },
+  "initial_latency_ms": 473.44169998541474,
+  "repair_attempted": true,
+  "repair_trigger_issues": [
+    {
+      "code": "missing_requirement",
+      "message": "Draft omits requirement 'v05-pair-23-prepare'.",
+      "requirement_id": "v05-pair-23-prepare"
+    },
+    {
+      "code": "missing_requirement",
+      "message": "Draft omits requirement 'v05-pair-23-finalize'.",
+      "requirement_id": "v05-pair-23-finalize"
+    }
+  ],
+  "repair_raw_response": {
+    "id": "chatcmpl-z5bhwirht4cjba6xl7105",
+    "object": "chat.completion",
+    "created": 1784063392,
+    "model": "qwen/qwen3-1.7b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\":{\"selections\":[],\"unresolved_terms\":[],\"rationale\":\"\"}}\n",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 829,
+      "completion_tokens": 17,
+      "total_tokens": 846,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-1.7b"
+  },
+  "repaired_parsed_object": {
+    "draft": {
+      "selections": [],
+      "unresolved_terms": [],
+      "rationale": ""
+    }
+  },
+  "repair_latency_ms": 351.67580004781485,
+  "call_count": 2,
+  "evaluation_status": "raw_output_collected_not_scored"
+}

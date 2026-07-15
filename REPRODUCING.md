@@ -65,29 +65,36 @@ by case, and attributes only configuration-specific latency. The historical
 v0.4 raw run is dirty-source evidence. Do not promote it or suppress its failed
 Qwen3 1.7B recall criterion.
 
-## Clean v0.5 comparison and consensus campaign
+## Accepted v0.5 comparison and consensus campaign
 
-Create and push a non-final evidence-candidate commit only after
-`git status --porcelain` is empty. The v0.5 public cases, hidden author labels,
-prompts, schemas, criteria, and analysis code must already be frozen in that
-commit. Collect and analyze both arms from that exact revision:
+The accepted collection was produced from clean evidence-candidate commit
+`7a31b42069104c3a4d7f10d8441d82357a35fd8b`. The packaged run is `e/v5`.
+To repeat the protocol, create and push a non-final evidence-candidate commit
+only after `git status --porcelain` is empty. The public cases, hidden labels,
+prompts, schemas, criteria, and analysis code must already be frozen:
 
 ```text
 uv run unified-defense-study-v05 --corpus corpus/v0.5 --collect
-uv run unified-analyze-defense-study-v05 --run demo_runs/v0.5/<run-id> --corpus corpus/v0.5
+uv run unified-analyze-defense-study-v05 --run <run-directory> --corpus corpus/v0.5
 ```
 
 Completion requires 1,440 unique arm/model/seed/case outputs. Each arm has the
 same one-initial-plus-one-repair maximum. Requested seeds are stability
 repetitions rather than independent samples. Functional metrics are written to
 a deterministic report and wall-clock measurements to a separate artifact.
-Unsuccessful pre-specified outcomes are retained, not rerun away.
+Unsuccessful pre-specified outcomes are retained, not rerun away. In the
+accepted run, the hybrid's zero-false-acceptance criterion passed, but its
+per-model recall and positive paired-accuracy-difference criteria failed.
 
-Run the consensus campaign from the same clean revision:
+The primary consensus campaign was run from correction commit
+`3f8093af1ecc7c49312ac34856bba825bd81f381` and is packaged under
+`demo_runs/consensus/20260715T022727Z-3f8093a-v2`. It is complete and valid,
+but failed with 20 passed, seven invariant-failed, and six infrastructure-error
+trials. Repeat campaigns with:
 
 ```text
 uv run unified-consensus-matrix --output-dir demo_runs/consensus/<new-run-id> --trials 3 --promotion-candidate
-uv run unified-evidence-preflight --require-release --corpus corpus/v0.5 --repository .
+uv run unified-evidence-preflight --corpus corpus/v0.5 --repository .
 ```
 
 The campaign creates isolated Compose projects and fresh volumes for 3-, 5-,
@@ -96,6 +103,12 @@ restoration, restart/replacement, audit-projection failure, concurrency, and
 three crash windows. Dirty, incomplete, overwritten, or hash-mismatched output
 is never accepted. Containers share one host; this is crash-fault evidence, not
 Byzantine or independent-failure-domain validation.
+
+The clean PostgreSQL v1 failure is preserved under
+`demo_runs/postgres/20260715T0214Z-7a31b42-failed`. It exposed a lease
+read-then-upsert race. The atomic conditional-upsert correction is commit
+`3f8093af1ecc7c49312ac34856bba825bd81f381`; its v2 report under
+`demo_runs/postgres/20260715T0225Z-3f8093a-passed` passes all five checks.
 
 The third-party A2A test uses the vendored upstream-derived Hello World snapshot
 pinned in `vendor/a2a-samples/UPSTREAM.json` and `a2a-sdk==1.1.0`. It must pass

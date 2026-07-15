@@ -1,11 +1,26 @@
 {
   "schema_version": "0.6.0",
   "release_status": "candidate-blocked",
-  "technical_status": "implementation-in-progress",
-  "evaluated_source_commit": "UNFROZEN",
+  "technical_status": "evidence-complete-negative-outcomes",
+  "evaluated_source_commit": "3f8093af1ecc7c49312ac34856bba825bd81f381",
   "packaging_commit": "UNFROZEN",
   "dirty_state": true,
-  "accepted_evidence": [],
+  "accepted_evidence": [
+    "e/v5/provenance.json",
+    "e/v5/collection-complete.json",
+    "e/v5/analysis-v0.5.0.json",
+    "e/artifact-manifest.json",
+    "demo_runs/consensus/20260715T022727Z-3f8093a-v2/campaign.json",
+    "demo_runs/deterministic/20260715T0255Z-3f8093a/deterministic.json",
+    "demo_runs/system/20260715T0212Z-7a31b42/docker-system-report.json",
+    "demo_runs/postgres/20260715T0225Z-3f8093a-passed/distributed-system-report.json"
+  ],
+  "artifact_inventory": {
+    "path": "e/artifact-manifest.json",
+    "sha256": "2b8fe343110cd6c9b16fc1588a155a4c97ae7d5dfb145b3ea0a7b6fc2a388805",
+    "artifact_count": 1592,
+    "coverage": "all packaged v0.5, consensus, deterministic, Docker A2A, and PostgreSQL evidence files"
+  },
   "historical_study_evidence": {
     "bridge_v03": {
       "run_id": "20260713T013624Z-b9fd8b6f83",
@@ -43,7 +58,29 @@
     }
   },
   "clean_replication_evidence": null,
-  "v05_study_evidence": null,
+  "v05_study_evidence": {
+    "run_root": "e/v5",
+    "analysis_file": "analysis-v0.5.0.json",
+    "analysis_sha256": "5bead15a76a84f66671b9bc14dd7ac6ead9c9a5ce4b434757d94a5e86c093f82",
+    "analysis_reproduction": "two independent analyzer executions produced the same functional digest",
+    "timing_file": "timings-v0.5.0.json",
+    "timing_sha256": "c210b662972ee287b752c4ba35f6dc7ba9e745b85a977eda218cfe8fea0c8b53",
+    "evaluated_source_commit": "7a31b42069104c3a4d7f10d8441d82357a35fd8b",
+    "evidence_valid": true,
+    "outcome": "mixed",
+    "claim_status": "partially_supported",
+    "case_outputs": 1440,
+    "headline_results": {
+      "hybrid_repaired_accuracy": 0.5069444444444444,
+      "hybrid_repaired_feasible_recall": 0.013888888888888888,
+      "hybrid_false_acceptance": 0,
+      "direct_repaired_accuracy": 0.5208333333333334,
+      "direct_false_acceptance": 345,
+      "paired_accuracy_difference_hybrid_minus_direct": -0.01388888888888895,
+      "matched_pair_clustered_bootstrap_95_ci": [-0.034722222222222224, 0.0],
+      "all_planning_criteria_met": false
+    }
+  },
   "runtime_ablation_evidence": {
     "analysis_file": "demo_runs/runtime_ablation/v1/analysis.json",
     "observations": 350,
@@ -54,7 +91,61 @@
     "observations_sha256": "7617bb8da5308b9a22a7ed7fe12c93d7e0b80484b2a18de2ee44ea3d2e3b7bbf",
     "classification": "historical_missing_clean_source_attestation"
   },
-  "consensus_campaign_evidence": null,
+  "consensus_campaign_evidence": {
+    "campaign_file": "demo_runs/consensus/20260715T022727Z-3f8093a-v2/campaign.json",
+    "sha256": "9881691f1c1758a237df184ca18e49aaf9eb3d7a904ab64bd4374f10226f3588",
+    "source_commit": "3f8093af1ecc7c49312ac34856bba825bd81f381",
+    "evidence_valid": true,
+    "accepted": true,
+    "outcome": "failed",
+    "claim_status": "unsupported",
+    "trial_count": 33,
+    "passed_trials": 20,
+    "invariant_failed_trials": 7,
+    "infrastructure_failed_trials": 6,
+    "safety_checks_expected": 144,
+    "safety_checks_executed": 104,
+    "safety_violations": 19,
+    "unexecuted_checks": 40
+  },
+  "historical_failed_clean_evidence": [
+    {
+      "kind": "consensus_campaign",
+      "campaign_file": "demo_runs/consensus/20260715T014124Z-7a31b42-v1/campaign.json",
+      "sha256": "0505288497925ab68955b9c4b5f5683c3bc53eb5a1576045d0e52cb60091599e",
+      "source_commit": "7a31b42069104c3a4d7f10d8441d82357a35fd8b",
+      "evidence_valid": true,
+      "outcome": "failed"
+    },
+    {
+      "kind": "postgres_distributed",
+      "report_file": "demo_runs/postgres/20260715T0214Z-7a31b42-failed/distributed-system-report.json",
+      "sha256": "1cdda570e64f650a5f231063259ba3b7e84b40e28597aa1d66e074e61aefe217",
+      "source_commit": "7a31b42069104c3a4d7f10d8441d82357a35fd8b",
+      "evidence_valid": true,
+      "outcome": "failed"
+    }
+  ],
+  "current_system_evidence": {
+    "deterministic": {
+      "report_file": "demo_runs/deterministic/20260715T0255Z-3f8093a/deterministic.json",
+      "sha256": "559af22eb5eb29b1677ef043e62340a1b2a097ae4cc865bdae0d6b59261f7680",
+      "passed": "7/7"
+    },
+    "docker_a2a": {
+      "report_file": "demo_runs/system/20260715T0212Z-7a31b42/docker-system-report.json",
+      "sha256": "3fc356dec908e9e5eae7e48315e519c2f5ec32e27e8cec6335a0f8c268dcef44",
+      "source_commit": "7a31b42069104c3a4d7f10d8441d82357a35fd8b",
+      "passed": "11/11"
+    },
+    "postgres_distributed": {
+      "report_file": "demo_runs/postgres/20260715T0225Z-3f8093a-passed/distributed-system-report.json",
+      "sha256": "8e16c0575c6228b0cb4b23204d4d693bebee5acdbe3a5af112687803eeea449a",
+      "source_commit": "3f8093af1ecc7c49312ac34856bba825bd81f381",
+      "passed": "5/5"
+    },
+    "upstream_derived_a2a": "1/1"
+  },
   "historical_system_evidence": [
     "demo_runs/v0.2/preflight-20260712-03/docker-system-report.json",
     "demo_runs/v0.2/preflight-20260712-07/distributed-system-report.json",
@@ -62,12 +153,12 @@
   ],
   "current_local_validation": {
     "test_count": 213,
-    "production_branch_coverage_percent": 90.15,
+    "production_branch_coverage_percent": 90.16,
     "tests": "213 passing on Windows",
-    "coverage": "90.15 percent production branch coverage; every declared production aggregate and critical-module threshold passes; the all-source report is 80.19 percent because it includes historical and executable evidence modules outside the production aggregate",
-    "deterministic": "historical 7/7",
+    "coverage": "90.16 percent production branch coverage; every declared production aggregate and critical-module threshold passes",
+    "deterministic": "clean 7/7 from commit 3f8093af1ecc7c49312ac34856bba825bd81f381",
     "third_party_a2a": "upstream-derived fixture pinned to a2a-samples commit 1bb0871294af52fdb2c7e5173e43fade0eb008ba",
-    "consensus_smoke": "campaign machinery preserved three failed dirty-source trials; Docker image resolution was blocked by GHCR TLS timeouts and no safety observation was counted"
+    "consensus_full": "clean complete 33-trial campaign; evidence valid, outcome failed, claim unsupported"
   },
   "legacy_evidence": [
     "demo_runs/end_to_end_scenarios.json",
@@ -78,10 +169,9 @@
     "demo_runs/thesis_analysis"
   ],
   "open_gates": [
-    "technical: clean complete v0.5 dual-arm collection from an evidence-candidate commit",
-    "technical: accepted clean-source 3/5/7 consensus campaign",
-    "technical: final immutable Docker A2A and PostgreSQL evidence",
+    "research outcome: RQ4 comparative advantage is unsupported by v0.5",
+    "research outcome: RQ5 consensus claim is unsupported by the clean complete campaign",
     "administrative: advisor and tribunal metadata",
-    "administrative: final repository commit, tag, push, and container digests"
+    "administrative: packaging commit, final tag, and push"
   ]
 }

@@ -1,0 +1,1888 @@
+{
+  "checks": {
+    "coordinate_completed": true,
+    "steady_state": true
+  },
+  "duration_s": 45.086615999694914,
+  "error": "",
+  "executed_checks": [
+    "coordinate_completed",
+    "steady_state"
+  ],
+  "expected_checks": [
+    "steady_state",
+    "coordinate_completed"
+  ],
+  "observations": {
+    "coordinate": {
+      "body": {
+        "artifacts": [
+          {
+            "artifact_id": "89d374a8-9cb9-4378-a5c8-71f05a0cf97b",
+            "data": {
+              "summary": "Consensus-backed fixture summary"
+            },
+            "kind": "data",
+            "name": "summary"
+          }
+        ],
+        "explanation": "Authorized coordination completed.",
+        "plan_id": "plan-624ee400a3aa4dc6b7d085a033abd4bd",
+        "plan_result": {
+          "feasibility_report": {
+            "capability_resolution": [
+              {
+                "agent_id": "summarizer",
+                "requested_capability_id": "summarize",
+                "requirement_id": "summarize",
+                "resolved": true,
+                "resolved_capability_id": "summarize",
+                "task_id": "t1"
+              }
+            ],
+            "constraint_violations": [],
+            "evidence": [
+              {
+                "details": {},
+                "name": "well_formed",
+                "passed": true
+              },
+              {
+                "details": {},
+                "name": "covered",
+                "passed": true
+              },
+              {
+                "details": {},
+                "name": "total_assignment",
+                "passed": true
+              },
+              {
+                "details": {},
+                "name": "authorized",
+                "passed": true
+              },
+              {
+                "details": {},
+                "name": "compatible",
+                "passed": true
+              },
+              {
+                "details": {},
+                "name": "acyclic",
+                "passed": true
+              },
+              {
+                "details": {},
+                "name": "ordered",
+                "passed": true
+              },
+              {
+                "details": {},
+                "name": "requirements_complete",
+                "passed": true
+              },
+              {
+                "details": {},
+                "name": "complete",
+                "passed": true
+              },
+              {
+                "details": {},
+                "name": "verifiable",
+                "passed": true
+              },
+              {
+                "details": {
+                  "violations": []
+                },
+                "name": "constraints_satisfied",
+                "passed": true
+              }
+            ],
+            "explanation": "Plan authorized by deterministic feasibility checks.",
+            "feasible": true,
+            "generated_nlp_agents": [],
+            "matched_agents": {
+              "t1": "summarizer"
+            },
+            "missing_capabilities": [],
+            "risks": [],
+            "schema_violations": [],
+            "validation_gaps": []
+          },
+          "plan_generation": 1,
+          "plan_id": "plan-624ee400a3aa4dc6b7d085a033abd4bd",
+          "proposal": {
+            "completion_contract": {
+              "require_all_task_validators": true,
+              "required_artifacts": [
+                "summary"
+              ],
+              "required_task_states": [
+                "completed"
+              ]
+            },
+            "completion_criteria": [
+              "summary artifact exists"
+            ],
+            "constraint_evidence": {},
+            "execution_order": [
+              "t1"
+            ],
+            "expected_artifacts": [
+              "summary"
+            ],
+            "generated_nlp_agents": [],
+            "selected_agents": {
+              "t1": "summarizer"
+            },
+            "tasks": [
+              {
+                "assigned_to": "summarizer",
+                "auxiliary_spec_id": null,
+                "capability_id": "summarize",
+                "depends_on": [],
+                "description": "",
+                "expected_artifacts": [
+                  "summary"
+                ],
+                "requirement_id": "summarize",
+                "requirement_name": "summarize",
+                "task_id": "t1",
+                "validation_contract": {
+                  "artifact_kinds": [],
+                  "evidence_types": [],
+                  "json_schema": {},
+                  "required_artifacts": [
+                    "summary"
+                  ],
+                  "required_fields": [],
+                  "validator_id": ""
+                }
+              }
+            ]
+          },
+          "registry_revision": 241,
+          "registry_snapshot": [
+            {
+              "agent_id": "slow-agent",
+              "agent_kind": "remote_a2a",
+              "availability_scope": "remote",
+              "description": "Fixture agent for slow summarize.",
+              "input_modes": [
+                "text"
+              ],
+              "invocation_endpoint": "http://slow-agent:8000/",
+              "name": "slow-agent",
+              "output_modes": [
+                "data"
+              ],
+              "owner_node_id": "",
+              "required_security_schemes": [],
+              "security_schemes": {},
+              "service_endpoint": "http://slow-agent:8000",
+              "skills": [
+                {
+                  "auxiliary_eligible": false,
+                  "capability_id": "slow-summarize",
+                  "constraints": [],
+                  "depends_on_requirement_ids": [],
+                  "description": "",
+                  "expected_evidence": [],
+                  "input_modes": [
+                    "text"
+                  ],
+                  "input_schema": {},
+                  "name": "slow summarize",
+                  "output_modes": [
+                    "data"
+                  ],
+                  "output_schema": {},
+                  "required_trust_level": "standard",
+                  "requirement_id": "slow-summarize",
+                  "side_effect_class": "idempotent",
+                  "validation_contract": {
+                    "artifact_kinds": [],
+                    "evidence_types": [],
+                    "json_schema": {},
+                    "required_artifacts": [],
+                    "required_fields": [],
+                    "validator_id": ""
+                  }
+                }
+              ],
+              "source_card": {},
+              "status": "available",
+              "supports_fencing": true,
+              "trust_level": "standard",
+              "validation_contract": {
+                "artifact_kinds": [],
+                "evidence_types": [],
+                "json_schema": {},
+                "required_artifacts": [],
+                "required_fields": [],
+                "validator_id": ""
+              }
+            },
+            {
+              "agent_id": "summarizer",
+              "agent_kind": "remote_a2a",
+              "availability_scope": "remote",
+              "description": "Fixture agent for summarize.",
+              "input_modes": [
+                "text"
+              ],
+              "invocation_endpoint": "http://summarizer:8000/",
+              "name": "summarizer",
+              "output_modes": [
+                "data"
+              ],
+              "owner_node_id": "",
+              "required_security_schemes": [],
+              "security_schemes": {},
+              "service_endpoint": "http://summarizer:8000",
+              "skills": [
+                {
+                  "auxiliary_eligible": false,
+                  "capability_id": "summarize",
+                  "constraints": [],
+                  "depends_on_requirement_ids": [],
+                  "description": "",
+                  "expected_evidence": [],
+                  "input_modes": [
+                    "text"
+                  ],
+                  "input_schema": {},
+                  "name": "summarize",
+                  "output_modes": [
+                    "data"
+                  ],
+                  "output_schema": {},
+                  "required_trust_level": "standard",
+                  "requirement_id": "summarize",
+                  "side_effect_class": "idempotent",
+                  "validation_contract": {
+                    "artifact_kinds": [],
+                    "evidence_types": [],
+                    "json_schema": {},
+                    "required_artifacts": [],
+                    "required_fields": [],
+                    "validator_id": ""
+                  }
+                }
+              ],
+              "source_card": {},
+              "status": "available",
+              "supports_fencing": true,
+              "trust_level": "standard",
+              "validation_contract": {
+                "artifact_kinds": [],
+                "evidence_types": [],
+                "json_schema": {},
+                "required_artifacts": [],
+                "required_fields": [],
+                "validator_id": ""
+              }
+            }
+          ],
+          "registry_snapshot_hash": "a0b3bf0559497a35cac202c9141904a569d83cd5b6b05d8b81cca3b13268445b",
+          "request": {
+            "constraints": [],
+            "context": {},
+            "required_artifacts": [
+              "summary"
+            ],
+            "requirements": [
+              {
+                "auxiliary_eligible": false,
+                "capability_id": "summarize",
+                "constraints": [],
+                "depends_on_requirement_ids": [],
+                "description": "",
+                "expected_evidence": [],
+                "input_modes": [],
+                "input_schema": {},
+                "name": "summarize",
+                "output_modes": [],
+                "output_schema": {},
+                "required_trust_level": "standard",
+                "requirement_id": "summarize",
+                "side_effect_class": "read_only",
+                "validation_contract": {
+                  "artifact_kinds": [],
+                  "evidence_types": [],
+                  "json_schema": {},
+                  "required_artifacts": [
+                    "summary"
+                  ],
+                  "required_fields": [],
+                  "validator_id": ""
+                }
+              }
+            ],
+            "user_goal": "Summarize through consensus-backed coordination."
+          },
+          "session_id": "formation-7-ff8da589efcf4683a5436b234eb14c28"
+        },
+        "session_id": "formation-7-ff8da589efcf4683a5436b234eb14c28",
+        "status": "completed",
+        "task_results": [
+          {
+            "agent_id": "summarizer",
+            "agent_kind": "remote_a2a",
+            "artifacts": [
+              {
+                "artifact_id": "89d374a8-9cb9-4378-a5c8-71f05a0cf97b",
+                "data": {
+                  "summary": "Consensus-backed fixture summary"
+                },
+                "kind": "data",
+                "name": "summary"
+              }
+            ],
+            "attempt_id": "t1-attempt-1",
+            "error": "",
+            "metadata": {
+              "attempt_key": "formation-7-ff8da589efcf4683a5436b234eb14c28:plan-624ee400a3aa4dc6b7d085a033abd4bd:t1:t1-attempt-1",
+              "coordinator_id": "coordination-g",
+              "fencing_token": 237,
+              "idempotency_key": "formation-7-ff8da589efcf4683a5436b234eb14c28:plan-624ee400a3aa4dc6b7d085a033abd4bd:t1:t1-attempt-1",
+              "invocation_endpoint": "http://summarizer:8000/",
+              "operation_key": "formation-7-ff8da589efcf4683a5436b234eb14c28:1:t1",
+              "plan_generation": 1,
+              "registry_revision": 241
+            },
+            "output": {
+              "artifacts": [
+                {
+                  "artifact_id": "89d374a8-9cb9-4378-a5c8-71f05a0cf97b",
+                  "data": {
+                    "summary": "Consensus-backed fixture summary"
+                  },
+                  "kind": "data",
+                  "name": "summary"
+                }
+              ],
+              "chunks": [
+                {
+                  "task": {
+                    "artifacts": [
+                      {
+                        "artifact_id": "89d374a8-9cb9-4378-a5c8-71f05a0cf97b",
+                        "name": "summary",
+                        "parts": [
+                          {
+                            "data": {
+                              "summary": "Consensus-backed fixture summary"
+                            }
+                          }
+                        ]
+                      }
+                    ],
+                    "context_id": "45578a2b-150e-4bbf-901b-57d7444e5dc5",
+                    "history": [
+                      {
+                        "context_id": "45578a2b-150e-4bbf-901b-57d7444e5dc5",
+                        "message_id": "215e20c1-016b-4f1b-9598-0e8213c751b9",
+                        "parts": [
+                          {
+                            "text": "{\"_coordination\": {\"attempt_id\": \"t1-attempt-1\", \"attempt_key\": \"formation-7-ff8da589efcf4683a5436b234eb14c28:plan-624ee400a3aa4dc6b7d085a033abd4bd:t1:t1-attempt-1\", \"coordinator_id\": \"coordination-g\", \"fencing_token\": 237, \"idempotency_key\": \"formation-7-ff8da589efcf4683a5436b234eb14c28:plan-624ee400a3aa4dc6b7d085a033abd4bd:t1:t1-attempt-1\", \"inputs_by_task\": {}, \"operation_key\": \"formation-7-ff8da589efcf4683a5436b234eb14c28:1:t1\", \"plan_generation\": 1, \"plan_id\": \"plan-624ee400a3aa4dc6b7d085a033abd4bd\", \"previous_artifacts\": [], \"registry_revision\": 241, \"session_id\": \"formation-7-ff8da589efcf4683a5436b234eb14c28\", \"task_id\": \"t1\"}, \"text\": \"formation-7-ff8da589efcf4683a5436b234eb14c28\"}"
+                          }
+                        ],
+                        "role": "ROLE_USER",
+                        "task_id": "69cbf890-4b31-4a71-88ae-0984ae52463e"
+                      }
+                    ],
+                    "id": "69cbf890-4b31-4a71-88ae-0984ae52463e",
+                    "status": {
+                      "message": {
+                        "context_id": "45578a2b-150e-4bbf-901b-57d7444e5dc5",
+                        "message_id": "97953bae-1b71-4e91-ac7b-4ec4e8221932",
+                        "parts": [
+                          {
+                            "text": "summarizer completed."
+                          }
+                        ],
+                        "role": "ROLE_AGENT",
+                        "task_id": "69cbf890-4b31-4a71-88ae-0984ae52463e"
+                      },
+                      "state": "TASK_STATE_COMPLETED",
+                      "timestamp": "2026-07-15T02:29:28.965261Z"
+                    }
+                  }
+                }
+              ]
+            },
+            "plan_id": "plan-624ee400a3aa4dc6b7d085a033abd4bd",
+            "session_id": "formation-7-ff8da589efcf4683a5436b234eb14c28",
+            "status": "completed",
+            "task_id": "t1"
+          }
+        ],
+        "trace": [
+          {
+            "attempt_id": "",
+            "data": {
+              "attempt_id": "",
+              "payload": {
+                "expires_at": "2026-07-15T02:29:33.640438+00:00",
+                "fencing_token": 237,
+                "holder_id": "coordination-g"
+              },
+              "plan_id": "",
+              "session_id": "formation-7-ff8da589efcf4683a5436b234eb14c28",
+              "task_id": ""
+            },
+            "event_type": "lease_acquired",
+            "message": "Ledger event lease_acquired.",
+            "plan_id": "",
+            "session_id": "formation-7-ff8da589efcf4683a5436b234eb14c28",
+            "source": "store",
+            "task_id": "",
+            "timestamp": "2026-07-15T02:29:28.644416Z"
+          },
+          {
+            "attempt_id": "",
+            "data": {
+              "attempt_id": "",
+              "payload": {
+                "context": {},
+                "payload": {
+                  "text": "formation-7-ff8da589efcf4683a5436b234eb14c28"
+                },
+                "user_request": {
+                  "constraints": [],
+                  "context": {},
+                  "required_artifacts": [
+                    "summary"
+                  ],
+                  "requirements": [
+                    {
+                      "auxiliary_eligible": false,
+                      "capability_id": "summarize",
+                      "constraints": [],
+                      "depends_on_requirement_ids": [],
+                      "description": "",
+                      "expected_evidence": [],
+                      "input_modes": [],
+                      "input_schema": {},
+                      "name": "summarize",
+                      "output_modes": [],
+                      "output_schema": {},
+                      "required_trust_level": "standard",
+                      "requirement_id": "summarize",
+                      "side_effect_class": "read_only",
+                      "validation_contract": {
+                        "artifact_kinds": [],
+                        "evidence_types": [],
+                        "json_schema": {},
+                        "required_artifacts": [
+                          "summary"
+                        ],
+                        "required_fields": [],
+                        "validator_id": ""
+                      }
+                    }
+                  ],
+                  "user_goal": "Summarize through consensus-backed coordination."
+                }
+              },
+              "plan_id": "plan-624ee400a3aa4dc6b7d085a033abd4bd",
+              "session_id": "formation-7-ff8da589efcf4683a5436b234eb14c28",
+              "task_id": ""
+            },
+            "event_type": "session_started",
+            "message": "Ledger event session_started.",
+            "plan_id": "plan-624ee400a3aa4dc6b7d085a033abd4bd",
+            "session_id": "formation-7-ff8da589efcf4683a5436b234eb14c28",
+            "source": "store",
+            "task_id": "",
+            "timestamp": "2026-07-15T02:29:28.657632Z"
+          },
+          {
+            "attempt_id": "",
+            "data": {
+              "attempt_id": "",
+              "payload": {
+                "registry_snapshot": [
+                  {
+                    "agent_id": "slow-agent",
+                    "agent_kind": "remote_a2a",
+                    "availability_scope": "remote",
+                    "description": "Fixture agent for slow summarize.",
+                    "input_modes": [
+                      "text"
+                    ],
+                    "invocation_endpoint": "http://slow-agent:8000/",
+                    "name": "slow-agent",
+                    "output_modes": [
+                      "data"
+                    ],
+                    "owner_node_id": "",
+                    "required_security_schemes": [],
+                    "security_schemes": {},
+                    "service_endpoint": "http://slow-agent:8000",
+                    "skills": [
+                      {
+                        "auxiliary_eligible": false,
+                        "capability_id": "slow-summarize",
+                        "constraints": [],
+                        "depends_on_requirement_ids": [],
+                        "description": "",
+                        "expected_evidence": [],
+                        "input_modes": [
+                          "text"
+                        ],
+                        "input_schema": {},
+                        "name": "slow summarize",
+                        "output_modes": [
+                          "data"
+                        ],
+                        "output_schema": {},
+                        "required_trust_level": "standard",
+                        "requirement_id": "slow-summarize",
+                        "side_effect_class": "idempotent",
+                        "validation_contract": {
+                          "artifact_kinds": [],
+                          "evidence_types": [],
+                          "json_schema": {},
+                          "required_artifacts": [],
+                          "required_fields": [],
+                          "validator_id": ""
+                        }
+                      }
+                    ],
+                    "source_card": {},
+                    "status": "available",
+                    "supports_fencing": true,
+                    "trust_level": "standard",
+                    "validation_contract": {
+                      "artifact_kinds": [],
+                      "evidence_types": [],
+                      "json_schema": {},
+                      "required_artifacts": [],
+                      "required_fields": [],
+                      "validator_id": ""
+                    }
+                  },
+                  {
+                    "agent_id": "summarizer",
+                    "agent_kind": "remote_a2a",
+                    "availability_scope": "remote",
+                    "description": "Fixture agent for summarize.",
+                    "input_modes": [
+                      "text"
+                    ],
+                    "invocation_endpoint": "http://summarizer:8000/",
+                    "name": "summarizer",
+                    "output_modes": [
+                      "data"
+                    ],
+                    "owner_node_id": "",
+                    "required_security_schemes": [],
+                    "security_schemes": {},
+                    "service_endpoint": "http://summarizer:8000",
+                    "skills": [
+                      {
+                        "auxiliary_eligible": false,
+                        "capability_id": "summarize",
+                        "constraints": [],
+                        "depends_on_requirement_ids": [],
+                        "description": "",
+                        "expected_evidence": [],
+                        "input_modes": [
+                          "text"
+                        ],
+                        "input_schema": {},
+                        "name": "summarize",
+                        "output_modes": [
+                          "data"
+                        ],
+                        "output_schema": {},
+                        "required_trust_level": "standard",
+                        "requirement_id": "summarize",
+                        "side_effect_class": "idempotent",
+                        "validation_contract": {
+                          "artifact_kinds": [],
+                          "evidence_types": [],
+                          "json_schema": {},
+                          "required_artifacts": [],
+                          "required_fields": [],
+                          "validator_id": ""
+                        }
+                      }
+                    ],
+                    "source_card": {},
+                    "status": "available",
+                    "supports_fencing": true,
+                    "trust_level": "standard",
+                    "validation_contract": {
+                      "artifact_kinds": [],
+                      "evidence_types": [],
+                      "json_schema": {},
+                      "required_artifacts": [],
+                      "required_fields": [],
+                      "validator_id": ""
+                    }
+                  }
+                ]
+              },
+              "plan_id": "plan-624ee400a3aa4dc6b7d085a033abd4bd",
+              "session_id": "formation-7-ff8da589efcf4683a5436b234eb14c28",
+              "task_id": ""
+            },
+            "event_type": "registry_snapshot_recorded",
+            "message": "Ledger event registry_snapshot_recorded.",
+            "plan_id": "plan-624ee400a3aa4dc6b7d085a033abd4bd",
+            "session_id": "formation-7-ff8da589efcf4683a5436b234eb14c28",
+            "source": "store",
+            "task_id": "",
+            "timestamp": "2026-07-15T02:29:28.681062Z"
+          },
+          {
+            "attempt_id": "",
+            "data": {
+              "attempt_id": "",
+              "payload": {
+                "plan_result": {
+                  "feasibility_report": {
+                    "capability_resolution": [
+                      {
+                        "agent_id": "summarizer",
+                        "requested_capability_id": "summarize",
+                        "requirement_id": "summarize",
+                        "resolved": true,
+                        "resolved_capability_id": "summarize",
+                        "task_id": "t1"
+                      }
+                    ],
+                    "constraint_violations": [],
+                    "evidence": [
+                      {
+                        "details": {},
+                        "name": "well_formed",
+                        "passed": true
+                      },
+                      {
+                        "details": {},
+                        "name": "covered",
+                        "passed": true
+                      },
+                      {
+                        "details": {},
+                        "name": "total_assignment",
+                        "passed": true
+                      },
+                      {
+                        "details": {},
+                        "name": "authorized",
+                        "passed": true
+                      },
+                      {
+                        "details": {},
+                        "name": "compatible",
+                        "passed": true
+                      },
+                      {
+                        "details": {},
+                        "name": "acyclic",
+                        "passed": true
+                      },
+                      {
+                        "details": {},
+                        "name": "ordered",
+                        "passed": true
+                      },
+                      {
+                        "details": {},
+                        "name": "requirements_complete",
+                        "passed": true
+                      },
+                      {
+                        "details": {},
+                        "name": "complete",
+                        "passed": true
+                      },
+                      {
+                        "details": {},
+                        "name": "verifiable",
+                        "passed": true
+                      },
+                      {
+                        "details": {
+                          "violations": []
+                        },
+                        "name": "constraints_satisfied",
+                        "passed": true
+                      }
+                    ],
+                    "explanation": "Plan authorized by deterministic feasibility checks.",
+                    "feasible": true,
+                    "generated_nlp_agents": [],
+                    "matched_agents": {
+                      "t1": "summarizer"
+                    },
+                    "missing_capabilities": [],
+                    "risks": [],
+                    "schema_violations": [],
+                    "validation_gaps": []
+                  },
+                  "plan_generation": 1,
+                  "plan_id": "plan-624ee400a3aa4dc6b7d085a033abd4bd",
+                  "proposal": {
+                    "completion_contract": {
+                      "require_all_task_validators": true,
+                      "required_artifacts": [
+                        "summary"
+                      ],
+                      "required_task_states": [
+                        "completed"
+                      ]
+                    },
+                    "completion_criteria": [
+                      "summary artifact exists"
+                    ],
+                    "constraint_evidence": {},
+                    "execution_order": [
+                      "t1"
+                    ],
+                    "expected_artifacts": [
+                      "summary"
+                    ],
+                    "generated_nlp_agents": [],
+                    "selected_agents": {
+                      "t1": "summarizer"
+                    },
+                    "tasks": [
+                      {
+                        "assigned_to": "summarizer",
+                        "auxiliary_spec_id": null,
+                        "capability_id": "summarize",
+                        "depends_on": [],
+                        "description": "",
+                        "expected_artifacts": [
+                          "summary"
+                        ],
+                        "requirement_id": "summarize",
+                        "requirement_name": "summarize",
+                        "task_id": "t1",
+                        "validation_contract": {
+                          "artifact_kinds": [],
+                          "evidence_types": [],
+                          "json_schema": {},
+                          "required_artifacts": [
+                            "summary"
+                          ],
+                          "required_fields": [],
+                          "validator_id": ""
+                        }
+                      }
+                    ]
+                  },
+                  "registry_revision": 241,
+                  "registry_snapshot": [
+                    {
+                      "agent_id": "slow-agent",
+                      "agent_kind": "remote_a2a",
+                      "availability_scope": "remote",
+                      "description": "Fixture agent for slow summarize.",
+                      "input_modes": [
+                        "text"
+                      ],
+                      "invocation_endpoint": "http://slow-agent:8000/",
+                      "name": "slow-agent",
+                      "output_modes": [
+                        "data"
+                      ],
+                      "owner_node_id": "",
+                      "required_security_schemes": [],
+                      "security_schemes": {},
+                      "service_endpoint": "http://slow-agent:8000",
+                      "skills": [
+                        {
+                          "auxiliary_eligible": false,
+                          "capability_id": "slow-summarize",
+                          "constraints": [],
+                          "depends_on_requirement_ids": [],
+                          "description": "",
+                          "expected_evidence": [],
+                          "input_modes": [
+                            "text"
+                          ],
+                          "input_schema": {},
+                          "name": "slow summarize",
+                          "output_modes": [
+                            "data"
+                          ],
+                          "output_schema": {},
+                          "required_trust_level": "standard",
+                          "requirement_id": "slow-summarize",
+                          "side_effect_class": "idempotent",
+                          "validation_contract": {
+                            "artifact_kinds": [],
+                            "evidence_types": [],
+                            "json_schema": {},
+                            "required_artifacts": [],
+                            "required_fields": [],
+                            "validator_id": ""
+                          }
+                        }
+                      ],
+                      "source_card": {},
+                      "status": "available",
+                      "supports_fencing": true,
+                      "trust_level": "standard",
+                      "validation_contract": {
+                        "artifact_kinds": [],
+                        "evidence_types": [],
+                        "json_schema": {},
+                        "required_artifacts": [],
+                        "required_fields": [],
+                        "validator_id": ""
+                      }
+                    },
+                    {
+                      "agent_id": "summarizer",
+                      "agent_kind": "remote_a2a",
+                      "availability_scope": "remote",
+                      "description": "Fixture agent for summarize.",
+                      "input_modes": [
+                        "text"
+                      ],
+                      "invocation_endpoint": "http://summarizer:8000/",
+                      "name": "summarizer",
+                      "output_modes": [
+                        "data"
+                      ],
+                      "owner_node_id": "",
+                      "required_security_schemes": [],
+                      "security_schemes": {},
+                      "service_endpoint": "http://summarizer:8000",
+                      "skills": [
+                        {
+                          "auxiliary_eligible": false,
+                          "capability_id": "summarize",
+                          "constraints": [],
+                          "depends_on_requirement_ids": [],
+                          "description": "",
+                          "expected_evidence": [],
+                          "input_modes": [
+                            "text"
+                          ],
+                          "input_schema": {},
+                          "name": "summarize",
+                          "output_modes": [
+                            "data"
+                          ],
+                          "output_schema": {},
+                          "required_trust_level": "standard",
+                          "requirement_id": "summarize",
+                          "side_effect_class": "idempotent",
+                          "validation_contract": {
+                            "artifact_kinds": [],
+                            "evidence_types": [],
+                            "json_schema": {},
+                            "required_artifacts": [],
+                            "required_fields": [],
+                            "validator_id": ""
+                          }
+                        }
+                      ],
+                      "source_card": {},
+                      "status": "available",
+                      "supports_fencing": true,
+                      "trust_level": "standard",
+                      "validation_contract": {
+                        "artifact_kinds": [],
+                        "evidence_types": [],
+                        "json_schema": {},
+                        "required_artifacts": [],
+                        "required_fields": [],
+                        "validator_id": ""
+                      }
+                    }
+                  ],
+                  "registry_snapshot_hash": "a0b3bf0559497a35cac202c9141904a569d83cd5b6b05d8b81cca3b13268445b",
+                  "request": {
+                    "constraints": [],
+                    "context": {},
+                    "required_artifacts": [
+                      "summary"
+                    ],
+                    "requirements": [
+                      {
+                        "auxiliary_eligible": false,
+                        "capability_id": "summarize",
+                        "constraints": [],
+                        "depends_on_requirement_ids": [],
+                        "description": "",
+                        "expected_evidence": [],
+                        "input_modes": [],
+                        "input_schema": {},
+                        "name": "summarize",
+                        "output_modes": [],
+                        "output_schema": {},
+                        "required_trust_level": "standard",
+                        "requirement_id": "summarize",
+                        "side_effect_class": "read_only",
+                        "validation_contract": {
+                          "artifact_kinds": [],
+                          "evidence_types": [],
+                          "json_schema": {},
+                          "required_artifacts": [
+                            "summary"
+                          ],
+                          "required_fields": [],
+                          "validator_id": ""
+                        }
+                      }
+                    ],
+                    "user_goal": "Summarize through consensus-backed coordination."
+                  },
+                  "session_id": "formation-7-ff8da589efcf4683a5436b234eb14c28"
+                }
+              },
+              "plan_id": "plan-624ee400a3aa4dc6b7d085a033abd4bd",
+              "session_id": "formation-7-ff8da589efcf4683a5436b234eb14c28",
+              "task_id": ""
+            },
+            "event_type": "plan_authorized",
+            "message": "Ledger event plan_authorized.",
+            "plan_id": "plan-624ee400a3aa4dc6b7d085a033abd4bd",
+            "session_id": "formation-7-ff8da589efcf4683a5436b234eb14c28",
+            "source": "store",
+            "task_id": "",
+            "timestamp": "2026-07-15T02:29:28.689877Z"
+          },
+          {
+            "attempt_id": "t1-attempt-1",
+            "data": {
+              "attempt_id": "t1-attempt-1",
+              "payload": {
+                "attempt_key": "formation-7-ff8da589efcf4683a5436b234eb14c28:plan-624ee400a3aa4dc6b7d085a033abd4bd:t1:t1-attempt-1",
+                "coordinator_id": "coordination-g",
+                "fencing_token": 237,
+                "idempotency_key": "formation-7-ff8da589efcf4683a5436b234eb14c28:plan-624ee400a3aa4dc6b7d085a033abd4bd:t1:t1-attempt-1",
+                "operation_key": "formation-7-ff8da589efcf4683a5436b234eb14c28:1:t1",
+                "task": {
+                  "assigned_to": "summarizer",
+                  "auxiliary_spec_id": null,
+                  "capability_id": "summarize",
+                  "depends_on": [],
+                  "description": "",
+                  "expected_artifacts": [
+                    "summary"
+                  ],
+                  "requirement_id": "summarize",
+                  "requirement_name": "summarize",
+                  "task_id": "t1",
+                  "validation_contract": {
+                    "artifact_kinds": [],
+                    "evidence_types": [],
+                    "json_schema": {},
+                    "required_artifacts": [
+                      "summary"
+                    ],
+                    "required_fields": [],
+                    "validator_id": ""
+                  }
+                }
+              },
+              "plan_id": "plan-624ee400a3aa4dc6b7d085a033abd4bd",
+              "session_id": "formation-7-ff8da589efcf4683a5436b234eb14c28",
+              "task_id": "t1"
+            },
+            "event_type": "task_attempt_started",
+            "message": "Ledger event task_attempt_started.",
+            "plan_id": "plan-624ee400a3aa4dc6b7d085a033abd4bd",
+            "session_id": "formation-7-ff8da589efcf4683a5436b234eb14c28",
+            "source": "store",
+            "task_id": "t1",
+            "timestamp": "2026-07-15T02:29:28.708450Z"
+          },
+          {
+            "attempt_id": "t1-attempt-1",
+            "data": {
+              "attempt_id": "t1-attempt-1",
+              "payload": {
+                "agent_id": "summarizer",
+                "agent_kind": "remote_a2a",
+                "error": "",
+                "metadata": {
+                  "attempt_key": "formation-7-ff8da589efcf4683a5436b234eb14c28:plan-624ee400a3aa4dc6b7d085a033abd4bd:t1:t1-attempt-1",
+                  "coordinator_id": "coordination-g",
+                  "fencing_token": 237,
+                  "idempotency_key": "formation-7-ff8da589efcf4683a5436b234eb14c28:plan-624ee400a3aa4dc6b7d085a033abd4bd:t1:t1-attempt-1",
+                  "invocation_endpoint": "http://summarizer:8000/",
+                  "operation_key": "formation-7-ff8da589efcf4683a5436b234eb14c28:1:t1",
+                  "plan_generation": 1,
+                  "registry_revision": 241
+                },
+                "status": "completed"
+              },
+              "plan_id": "plan-624ee400a3aa4dc6b7d085a033abd4bd",
+              "session_id": "formation-7-ff8da589efcf4683a5436b234eb14c28",
+              "task_id": "t1"
+            },
+            "event_type": "sdk_observation",
+            "message": "Ledger event sdk_observation.",
+            "plan_id": "plan-624ee400a3aa4dc6b7d085a033abd4bd",
+            "session_id": "formation-7-ff8da589efcf4683a5436b234eb14c28",
+            "source": "sdk",
+            "task_id": "t1",
+            "timestamp": "2026-07-15T02:29:28.977339Z"
+          },
+          {
+            "attempt_id": "t1-attempt-1",
+            "data": {
+              "attempt_id": "t1-attempt-1",
+              "payload": {
+                "data": {
+                  "agent_id": "summarizer",
+                  "agent_kind": "remote_a2a"
+                },
+                "message": "Task t1 started.",
+                "source": "sdk"
+              },
+              "plan_id": "plan-624ee400a3aa4dc6b7d085a033abd4bd",
+              "session_id": "formation-7-ff8da589efcf4683a5436b234eb14c28",
+              "task_id": "t1"
+            },
+            "event_type": "sdk_task_started",
+            "message": "Ledger event sdk_task_started.",
+            "plan_id": "plan-624ee400a3aa4dc6b7d085a033abd4bd",
+            "session_id": "formation-7-ff8da589efcf4683a5436b234eb14c28",
+            "source": "sdk",
+            "task_id": "t1",
+            "timestamp": "2026-07-15T02:29:28.994825Z"
+          },
+          {
+            "attempt_id": "t1-attempt-1",
+            "data": {
+              "attempt_id": "t1-attempt-1",
+              "payload": {
+                "data": {
+                  "agent_id": "summarizer",
+                  "artifact_count": 1
+                },
+                "message": "Task t1 completed.",
+                "source": "sdk"
+              },
+              "plan_id": "plan-624ee400a3aa4dc6b7d085a033abd4bd",
+              "session_id": "formation-7-ff8da589efcf4683a5436b234eb14c28",
+              "task_id": "t1"
+            },
+            "event_type": "sdk_task_completed",
+            "message": "Ledger event sdk_task_completed.",
+            "plan_id": "plan-624ee400a3aa4dc6b7d085a033abd4bd",
+            "session_id": "formation-7-ff8da589efcf4683a5436b234eb14c28",
+            "source": "sdk",
+            "task_id": "t1",
+            "timestamp": "2026-07-15T02:29:29.005084Z"
+          },
+          {
+            "attempt_id": "t1-attempt-1",
+            "data": {
+              "attempt_id": "t1-attempt-1",
+              "payload": {
+                "task_result": {
+                  "agent_id": "summarizer",
+                  "agent_kind": "remote_a2a",
+                  "artifacts": [
+                    {
+                      "artifact_id": "89d374a8-9cb9-4378-a5c8-71f05a0cf97b",
+                      "data": {
+                        "summary": "Consensus-backed fixture summary"
+                      },
+                      "kind": "data",
+                      "name": "summary"
+                    }
+                  ],
+                  "attempt_id": "t1-attempt-1",
+                  "error": "",
+                  "metadata": {
+                    "attempt_key": "formation-7-ff8da589efcf4683a5436b234eb14c28:plan-624ee400a3aa4dc6b7d085a033abd4bd:t1:t1-attempt-1",
+                    "coordinator_id": "coordination-g",
+                    "fencing_token": 237,
+                    "idempotency_key": "formation-7-ff8da589efcf4683a5436b234eb14c28:plan-624ee400a3aa4dc6b7d085a033abd4bd:t1:t1-attempt-1",
+                    "invocation_endpoint": "http://summarizer:8000/",
+                    "operation_key": "formation-7-ff8da589efcf4683a5436b234eb14c28:1:t1",
+                    "plan_generation": 1,
+                    "registry_revision": 241
+                  },
+                  "output": {
+                    "artifacts": [
+                      {
+                        "artifact_id": "89d374a8-9cb9-4378-a5c8-71f05a0cf97b",
+                        "data": {
+                          "summary": "Consensus-backed fixture summary"
+                        },
+                        "kind": "data",
+                        "name": "summary"
+                      }
+                    ],
+                    "chunks": [
+                      {
+                        "task": {
+                          "artifacts": [
+                            {
+                              "artifact_id": "89d374a8-9cb9-4378-a5c8-71f05a0cf97b",
+                              "name": "summary",
+                              "parts": [
+                                {
+                                  "data": {
+                                    "summary": "Consensus-backed fixture summary"
+                                  }
+                                }
+                              ]
+                            }
+                          ],
+                          "context_id": "45578a2b-150e-4bbf-901b-57d7444e5dc5",
+                          "history": [
+                            {
+                              "context_id": "45578a2b-150e-4bbf-901b-57d7444e5dc5",
+                              "message_id": "215e20c1-016b-4f1b-9598-0e8213c751b9",
+                              "parts": [
+                                {
+                                  "text": "{\"_coordination\": {\"attempt_id\": \"t1-attempt-1\", \"attempt_key\": \"formation-7-ff8da589efcf4683a5436b234eb14c28:plan-624ee400a3aa4dc6b7d085a033abd4bd:t1:t1-attempt-1\", \"coordinator_id\": \"coordination-g\", \"fencing_token\": 237, \"idempotency_key\": \"formation-7-ff8da589efcf4683a5436b234eb14c28:plan-624ee400a3aa4dc6b7d085a033abd4bd:t1:t1-attempt-1\", \"inputs_by_task\": {}, \"operation_key\": \"formation-7-ff8da589efcf4683a5436b234eb14c28:1:t1\", \"plan_generation\": 1, \"plan_id\": \"plan-624ee400a3aa4dc6b7d085a033abd4bd\", \"previous_artifacts\": [], \"registry_revision\": 241, \"session_id\": \"formation-7-ff8da589efcf4683a5436b234eb14c28\", \"task_id\": \"t1\"}, \"text\": \"formation-7-ff8da589efcf4683a5436b234eb14c28\"}"
+                                }
+                              ],
+                              "role": "ROLE_USER",
+                              "task_id": "69cbf890-4b31-4a71-88ae-0984ae52463e"
+                            }
+                          ],
+                          "id": "69cbf890-4b31-4a71-88ae-0984ae52463e",
+                          "status": {
+                            "message": {
+                              "context_id": "45578a2b-150e-4bbf-901b-57d7444e5dc5",
+                              "message_id": "97953bae-1b71-4e91-ac7b-4ec4e8221932",
+                              "parts": [
+                                {
+                                  "text": "summarizer completed."
+                                }
+                              ],
+                              "role": "ROLE_AGENT",
+                              "task_id": "69cbf890-4b31-4a71-88ae-0984ae52463e"
+                            },
+                            "state": "TASK_STATE_COMPLETED",
+                            "timestamp": "2026-07-15T02:29:28.965261Z"
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "plan_id": "plan-624ee400a3aa4dc6b7d085a033abd4bd",
+                  "session_id": "formation-7-ff8da589efcf4683a5436b234eb14c28",
+                  "status": "completed",
+                  "task_id": "t1"
+                }
+              },
+              "plan_id": "plan-624ee400a3aa4dc6b7d085a033abd4bd",
+              "session_id": "formation-7-ff8da589efcf4683a5436b234eb14c28",
+              "task_id": "t1"
+            },
+            "event_type": "task_attempt_completed",
+            "message": "Ledger event task_attempt_completed.",
+            "plan_id": "plan-624ee400a3aa4dc6b7d085a033abd4bd",
+            "session_id": "formation-7-ff8da589efcf4683a5436b234eb14c28",
+            "source": "store",
+            "task_id": "t1",
+            "timestamp": "2026-07-15T02:29:29.018207Z"
+          },
+          {
+            "attempt_id": "",
+            "data": {
+              "attempt_id": "",
+              "payload": {
+                "run_result": {
+                  "artifacts": [
+                    {
+                      "artifact_id": "89d374a8-9cb9-4378-a5c8-71f05a0cf97b",
+                      "data": {
+                        "summary": "Consensus-backed fixture summary"
+                      },
+                      "kind": "data",
+                      "name": "summary"
+                    }
+                  ],
+                  "explanation": "Authorized coordination completed.",
+                  "plan_id": "plan-624ee400a3aa4dc6b7d085a033abd4bd",
+                  "plan_result": {
+                    "feasibility_report": {
+                      "capability_resolution": [
+                        {
+                          "agent_id": "summarizer",
+                          "requested_capability_id": "summarize",
+                          "requirement_id": "summarize",
+                          "resolved": true,
+                          "resolved_capability_id": "summarize",
+                          "task_id": "t1"
+                        }
+                      ],
+                      "constraint_violations": [],
+                      "evidence": [
+                        {
+                          "details": {},
+                          "name": "well_formed",
+                          "passed": true
+                        },
+                        {
+                          "details": {},
+                          "name": "covered",
+                          "passed": true
+                        },
+                        {
+                          "details": {},
+                          "name": "total_assignment",
+                          "passed": true
+                        },
+                        {
+                          "details": {},
+                          "name": "authorized",
+                          "passed": true
+                        },
+                        {
+                          "details": {},
+                          "name": "compatible",
+                          "passed": true
+                        },
+                        {
+                          "details": {},
+                          "name": "acyclic",
+                          "passed": true
+                        },
+                        {
+                          "details": {},
+                          "name": "ordered",
+                          "passed": true
+                        },
+                        {
+                          "details": {},
+                          "name": "requirements_complete",
+                          "passed": true
+                        },
+                        {
+                          "details": {},
+                          "name": "complete",
+                          "passed": true
+                        },
+                        {
+                          "details": {},
+                          "name": "verifiable",
+                          "passed": true
+                        },
+                        {
+                          "details": {
+                            "violations": []
+                          },
+                          "name": "constraints_satisfied",
+                          "passed": true
+                        }
+                      ],
+                      "explanation": "Plan authorized by deterministic feasibility checks.",
+                      "feasible": true,
+                      "generated_nlp_agents": [],
+                      "matched_agents": {
+                        "t1": "summarizer"
+                      },
+                      "missing_capabilities": [],
+                      "risks": [],
+                      "schema_violations": [],
+                      "validation_gaps": []
+                    },
+                    "plan_generation": 1,
+                    "plan_id": "plan-624ee400a3aa4dc6b7d085a033abd4bd",
+                    "proposal": {
+                      "completion_contract": {
+                        "require_all_task_validators": true,
+                        "required_artifacts": [
+                          "summary"
+                        ],
+                        "required_task_states": [
+                          "completed"
+                        ]
+                      },
+                      "completion_criteria": [
+                        "summary artifact exists"
+                      ],
+                      "constraint_evidence": {},
+                      "execution_order": [
+                        "t1"
+                      ],
+                      "expected_artifacts": [
+                        "summary"
+                      ],
+                      "generated_nlp_agents": [],
+                      "selected_agents": {
+                        "t1": "summarizer"
+                      },
+                      "tasks": [
+                        {
+                          "assigned_to": "summarizer",
+                          "auxiliary_spec_id": null,
+                          "capability_id": "summarize",
+                          "depends_on": [],
+                          "description": "",
+                          "expected_artifacts": [
+                            "summary"
+                          ],
+                          "requirement_id": "summarize",
+                          "requirement_name": "summarize",
+                          "task_id": "t1",
+                          "validation_contract": {
+                            "artifact_kinds": [],
+                            "evidence_types": [],
+                            "json_schema": {},
+                            "required_artifacts": [
+                              "summary"
+                            ],
+                            "required_fields": [],
+                            "validator_id": ""
+                          }
+                        }
+                      ]
+                    },
+                    "registry_revision": 241,
+                    "registry_snapshot": [
+                      {
+                        "agent_id": "slow-agent",
+                        "agent_kind": "remote_a2a",
+                        "availability_scope": "remote",
+                        "description": "Fixture agent for slow summarize.",
+                        "input_modes": [
+                          "text"
+                        ],
+                        "invocation_endpoint": "http://slow-agent:8000/",
+                        "name": "slow-agent",
+                        "output_modes": [
+                          "data"
+                        ],
+                        "owner_node_id": "",
+                        "required_security_schemes": [],
+                        "security_schemes": {},
+                        "service_endpoint": "http://slow-agent:8000",
+                        "skills": [
+                          {
+                            "auxiliary_eligible": false,
+                            "capability_id": "slow-summarize",
+                            "constraints": [],
+                            "depends_on_requirement_ids": [],
+                            "description": "",
+                            "expected_evidence": [],
+                            "input_modes": [
+                              "text"
+                            ],
+                            "input_schema": {},
+                            "name": "slow summarize",
+                            "output_modes": [
+                              "data"
+                            ],
+                            "output_schema": {},
+                            "required_trust_level": "standard",
+                            "requirement_id": "slow-summarize",
+                            "side_effect_class": "idempotent",
+                            "validation_contract": {
+                              "artifact_kinds": [],
+                              "evidence_types": [],
+                              "json_schema": {},
+                              "required_artifacts": [],
+                              "required_fields": [],
+                              "validator_id": ""
+                            }
+                          }
+                        ],
+                        "source_card": {},
+                        "status": "available",
+                        "supports_fencing": true,
+                        "trust_level": "standard",
+                        "validation_contract": {
+                          "artifact_kinds": [],
+                          "evidence_types": [],
+                          "json_schema": {},
+                          "required_artifacts": [],
+                          "required_fields": [],
+                          "validator_id": ""
+                        }
+                      },
+                      {
+                        "agent_id": "summarizer",
+                        "agent_kind": "remote_a2a",
+                        "availability_scope": "remote",
+                        "description": "Fixture agent for summarize.",
+                        "input_modes": [
+                          "text"
+                        ],
+                        "invocation_endpoint": "http://summarizer:8000/",
+                        "name": "summarizer",
+                        "output_modes": [
+                          "data"
+                        ],
+                        "owner_node_id": "",
+                        "required_security_schemes": [],
+                        "security_schemes": {},
+                        "service_endpoint": "http://summarizer:8000",
+                        "skills": [
+                          {
+                            "auxiliary_eligible": false,
+                            "capability_id": "summarize",
+                            "constraints": [],
+                            "depends_on_requirement_ids": [],
+                            "description": "",
+                            "expected_evidence": [],
+                            "input_modes": [
+                              "text"
+                            ],
+                            "input_schema": {},
+                            "name": "summarize",
+                            "output_modes": [
+                              "data"
+                            ],
+                            "output_schema": {},
+                            "required_trust_level": "standard",
+                            "requirement_id": "summarize",
+                            "side_effect_class": "idempotent",
+                            "validation_contract": {
+                              "artifact_kinds": [],
+                              "evidence_types": [],
+                              "json_schema": {},
+                              "required_artifacts": [],
+                              "required_fields": [],
+                              "validator_id": ""
+                            }
+                          }
+                        ],
+                        "source_card": {},
+                        "status": "available",
+                        "supports_fencing": true,
+                        "trust_level": "standard",
+                        "validation_contract": {
+                          "artifact_kinds": [],
+                          "evidence_types": [],
+                          "json_schema": {},
+                          "required_artifacts": [],
+                          "required_fields": [],
+                          "validator_id": ""
+                        }
+                      }
+                    ],
+                    "registry_snapshot_hash": "a0b3bf0559497a35cac202c9141904a569d83cd5b6b05d8b81cca3b13268445b",
+                    "request": {
+                      "constraints": [],
+                      "context": {},
+                      "required_artifacts": [
+                        "summary"
+                      ],
+                      "requirements": [
+                        {
+                          "auxiliary_eligible": false,
+                          "capability_id": "summarize",
+                          "constraints": [],
+                          "depends_on_requirement_ids": [],
+                          "description": "",
+                          "expected_evidence": [],
+                          "input_modes": [],
+                          "input_schema": {},
+                          "name": "summarize",
+                          "output_modes": [],
+                          "output_schema": {},
+                          "required_trust_level": "standard",
+                          "requirement_id": "summarize",
+                          "side_effect_class": "read_only",
+                          "validation_contract": {
+                            "artifact_kinds": [],
+                            "evidence_types": [],
+                            "json_schema": {},
+                            "required_artifacts": [
+                              "summary"
+                            ],
+                            "required_fields": [],
+                            "validator_id": ""
+                          }
+                        }
+                      ],
+                      "user_goal": "Summarize through consensus-backed coordination."
+                    },
+                    "session_id": "formation-7-ff8da589efcf4683a5436b234eb14c28"
+                  },
+                  "session_id": "formation-7-ff8da589efcf4683a5436b234eb14c28",
+                  "status": "completed",
+                  "task_results": [
+                    {
+                      "agent_id": "summarizer",
+                      "agent_kind": "remote_a2a",
+                      "artifacts": [
+                        {
+                          "artifact_id": "89d374a8-9cb9-4378-a5c8-71f05a0cf97b",
+                          "data": {
+                            "summary": "Consensus-backed fixture summary"
+                          },
+                          "kind": "data",
+                          "name": "summary"
+                        }
+                      ],
+                      "attempt_id": "t1-attempt-1",
+                      "error": "",
+                      "metadata": {
+                        "attempt_key": "formation-7-ff8da589efcf4683a5436b234eb14c28:plan-624ee400a3aa4dc6b7d085a033abd4bd:t1:t1-attempt-1",
+                        "coordinator_id": "coordination-g",
+                        "fencing_token": 237,
+                        "idempotency_key": "formation-7-ff8da589efcf4683a5436b234eb14c28:plan-624ee400a3aa4dc6b7d085a033abd4bd:t1:t1-attempt-1",
+                        "invocation_endpoint": "http://summarizer:8000/",
+                        "operation_key": "formation-7-ff8da589efcf4683a5436b234eb14c28:1:t1",
+                        "plan_generation": 1,
+                        "registry_revision": 241
+                      },
+                      "output": {
+                        "artifacts": [
+                          {
+                            "artifact_id": "89d374a8-9cb9-4378-a5c8-71f05a0cf97b",
+                            "data": {
+                              "summary": "Consensus-backed fixture summary"
+                            },
+                            "kind": "data",
+                            "name": "summary"
+                          }
+                        ],
+                        "chunks": [
+                          {
+                            "task": {
+                              "artifacts": [
+                                {
+                                  "artifact_id": "89d374a8-9cb9-4378-a5c8-71f05a0cf97b",
+                                  "name": "summary",
+                                  "parts": [
+                                    {
+                                      "data": {
+                                        "summary": "Consensus-backed fixture summary"
+                                      }
+                                    }
+                                  ]
+                                }
+                              ],
+                              "context_id": "45578a2b-150e-4bbf-901b-57d7444e5dc5",
+                              "history": [
+                                {
+                                  "context_id": "45578a2b-150e-4bbf-901b-57d7444e5dc5",
+                                  "message_id": "215e20c1-016b-4f1b-9598-0e8213c751b9",
+                                  "parts": [
+                                    {
+                                      "text": "{\"_coordination\": {\"attempt_id\": \"t1-attempt-1\", \"attempt_key\": \"formation-7-ff8da589efcf4683a5436b234eb14c28:plan-624ee400a3aa4dc6b7d085a033abd4bd:t1:t1-attempt-1\", \"coordinator_id\": \"coordination-g\", \"fencing_token\": 237, \"idempotency_key\": \"formation-7-ff8da589efcf4683a5436b234eb14c28:plan-624ee400a3aa4dc6b7d085a033abd4bd:t1:t1-attempt-1\", \"inputs_by_task\": {}, \"operation_key\": \"formation-7-ff8da589efcf4683a5436b234eb14c28:1:t1\", \"plan_generation\": 1, \"plan_id\": \"plan-624ee400a3aa4dc6b7d085a033abd4bd\", \"previous_artifacts\": [], \"registry_revision\": 241, \"session_id\": \"formation-7-ff8da589efcf4683a5436b234eb14c28\", \"task_id\": \"t1\"}, \"text\": \"formation-7-ff8da589efcf4683a5436b234eb14c28\"}"
+                                    }
+                                  ],
+                                  "role": "ROLE_USER",
+                                  "task_id": "69cbf890-4b31-4a71-88ae-0984ae52463e"
+                                }
+                              ],
+                              "id": "69cbf890-4b31-4a71-88ae-0984ae52463e",
+                              "status": {
+                                "message": {
+                                  "context_id": "45578a2b-150e-4bbf-901b-57d7444e5dc5",
+                                  "message_id": "97953bae-1b71-4e91-ac7b-4ec4e8221932",
+                                  "parts": [
+                                    {
+                                      "text": "summarizer completed."
+                                    }
+                                  ],
+                                  "role": "ROLE_AGENT",
+                                  "task_id": "69cbf890-4b31-4a71-88ae-0984ae52463e"
+                                },
+                                "state": "TASK_STATE_COMPLETED",
+                                "timestamp": "2026-07-15T02:29:28.965261Z"
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      "plan_id": "plan-624ee400a3aa4dc6b7d085a033abd4bd",
+                      "session_id": "formation-7-ff8da589efcf4683a5436b234eb14c28",
+                      "status": "completed",
+                      "task_id": "t1"
+                    }
+                  ],
+                  "trace": []
+                }
+              },
+              "plan_id": "plan-624ee400a3aa4dc6b7d085a033abd4bd",
+              "session_id": "formation-7-ff8da589efcf4683a5436b234eb14c28",
+              "task_id": ""
+            },
+            "event_type": "run_completed",
+            "message": "Ledger event run_completed.",
+            "plan_id": "plan-624ee400a3aa4dc6b7d085a033abd4bd",
+            "session_id": "formation-7-ff8da589efcf4683a5436b234eb14c28",
+            "source": "store",
+            "task_id": "",
+            "timestamp": "2026-07-15T02:29:29.032491Z"
+          }
+        ]
+      },
+      "status_code": 200
+    },
+    "image_ids": {
+      "coordination-a": "sha256:573293cdc992ce0494986e70c25dd8cf3ba59e1ae52c9ce26a4dc16e54eca410",
+      "coordination-b": "sha256:573293cdc992ce0494986e70c25dd8cf3ba59e1ae52c9ce26a4dc16e54eca410",
+      "coordination-c": "sha256:573293cdc992ce0494986e70c25dd8cf3ba59e1ae52c9ce26a4dc16e54eca410",
+      "coordination-d": "sha256:573293cdc992ce0494986e70c25dd8cf3ba59e1ae52c9ce26a4dc16e54eca410",
+      "coordination-e": "sha256:573293cdc992ce0494986e70c25dd8cf3ba59e1ae52c9ce26a4dc16e54eca410",
+      "coordination-f": "sha256:573293cdc992ce0494986e70c25dd8cf3ba59e1ae52c9ce26a4dc16e54eca410",
+      "coordination-g": "sha256:573293cdc992ce0494986e70c25dd8cf3ba59e1ae52c9ce26a4dc16e54eca410",
+      "slow-agent": "sha256:573293cdc992ce0494986e70c25dd8cf3ba59e1ae52c9ce26a4dc16e54eca410",
+      "summarizer": "sha256:573293cdc992ce0494986e70c25dd8cf3ba59e1ae52c9ce26a4dc16e54eca410"
+    },
+    "statuses": {
+      "coordination-a": {
+        "active_voters": 7,
+        "authoritative_voters": 7,
+        "cluster_id": "thesis-coordination",
+        "configuration_generation": 0,
+        "configured_voter_target": 7,
+        "coordinator_nodes": 7,
+        "coordinator_only_nodes": 0,
+        "degraded": false,
+        "degraded_reason": "",
+        "discovery_method": "none",
+        "http_status": 200,
+        "leader": 18292091069950412911,
+        "learners": 0,
+        "live_voters": 7,
+        "member_id": 18292091069950412911,
+        "node_id": "coordination-a",
+        "pending_membership_changes": 0,
+        "pending_membership_operation": null,
+        "quorum": 4,
+        "quorum_available": true,
+        "revision": 234,
+        "role": "voter",
+        "role_agreement": {
+          "coordination-a": true,
+          "coordination-b": true,
+          "coordination-c": true,
+          "coordination-d": true,
+          "coordination-e": true,
+          "coordination-f": true,
+          "coordination-g": true
+        },
+        "state": "ready",
+        "steady_state": true
+      },
+      "coordination-b": {
+        "active_voters": 7,
+        "authoritative_voters": 7,
+        "cluster_id": "thesis-coordination",
+        "configuration_generation": 0,
+        "configured_voter_target": 7,
+        "coordinator_nodes": 7,
+        "coordinator_only_nodes": 0,
+        "degraded": false,
+        "degraded_reason": "",
+        "discovery_method": "multicast",
+        "http_status": 200,
+        "leader": 18292091069950412911,
+        "learners": 0,
+        "live_voters": 7,
+        "member_id": 16558414102793199770,
+        "node_id": "coordination-b",
+        "pending_membership_changes": 0,
+        "pending_membership_operation": null,
+        "quorum": 4,
+        "quorum_available": true,
+        "revision": 234,
+        "role": "voter",
+        "role_agreement": {
+          "coordination-a": true,
+          "coordination-b": true,
+          "coordination-c": true,
+          "coordination-d": true,
+          "coordination-e": true,
+          "coordination-f": true,
+          "coordination-g": true
+        },
+        "state": "ready",
+        "steady_state": true
+      },
+      "coordination-c": {
+        "active_voters": 7,
+        "authoritative_voters": 7,
+        "cluster_id": "thesis-coordination",
+        "configuration_generation": 0,
+        "configured_voter_target": 7,
+        "coordinator_nodes": 7,
+        "coordinator_only_nodes": 0,
+        "degraded": false,
+        "degraded_reason": "",
+        "discovery_method": "multicast",
+        "http_status": 200,
+        "leader": 18292091069950412911,
+        "learners": 0,
+        "live_voters": 7,
+        "member_id": 827067936464148548,
+        "node_id": "coordination-c",
+        "pending_membership_changes": 0,
+        "pending_membership_operation": null,
+        "quorum": 4,
+        "quorum_available": true,
+        "revision": 234,
+        "role": "voter",
+        "role_agreement": {
+          "coordination-a": true,
+          "coordination-b": true,
+          "coordination-c": true,
+          "coordination-d": true,
+          "coordination-e": true,
+          "coordination-f": true,
+          "coordination-g": true
+        },
+        "state": "ready",
+        "steady_state": true
+      },
+      "coordination-d": {
+        "active_voters": 7,
+        "authoritative_voters": 7,
+        "cluster_id": "thesis-coordination",
+        "configuration_generation": 0,
+        "configured_voter_target": 7,
+        "coordinator_nodes": 7,
+        "coordinator_only_nodes": 0,
+        "degraded": false,
+        "degraded_reason": "",
+        "discovery_method": "multicast",
+        "http_status": 200,
+        "leader": 18292091069950412911,
+        "learners": 0,
+        "live_voters": 7,
+        "member_id": 6058172817249090187,
+        "node_id": "coordination-d",
+        "pending_membership_changes": 0,
+        "pending_membership_operation": null,
+        "quorum": 4,
+        "quorum_available": true,
+        "revision": 234,
+        "role": "voter",
+        "role_agreement": {
+          "coordination-a": true,
+          "coordination-b": true,
+          "coordination-c": true,
+          "coordination-d": true,
+          "coordination-e": true,
+          "coordination-f": true,
+          "coordination-g": true
+        },
+        "state": "ready",
+        "steady_state": true
+      },
+      "coordination-e": {
+        "active_voters": 7,
+        "authoritative_voters": 7,
+        "cluster_id": "thesis-coordination",
+        "configuration_generation": 0,
+        "configured_voter_target": 7,
+        "coordinator_nodes": 7,
+        "coordinator_only_nodes": 0,
+        "degraded": false,
+        "degraded_reason": "",
+        "discovery_method": "multicast",
+        "http_status": 200,
+        "leader": 18292091069950412911,
+        "learners": 0,
+        "live_voters": 7,
+        "member_id": 2100494990897046922,
+        "node_id": "coordination-e",
+        "pending_membership_changes": 0,
+        "pending_membership_operation": null,
+        "quorum": 4,
+        "quorum_available": true,
+        "revision": 234,
+        "role": "voter",
+        "role_agreement": {
+          "coordination-a": true,
+          "coordination-b": true,
+          "coordination-c": true,
+          "coordination-d": true,
+          "coordination-e": true,
+          "coordination-f": true,
+          "coordination-g": true
+        },
+        "state": "ready",
+        "steady_state": true
+      },
+      "coordination-f": {
+        "active_voters": 7,
+        "authoritative_voters": 7,
+        "cluster_id": "thesis-coordination",
+        "configuration_generation": 0,
+        "configured_voter_target": 7,
+        "coordinator_nodes": 7,
+        "coordinator_only_nodes": 0,
+        "degraded": false,
+        "degraded_reason": "",
+        "discovery_method": "multicast",
+        "http_status": 200,
+        "leader": 18292091069950412911,
+        "learners": 0,
+        "live_voters": 7,
+        "member_id": 300124398153805353,
+        "node_id": "coordination-f",
+        "pending_membership_changes": 0,
+        "pending_membership_operation": null,
+        "quorum": 4,
+        "quorum_available": true,
+        "revision": 234,
+        "role": "voter",
+        "role_agreement": {
+          "coordination-a": true,
+          "coordination-b": true,
+          "coordination-c": true,
+          "coordination-d": true,
+          "coordination-e": true,
+          "coordination-f": true,
+          "coordination-g": true
+        },
+        "state": "ready",
+        "steady_state": true
+      },
+      "coordination-g": {
+        "active_voters": 7,
+        "authoritative_voters": 7,
+        "cluster_id": "thesis-coordination",
+        "configuration_generation": 0,
+        "configured_voter_target": 7,
+        "coordinator_nodes": 7,
+        "coordinator_only_nodes": 0,
+        "degraded": false,
+        "degraded_reason": "",
+        "discovery_method": "multicast",
+        "http_status": 200,
+        "leader": 18292091069950412911,
+        "learners": 0,
+        "live_voters": 7,
+        "member_id": 18091331166917233483,
+        "node_id": "coordination-g",
+        "pending_membership_changes": 0,
+        "pending_membership_operation": null,
+        "quorum": 4,
+        "quorum_available": true,
+        "revision": 234,
+        "role": "voter",
+        "role_agreement": {
+          "coordination-a": true,
+          "coordination-b": true,
+          "coordination-c": true,
+          "coordination-d": true,
+          "coordination-e": true,
+          "coordination-f": true,
+          "coordination-g": true
+        },
+        "state": "ready",
+        "steady_state": true
+      }
+    }
+  },
+  "passed": true,
+  "scenario": "formation-7",
+  "status": "passed",
+  "topology": 7,
+  "trial": 1,
+  "unexecuted_checks": [],
+  "violated_checks": []
+}

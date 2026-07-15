@@ -1,0 +1,13 @@
+{
+  "command": [
+    "docker",
+    "build",
+    "--tag",
+    "unified-multi-agent-coordination:etcd-distributed",
+    "."
+  ],
+  "duration_s": 55.74991550017148,
+  "returncode": 0,
+  "stderr": "2026/07/14 22:26:31 http2: server: error reading preface from client //./pipe/dockerDesktopLinuxEngine: file has already been closed\n#0 building with \"desktop-linux\" instance using docker driver\n\n#1 [internal] load build definition from Dockerfile\n#1 DONE 0.0s\n\n#1 [internal] load build definition from Dockerfile\n#1 transferring dockerfile: 727B done\n#1 DONE 0.0s\n\n#2 [internal] load metadata for gcr.io/etcd-development/etcd:v3.6.13@sha256:24fc96ede8e787eb769e771d1245ddb2333301697a8b571e20415a0caccc375e\n#2 DONE 0.0s\n\n#3 [internal] load metadata for ghcr.io/astral-sh/uv:python3.13-bookworm-slim@sha256:531f855bda2c73cd6ef67d56b733b357cea384185b3022bd09f05e002cd144ca\n#3 DONE 54.7s\n\n#4 [internal] load .dockerignore\n#4 transferring context: 303B done\n#4 DONE 0.0s\n\n#5 [stage-1 1/8] FROM ghcr.io/astral-sh/uv:python3.13-bookworm-slim@sha256:531f855bda2c73cd6ef67d56b733b357cea384185b3022bd09f05e002cd144ca\n#5 DONE 0.0s\n\n#6 [etcd 1/1] FROM gcr.io/etcd-development/etcd:v3.6.13@sha256:24fc96ede8e787eb769e771d1245ddb2333301697a8b571e20415a0caccc375e\n#6 DONE 0.0s\n\n#7 [internal] load build context\n#7 transferring context: 9.90kB done\n#7 DONE 0.0s\n\n#8 [stage-1 5/8] COPY main.py ./\n#8 CACHED\n\n#9 [stage-1 7/8] COPY --from=etcd /usr/local/bin/etcdctl /usr/local/bin/etcdctl\n#9 CACHED\n\n#10 [stage-1 4/8] COPY src ./src\n#10 CACHED\n\n#11 [stage-1 6/8] COPY --from=etcd /usr/local/bin/etcd /usr/local/bin/etcd\n#11 CACHED\n\n#12 [stage-1 2/8] WORKDIR /app\n#12 CACHED\n\n#13 [stage-1 3/8] COPY pyproject.toml uv.lock README.md ./\n#13 CACHED\n\n#14 [stage-1 8/8] RUN uv sync --frozen --no-dev\n#14 CACHED\n\n#15 exporting to image\n#15 exporting layers done\n#15 writing image sha256:573293cdc992ce0494986e70c25dd8cf3ba59e1ae52c9ce26a4dc16e54eca410 done\n#15 naming to docker.io/library/unified-multi-agent-coordination:etcd-distributed 0.0s done\n#15 DONE 0.0s\n\nView build details: docker-desktop://dashboard/build/desktop-linux/desktop-linux/vbny188yhf8o8sfp4iveiqapm\n",
+  "stdout": ""
+}

@@ -3,7 +3,7 @@
 
 \section{Evidence Status}
 
-This chapter distinguishes historical version 0.2--0.4 evidence, the frozen version~0.5 primary comparison, and the consensus-backed core evaluation track. Earlier reports are development artifacts and are excluded from the final RQ4 comparison. The v0.5 corpus is author-labelled, pre-specified, frozen, and label-hidden during inference; no independent adjudicator was available. At the evidence-candidate freeze represented by this text, the new 1,440-output matrix and clean 33-trial consensus campaign remain release gates. Consequently, historical numbers below describe development behavior and cannot substitute for the final v0.5/RQ5 results.
+This chapter distinguishes historical version 0.2--0.4 evidence from the accepted version~0.5 primary comparison and two clean 33-trial consensus campaigns. Earlier reports remain development artifacts and are excluded from the final RQ4 comparison. The v0.5 corpus is author-labelled, pre-specified, frozen, and label-hidden during inference; no independent adjudicator was available. Evidence validity is separated from outcome: the v0.5 result is valid but mixed, and both complete consensus campaigns are valid but failed.
 
 \begin{table}[htbp]
 \centering
@@ -19,18 +19,18 @@ Deterministic scenarios & 7/7 & 7/7 \\
 Docker A2A checks & 11/11 & 11/11 \\
 PostgreSQL distributed checks & 5/5 & 5/5 \\
 Historical etcd three-voter smoke checks & 7/7 & historical only \\
-Full 3/5/7 consensus campaign & not collected & 33 accounted trials; criteria reported \\
+Full 3/5/7 consensus campaign & \ConsensusTrialCount/33; \ConsensusOutcome & 33 accounted trials; criteria reported \\
 Upstream-derived A2A interoperability & 1/1 & passing \\
 Ruff and mypy & passing & passing \\
 Frozen author-label provenance & complete & complete \\
 Historical v0.4 outputs & 540/540 & historical only \\
 Primary v0.5 outputs & \VFiveOutputCount/1,440 & 1,440/1,440 \\
-Deterministic schema 0.5.0 analysis & pending & hash-reproducible \\
+Deterministic schema 0.5.0 analysis & reproducible & hash-reproducible \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Branch-aware production coverage is \ProductionBranchCoverage\%, above the 85\% aggregate gate. Every independently enforced critical-module threshold passes, including 90\% for cluster discovery, at least 80\% for the consensus campaign driver, and at least 90\% for evidence preflight. All \EvidenceTestCount{} tests, Ruff, mypy, the production aggregate, and the module-specific gates pass on the recorded Windows run. This closes the automated code-quality gate, but it does not substitute for the missing clean v0.5 collection and consensus campaign.
+Branch-aware production coverage is \ProductionBranchCoverage\%, above the 85\% aggregate gate. Every independently enforced critical-module threshold passes, including at least 85\% for cluster discovery, at least 80\% for the consensus campaign driver, and at least 90\% for evidence preflight. All \EvidenceTestCount{} tests, Ruff, mypy, the production aggregate, and the module-specific gates pass on the recorded Windows run. The generated thesis macros are derived from the manifest and reproduce without a diff.
 
 \section{Fail-Closed Symbolic Boundary}
 
@@ -50,17 +50,36 @@ The seven deterministic statuses match their references: three successful comple
 
 The corrected Docker harness passes eleven checks covering health, registry discovery, direct and decomposed A2A execution, missing capability, insufficient authority, incompatible modes, invalid artifacts, timeout, registry outage, and session replay. The decomposed case originally exposed a stale assumption that every prior artifact should be forwarded. The corrected planner declares dependencies from canonical mode flow, and the harness now verifies that the final consumer receives only its declared predecessor artifact.
 
-The PostgreSQL harness passes five checks: live lease conflict, takeover after an abandoned read-only attempt, process exit after external dispatch of unknown-side-effect work, stale-fence rejection, and database invariant rejection. It records zero duplicate dispatches and repeated effects in these cases, one lease conflict, one stale-write rejection, terminal correctness, and measured recovery latency. These observations do not establish consensus or cover all crash windows.
+The first clean PostgreSQL harness failed because lease acquisition used a read-then-upsert sequence that allowed a competing coordinator to reach a duplicate terminal insertion. That report is preserved. Commit \texttt{3f8093af1ecc7c49312ac34856bba825bd81f381} replaced acquisition with one conditional PostgreSQL upsert that refuses a live foreign holder and increments fencing atomically for an expired or same-holder lease. The subsequent clean harness passes all five checks: live lease conflict, takeover after an abandoned read-only attempt, process exit after external dispatch of unknown-side-effect work, stale-fence rejection, and database invariant rejection. It records zero duplicate dispatches and repeated receiver-side effects, one lease conflict, one stale-write rejection, and terminal correctness. These observations do not establish consensus or cover all crash windows.
 
 An additional test launches the vendored, upstream-derived A2A Hello World sample as an independent server, ingests its Agent Card, preserves its \texttt{echo\_bot} skill identifier, authorizes the matching task, and receives its remote artifact. Its provenance records the upstream URL, commit, blob identifiers, copied-file hashes, license, and local comment-only adaptation. This establishes one reproducible interoperability path; it is not evidence of universal A2A compatibility.
 
-\section{Consensus-Backed Distributed Evidence and Open Campaign Gate}
+\section{Consensus-Backed Distributed Evidence}
 
-The historical consensus-backed Docker harness starts three unified coordinator containers at a voter target of three with etcd~3.6.13. Its dirty-source report records seven passing checks: three authoritative voters, a cluster-wide registry, conflicting live lease ownership returning HTTP \texttt{409}, rejection of a forged join message, presence of membership history, one terminal result, and zero duplicate external effects in the exercised request. It also records the elected leader, authoritative revision, quorum of two, and discovery paths containing explicit bootstrap and multicast fallback. This is useful development evidence that the topology can form and preserve the checked invariants, but it is not accepted release evidence and does not validate every Raft property.
+The primary clean campaign was built once from correction commit \texttt{3f8093af1ecc7c49\allowbreak 312ac34856bba825\allowbreak bd81f381} as image \texttt{sha256:573293cdc992ce04\allowbreak 94986e70c25dd8cf\allowbreak 3ba59e1ae52c9ce2\allowbreak 6a4dc16e54eca410}; every isolated trial then used \texttt{--no-build}. It completed the exact 33-trial matrix with complete check accounting. Evidence validity is true although the outcome is failed and the claim status is unsupported. Of 33 trials, 20 passed, seven violated invariants, and six ended in infrastructure errors. Only \ConsensusChecksExecuted{} of \ConsensusChecksExpected{} expected checks executed; 19 executed checks violated their invariant and 40 remained unexecuted. It would therefore be false to summarize the campaign as ``zero safety violations.''
 
-The new host-side campaign runner automates isolated projects and fresh volumes for formation at three, five, and seven voters; $3\rightarrow5\rightarrow3$ and $5\rightarrow7\rightarrow5$ changes; leader failure; minority and majority partitions; restoration; persistent restart; failed-voter replacement; audit projection failure; concurrent same-session requests; and three crash windows. It records immutable per-trial provenance and refuses accepted status for dirty source. The first local dirty-source smoke attempt preserved three failed reports because Docker could not complete TLS handshakes while resolving the pinned build image; it produced no safety observations and is not counted as a system result. A clean commit and successful full campaign remain required before RQ5 can receive an empirical answer.
+\begin{table}[htbp]
+\centering
+\caption{Primary clean consensus campaign outcomes across three repetitions.}
+\label{tab:consensus-campaign}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.47\textwidth}rrr}
+\toprule
+\textbf{Scenario} & \textbf{Pass} & \textbf{Invariant fail} & \textbf{Infra. error} \\
+\midrule
+Formation at 3, 5, and 7 voters (combined) & 9 & 0 & 0 \\
+$3\rightarrow5\rightarrow3$ reconfiguration & 3 & 0 & 0 \\
+$5\rightarrow7\rightarrow5$ reconfiguration & 1 & 0 & 2 \\
+Leader/partition/quorum/concurrency & 0 & 0 & 3 \\
+Audit sink unavailable & 3 & 0 & 0 \\
+Failed-voter replacement & 1 & 1 & 1 \\
+Crash after attempt start & 0 & 3 & 0 \\
+Crash after external dispatch & 0 & 3 & 0 \\
+Crash during aggregation & 3 & 0 & 0 \\
+\bottomrule
+\end{tabular}
+\end{table}
 
-The historical status snapshots expose a convergence-observability weakness: one node still labels its local role as \texttt{learner}, and every snapshot shows one pending membership change. The remediated status contract now distinguishes bootstrapping, reconfiguring, ready, degraded, and quorum-lost states; reports configuration generation, authoritative and live voters, learners, leader and revision; includes a durable membership operation and phase; and checks each node's advertised role against both its intent and actual etcd learner/voter role. The new campaign accepts steady state only with role agreement and zero pending operations. This mechanism is unit-tested, but its full container evidence remains open.
+A prior complete clean campaign from commit \texttt{7a31b42069104c3a\allowbreak 4d7f10d8441d8235\allowbreak 7a35fd8b} is also preserved: 19 trials passed, eight violated invariants, and six had infrastructure errors, with 102/144 checks executed and 20 violations. The similar but non-identical distributions demonstrate both reproducible fault classes and run-to-run instability. Formation, audit failure, and aggregation-crash cases were consistently successful. Reconfiguration could leave a pending membership change, the combined scenario repeatedly failed before executing its checks, and the attempt-start and post-dispatch crash windows repeatedly violated duplicate-effect or recovery invariants. Consequently, RQ5 receives a negative empirical answer for this implementation and single-host campaign. The mechanism exists, but the measured system does not preserve all stated safety and conditional-liveness properties.
 
 \section{Separate Runtime-Only Ablations}
 
@@ -99,7 +118,7 @@ RQ1--RQ3 receive implementation-level support from the corrected boundary and ha
 
 \section{Version 0.4 Linguistic-Bridge Redesign}
 
-Version 0.4 preserves version 0.3 as negative evidence and evaluates a new corpus/protocol hash, \texttt{a0ecd2bf0ebc6740\allowbreak a205108e45385eb1\allowbreak e2e7d7ae00dacab3\allowbreak 8bc123c8ca49aa2d}. The model generated only canonical requirement/capability selections and requirement-level dependencies; deterministic hydration supplied executable fields from the admitted request and registry. One bounded structural repair was attempted in 424 of 540 primary outputs. Analysis schema 0.4.1 scores deterministic controls once per case, uses the initial response for LLM-only scoring, and attributes latency to the work performed by each configuration. Two reruns using the calibrated timing bundle produced the same SHA-256 digest, \texttt{16a1faf6b3fff50a\allowbreak ffb8c2a07b9351f3\allowbreak 7dc90d06a8e76640\allowbreak 3b8defbdad96c527}. The raw run records a dirty source tree and is consequently historical rather than accepted release evidence; a clean-source replication remains a release gate.
+Version 0.4 preserves version 0.3 as negative evidence and evaluates a new corpus/protocol hash, \texttt{a0ecd2bf0ebc6740\allowbreak a205108e45385eb1\allowbreak e2e7d7ae00dacab3\allowbreak 8bc123c8ca49aa2d}. The model generated only canonical requirement/capability selections and requirement-level dependencies; deterministic hydration supplied executable fields from the admitted request and registry. One bounded structural repair was attempted in 424 of 540 primary outputs. Analysis schema 0.4.1 scores deterministic controls once per case, uses the initial response for LLM-only scoring, and attributes latency to the work performed by each configuration. Two reruns using the calibrated timing bundle produced the same SHA-256 digest, \texttt{16a1faf6b3fff50a\allowbreak ffb8c2a07b9351f3\allowbreak 7dc90d06a8e76640\allowbreak 3b8defbdad96c527}. The raw run records a dirty source tree and is consequently retained only as historical development evidence; v0.5 supersedes it as the primary comparison.
 
 \begin{table}[htbp]
 \centering
@@ -123,3 +142,30 @@ Contract-validation ablation & 90.0\% & 76.0\% & 0 & 54 \\
 The hybrid's 95\% case-clustered accuracy interval is 85.0--94.6\%. At the case-unit level, all 15 feasible cases had majority acceptance. Nevertheless, only two of three pre-registered success criteria passed. Qwen3 1.7B achieved 28.0\% feasible recall and 70.0\% accuracy; Gemma E2B and Qwen3 8B each achieved 100\% recall and accuracy. Consequently the required 60\% per-model recall floor failed, and version 0.4 is a substantial improvement rather than a fully successful pre-registered validation. The changed corpus wording and bridge protocol also prevent treating the difference from version 0.3 as a direct paired causal estimate.
 
 The corrected latency accounting reports median total latency of approximately 1.91~s for the hybrid and 1.07~s for the initial-response LLM-only configuration; the deterministic lexical and oracle controls require only their local matching or symbolic work. Requested-seed outputs are reported as stability repetitions because the backend response does not confirm seed compliance. Across the five requested seeds, many model--case outputs are identical, so repetition is not interpreted as an increase beyond 36 primary case units.
+
+\section{Version 0.5 Primary Comparison}
+
+The clean v0.5 run contains all 1,440 independently prompted arm--model--seed--case outputs. Labels remained inaccessible until both arms completed, each arm received the same public inputs and at most one structural repair, and two analyzer runs produced the same functional digest, \texttt{5bead15a76a84f66671b9bc14dd7ac6ead9c9a5ce4b434757d94a5e86c093f82}. Wall-clock timings are stored separately. Requested seeds measure stability and are not treated as independent case samples.
+
+\begin{table}[htbp]
+\centering
+\caption{Primary v0.5 planning results over 720 repeated observations per arm.}
+\label{tab:v05-comparison}
+\begin{tabular}{p{0.38\textwidth}rrrr}
+\toprule
+\textbf{Configuration} & \textbf{Accuracy} & \textbf{Recall} & \textbf{FA} & \textbf{FR} \\
+\midrule
+Hybrid, initial & 50.00\% & 0.00\% & 0 & 360 \\
+Hybrid, repaired & 50.69\% & 1.39\% & 0 & 355 \\
+Direct LLM, initial & 52.08\% & 100.00\% & 345 & 0 \\
+Direct LLM, repaired & 52.08\% & 100.00\% & 345 & 0 \\
+Greedy symbolic baseline ($n=48$) & 100.00\% & 100.00\% & 0 & 0 \\
+Lexical diagnostic ($n=48$) & 50.00\% & 0.00\% & 0 & 24 \\
+Structured oracle ($n=48$) & 100.00\% & 100.00\% & 0 & 0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Repair was invoked for every output in both arms. It changed the direct arm's decision in 455 responses, but those changes were ignored by the frozen decision contract; it recovered only five hybrid feasible observations. By model, repaired hybrid recall was 0\% for Qwen3 1.7B, 4.17\% for Gemma E2B, and 0\% for Qwen3 8B. Thus the zero-false-acceptance criterion passed, but the 60\% per-model feasible-recall criterion failed for every model.
+
+The repaired hybrid was 1.39 percentage points less accurate than the repaired direct coordinator. The matched-pair clustered bootstrap 95\% interval was $[-3.47,0.00]$ percentage points, and within-model exact McNemar comparisons remained non-significant after Holm correction. Case-majority accuracy was 50\% for both arms. The direct arm achieved acceptance utility only by accepting nearly every case, including 345 unsafe repeated observations; the hybrid achieved fail-closed behavior only by refusing nearly every feasible case. Therefore v0.5 supports the safety behavior of the authorization boundary but not useful hybrid coordination or comparative superiority. RQ4 is partially supported in this narrow sense and otherwise answered negatively.

@@ -1,0 +1,121 @@
+{
+  "schema_version": "0.5.0",
+  "identity": {
+    "arm": "hybrid_bridge_v05",
+    "case_id": "v05-pair-08-feasible",
+    "model_id": "qwen/qwen3-8b",
+    "seed": 11
+  },
+  "temperature": 0,
+  "prompt_version": "defense-v0.5-dual-arm-v1",
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Return a non-executable linguistic plan draft. Select every admitted requirement_id exactly once and only its declared capability_id. Copy only request-declared dependency requirement IDs. Report genuine ambiguity in unresolved_terms. Do not create task IDs, agents, authority, contracts, schemas, or artifacts. You do not decide feasibility and reference labels are unavailable."
+    },
+    {
+      "role": "user",
+      "content": "{\"request_text\":\"Prepare and finalize the declared data analytics workflow while preserving authority, data-flow, and completion contracts.\",\"admitted_request\":{\"user_goal\":\"Prepare and finalize the declared data analytics workflow while preserving authority, data-flow, and completion contracts.\",\"requirements\":[{\"name\":\"Prepare data analytics\",\"requirement_id\":\"v05-pair-08-prepare\",\"capability_id\":\"v05-pair-08-prepare\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-08-intermediate\"],\"json_schema\":{\"type\":\"object\"}}},{\"name\":\"Finalize data analytics\",\"requirement_id\":\"v05-pair-08-finalize\",\"capability_id\":\"v05-pair-08-finalize\",\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"depends_on_requirement_ids\":[\"v05-pair-08-prepare\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-08-result\"],\"json_schema\":{\"type\":\"object\"}}}],\"required_artifacts\":[\"v05-pair-08-result\"],\"context\":{\"approved\":true,\"pair_number\":8}},\"registry_snapshot\":[{\"agent_id\":\"v05-pair-08-preparer\",\"name\":\"Data Analytics preparer\",\"service_endpoint\":\"https://v05-pair-08-preparer.example/a2a\",\"trust_level\":\"standard\",\"status\":\"available\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"skills\":[{\"name\":\"Prepare data analytics\",\"requirement_id\":\"v05-pair-08-prepare\",\"capability_id\":\"v05-pair-08-prepare\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-08-intermediate\"],\"json_schema\":{\"type\":\"object\"}}}]},{\"agent_id\":\"v05-pair-08-finisher\",\"name\":\"Data Analytics finisher\",\"service_endpoint\":\"https://v05-pair-08-finisher.example/a2a\",\"trust_level\":\"standard\",\"status\":\"available\",\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"skills\":[{\"name\":\"Finalize data analytics\",\"requirement_id\":\"v05-pair-08-finalize\",\"capability_id\":\"v05-pair-08-finalize\",\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"depends_on_requirement_ids\":[\"v05-pair-08-prepare\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-08-result\"],\"json_schema\":{\"type\":\"object\"}}}]}],\"payload\":{\"text\":\"Input for data analytics pair 8\"}}"
+    }
+  ],
+  "initial_raw_response": {
+    "id": "chatcmpl-engsov6s3ziawyu3qiie6",
+    "object": "chat.completion",
+    "created": 1784068147,
+    "model": "qwen/qwen3-8b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\n  \"draft\": {\n    \"unresolved_terms\": [],\n    \"rationale\": \"The linguistic plan draft is constructed by selecting every admitted requirement_id exactly once and mapping it to its declared capability_id. Dependencies are captured through the 'depends_on_requirement_ids' field, while output modes and input modes are preserved as per the request's declaration. No task IDs, agents, authority, contracts, schemas, or artifacts are created beyond what is explicitly provided in the request and registry snapshot.\"\n  }\n}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 686,
+      "completion_tokens": 104,
+      "total_tokens": 790,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-8b"
+  },
+  "initial_parsed_object": {
+    "draft": {
+      "selections": [],
+      "unresolved_terms": [],
+      "rationale": "The linguistic plan draft is constructed by selecting every admitted requirement_id exactly once and mapping it to its declared capability_id. Dependencies are captured through the 'depends_on_requirement_ids' field, while output modes and input modes are preserved as per the request's declaration. No task IDs, agents, authority, contracts, schemas, or artifacts are created beyond what is explicitly provided in the request and registry snapshot."
+    }
+  },
+  "initial_latency_ms": 8671.407900052145,
+  "repair_attempted": true,
+  "repair_trigger_issues": [
+    {
+      "code": "missing_requirement",
+      "message": "Draft omits requirement 'v05-pair-08-prepare'.",
+      "requirement_id": "v05-pair-08-prepare"
+    },
+    {
+      "code": "missing_requirement",
+      "message": "Draft omits requirement 'v05-pair-08-finalize'.",
+      "requirement_id": "v05-pair-08-finalize"
+    }
+  ],
+  "repair_raw_response": {
+    "id": "chatcmpl-9k73ehq90vd1d37czqlajz",
+    "object": "chat.completion",
+    "created": 1784068156,
+    "model": "qwen/qwen3-8b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\":{\"selections\":[{\"requirement_id\":\"v05-pair-08-prepare\",\"capability_id\":\"v05-pair-08-prepare\"},{\"requirement_id\":\"v05-pair-08-finalize\",\"capability_id\":\"v05-pair-08-finalize\"}],\"unresolved_terms\":[],\"rationale\":\"The linguistic plan draft now includes all admitted requirement_ids mapped to their declared capability_ids. Dependencies are preserved through the 'depends_on_requirement_ids' field, and output modes and input modes are retained as per the request's declaration.\"}}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 902,
+      "completion_tokens": 121,
+      "total_tokens": 1023,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-8b"
+  },
+  "repaired_parsed_object": {
+    "draft": {
+      "selections": [
+        {
+          "requirement_id": "v05-pair-08-prepare",
+          "capability_id": "v05-pair-08-prepare",
+          "depends_on_requirement_ids": []
+        },
+        {
+          "requirement_id": "v05-pair-08-finalize",
+          "capability_id": "v05-pair-08-finalize",
+          "depends_on_requirement_ids": []
+        }
+      ],
+      "unresolved_terms": [],
+      "rationale": "The linguistic plan draft now includes all admitted requirement_ids mapped to their declared capability_ids. Dependencies are preserved through the 'depends_on_requirement_ids' field, and output modes and input modes are retained as per the request's declaration."
+    }
+  },
+  "repair_latency_ms": 6465.971100144088,
+  "call_count": 2,
+  "evaluation_status": "raw_output_collected_not_scored"
+}

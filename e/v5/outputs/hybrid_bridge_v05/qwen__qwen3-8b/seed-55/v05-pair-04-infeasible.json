@@ -1,0 +1,121 @@
+{
+  "schema_version": "0.5.0",
+  "identity": {
+    "arm": "hybrid_bridge_v05",
+    "case_id": "v05-pair-04-infeasible",
+    "model_id": "qwen/qwen3-8b",
+    "seed": 55
+  },
+  "temperature": 0,
+  "prompt_version": "defense-v0.5-dual-arm-v1",
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Return a non-executable linguistic plan draft. Select every admitted requirement_id exactly once and only its declared capability_id. Copy only request-declared dependency requirement IDs. Report genuine ambiguity in unresolved_terms. Do not create task IDs, agents, authority, contracts, schemas, or artifacts. You do not decide feasibility and reference labels are unavailable."
+    },
+    {
+      "role": "user",
+      "content": "{\"request_text\":\"Prepare and finalize the declared travel logistics workflow while preserving authority, data-flow, and completion contracts.\",\"admitted_request\":{\"user_goal\":\"Prepare and finalize the declared travel logistics workflow while preserving authority, data-flow, and completion contracts.\",\"requirements\":[{\"name\":\"Prepare travel logistics\",\"requirement_id\":\"v05-pair-04-prepare\",\"capability_id\":\"v05-pair-04-prepare\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-04-intermediate\"],\"json_schema\":{\"type\":\"object\"}}},{\"name\":\"Finalize travel logistics\",\"requirement_id\":\"v05-pair-04-finalize\",\"capability_id\":\"v05-pair-04-finalize\",\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"depends_on_requirement_ids\":[\"v05-pair-04-prepare\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-04-result\"],\"json_schema\":{\"type\":\"object\"}}}],\"required_artifacts\":[\"v05-pair-04-result\"],\"context\":{\"approved\":true,\"pair_number\":4}},\"registry_snapshot\":[{\"agent_id\":\"v05-pair-04-preparer\",\"name\":\"Travel Logistics preparer\",\"service_endpoint\":\"https://v05-pair-04-preparer.example/a2a\",\"trust_level\":\"standard\",\"status\":\"available\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"skills\":[{\"name\":\"Prepare travel logistics\",\"requirement_id\":\"v05-pair-04-prepare\",\"capability_id\":\"v05-pair-04-prepare\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-04-intermediate\"],\"json_schema\":{\"type\":\"object\"}}}]},{\"agent_id\":\"v05-pair-04-finisher\",\"name\":\"Travel Logistics finisher\",\"service_endpoint\":\"https://v05-pair-04-finisher.example/a2a\",\"trust_level\":\"standard\",\"status\":\"unavailable\",\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"skills\":[{\"name\":\"Finalize travel logistics\",\"requirement_id\":\"v05-pair-04-finalize\",\"capability_id\":\"v05-pair-04-finalize\",\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"depends_on_requirement_ids\":[\"v05-pair-04-prepare\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-04-result\"],\"json_schema\":{\"type\":\"object\"}}}]}],\"payload\":{\"text\":\"Input for travel logistics pair 4\"}}"
+    }
+  ],
+  "initial_raw_response": {
+    "id": "chatcmpl-eyn2ww7p3at3l8ur9kjz",
+    "object": "chat.completion",
+    "created": 1784077324,
+    "model": "qwen/qwen3-8b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\n  \"draft\": {\n    \"unresolved_terms\": [],\n    \"rationale\": \"The linguistic plan draft is constructed based on the declared requirements, dependencies, and capabilities without introducing new task IDs, agents, or artifacts. It reflects only the request-declared dependency requirement IDs and capability_ids as specified in the input data.\"\n  }\n}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 687,
+      "completion_tokens": 71,
+      "total_tokens": 758,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-8b"
+  },
+  "initial_parsed_object": {
+    "draft": {
+      "selections": [],
+      "unresolved_terms": [],
+      "rationale": "The linguistic plan draft is constructed based on the declared requirements, dependencies, and capabilities without introducing new task IDs, agents, or artifacts. It reflects only the request-declared dependency requirement IDs and capability_ids as specified in the input data."
+    }
+  },
+  "initial_latency_ms": 4233.51959977299,
+  "repair_attempted": true,
+  "repair_trigger_issues": [
+    {
+      "code": "missing_requirement",
+      "message": "Draft omits requirement 'v05-pair-04-prepare'.",
+      "requirement_id": "v05-pair-04-prepare"
+    },
+    {
+      "code": "missing_requirement",
+      "message": "Draft omits requirement 'v05-pair-04-finalize'.",
+      "requirement_id": "v05-pair-04-finalize"
+    }
+  ],
+  "repair_raw_response": {
+    "id": "chatcmpl-zn684cbc4n8lre98soy5",
+    "object": "chat.completion",
+    "created": 1784077328,
+    "model": "qwen/qwen3-8b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\":{\"selections\":[{\"requirement_id\":\"v05-pair-04-prepare\",\"capability_id\":\"v05-pair-04-prepare\"},{\"requirement_id\":\"v05-pair-04-finalize\",\"capability_id\":\"v05-pair-04-finalize\"}],\"unresolved_terms\":[],\"rationale\":\"The linguistic plan draft now includes the declared requirement_ids and their corresponding capability_ids as specified in the input data. No new task IDs, agents, or artifacts have been introduced.\"}}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 870,
+      "completion_tokens": 110,
+      "total_tokens": 980,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-8b"
+  },
+  "repaired_parsed_object": {
+    "draft": {
+      "selections": [
+        {
+          "requirement_id": "v05-pair-04-prepare",
+          "capability_id": "v05-pair-04-prepare",
+          "depends_on_requirement_ids": []
+        },
+        {
+          "requirement_id": "v05-pair-04-finalize",
+          "capability_id": "v05-pair-04-finalize",
+          "depends_on_requirement_ids": []
+        }
+      ],
+      "unresolved_terms": [],
+      "rationale": "The linguistic plan draft now includes the declared requirement_ids and their corresponding capability_ids as specified in the input data. No new task IDs, agents, or artifacts have been introduced."
+    }
+  },
+  "repair_latency_ms": 6066.934699658304,
+  "call_count": 2,
+  "evaluation_status": "raw_output_collected_not_scored"
+}

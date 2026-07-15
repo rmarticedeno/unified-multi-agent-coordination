@@ -1,0 +1,130 @@
+{
+  "schema_version": "0.5.0",
+  "identity": {
+    "arm": "hybrid_bridge_v05",
+    "case_id": "v05-pair-12-infeasible",
+    "model_id": "google/gemma-4-e2b",
+    "seed": 11
+  },
+  "temperature": 0,
+  "prompt_version": "defense-v0.5-dual-arm-v1",
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Return a non-executable linguistic plan draft. Select every admitted requirement_id exactly once and only its declared capability_id. Copy only request-declared dependency requirement IDs. Report genuine ambiguity in unresolved_terms. Do not create task IDs, agents, authority, contracts, schemas, or artifacts. You do not decide feasibility and reference labels are unavailable."
+    },
+    {
+      "role": "user",
+      "content": "{\"request_text\":\"Prepare and finalize the declared software maintenance workflow while preserving authority, data-flow, and completion contracts.\",\"admitted_request\":{\"user_goal\":\"Prepare and finalize the declared software maintenance workflow while preserving authority, data-flow, and completion contracts.\",\"requirements\":[{\"name\":\"Prepare software maintenance\",\"requirement_id\":\"v05-pair-12-prepare\",\"capability_id\":\"v05-pair-12-prepare\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-12-intermediate\"],\"json_schema\":{\"type\":\"object\"}}},{\"name\":\"Finalize software maintenance\",\"requirement_id\":\"v05-pair-12-finalize\",\"capability_id\":\"v05-pair-12-finalize-missing\",\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"depends_on_requirement_ids\":[\"v05-pair-12-prepare\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-12-result\"],\"json_schema\":{\"type\":\"object\"}}}],\"required_artifacts\":[\"v05-pair-12-result\"],\"context\":{\"approved\":true,\"pair_number\":12}},\"registry_snapshot\":[{\"agent_id\":\"v05-pair-12-preparer\",\"name\":\"Software Maintenance preparer\",\"service_endpoint\":\"https://v05-pair-12-preparer.example/a2a\",\"trust_level\":\"standard\",\"status\":\"available\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"skills\":[{\"name\":\"Prepare software maintenance\",\"requirement_id\":\"v05-pair-12-prepare\",\"capability_id\":\"v05-pair-12-prepare\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-12-intermediate\"],\"json_schema\":{\"type\":\"object\"}}}]},{\"agent_id\":\"v05-pair-12-finisher\",\"name\":\"Software Maintenance finisher\",\"service_endpoint\":\"https://v05-pair-12-finisher.example/a2a\",\"trust_level\":\"standard\",\"status\":\"available\",\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"skills\":[{\"name\":\"Finalize software maintenance\",\"requirement_id\":\"v05-pair-12-finalize\",\"capability_id\":\"v05-pair-12-finalize\",\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"depends_on_requirement_ids\":[\"v05-pair-12-prepare\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-12-result\"],\"json_schema\":{\"type\":\"object\"}}}]}],\"payload\":{\"text\":\"Input for software maintenance pair 12\"}}"
+    }
+  ],
+  "initial_raw_response": {
+    "id": "chatcmpl-tnew43uasur7elw2j916ob",
+    "object": "chat.completion",
+    "created": 1784064914,
+    "model": "google/gemma-4-e2b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\": {\"unresolved_terms\": [\"completion contracts\"], \"rationale\": \"The request explicitly asks to preserve 'completion contracts', but the provided requirements and artifacts do not define what these contracts are or how they are preserved in the workflow. The flow is defined by 'prepare' and 'finalize', but the preservation mechanism for contracts is missing.\"}}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 754,
+      "completion_tokens": 75,
+      "total_tokens": 829,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "google/gemma-4-e2b"
+  },
+  "initial_parsed_object": {
+    "draft": {
+      "selections": [],
+      "unresolved_terms": [
+        "completion contracts"
+      ],
+      "rationale": "The request explicitly asks to preserve 'completion contracts', but the provided requirements and artifacts do not define what these contracts are or how they are preserved in the workflow. The flow is defined by 'prepare' and 'finalize', but the preservation mechanism for contracts is missing."
+    }
+  },
+  "initial_latency_ms": 2268.0334001779556,
+  "repair_attempted": true,
+  "repair_trigger_issues": [
+    {
+      "code": "missing_requirement",
+      "message": "Draft omits requirement 'v05-pair-12-prepare'.",
+      "requirement_id": "v05-pair-12-prepare"
+    },
+    {
+      "code": "missing_requirement",
+      "message": "Draft omits requirement 'v05-pair-12-finalize'.",
+      "requirement_id": "v05-pair-12-finalize"
+    },
+    {
+      "code": "unresolved_term",
+      "message": "Unresolved linguistic term: completion contracts",
+      "requirement_id": ""
+    }
+  ],
+  "repair_raw_response": {
+    "id": "chatcmpl-ol1tk668etfczmfaj25rgm",
+    "object": "chat.completion",
+    "created": 1784064916,
+    "model": "google/gemma-4-e2b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\":{\"selections\":[{\"requirement_id\":\"v05-pair-12-prepare\",\"capability_id\":\"v05-pair-12-prepare\"},{\"requirement_id\":\"v05-pair-12-finalize\",\"capability_id\":\"v05-pair-12-finalize\"}],\"unresolved_terms\":[\"completion contracts\"],\"rationale\":\"The request explicitly asks to correct JSON/public referential errors by ensuring all declared requirements are present. The original input implicitly defined these missing requirements as necessary for the workflow, thus selecting them and their corresponding capabilities.\"}}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 969,
+      "completion_tokens": 122,
+      "total_tokens": 1091,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "google/gemma-4-e2b"
+  },
+  "repaired_parsed_object": {
+    "draft": {
+      "selections": [
+        {
+          "requirement_id": "v05-pair-12-prepare",
+          "capability_id": "v05-pair-12-prepare",
+          "depends_on_requirement_ids": []
+        },
+        {
+          "requirement_id": "v05-pair-12-finalize",
+          "capability_id": "v05-pair-12-finalize",
+          "depends_on_requirement_ids": []
+        }
+      ],
+      "unresolved_terms": [
+        "completion contracts"
+      ],
+      "rationale": "The request explicitly asks to correct JSON/public referential errors by ensuring all declared requirements are present. The original input implicitly defined these missing requirements as necessary for the workflow, thus selecting them and their corresponding capabilities."
+    }
+  },
+  "repair_latency_ms": 2016.1812000442296,
+  "call_count": 2,
+  "evaluation_status": "raw_output_collected_not_scored"
+}

@@ -1,0 +1,12 @@
+{
+  "complete": true,
+  "schema_version": "0.5.0",
+  "expected_outputs": 1440,
+  "observed_outputs": 1440,
+  "labels_loaded_during_collection": false,
+  "max_calls_per_output": 2,
+  "arms": [
+    "hybrid_bridge_v05",
+    "direct_llm_coordinator_v05"
+  ]
+}

@@ -1,0 +1,144 @@
+{
+  "schema_version": "0.5.0",
+  "identity": {
+    "arm": "hybrid_bridge_v05",
+    "case_id": "v05-pair-07-feasible",
+    "model_id": "google/gemma-4-e2b",
+    "seed": 55
+  },
+  "temperature": 0,
+  "prompt_version": "defense-v0.5-dual-arm-v1",
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Return a non-executable linguistic plan draft. Select every admitted requirement_id exactly once and only its declared capability_id. Copy only request-declared dependency requirement IDs. Report genuine ambiguity in unresolved_terms. Do not create task IDs, agents, authority, contracts, schemas, or artifacts. You do not decide feasibility and reference labels are unavailable."
+    },
+    {
+      "role": "user",
+      "content": "{\"request_text\":\"Prepare and finalize the declared data analytics workflow while preserving authority, data-flow, and completion contracts.\",\"admitted_request\":{\"user_goal\":\"Prepare and finalize the declared data analytics workflow while preserving authority, data-flow, and completion contracts.\",\"requirements\":[{\"name\":\"Prepare data analytics\",\"requirement_id\":\"v05-pair-07-prepare\",\"capability_id\":\"v05-pair-07-prepare\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-07-intermediate\"],\"json_schema\":{\"type\":\"object\"}}},{\"name\":\"Finalize data analytics\",\"requirement_id\":\"v05-pair-07-finalize\",\"capability_id\":\"v05-pair-07-finalize\",\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"depends_on_requirement_ids\":[\"v05-pair-07-prepare\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-07-result\"],\"json_schema\":{\"type\":\"object\"}}}],\"required_artifacts\":[\"v05-pair-07-result\"],\"context\":{\"approved\":true,\"pair_number\":7}},\"registry_snapshot\":[{\"agent_id\":\"v05-pair-07-preparer\",\"name\":\"Data Analytics preparer\",\"service_endpoint\":\"https://v05-pair-07-preparer.example/a2a\",\"trust_level\":\"standard\",\"status\":\"available\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"skills\":[{\"name\":\"Prepare data analytics\",\"requirement_id\":\"v05-pair-07-prepare\",\"capability_id\":\"v05-pair-07-prepare\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-07-intermediate\"],\"json_schema\":{\"type\":\"object\"}}}]},{\"agent_id\":\"v05-pair-07-finisher\",\"name\":\"Data Analytics finisher\",\"service_endpoint\":\"https://v05-pair-07-finisher.example/a2a\",\"trust_level\":\"standard\",\"status\":\"available\",\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"skills\":[{\"name\":\"Finalize data analytics\",\"requirement_id\":\"v05-pair-07-finalize\",\"capability_id\":\"v05-pair-07-finalize\",\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"depends_on_requirement_ids\":[\"v05-pair-07-prepare\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-07-result\"],\"json_schema\":{\"type\":\"object\"}}}]}],\"payload\":{\"text\":\"Input for data analytics pair 7\"}}"
+    }
+  ],
+  "initial_raw_response": {
+    "id": "chatcmpl-yg4vl1ggd6955voys5dhsw",
+    "object": "chat.completion",
+    "created": 1784066947,
+    "model": "google/gemma-4-e2b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\": {\n  \"unresolved_terms\": [\n    \"authority\",\n    \"data-flow\",\n    \"completion contracts\"\n  ]\n  }\n}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 750,
+      "completion_tokens": 42,
+      "total_tokens": 792,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "google/gemma-4-e2b"
+  },
+  "initial_parsed_object": {
+    "draft": {
+      "selections": [],
+      "unresolved_terms": [
+        "authority",
+        "data-flow",
+        "completion contracts"
+      ],
+      "rationale": ""
+    }
+  },
+  "initial_latency_ms": 2344.7938000317663,
+  "repair_attempted": true,
+  "repair_trigger_issues": [
+    {
+      "code": "missing_requirement",
+      "message": "Draft omits requirement 'v05-pair-07-prepare'.",
+      "requirement_id": "v05-pair-07-prepare"
+    },
+    {
+      "code": "missing_requirement",
+      "message": "Draft omits requirement 'v05-pair-07-finalize'.",
+      "requirement_id": "v05-pair-07-finalize"
+    },
+    {
+      "code": "unresolved_term",
+      "message": "Unresolved linguistic term: authority",
+      "requirement_id": ""
+    },
+    {
+      "code": "unresolved_term",
+      "message": "Unresolved linguistic term: data-flow",
+      "requirement_id": ""
+    },
+    {
+      "code": "unresolved_term",
+      "message": "Unresolved linguistic term: completion contracts",
+      "requirement_id": ""
+    }
+  ],
+  "repair_raw_response": {
+    "id": "chatcmpl-7pyyaqfjtbku3vzwk3jc0j",
+    "object": "chat.completion",
+    "created": 1784066949,
+    "model": "google/gemma-4-e2b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\":{\"selections\":[{\"requirement_id\":\"v05-pair-07-prepare\",\"capability_id\":\"v05-pair-07-prepare\"},{\"requirement_id\":\"v05-pair-07-finalize\",\"capability_id\":\"v05-pair-07-finalize\"}],\"unresolved_terms\":[\"authority\",\"data-flow\",\"completion contracts\"]}}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 965,
+      "completion_tokens": 83,
+      "total_tokens": 1048,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "google/gemma-4-e2b"
+  },
+  "repaired_parsed_object": {
+    "draft": {
+      "selections": [
+        {
+          "requirement_id": "v05-pair-07-prepare",
+          "capability_id": "v05-pair-07-prepare",
+          "depends_on_requirement_ids": []
+        },
+        {
+          "requirement_id": "v05-pair-07-finalize",
+          "capability_id": "v05-pair-07-finalize",
+          "depends_on_requirement_ids": []
+        }
+      ],
+      "unresolved_terms": [
+        "authority",
+        "data-flow",
+        "completion contracts"
+      ],
+      "rationale": ""
+    }
+  },
+  "repair_latency_ms": 1359.6422001719475,
+  "call_count": 2,
+  "evaluation_status": "raw_output_collected_not_scored"
+}

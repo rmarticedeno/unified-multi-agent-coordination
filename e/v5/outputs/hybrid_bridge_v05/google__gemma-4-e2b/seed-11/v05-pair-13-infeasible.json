@@ -1,0 +1,121 @@
+{
+  "schema_version": "0.5.0",
+  "identity": {
+    "arm": "hybrid_bridge_v05",
+    "case_id": "v05-pair-13-infeasible",
+    "model_id": "google/gemma-4-e2b",
+    "seed": 11
+  },
+  "temperature": 0,
+  "prompt_version": "defense-v0.5-dual-arm-v1",
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Return a non-executable linguistic plan draft. Select every admitted requirement_id exactly once and only its declared capability_id. Copy only request-declared dependency requirement IDs. Report genuine ambiguity in unresolved_terms. Do not create task IDs, agents, authority, contracts, schemas, or artifacts. You do not decide feasibility and reference labels are unavailable."
+    },
+    {
+      "role": "user",
+      "content": "{\"request_text\":\"Prepare and finalize the declared research administration workflow while preserving authority, data-flow, and completion contracts.\",\"admitted_request\":{\"user_goal\":\"Prepare and finalize the declared research administration workflow while preserving authority, data-flow, and completion contracts.\",\"requirements\":[{\"name\":\"Prepare research administration\",\"requirement_id\":\"v05-pair-13-prepare\",\"capability_id\":\"v05-pair-13-prepare\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-13-intermediate\"],\"json_schema\":{\"type\":\"object\"}}},{\"name\":\"Finalize research administration\",\"requirement_id\":\"v05-pair-13-finalize\",\"capability_id\":\"v05-pair-13-finalize\",\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"depends_on_requirement_ids\":[\"v05-pair-13-prepare\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-13-result\"],\"json_schema\":{\"type\":\"object\"}},\"constraints\":[{\"constraint_id\":\"v05-pair-13-approval\",\"source\":\"request_context\",\"path\":\"approved\",\"operator\":\"eq\",\"expected\":true,\"requirement_id\":\"v05-pair-13-finalize\"}]}],\"required_artifacts\":[\"v05-pair-13-result\"],\"context\":{\"approved\":false,\"pair_number\":13}},\"registry_snapshot\":[{\"agent_id\":\"v05-pair-13-preparer\",\"name\":\"Research Administration preparer\",\"service_endpoint\":\"https://v05-pair-13-preparer.example/a2a\",\"trust_level\":\"standard\",\"status\":\"available\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"skills\":[{\"name\":\"Prepare research administration\",\"requirement_id\":\"v05-pair-13-prepare\",\"capability_id\":\"v05-pair-13-prepare\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-13-intermediate\"],\"json_schema\":{\"type\":\"object\"}}}]},{\"agent_id\":\"v05-pair-13-finisher\",\"name\":\"Research Administration finisher\",\"service_endpoint\":\"https://v05-pair-13-finisher.example/a2a\",\"trust_level\":\"standard\",\"status\":\"available\",\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"skills\":[{\"name\":\"Finalize research administration\",\"requirement_id\":\"v05-pair-13-finalize\",\"capability_id\":\"v05-pair-13-finalize\",\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"depends_on_requirement_ids\":[\"v05-pair-13-prepare\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-13-result\"],\"json_schema\":{\"type\":\"object\"}}}]}],\"payload\":{\"text\":\"Input for research administration pair 13\"}}"
+    }
+  ],
+  "initial_raw_response": {
+    "id": "chatcmpl-bpmsul8pwejl464i9kh4p",
+    "object": "chat.completion",
+    "created": 1784064932,
+    "model": "google/gemma-4-e2b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\": {\n  \"rationale\": \"The user requests the preparation and finalization of a research administration workflow while preserving authority, data-flow, and completion contracts. This maps directly to two sequential requirements: 'Prepare research administration' followed by 'Finalize research administration'. The dependency structure is explicitly defined in the requirements section, where 'Finalize research administration' depends on 'Prepare research administration'. The constraints indicate an approval step related to the finalization phase.\\n\\n**Selected Requirements and Capabilities:**\\n1.  **Requirement ID:** v05-pair-13-prepare $\\rightarrow$ **Capability ID:** v05-pair-13-prepare\\n2.  **Requirement ID:** v05-pair-13-finalize $\\rightarrow$ **Capability ID:** v05-pair-13-finalize\\n\\n**Dependencies (Request-Declared):**\\nThe requirement 'v05-pair-13-finalize' explicitly depends on 'v05-pair-13-prepare'.\\n\\n**Ambiguity Report:**\\nNo genuine ambiguity is detected in the provided terms or dependencies. The flow is clearly defined as a sequential process.\\n\\n**Unresolved Terms:**\\nNone.\"\n}}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 804,
+      "completion_tokens": 268,
+      "total_tokens": 1072,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "google/gemma-4-e2b"
+  },
+  "initial_parsed_object": {
+    "draft": {
+      "selections": [],
+      "unresolved_terms": [],
+      "rationale": "The user requests the preparation and finalization of a research administration workflow while preserving authority, data-flow, and completion contracts. This maps directly to two sequential requirements: 'Prepare research administration' followed by 'Finalize research administration'. The dependency structure is explicitly defined in the requirements section, where 'Finalize research administration' depends on 'Prepare research administration'. The constraints indicate an approval step related to the finalization phase.\n\n**Selected Requirements and Capabilities:**\n1.  **Requirement ID:** v05-pair-13-prepare $\rightarrow$ **Capability ID:** v05-pair-13-prepare\n2.  **Requirement ID:** v05-pair-13-finalize $\rightarrow$ **Capability ID:** v05-pair-13-finalize\n\n**Dependencies (Request-Declared):**\nThe requirement 'v05-pair-13-finalize' explicitly depends on 'v05-pair-13-prepare'.\n\n**Ambiguity Report:**\nNo genuine ambiguity is detected in the provided terms or dependencies. The flow is clearly defined as a sequential process.\n\n**Unresolved Terms:**\nNone."
+    }
+  },
+  "initial_latency_ms": 6734.0300001669675,
+  "repair_attempted": true,
+  "repair_trigger_issues": [
+    {
+      "code": "missing_requirement",
+      "message": "Draft omits requirement 'v05-pair-13-prepare'.",
+      "requirement_id": "v05-pair-13-prepare"
+    },
+    {
+      "code": "missing_requirement",
+      "message": "Draft omits requirement 'v05-pair-13-finalize'.",
+      "requirement_id": "v05-pair-13-finalize"
+    }
+  ],
+  "repair_raw_response": {
+    "id": "chatcmpl-s1ee3cad0p89of1ariqkx",
+    "object": "chat.completion",
+    "created": 1784064939,
+    "model": "google/gemma-4-e2b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\":{\"selections\":[{\"requirement_id\":\"v05-pair-13-prepare\",\"capability_id\":\"v05-pair-13-prepare\"},{\"requirement_id\":\"v05-pair-13-finalize\",\"capability_id\":\"v05-pair-13-finalize\"}],\"unresolved_terms\":[],\"rationale\":\"The user requested a plan based on the provided input. The previous output correctly identified the necessary requirements and capabilities from the initial request structure. This repair call confirms that both required requirements ('v05-pair-13-prepare' and 'v05-pair-13-finalize') must be included in the final selection set, as they constitute the declared workflow.\\n\\n**Selected Requirements and Capabilities:**\\n1.  **Requirement ID:** v05-pair-13-prepare $\\rightarrow$ **Capability ID:** v05-pair-13-prepare\\n2.  **Requirement ID:** v05-pair-13-finalize $\\rightarrow$ **Capability ID:** v05-pair-13-finalize\\n\\n**Dependencies (Request-Declared):**\\nThe requirement 'v05-pair-13-finalize' explicitly depends on 'v05-pair-13-prepare'.\\n\\n**Ambiguity Report:**\\nNo genuine ambiguity is detected in the provided terms or dependencies. The flow is clearly defined as a sequential process.\\n\\n**Unresolved Terms:**\\nNone.\"}}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 1194,
+      "completion_tokens": 322,
+      "total_tokens": 1516,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "google/gemma-4-e2b"
+  },
+  "repaired_parsed_object": {
+    "draft": {
+      "selections": [
+        {
+          "requirement_id": "v05-pair-13-prepare",
+          "capability_id": "v05-pair-13-prepare",
+          "depends_on_requirement_ids": []
+        },
+        {
+          "requirement_id": "v05-pair-13-finalize",
+          "capability_id": "v05-pair-13-finalize",
+          "depends_on_requirement_ids": []
+        }
+      ],
+      "unresolved_terms": [],
+      "rationale": "The user requested a plan based on the provided input. The previous output correctly identified the necessary requirements and capabilities from the initial request structure. This repair call confirms that both required requirements ('v05-pair-13-prepare' and 'v05-pair-13-finalize') must be included in the final selection set, as they constitute the declared workflow.\n\n**Selected Requirements and Capabilities:**\n1.  **Requirement ID:** v05-pair-13-prepare $\rightarrow$ **Capability ID:** v05-pair-13-prepare\n2.  **Requirement ID:** v05-pair-13-finalize $\rightarrow$ **Capability ID:** v05-pair-13-finalize\n\n**Dependencies (Request-Declared):**\nThe requirement 'v05-pair-13-finalize' explicitly depends on 'v05-pair-13-prepare'.\n\n**Ambiguity Report:**\nNo genuine ambiguity is detected in the provided terms or dependencies. The flow is clearly defined as a sequential process.\n\n**Unresolved Terms:**\nNone."
+    }
+  },
+  "repair_latency_ms": 4868.4614999219775,
+  "call_count": 2,
+  "evaluation_status": "raw_output_collected_not_scored"
+}

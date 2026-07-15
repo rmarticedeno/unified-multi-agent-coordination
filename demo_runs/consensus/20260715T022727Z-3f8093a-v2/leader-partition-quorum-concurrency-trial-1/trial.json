@@ -1,0 +1,35 @@
+{
+  "checks": {},
+  "duration_s": 32.8231283002533,
+  "error": "ReadTimeout: ",
+  "executed_checks": [],
+  "expected_checks": [
+    "leader_failure_progress",
+    "leader_failure_within_30s",
+    "minority_partition_majority_progress",
+    "minority_partition_fails_closed",
+    "quorum_loss_503",
+    "quorum_loss_detected_within_10s",
+    "quorum_restored",
+    "concurrent_session_serialized",
+    "all_restorations_steady"
+  ],
+  "observations": {},
+  "passed": false,
+  "scenario": "leader-partition-quorum-concurrency",
+  "status": "infrastructure_error",
+  "topology": 3,
+  "trial": 1,
+  "unexecuted_checks": [
+    "leader_failure_progress",
+    "leader_failure_within_30s",
+    "minority_partition_majority_progress",
+    "minority_partition_fails_closed",
+    "quorum_loss_503",
+    "quorum_loss_detected_within_10s",
+    "quorum_restored",
+    "concurrent_session_serialized",
+    "all_restorations_steady"
+  ],
+  "violated_checks": []
+}

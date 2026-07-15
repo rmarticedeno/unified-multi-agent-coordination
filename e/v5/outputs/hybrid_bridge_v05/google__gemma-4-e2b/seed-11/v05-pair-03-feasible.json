@@ -1,0 +1,121 @@
+{
+  "schema_version": "0.5.0",
+  "identity": {
+    "arm": "hybrid_bridge_v05",
+    "case_id": "v05-pair-03-feasible",
+    "model_id": "google/gemma-4-e2b",
+    "seed": 11
+  },
+  "temperature": 0,
+  "prompt_version": "defense-v0.5-dual-arm-v1",
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Return a non-executable linguistic plan draft. Select every admitted requirement_id exactly once and only its declared capability_id. Copy only request-declared dependency requirement IDs. Report genuine ambiguity in unresolved_terms. Do not create task IDs, agents, authority, contracts, schemas, or artifacts. You do not decide feasibility and reference labels are unavailable."
+    },
+    {
+      "role": "user",
+      "content": "{\"request_text\":\"Prepare and finalize the declared document processing workflow while preserving authority, data-flow, and completion contracts.\",\"admitted_request\":{\"user_goal\":\"Prepare and finalize the declared document processing workflow while preserving authority, data-flow, and completion contracts.\",\"requirements\":[{\"name\":\"Prepare document processing\",\"requirement_id\":\"v05-pair-03-prepare\",\"capability_id\":\"v05-pair-03-prepare\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-03-intermediate\"],\"json_schema\":{\"type\":\"object\"}}},{\"name\":\"Finalize document processing\",\"requirement_id\":\"v05-pair-03-finalize\",\"capability_id\":\"v05-pair-03-finalize\",\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"depends_on_requirement_ids\":[\"v05-pair-03-prepare\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-03-result\"],\"json_schema\":{\"type\":\"object\"}}}],\"required_artifacts\":[\"v05-pair-03-result\"],\"context\":{\"approved\":true,\"pair_number\":3}},\"registry_snapshot\":[{\"agent_id\":\"v05-pair-03-preparer\",\"name\":\"Document Processing preparer\",\"service_endpoint\":\"https://v05-pair-03-preparer.example/a2a\",\"trust_level\":\"standard\",\"status\":\"available\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"skills\":[{\"name\":\"Prepare document processing\",\"requirement_id\":\"v05-pair-03-prepare\",\"capability_id\":\"v05-pair-03-prepare\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-03-intermediate\"],\"json_schema\":{\"type\":\"object\"}}}]},{\"agent_id\":\"v05-pair-03-finisher\",\"name\":\"Document Processing finisher\",\"service_endpoint\":\"https://v05-pair-03-finisher.example/a2a\",\"trust_level\":\"standard\",\"status\":\"available\",\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"skills\":[{\"name\":\"Finalize document processing\",\"requirement_id\":\"v05-pair-03-finalize\",\"capability_id\":\"v05-pair-03-finalize\",\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"depends_on_requirement_ids\":[\"v05-pair-03-prepare\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-03-result\"],\"json_schema\":{\"type\":\"object\"}}}]}],\"payload\":{\"text\":\"Input for document processing pair 3\"}}"
+    }
+  ],
+  "initial_raw_response": {
+    "id": "chatcmpl-7w2kiue4cpft4sod8fr4kc",
+    "object": "chat.completion",
+    "created": 1784064698,
+    "model": "google/gemma-4-e2b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\": {\n  \"rationale\": \"The user goal is to prepare and finalize a document processing workflow while preserving authority, data-flow, and completion contracts. This requires executing the defined requirements sequentially: first preparing the document, and then finalizing it. The dependency structure is explicitly defined in the requirements for 'Finalize document processing', which depends on 'Prepare document processing'.\\n\\n**Admitted Requirements and Capabilities:**\\n1.  **Requirement ID:** `v05-pair-03-prepare` $\\rightarrow$ **Capability ID:** `v05-pair-03-prepare` (Input: text, Output: intermediate)\\n2.  **Requirement ID:** `v05-pair-03-finalize` $\\rightarrow$ **Capability ID:** `v05-pair-03-finalize` (Input: intermediate, Output: json, Depends on: `v05-pair-03-prepare`)\\n\\n**Declared Dependency Requirement IDs:**\\n*   The requirement `v05-pair-03-finalize` explicitly depends on `v05-pair-03-prepare`.\\n\\n**Ambiguity Report:**\\nNo genuine ambiguity is detected in the provided structure regarding the execution flow or capability mapping. The workflow is clearly defined as a sequential chain of two steps.\\n\\n**Workflow Draft (Linguistic Plan):**\\n1.  Execute `v05-pair-03-prepare` using the input text.\\n2.  Use the intermediate result from step 1 to execute `v05-pair-03-finalize`.\\n\\n**Artifact Flow:**\\n*   `v05-pair-03-prepare` produces artifact `v05-pair-03-intermediate`.\\n*   `v05-pair-03-finalize` produces artifact `v05-pair-03-result`.\\n\\n**Final Output Artifact:** The workflow culminates in the required artifact `v05-pair-03-result`.\"\n}}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 750,
+      "completion_tokens": 447,
+      "total_tokens": 1197,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "google/gemma-4-e2b"
+  },
+  "initial_parsed_object": {
+    "draft": {
+      "selections": [],
+      "unresolved_terms": [],
+      "rationale": "The user goal is to prepare and finalize a document processing workflow while preserving authority, data-flow, and completion contracts. This requires executing the defined requirements sequentially: first preparing the document, and then finalizing it. The dependency structure is explicitly defined in the requirements for 'Finalize document processing', which depends on 'Prepare document processing'.\n\n**Admitted Requirements and Capabilities:**\n1.  **Requirement ID:** `v05-pair-03-prepare` $\rightarrow$ **Capability ID:** `v05-pair-03-prepare` (Input: text, Output: intermediate)\n2.  **Requirement ID:** `v05-pair-03-finalize` $\rightarrow$ **Capability ID:** `v05-pair-03-finalize` (Input: intermediate, Output: json, Depends on: `v05-pair-03-prepare`)\n\n**Declared Dependency Requirement IDs:**\n*   The requirement `v05-pair-03-finalize` explicitly depends on `v05-pair-03-prepare`.\n\n**Ambiguity Report:**\nNo genuine ambiguity is detected in the provided structure regarding the execution flow or capability mapping. The workflow is clearly defined as a sequential chain of two steps.\n\n**Workflow Draft (Linguistic Plan):**\n1.  Execute `v05-pair-03-prepare` using the input text.\n2.  Use the intermediate result from step 1 to execute `v05-pair-03-finalize`.\n\n**Artifact Flow:**\n*   `v05-pair-03-prepare` produces artifact `v05-pair-03-intermediate`.\n*   `v05-pair-03-finalize` produces artifact `v05-pair-03-result`.\n\n**Final Output Artifact:** The workflow culminates in the required artifact `v05-pair-03-result`."
+    }
+  },
+  "initial_latency_ms": 7617.197800194845,
+  "repair_attempted": true,
+  "repair_trigger_issues": [
+    {
+      "code": "missing_requirement",
+      "message": "Draft omits requirement 'v05-pair-03-prepare'.",
+      "requirement_id": "v05-pair-03-prepare"
+    },
+    {
+      "code": "missing_requirement",
+      "message": "Draft omits requirement 'v05-pair-03-finalize'.",
+      "requirement_id": "v05-pair-03-finalize"
+    }
+  ],
+  "repair_raw_response": {
+    "id": "chatcmpl-aek695ys5qplmp9vi7dok",
+    "object": "chat.completion",
+    "created": 1784064706,
+    "model": "google/gemma-4-e2b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\":{\"selections\":[{\"requirement_id\":\"v05-pair-03-prepare\",\"capability_id\":\"v05-pair-03-prepare\"},{\"requirement_id\":\"v05-pair-03-finalize\",\"capability_id\":\"v05-pair-03-finalize\"}],\"unresolved_terms\":[],\"rationale\":\"The request asks for a repair call to correct JSON/public referential errors, specifically noting that the draft omits requirements 'v05-pair-03-prepare' and 'v05-pair-03-finalize'. The previous output already identified these two requirements as necessary components of the workflow defined in the input. This repair confirms the selection of these missing elements based on the explicit goal of preparing and finalizing a document processing workflow.\\n\\n**Selection Rationale:**\\n*   `v05-pair-03-prepare` is selected because it is the first step in the requested workflow.\\n*   `v05-pair-03-finalize` is selected because it is the second, dependent step required to complete the workflow.\\n\\n**Dependency Check:** The selection respects the dependency structure where `v05-pair-03-finalize` depends on `v05-pair-03-prepare`.\\n\\n**Final Selection Set:** The selected requirements are exactly those missing from the previous draft, fulfilling the implicit need to define the workflow steps.\"}}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 1319,
+      "completion_tokens": 308,
+      "total_tokens": 1627,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "google/gemma-4-e2b"
+  },
+  "repaired_parsed_object": {
+    "draft": {
+      "selections": [
+        {
+          "requirement_id": "v05-pair-03-prepare",
+          "capability_id": "v05-pair-03-prepare",
+          "depends_on_requirement_ids": []
+        },
+        {
+          "requirement_id": "v05-pair-03-finalize",
+          "capability_id": "v05-pair-03-finalize",
+          "depends_on_requirement_ids": []
+        }
+      ],
+      "unresolved_terms": [],
+      "rationale": "The request asks for a repair call to correct JSON/public referential errors, specifically noting that the draft omits requirements 'v05-pair-03-prepare' and 'v05-pair-03-finalize'. The previous output already identified these two requirements as necessary components of the workflow defined in the input. This repair confirms the selection of these missing elements based on the explicit goal of preparing and finalizing a document processing workflow.\n\n**Selection Rationale:**\n*   `v05-pair-03-prepare` is selected because it is the first step in the requested workflow.\n*   `v05-pair-03-finalize` is selected because it is the second, dependent step required to complete the workflow.\n\n**Dependency Check:** The selection respects the dependency structure where `v05-pair-03-finalize` depends on `v05-pair-03-prepare`.\n\n**Final Selection Set:** The selected requirements are exactly those missing from the previous draft, fulfilling the implicit need to define the workflow steps."
+    }
+  },
+  "repair_latency_ms": 4383.509000064805,
+  "call_count": 2,
+  "evaluation_status": "raw_output_collected_not_scored"
+}

@@ -1,0 +1,144 @@
+{
+  "schema_version": "0.5.0",
+  "identity": {
+    "arm": "hybrid_bridge_v05",
+    "case_id": "v05-pair-13-feasible",
+    "model_id": "google/gemma-4-e2b",
+    "seed": 44
+  },
+  "temperature": 0,
+  "prompt_version": "defense-v0.5-dual-arm-v1",
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Return a non-executable linguistic plan draft. Select every admitted requirement_id exactly once and only its declared capability_id. Copy only request-declared dependency requirement IDs. Report genuine ambiguity in unresolved_terms. Do not create task IDs, agents, authority, contracts, schemas, or artifacts. You do not decide feasibility and reference labels are unavailable."
+    },
+    {
+      "role": "user",
+      "content": "{\"request_text\":\"Prepare and finalize the declared research administration workflow while preserving authority, data-flow, and completion contracts.\",\"admitted_request\":{\"user_goal\":\"Prepare and finalize the declared research administration workflow while preserving authority, data-flow, and completion contracts.\",\"requirements\":[{\"name\":\"Prepare research administration\",\"requirement_id\":\"v05-pair-13-prepare\",\"capability_id\":\"v05-pair-13-prepare\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-13-intermediate\"],\"json_schema\":{\"type\":\"object\"}}},{\"name\":\"Finalize research administration\",\"requirement_id\":\"v05-pair-13-finalize\",\"capability_id\":\"v05-pair-13-finalize\",\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"depends_on_requirement_ids\":[\"v05-pair-13-prepare\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-13-result\"],\"json_schema\":{\"type\":\"object\"}}}],\"required_artifacts\":[\"v05-pair-13-result\"],\"context\":{\"approved\":true,\"pair_number\":13}},\"registry_snapshot\":[{\"agent_id\":\"v05-pair-13-preparer\",\"name\":\"Research Administration preparer\",\"service_endpoint\":\"https://v05-pair-13-preparer.example/a2a\",\"trust_level\":\"standard\",\"status\":\"available\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"skills\":[{\"name\":\"Prepare research administration\",\"requirement_id\":\"v05-pair-13-prepare\",\"capability_id\":\"v05-pair-13-prepare\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-13-intermediate\"],\"json_schema\":{\"type\":\"object\"}}}]},{\"agent_id\":\"v05-pair-13-finisher\",\"name\":\"Research Administration finisher\",\"service_endpoint\":\"https://v05-pair-13-finisher.example/a2a\",\"trust_level\":\"standard\",\"status\":\"available\",\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"skills\":[{\"name\":\"Finalize research administration\",\"requirement_id\":\"v05-pair-13-finalize\",\"capability_id\":\"v05-pair-13-finalize\",\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"depends_on_requirement_ids\":[\"v05-pair-13-prepare\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-13-result\"],\"json_schema\":{\"type\":\"object\"}}}]}],\"payload\":{\"text\":\"Input for research administration pair 13\"}}"
+    }
+  ],
+  "initial_raw_response": {
+    "id": "chatcmpl-fp44mahpegnf4t2sh2j2uw",
+    "object": "chat.completion",
+    "created": 1784066517,
+    "model": "google/gemma-4-e2b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\": {\"unresolved_terms\": [\"authority\", \"data-flow\", \"completion contracts\"]}}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 752,
+      "completion_tokens": 25,
+      "total_tokens": 777,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "google/gemma-4-e2b"
+  },
+  "initial_parsed_object": {
+    "draft": {
+      "selections": [],
+      "unresolved_terms": [
+        "authority",
+        "data-flow",
+        "completion contracts"
+      ],
+      "rationale": ""
+    }
+  },
+  "initial_latency_ms": 1742.6495000254363,
+  "repair_attempted": true,
+  "repair_trigger_issues": [
+    {
+      "code": "missing_requirement",
+      "message": "Draft omits requirement 'v05-pair-13-prepare'.",
+      "requirement_id": "v05-pair-13-prepare"
+    },
+    {
+      "code": "missing_requirement",
+      "message": "Draft omits requirement 'v05-pair-13-finalize'.",
+      "requirement_id": "v05-pair-13-finalize"
+    },
+    {
+      "code": "unresolved_term",
+      "message": "Unresolved linguistic term: authority",
+      "requirement_id": ""
+    },
+    {
+      "code": "unresolved_term",
+      "message": "Unresolved linguistic term: data-flow",
+      "requirement_id": ""
+    },
+    {
+      "code": "unresolved_term",
+      "message": "Unresolved linguistic term: completion contracts",
+      "requirement_id": ""
+    }
+  ],
+  "repair_raw_response": {
+    "id": "chatcmpl-prvjud73w9exltr2rmuah",
+    "object": "chat.completion",
+    "created": 1784066519,
+    "model": "google/gemma-4-e2b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\":{\"selections\":[{\"requirement_id\":\"v05-pair-13-prepare\",\"capability_id\":\"v05-pair-13-prepare\"},{\"requirement_id\":\"v05-pair-13-finalize\",\"capability_id\":\"v05-pair-13-finalize\"}],\"unresolved_terms\":[\"authority\",\"data-flow\",\"completion contracts\"]}}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 967,
+      "completion_tokens": 83,
+      "total_tokens": 1050,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "google/gemma-4-e2b"
+  },
+  "repaired_parsed_object": {
+    "draft": {
+      "selections": [
+        {
+          "requirement_id": "v05-pair-13-prepare",
+          "capability_id": "v05-pair-13-prepare",
+          "depends_on_requirement_ids": []
+        },
+        {
+          "requirement_id": "v05-pair-13-finalize",
+          "capability_id": "v05-pair-13-finalize",
+          "depends_on_requirement_ids": []
+        }
+      ],
+      "unresolved_terms": [
+        "authority",
+        "data-flow",
+        "completion contracts"
+      ],
+      "rationale": ""
+    }
+  },
+  "repair_latency_ms": 1454.3571001850069,
+  "call_count": 2,
+  "evaluation_status": "raw_output_collected_not_scored"
+}

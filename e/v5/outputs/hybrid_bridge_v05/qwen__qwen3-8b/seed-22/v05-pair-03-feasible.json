@@ -1,0 +1,121 @@
+{
+  "schema_version": "0.5.0",
+  "identity": {
+    "arm": "hybrid_bridge_v05",
+    "case_id": "v05-pair-03-feasible",
+    "model_id": "qwen/qwen3-8b",
+    "seed": 22
+  },
+  "temperature": 0,
+  "prompt_version": "defense-v0.5-dual-arm-v1",
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Return a non-executable linguistic plan draft. Select every admitted requirement_id exactly once and only its declared capability_id. Copy only request-declared dependency requirement IDs. Report genuine ambiguity in unresolved_terms. Do not create task IDs, agents, authority, contracts, schemas, or artifacts. You do not decide feasibility and reference labels are unavailable."
+    },
+    {
+      "role": "user",
+      "content": "{\"request_text\":\"Prepare and finalize the declared document processing workflow while preserving authority, data-flow, and completion contracts.\",\"admitted_request\":{\"user_goal\":\"Prepare and finalize the declared document processing workflow while preserving authority, data-flow, and completion contracts.\",\"requirements\":[{\"name\":\"Prepare document processing\",\"requirement_id\":\"v05-pair-03-prepare\",\"capability_id\":\"v05-pair-03-prepare\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-03-intermediate\"],\"json_schema\":{\"type\":\"object\"}}},{\"name\":\"Finalize document processing\",\"requirement_id\":\"v05-pair-03-finalize\",\"capability_id\":\"v05-pair-03-finalize\",\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"depends_on_requirement_ids\":[\"v05-pair-03-prepare\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-03-result\"],\"json_schema\":{\"type\":\"object\"}}}],\"required_artifacts\":[\"v05-pair-03-result\"],\"context\":{\"approved\":true,\"pair_number\":3}},\"registry_snapshot\":[{\"agent_id\":\"v05-pair-03-preparer\",\"name\":\"Document Processing preparer\",\"service_endpoint\":\"https://v05-pair-03-preparer.example/a2a\",\"trust_level\":\"standard\",\"status\":\"available\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"skills\":[{\"name\":\"Prepare document processing\",\"requirement_id\":\"v05-pair-03-prepare\",\"capability_id\":\"v05-pair-03-prepare\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-03-intermediate\"],\"json_schema\":{\"type\":\"object\"}}}]},{\"agent_id\":\"v05-pair-03-finisher\",\"name\":\"Document Processing finisher\",\"service_endpoint\":\"https://v05-pair-03-finisher.example/a2a\",\"trust_level\":\"standard\",\"status\":\"available\",\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"skills\":[{\"name\":\"Finalize document processing\",\"requirement_id\":\"v05-pair-03-finalize\",\"capability_id\":\"v05-pair-03-finalize\",\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"depends_on_requirement_ids\":[\"v05-pair-03-prepare\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-03-result\"],\"json_schema\":{\"type\":\"object\"}}}]}],\"payload\":{\"text\":\"Input for document processing pair 3\"}}"
+    }
+  ],
+  "initial_raw_response": {
+    "id": "chatcmpl-ignbj8ky2z8cpia377gwta",
+    "object": "chat.completion",
+    "created": 1784069870,
+    "model": "qwen/qwen3-8b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\n  \"draft\": {\n    \"unresolved_terms\": [],\n    \"rationale\": \"The linguistic plan draft is constructed by selecting every admitted requirement_id exactly once and mapping it to its declared capability_id. Dependencies are captured through the 'depends_on_requirement_ids' field, while unresolved terms are reported as genuine ambiguity in the request.\"\n  }\n}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 686,
+      "completion_tokens": 73,
+      "total_tokens": 759,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-8b"
+  },
+  "initial_parsed_object": {
+    "draft": {
+      "selections": [],
+      "unresolved_terms": [],
+      "rationale": "The linguistic plan draft is constructed by selecting every admitted requirement_id exactly once and mapping it to its declared capability_id. Dependencies are captured through the 'depends_on_requirement_ids' field, while unresolved terms are reported as genuine ambiguity in the request."
+    }
+  },
+  "initial_latency_ms": 7899.1276999004185,
+  "repair_attempted": true,
+  "repair_trigger_issues": [
+    {
+      "code": "missing_requirement",
+      "message": "Draft omits requirement 'v05-pair-03-prepare'.",
+      "requirement_id": "v05-pair-03-prepare"
+    },
+    {
+      "code": "missing_requirement",
+      "message": "Draft omits requirement 'v05-pair-03-finalize'.",
+      "requirement_id": "v05-pair-03-finalize"
+    }
+  ],
+  "repair_raw_response": {
+    "id": "chatcmpl-6tf2zfrs3mbuwlov0pij4",
+    "object": "chat.completion",
+    "created": 1784069878,
+    "model": "qwen/qwen3-8b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\":{\"selections\":[{\"requirement_id\":\"v05-pair-03-prepare\",\"capability_id\":\"v05-pair-03-prepare\"},{\"requirement_id\":\"v05-pair-03-finalize\",\"capability_id\":\"v05-pair-03-finalize\"}],\"unresolved_terms\":[],\"rationale\":\"The linguistic plan draft now includes all admitted requirement_ids mapped to their declared capability_ids. Dependencies are captured through the 'depends_on_requirement_ids' field, while unresolved terms remain unreported as no genuine ambiguity was identified in the request.\"}}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 871,
+      "completion_tokens": 122,
+      "total_tokens": 993,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-8b"
+  },
+  "repaired_parsed_object": {
+    "draft": {
+      "selections": [
+        {
+          "requirement_id": "v05-pair-03-prepare",
+          "capability_id": "v05-pair-03-prepare",
+          "depends_on_requirement_ids": []
+        },
+        {
+          "requirement_id": "v05-pair-03-finalize",
+          "capability_id": "v05-pair-03-finalize",
+          "depends_on_requirement_ids": []
+        }
+      ],
+      "unresolved_terms": [],
+      "rationale": "The linguistic plan draft now includes all admitted requirement_ids mapped to their declared capability_ids. Dependencies are captured through the 'depends_on_requirement_ids' field, while unresolved terms remain unreported as no genuine ambiguity was identified in the request."
+    }
+  },
+  "repair_latency_ms": 7347.387399990112,
+  "call_count": 2,
+  "evaluation_status": "raw_output_collected_not_scored"
+}

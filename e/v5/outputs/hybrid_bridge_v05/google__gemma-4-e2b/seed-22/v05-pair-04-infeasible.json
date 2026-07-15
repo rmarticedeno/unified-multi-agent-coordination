@@ -1,0 +1,138 @@
+{
+  "schema_version": "0.5.0",
+  "identity": {
+    "arm": "hybrid_bridge_v05",
+    "case_id": "v05-pair-04-infeasible",
+    "model_id": "google/gemma-4-e2b",
+    "seed": 22
+  },
+  "temperature": 0,
+  "prompt_version": "defense-v0.5-dual-arm-v1",
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Return a non-executable linguistic plan draft. Select every admitted requirement_id exactly once and only its declared capability_id. Copy only request-declared dependency requirement IDs. Report genuine ambiguity in unresolved_terms. Do not create task IDs, agents, authority, contracts, schemas, or artifacts. You do not decide feasibility and reference labels are unavailable."
+    },
+    {
+      "role": "user",
+      "content": "{\"request_text\":\"Prepare and finalize the declared travel logistics workflow while preserving authority, data-flow, and completion contracts.\",\"admitted_request\":{\"user_goal\":\"Prepare and finalize the declared travel logistics workflow while preserving authority, data-flow, and completion contracts.\",\"requirements\":[{\"name\":\"Prepare travel logistics\",\"requirement_id\":\"v05-pair-04-prepare\",\"capability_id\":\"v05-pair-04-prepare\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-04-intermediate\"],\"json_schema\":{\"type\":\"object\"}}},{\"name\":\"Finalize travel logistics\",\"requirement_id\":\"v05-pair-04-finalize\",\"capability_id\":\"v05-pair-04-finalize\",\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"depends_on_requirement_ids\":[\"v05-pair-04-prepare\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-04-result\"],\"json_schema\":{\"type\":\"object\"}}}],\"required_artifacts\":[\"v05-pair-04-result\"],\"context\":{\"approved\":true,\"pair_number\":4}},\"registry_snapshot\":[{\"agent_id\":\"v05-pair-04-preparer\",\"name\":\"Travel Logistics preparer\",\"service_endpoint\":\"https://v05-pair-04-preparer.example/a2a\",\"trust_level\":\"standard\",\"status\":\"available\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"skills\":[{\"name\":\"Prepare travel logistics\",\"requirement_id\":\"v05-pair-04-prepare\",\"capability_id\":\"v05-pair-04-prepare\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-04-intermediate\"],\"json_schema\":{\"type\":\"object\"}}}]},{\"agent_id\":\"v05-pair-04-finisher\",\"name\":\"Travel Logistics finisher\",\"service_endpoint\":\"https://v05-pair-04-finisher.example/a2a\",\"trust_level\":\"standard\",\"status\":\"unavailable\",\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"skills\":[{\"name\":\"Finalize travel logistics\",\"requirement_id\":\"v05-pair-04-finalize\",\"capability_id\":\"v05-pair-04-finalize\",\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"depends_on_requirement_ids\":[\"v05-pair-04-prepare\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-04-result\"],\"json_schema\":{\"type\":\"object\"}}}]}],\"payload\":{\"text\":\"Input for travel logistics pair 4\"}}"
+    }
+  ],
+  "initial_raw_response": {
+    "id": "chatcmpl-txcnji4tr6ozy05xk7ineb",
+    "object": "chat.completion",
+    "created": 1784065240,
+    "model": "google/gemma-4-e2b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\": {\n  \"selections\": [\n    {\"requirement_id\": \"v05-pair-04-prepare\", \"capability_id\": \"v05-pair-04-prepare\"},\n    {\"requirement_id\": \"v05-pair-04-finalize\", \"capability_id\": \"v05-pair-04-finalize\"}\n  ],\n  \"unresolved_terms\": [\n    \"completion contracts\"\n  ],\n  \"rationale\": \"The request explicitly asks to prepare and finalize a workflow. The requirements map directly to these two steps. 'completion contracts' is mentioned as something to be preserved, but the specific nature or artifacts of these contracts are not defined in the provided structure.\"\n}}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 750,
+      "completion_tokens": 165,
+      "total_tokens": 915,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "google/gemma-4-e2b"
+  },
+  "initial_parsed_object": {
+    "draft": {
+      "selections": [
+        {
+          "requirement_id": "v05-pair-04-prepare",
+          "capability_id": "v05-pair-04-prepare",
+          "depends_on_requirement_ids": []
+        },
+        {
+          "requirement_id": "v05-pair-04-finalize",
+          "capability_id": "v05-pair-04-finalize",
+          "depends_on_requirement_ids": []
+        }
+      ],
+      "unresolved_terms": [
+        "completion contracts"
+      ],
+      "rationale": "The request explicitly asks to prepare and finalize a workflow. The requirements map directly to these two steps. 'completion contracts' is mentioned as something to be preserved, but the specific nature or artifacts of these contracts are not defined in the provided structure."
+    }
+  },
+  "initial_latency_ms": 3183.888199971989,
+  "repair_attempted": true,
+  "repair_trigger_issues": [
+    {
+      "code": "unresolved_term",
+      "message": "Unresolved linguistic term: completion contracts",
+      "requirement_id": ""
+    },
+    {
+      "code": "invalid_dependency",
+      "message": "Dependencies for 'v05-pair-04-finalize' must equal the admitted set ['v05-pair-04-prepare'].",
+      "requirement_id": "v05-pair-04-finalize"
+    }
+  ],
+  "repair_raw_response": {
+    "id": "chatcmpl-6o3fr9z5uggnoylw402p6",
+    "object": "chat.completion",
+    "created": 1784065243,
+    "model": "google/gemma-4-e2b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\":{\"selections\":[{\"requirement_id\":\"v05-pair-04-prepare\",\"capability_id\":\"v05-pair-04-prepare\",\"depends_on_requirement_ids\":[]},{\"requirement_id\":\"v05-pair-04-finalize\",\"capability_id\":\"v05-pair-04-finalize\",\"depends_on_requirement_ids\":[\"v05-pair-04-prepare\"]}],\"unresolved_terms\":[\"completion contracts\"]}}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 1016,
+      "completion_tokens": 106,
+      "total_tokens": 1122,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "google/gemma-4-e2b"
+  },
+  "repaired_parsed_object": {
+    "draft": {
+      "selections": [
+        {
+          "requirement_id": "v05-pair-04-prepare",
+          "capability_id": "v05-pair-04-prepare",
+          "depends_on_requirement_ids": []
+        },
+        {
+          "requirement_id": "v05-pair-04-finalize",
+          "capability_id": "v05-pair-04-finalize",
+          "depends_on_requirement_ids": [
+            "v05-pair-04-prepare"
+          ]
+        }
+      ],
+      "unresolved_terms": [
+        "completion contracts"
+      ],
+      "rationale": ""
+    }
+  },
+  "repair_latency_ms": 1544.1016000695527,
+  "call_count": 2,
+  "evaluation_status": "raw_output_collected_not_scored"
+}

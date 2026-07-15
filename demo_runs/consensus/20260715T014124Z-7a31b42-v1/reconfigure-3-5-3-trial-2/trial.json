@@ -1,0 +1,27 @@
+{
+  "checks": {},
+  "duration_s": 142.85027220007032,
+  "error": "RuntimeError: Cluster condition did not converge in 120s: {'coordination-a': {'http_status': 200, 'cluster_id': 'thesis-coordination', 'node_id': 'coordination-a', 'member_id': 18292091069950412911, 'role': 'voter', 'state': 'reconfiguring', 'steady_state': False, 'configuration_generation': 1, 'configured_voter_target': 5, 'authoritative_voters': 5, 'active_voters': 5, 'live_voters': 5, 'learners': 0, 'coordinator_nodes': 5, 'coordinator_only_nodes': 0, 'quorum': 3, 'quorum_available': True, 'leader': 18292091069950412911, 'revision': 1291, 'discovery_method': 'none', 'pending_membership_changes': 2, 'pending_membership_operation': None, 'role_agreement': {'coordination-a': True, 'coordination-b': False, 'coordination-c': True, 'coordination-d': True, 'coordination-e': True}, 'degraded': True, 'degraded_reason': 'membership reconciliation has not reached steady state'}, 'coordination-b': {'http_status': 200, 'cluster_id': 'thesis-coordination', 'node_id': 'coordination-b', 'member_id': 10955123035413938040, 'role': 'learner', 'state': 'reconfiguring', 'steady_state': False, 'configuration_generation': 1, 'configured_voter_target': 5, 'authoritative_voters': 5, 'active_voters': 5, 'live_voters': 5, 'learners': 0, 'coordinator_nodes': 5, 'coordinator_only_nodes': 0, 'quorum': 3, 'quorum_available': True, 'leader': 18292091069950412911, 'revision': 1291, 'discovery_method': 'dns', 'pending_membership_changes': 2, 'pending_membership_operation': None, 'role_agreement': {'coordination-a': True, 'coordination-b': False, 'coordination-c': True, 'coordination-d': True, 'coordination-e': True}, 'degraded': True, 'degraded_reason': 'membership reconciliation has not reached steady state'}, 'coordination-c': {'http_status': 200, 'cluster_id': 'thesis-coordination', 'node_id': 'coordination-c', 'member_id': 13252565895687683131, 'role': 'voter', 'state': 'reconfiguring', 'steady_state': False, 'configuration_generation': 1, 'configured_voter_target': 5, 'authoritative_voters': 5, 'active_voters': 5, 'live_voters': 5, 'learners': 0, 'coordinator_nodes': 5, 'coordinator_only_nodes': 0, 'quorum': 3, 'quorum_available': True, 'leader': 18292091069950412911, 'revision': 1291, 'discovery_method': 'dns', 'pending_membership_changes': 2, 'pending_membership_operation': None, 'role_agreement': {'coordination-a': True, 'coordination-b': False, 'coordination-c': True, 'coordination-d': True, 'coordination-e': True}, 'degraded': True, 'degraded_reason': 'membership reconciliation has not reached steady state'}, 'coordination-d': {'http_status': 200, 'cluster_id': 'thesis-coordination', 'node_id': 'coordination-d', 'member_id': 7086894326511525711, 'role': 'voter', 'state': 'reconfiguring', 'steady_state': False, 'configuration_generation': 1, 'configured_voter_target': 5, 'authoritative_voters': 5, 'active_voters': 5, 'live_voters': 5, 'learners': 0, 'coordinator_nodes': 5, 'coordinator_only_nodes': 0, 'quorum': 3, 'quorum_available': True, 'leader': 18292091069950412911, 'revision': 1291, 'discovery_method': 'multicast', 'pending_membership_changes': 2, 'pending_membership_operation': None, 'role_agreement': {'coordination-a': True, 'coordination-b': False, 'coordination-c': True, 'coordination-d': True, 'coordination-e': True}, 'degraded': True, 'degraded_reason': 'membership reconciliation has not reached steady state'}, 'coordination-e': {'http_status': 200, 'cluster_id': 'thesis-coordination', 'node_id': 'coordination-e', 'member_id': 7548308889026293481, 'role': 'voter', 'state': 'reconfiguring', 'steady_state': False, 'configuration_generation': 1, 'configured_voter_target': 5, 'authoritative_voters': 5, 'active_voters': 5, 'live_voters': 5, 'learners': 0, 'coordinator_nodes': 5, 'coordinator_only_nodes': 0, 'quorum': 3, 'quorum_available': True, 'leader': 18292091069950412911, 'revision': 1291, 'discovery_method': 'multicast', 'pending_membership_changes': 2, 'pending_membership_operation': None, 'role_agreement': {'coordination-a': True, 'coordination-b': False, 'coordination-c': True, 'coordination-d': True, 'coordination-e': True}, 'degraded': True, 'degraded_reason': 'membership reconciliation has not reached steady state'}}",
+  "executed_checks": [],
+  "expected_checks": [
+    "expand_accepted",
+    "expanded_steady",
+    "shrink_accepted",
+    "shrunk_steady",
+    "zero_pending_changes"
+  ],
+  "observations": {},
+  "passed": false,
+  "scenario": "reconfigure-3-5-3",
+  "status": "infrastructure_error",
+  "topology": 5,
+  "trial": 2,
+  "unexecuted_checks": [
+    "expand_accepted",
+    "expanded_steady",
+    "shrink_accepted",
+    "shrunk_steady",
+    "zero_pending_changes"
+  ],
+  "violated_checks": []
+}

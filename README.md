@@ -116,6 +116,20 @@ v0.3 and v0.4 remain immutable historical development evidence. A failed
 pre-specified v0.5 criterion remains valid evidence when source provenance,
 matrix completeness, artifact hashes, and protocol identity all validate.
 
+The accepted v0.5 run is packaged under `e/v5`. It contains all 1,440 outputs
+and a deterministic analysis digest of
+`5bead15a76a84f66671b9bc14dd7ac6ead9c9a5ce4b434757d94a5e86c093f82`.
+The outcome is mixed: the repaired hybrid made zero false acceptances but only
+1.39% feasible recall, while the direct arm made 345 false acceptances. The
+comparative-advantage criterion is therefore unsupported rather than rerun.
+
+The accepted consensus report is
+`demo_runs/consensus/20260715T022727Z-3f8093a-v2/campaign.json`. The evidence is
+valid but the outcome failed: 20 of 33 trials passed, seven violated invariants,
+and six had infrastructure errors. The earlier complete failed campaign is also
+preserved. Current deterministic, Docker A2A, PostgreSQL, and upstream-derived
+A2A checks pass 7/7, 11/11, 5/5, and 1/1 respectively.
+
 ## Service
 
 Start the FastAPI service locally:

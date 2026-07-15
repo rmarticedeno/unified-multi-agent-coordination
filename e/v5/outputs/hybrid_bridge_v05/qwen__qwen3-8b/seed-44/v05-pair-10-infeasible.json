@@ -1,0 +1,110 @@
+{
+  "schema_version": "0.5.0",
+  "identity": {
+    "arm": "hybrid_bridge_v05",
+    "case_id": "v05-pair-10-infeasible",
+    "model_id": "qwen/qwen3-8b",
+    "seed": 44
+  },
+  "temperature": 0,
+  "prompt_version": "defense-v0.5-dual-arm-v1",
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Return a non-executable linguistic plan draft. Select every admitted requirement_id exactly once and only its declared capability_id. Copy only request-declared dependency requirement IDs. Report genuine ambiguity in unresolved_terms. Do not create task IDs, agents, authority, contracts, schemas, or artifacts. You do not decide feasibility and reference labels are unavailable."
+    },
+    {
+      "role": "user",
+      "content": "{\"request_text\":\"Prepare and finalize the declared software maintenance workflow while preserving authority, data-flow, and completion contracts.\",\"admitted_request\":{\"user_goal\":\"Prepare and finalize the declared software maintenance workflow while preserving authority, data-flow, and completion contracts.\",\"requirements\":[{\"name\":\"Prepare software maintenance\",\"requirement_id\":\"v05-pair-10-prepare\",\"capability_id\":\"v05-pair-10-prepare\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-10-intermediate\"],\"json_schema\":{\"type\":\"object\"}}},{\"name\":\"Finalize software maintenance\",\"requirement_id\":\"v05-pair-10-finalize\",\"capability_id\":\"v05-pair-10-finalize\",\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"depends_on_requirement_ids\":[\"v05-pair-10-prepare\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-10-result\"],\"json_schema\":{\"type\":\"object\"}}}],\"required_artifacts\":[\"v05-pair-10-result\"],\"context\":{\"approved\":true,\"pair_number\":10}},\"registry_snapshot\":[{\"agent_id\":\"v05-pair-10-preparer\",\"name\":\"Software Maintenance preparer\",\"service_endpoint\":\"https://v05-pair-10-preparer.example/a2a\",\"trust_level\":\"standard\",\"status\":\"available\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"skills\":[{\"name\":\"Prepare software maintenance\",\"requirement_id\":\"v05-pair-10-prepare\",\"capability_id\":\"v05-pair-10-prepare\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-10-intermediate\"],\"json_schema\":{\"type\":\"object\"}}}]},{\"agent_id\":\"v05-pair-10-finisher\",\"name\":\"Software Maintenance finisher\",\"service_endpoint\":\"https://v05-pair-10-finisher.example/a2a\",\"trust_level\":\"standard\",\"status\":\"available\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"skills\":[{\"name\":\"Finalize software maintenance\",\"requirement_id\":\"v05-pair-10-finalize\",\"capability_id\":\"v05-pair-10-finalize\",\"input_modes\":[\"text\"],\"output_modes\":[\"json\"],\"depends_on_requirement_ids\":[\"v05-pair-10-prepare\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-10-result\"],\"json_schema\":{\"type\":\"object\"}}}]}],\"payload\":{\"text\":\"Input for software maintenance pair 10\"}}"
+    }
+  ],
+  "initial_raw_response": {
+    "id": "chatcmpl-60ydnzpkanal2t1bltmt",
+    "object": "chat.completion",
+    "created": 1784075598,
+    "model": "qwen/qwen3-8b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\n  \"draft\": {\n    \"unresolved_terms\": [],\n    \"rationale\": \"The linguistic plan draft is constructed based on the declared requirements, dependencies, and capabilities without introducing new elements or assumptions beyond what has been explicitly stated in the request and registry snapshot.\"\n  }\n}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 686,
+      "completion_tokens": 59,
+      "total_tokens": 745,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-8b"
+  },
+  "initial_parsed_object": {
+    "draft": {
+      "selections": [],
+      "unresolved_terms": [],
+      "rationale": "The linguistic plan draft is constructed based on the declared requirements, dependencies, and capabilities without introducing new elements or assumptions beyond what has been explicitly stated in the request and registry snapshot."
+    }
+  },
+  "initial_latency_ms": 3955.702899955213,
+  "repair_attempted": true,
+  "repair_trigger_issues": [
+    {
+      "code": "missing_requirement",
+      "message": "Draft omits requirement 'v05-pair-10-prepare'.",
+      "requirement_id": "v05-pair-10-prepare"
+    },
+    {
+      "code": "missing_requirement",
+      "message": "Draft omits requirement 'v05-pair-10-finalize'.",
+      "requirement_id": "v05-pair-10-finalize"
+    }
+  ],
+  "repair_raw_response": {
+    "id": "chatcmpl-pvvgyaiyhyjjrctja3rtd",
+    "object": "chat.completion",
+    "created": 1784075602,
+    "model": "qwen/qwen3-8b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\":{\"selections\":[],\"unresolved_terms\":[],\"rationale\":\"The linguistic plan draft is constructed based on the declared requirements, dependencies, and capabilities without introducing new elements or assumptions beyond what has been explicitly stated in the request and registry snapshot.\"}}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 857,
+      "completion_tokens": 52,
+      "total_tokens": 909,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "qwen/qwen3-8b"
+  },
+  "repaired_parsed_object": {
+    "draft": {
+      "selections": [],
+      "unresolved_terms": [],
+      "rationale": "The linguistic plan draft is constructed based on the declared requirements, dependencies, and capabilities without introducing new elements or assumptions beyond what has been explicitly stated in the request and registry snapshot."
+    }
+  },
+  "repair_latency_ms": 3975.6780001334846,
+  "call_count": 2,
+  "evaluation_status": "raw_output_collected_not_scored"
+}

@@ -1,0 +1,144 @@
+{
+  "schema_version": "0.5.0",
+  "identity": {
+    "arm": "hybrid_bridge_v05",
+    "case_id": "v05-pair-22-feasible",
+    "model_id": "google/gemma-4-e2b",
+    "seed": 33
+  },
+  "temperature": 0,
+  "prompt_version": "defense-v0.5-dual-arm-v1",
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Return a non-executable linguistic plan draft. Select every admitted requirement_id exactly once and only its declared capability_id. Copy only request-declared dependency requirement IDs. Report genuine ambiguity in unresolved_terms. Do not create task IDs, agents, authority, contracts, schemas, or artifacts. You do not decide feasibility and reference labels are unavailable."
+    },
+    {
+      "role": "user",
+      "content": "{\"request_text\":\"Prepare and finalize the declared iot inspection workflow while preserving authority, data-flow, and completion contracts.\",\"admitted_request\":{\"user_goal\":\"Prepare and finalize the declared iot inspection workflow while preserving authority, data-flow, and completion contracts.\",\"requirements\":[{\"name\":\"Prepare iot inspection\",\"requirement_id\":\"v05-pair-22-prepare\",\"capability_id\":\"v05-pair-22-prepare\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-22-intermediate\"],\"json_schema\":{\"type\":\"object\"}}},{\"name\":\"Finalize iot inspection\",\"requirement_id\":\"v05-pair-22-finalize\",\"capability_id\":\"v05-pair-22-finalize\",\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"depends_on_requirement_ids\":[\"v05-pair-22-prepare\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-22-result\"],\"json_schema\":{\"type\":\"object\"}}}],\"required_artifacts\":[\"v05-pair-22-result\"],\"context\":{\"approved\":true,\"pair_number\":22}},\"registry_snapshot\":[{\"agent_id\":\"v05-pair-22-preparer\",\"name\":\"Iot Inspection preparer\",\"service_endpoint\":\"https://v05-pair-22-preparer.example/a2a\",\"trust_level\":\"standard\",\"status\":\"available\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"skills\":[{\"name\":\"Prepare iot inspection\",\"requirement_id\":\"v05-pair-22-prepare\",\"capability_id\":\"v05-pair-22-prepare\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-22-intermediate\"],\"json_schema\":{\"type\":\"object\"}}}]},{\"agent_id\":\"v05-pair-22-finisher\",\"name\":\"Iot Inspection finisher\",\"service_endpoint\":\"https://v05-pair-22-finisher.example/a2a\",\"trust_level\":\"standard\",\"status\":\"available\",\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"skills\":[{\"name\":\"Finalize iot inspection\",\"requirement_id\":\"v05-pair-22-finalize\",\"capability_id\":\"v05-pair-22-finalize\",\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"depends_on_requirement_ids\":[\"v05-pair-22-prepare\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-22-result\"],\"json_schema\":{\"type\":\"object\"}}}]}],\"payload\":{\"text\":\"Input for iot inspection pair 22\"}}"
+    }
+  ],
+  "initial_raw_response": {
+    "id": "chatcmpl-wf62e7kelhlm8wknpnprm",
+    "object": "chat.completion",
+    "created": 1784066184,
+    "model": "google/gemma-4-e2b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\": {\n  \"unresolved_terms\": [\n    \"authority\",\n    \"data-flow\",\n    \"completion contracts\"\n  ]\n  }\n}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 754,
+      "completion_tokens": 42,
+      "total_tokens": 796,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "google/gemma-4-e2b"
+  },
+  "initial_parsed_object": {
+    "draft": {
+      "selections": [],
+      "unresolved_terms": [
+        "authority",
+        "data-flow",
+        "completion contracts"
+      ],
+      "rationale": ""
+    }
+  },
+  "initial_latency_ms": 1211.7184000089765,
+  "repair_attempted": true,
+  "repair_trigger_issues": [
+    {
+      "code": "missing_requirement",
+      "message": "Draft omits requirement 'v05-pair-22-prepare'.",
+      "requirement_id": "v05-pair-22-prepare"
+    },
+    {
+      "code": "missing_requirement",
+      "message": "Draft omits requirement 'v05-pair-22-finalize'.",
+      "requirement_id": "v05-pair-22-finalize"
+    },
+    {
+      "code": "unresolved_term",
+      "message": "Unresolved linguistic term: authority",
+      "requirement_id": ""
+    },
+    {
+      "code": "unresolved_term",
+      "message": "Unresolved linguistic term: data-flow",
+      "requirement_id": ""
+    },
+    {
+      "code": "unresolved_term",
+      "message": "Unresolved linguistic term: completion contracts",
+      "requirement_id": ""
+    }
+  ],
+  "repair_raw_response": {
+    "id": "chatcmpl-3pnefqpz8ufvhv0vaz348",
+    "object": "chat.completion",
+    "created": 1784066185,
+    "model": "google/gemma-4-e2b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\":{\"selections\":[{\"requirement_id\":\"v05-pair-22-prepare\",\"capability_id\":\"v05-pair-22-prepare\"},{\"requirement_id\":\"v05-pair-22-finalize\",\"capability_id\":\"v05-pair-22-finalize\"}],\"unresolved_terms\":[\"authority\",\"data-flow\",\"completion contracts\"]}}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 969,
+      "completion_tokens": 83,
+      "total_tokens": 1052,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "google/gemma-4-e2b"
+  },
+  "repaired_parsed_object": {
+    "draft": {
+      "selections": [
+        {
+          "requirement_id": "v05-pair-22-prepare",
+          "capability_id": "v05-pair-22-prepare",
+          "depends_on_requirement_ids": []
+        },
+        {
+          "requirement_id": "v05-pair-22-finalize",
+          "capability_id": "v05-pair-22-finalize",
+          "depends_on_requirement_ids": []
+        }
+      ],
+      "unresolved_terms": [
+        "authority",
+        "data-flow",
+        "completion contracts"
+      ],
+      "rationale": ""
+    }
+  },
+  "repair_latency_ms": 1382.3311999440193,
+  "call_count": 2,
+  "evaluation_status": "raw_output_collected_not_scored"
+}

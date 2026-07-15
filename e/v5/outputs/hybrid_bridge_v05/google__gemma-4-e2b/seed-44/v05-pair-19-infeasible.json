@@ -1,0 +1,121 @@
+{
+  "schema_version": "0.5.0",
+  "identity": {
+    "arm": "hybrid_bridge_v05",
+    "case_id": "v05-pair-19-infeasible",
+    "model_id": "google/gemma-4-e2b",
+    "seed": 44
+  },
+  "temperature": 0,
+  "prompt_version": "defense-v0.5-dual-arm-v1",
+  "prompt": [
+    {
+      "role": "system",
+      "content": "Return a non-executable linguistic plan draft. Select every admitted requirement_id exactly once and only its declared capability_id. Copy only request-declared dependency requirement IDs. Report genuine ambiguity in unresolved_terms. Do not create task IDs, agents, authority, contracts, schemas, or artifacts. You do not decide feasibility and reference labels are unavailable."
+    },
+    {
+      "role": "user",
+      "content": "{\"request_text\":\"Prepare and finalize the declared customer support workflow while preserving authority, data-flow, and completion contracts.\",\"admitted_request\":{\"user_goal\":\"Prepare and finalize the declared customer support workflow while preserving authority, data-flow, and completion contracts.\",\"requirements\":[{\"name\":\"Prepare customer support\",\"requirement_id\":\"v05-pair-19-prepare\",\"capability_id\":\"v05-pair-19-prepare\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-19-intermediate\"],\"json_schema\":{\"type\":\"object\"}},\"depends_on_requirement_ids\":[\"v05-pair-19-finalize\"]},{\"name\":\"Finalize customer support\",\"requirement_id\":\"v05-pair-19-finalize\",\"capability_id\":\"v05-pair-19-finalize\",\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"depends_on_requirement_ids\":[\"v05-pair-19-prepare\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-19-result\"],\"json_schema\":{\"type\":\"object\"}}}],\"required_artifacts\":[\"v05-pair-19-result\"],\"context\":{\"approved\":true,\"pair_number\":19}},\"registry_snapshot\":[{\"agent_id\":\"v05-pair-19-preparer\",\"name\":\"Customer Support preparer\",\"service_endpoint\":\"https://v05-pair-19-preparer.example/a2a\",\"trust_level\":\"standard\",\"status\":\"available\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"skills\":[{\"name\":\"Prepare customer support\",\"requirement_id\":\"v05-pair-19-prepare\",\"capability_id\":\"v05-pair-19-prepare\",\"input_modes\":[\"text\"],\"output_modes\":[\"intermediate\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-19-intermediate\"],\"json_schema\":{\"type\":\"object\"}}}]},{\"agent_id\":\"v05-pair-19-finisher\",\"name\":\"Customer Support finisher\",\"service_endpoint\":\"https://v05-pair-19-finisher.example/a2a\",\"trust_level\":\"standard\",\"status\":\"available\",\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"skills\":[{\"name\":\"Finalize customer support\",\"requirement_id\":\"v05-pair-19-finalize\",\"capability_id\":\"v05-pair-19-finalize\",\"input_modes\":[\"intermediate\"],\"output_modes\":[\"json\"],\"depends_on_requirement_ids\":[\"v05-pair-19-prepare\"],\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"validation_contract\":{\"required_artifacts\":[\"v05-pair-19-result\"],\"json_schema\":{\"type\":\"object\"}}}]}],\"payload\":{\"text\":\"Input for customer support pair 19\"}}"
+    }
+  ],
+  "initial_raw_response": {
+    "id": "chatcmpl-b4mn2a5olwlusvi3ezrjab",
+    "object": "chat.completion",
+    "created": 1784066662,
+    "model": "google/gemma-4-e2b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\": {\n  \"rationale\": \"The user goal is to prepare and finalize a customer support workflow while preserving authority, data-flow, and completion contracts. This requires executing the defined requirements sequentially: first preparing the support, and then finalizing it. The dependency structure is explicitly defined by `v05-pair-19-finalize` depending on `v05-pair-19-prepare`. The final artifact requested is `v05-pair-19-result`. The plan follows the declared dependencies to achieve the goal of finalizing the workflow based on the preparation step, ensuring contracts are preserved through the flow. No ambiguity is detected in the terms as all requirements and dependencies are explicitly defined within the input structure. The execution path involves calling the agent responsible for 'Prepare customer support' followed by the agent responsible for 'Finalize customer support'.\\n\\n\"\n  }\n}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 772,
+      "completion_tokens": 190,
+      "total_tokens": 962,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "google/gemma-4-e2b"
+  },
+  "initial_parsed_object": {
+    "draft": {
+      "selections": [],
+      "unresolved_terms": [],
+      "rationale": "The user goal is to prepare and finalize a customer support workflow while preserving authority, data-flow, and completion contracts. This requires executing the defined requirements sequentially: first preparing the support, and then finalizing it. The dependency structure is explicitly defined by `v05-pair-19-finalize` depending on `v05-pair-19-prepare`. The final artifact requested is `v05-pair-19-result`. The plan follows the declared dependencies to achieve the goal of finalizing the workflow based on the preparation step, ensuring contracts are preserved through the flow. No ambiguity is detected in the terms as all requirements and dependencies are explicitly defined within the input structure. The execution path involves calling the agent responsible for 'Prepare customer support' followed by the agent responsible for 'Finalize customer support'.\n\n"
+    }
+  },
+  "initial_latency_ms": 5913.068500114605,
+  "repair_attempted": true,
+  "repair_trigger_issues": [
+    {
+      "code": "missing_requirement",
+      "message": "Draft omits requirement 'v05-pair-19-prepare'.",
+      "requirement_id": "v05-pair-19-prepare"
+    },
+    {
+      "code": "missing_requirement",
+      "message": "Draft omits requirement 'v05-pair-19-finalize'.",
+      "requirement_id": "v05-pair-19-finalize"
+    }
+  ],
+  "repair_raw_response": {
+    "id": "chatcmpl-mz2r7d5o77l70wwqz52y1u",
+    "object": "chat.completion",
+    "created": 1784066668,
+    "model": "google/gemma-4-e2b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"draft\":{\"selections\":[{\"requirement_id\":\"v05-pair-19-prepare\",\"capability_id\":\"v05-pair-19-prepare\"},{\"requirement_id\":\"v05-pair-19-finalize\",\"capability_id\":\"v05-pair-19-finalize\"}],\"unresolved_terms\":[],\"rationale\":\"The request explicitly asks to correct JSON/public referential errors by including the missing requirements 'v05-pair-19-prepare' and 'v05-pair-19-finalize'. These were missing from the initial draft but are present in the input structure. The selections map each requirement ID exactly to its declared capability ID as instructed.\\n\\nThe dependency structure is: `v05-pair-19-finalize` depends on `v05-pair-19-prepare`. This confirms the required execution order.\\n\\nNo genuine ambiguity in unresolved terms is found. The plan selects every admitted requirement exactly once and only its declared capability ID, as per instructions.\"}}",
+          "reasoning_content": "",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 1080,
+      "completion_tokens": 221,
+      "total_tokens": 1301,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "google/gemma-4-e2b"
+  },
+  "repaired_parsed_object": {
+    "draft": {
+      "selections": [
+        {
+          "requirement_id": "v05-pair-19-prepare",
+          "capability_id": "v05-pair-19-prepare",
+          "depends_on_requirement_ids": []
+        },
+        {
+          "requirement_id": "v05-pair-19-finalize",
+          "capability_id": "v05-pair-19-finalize",
+          "depends_on_requirement_ids": []
+        }
+      ],
+      "unresolved_terms": [],
+      "rationale": "The request explicitly asks to correct JSON/public referential errors by including the missing requirements 'v05-pair-19-prepare' and 'v05-pair-19-finalize'. These were missing from the initial draft but are present in the input structure. The selections map each requirement ID exactly to its declared capability ID as instructed.\n\nThe dependency structure is: `v05-pair-19-finalize` depends on `v05-pair-19-prepare`. This confirms the required execution order.\n\nNo genuine ambiguity in unresolved terms is found. The plan selects every admitted requirement exactly once and only its declared capability ID, as per instructions."
+    }
+  },
+  "repair_latency_ms": 2966.536399908364,
+  "call_count": 2,
+  "evaluation_status": "raw_output_collected_not_scored"
+}
