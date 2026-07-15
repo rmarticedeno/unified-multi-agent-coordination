@@ -248,6 +248,7 @@ class _FakePostgresConnection:
         return "OK"
 
     async def fetchrow(self, statement, *args):
+        self.executed.append((statement, args))
         if self.fetchrow_results:
             return self.fetchrow_results.pop(0)
         return None
@@ -277,6 +278,15 @@ async def test_postgres_store_lease_lifecycle_queries_and_close():
     store = PostgresCoordinationStore("postgresql://unused")
     store._pool = pool
 
+    now = datetime.now(timezone.utc)
+    conn.fetchrow_results.append(
+        {
+            "holder_id": "coordinator-a",
+            "fencing_token": 1,
+            "expires_at": now + timedelta(seconds=30),
+            "heartbeat_at": now,
+        }
+    )
     acquired = await store.acquire_lease("pg-session", "coordinator-a", 30)
     assert acquired.fencing_token == 1
 
@@ -291,7 +301,6 @@ async def test_postgres_store_lease_lifecycle_queries_and_close():
     assert renewed.expires_at > acquired.expires_at
     await store.release_lease(renewed)
 
-    now = datetime.now(timezone.utc)
     conn.fetchrows = [
         {
             "event_type": "session_started",
@@ -323,11 +332,19 @@ async def test_postgres_store_rejects_conflicts_expiry_wrong_holder_and_fence():
     store._pool = _FakePool(conn)
     now = datetime.now(timezone.utc)
 
-    conn.fetchrow_results.append(
-        {"holder_id": "other", "fencing_token": 4, "expires_at": now + timedelta(seconds=30)}
+    conn.fetchrow_results.extend(
+        [
+            None,
+            {"holder_id": "other"},
+        ]
     )
     with pytest.raises(LeaseConflictError):
         await store.acquire_lease("pg-session", "coordinator-a", 30)
+
+    statements = "\n".join(sql for sql, _ in conn.executed)
+    assert "ON CONFLICT (session_id) DO UPDATE" in statements
+    assert "coordination_leases.fencing_token + 1" in statements
+    assert "WHERE coordination_leases.expires_at" in statements
 
     with pytest.raises(LeaseConflictError, match="no active lease"):
         await store._validate_lease(conn, _lease())

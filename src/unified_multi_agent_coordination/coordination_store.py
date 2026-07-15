@@ -346,32 +346,34 @@ class PostgresCoordinationStore:
                     now,
                 )
                 row = await conn.fetchrow(
-                    "SELECT holder_id, fencing_token, expires_at "
-                    "FROM coordination_leases WHERE session_id = $1 FOR UPDATE",
-                    session_id,
-                )
-                if row and row["expires_at"] > now and row["holder_id"] != holder_id:
-                    raise LeaseConflictError(
-                        f"Session {session_id} is leased by {row['holder_id']}."
-                    )
-                token = int(row["fencing_token"]) + 1 if row else 1
-                await conn.execute(
                     """
                     INSERT INTO coordination_leases
                         (session_id, holder_id, fencing_token, expires_at, heartbeat_at)
-                    VALUES ($1, $2, $3, $4, $5)
+                    VALUES ($1, $2, 1, $3, $4)
                     ON CONFLICT (session_id) DO UPDATE SET
                         holder_id = EXCLUDED.holder_id,
-                        fencing_token = EXCLUDED.fencing_token,
+                        fencing_token = coordination_leases.fencing_token + 1,
                         expires_at = EXCLUDED.expires_at,
                         heartbeat_at = EXCLUDED.heartbeat_at
+                    WHERE coordination_leases.expires_at <= $4
+                       OR coordination_leases.holder_id = $2
+                    RETURNING holder_id, fencing_token, expires_at, heartbeat_at
                     """,
                     session_id,
                     holder_id,
-                    token,
                     expires_at,
                     now,
                 )
+                if row is None:
+                    current = await conn.fetchrow(
+                        "SELECT holder_id FROM coordination_leases WHERE session_id = $1",
+                        session_id,
+                    )
+                    current_holder = current["holder_id"] if current else "another coordinator"
+                    raise LeaseConflictError(
+                        f"Session {session_id} is leased by {current_holder}."
+                    )
+                token = int(row["fencing_token"])
                 await self._insert_event(
                     conn,
                     LedgerEvent(
