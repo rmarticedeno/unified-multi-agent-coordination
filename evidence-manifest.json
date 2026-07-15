@@ -1,10 +1,10 @@
 {
   "schema_version": "0.6.0",
-  "release_status": "candidate-blocked",
+  "release_status": "technical-ready-administrative-blocked",
   "technical_status": "evidence-complete-negative-outcomes",
   "evaluated_source_commit": "3f8093af1ecc7c49312ac34856bba825bd81f381",
-  "packaging_commit": "UNFROZEN",
-  "dirty_state": true,
+  "packaging_commit": "63668b5d6232278894c769257fdbe3471d854bdd",
+  "dirty_state": false,
   "accepted_evidence": [
     "e/v5/provenance.json",
     "e/v5/collection-complete.json",
@@ -168,10 +168,12 @@
     "demo_runs/local_llm",
     "demo_runs/thesis_analysis"
   ],
+  "reported_negative_outcomes": [
+    "RQ4 comparative advantage is unsupported by v0.5",
+    "RQ5 consensus claim is unsupported by the clean complete campaign"
+  ],
   "open_gates": [
-    "research outcome: RQ4 comparative advantage is unsupported by v0.5",
-    "research outcome: RQ5 consensus claim is unsupported by the clean complete campaign",
-    "administrative: advisor and tribunal metadata",
-    "administrative: packaging commit, final tag, and push"
+    "administrative: advisor metadata",
+    "administrative: tribunal metadata"
   ]
 }
