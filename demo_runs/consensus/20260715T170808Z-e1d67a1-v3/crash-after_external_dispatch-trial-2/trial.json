@@ -1,0 +1,871 @@
+{
+  "checks": {
+    "fault_process_terminated_request": true,
+    "one_terminal_result": false,
+    "receiver_fencing_tokens_positive": false,
+    "receiver_operation_keys_observed": false,
+    "session_recovered": false,
+    "zero_repeated_external_effects": true
+  },
+  "duration_s": 66.57258210005239,
+  "error": "",
+  "executed_checks": [
+    "fault_process_terminated_request",
+    "one_terminal_result",
+    "receiver_fencing_tokens_positive",
+    "receiver_operation_keys_observed",
+    "session_recovered",
+    "zero_repeated_external_effects"
+  ],
+  "expected_checks": [
+    "fault_process_terminated_request",
+    "session_recovered",
+    "one_terminal_result",
+    "zero_repeated_external_effects",
+    "receiver_operation_keys_observed",
+    "receiver_fencing_tokens_positive"
+  ],
+  "observations": {
+    "fault_point": "after_external_dispatch",
+    "fixture_stats": {
+      "agent_id": "summarizer",
+      "completed_operation_count": 0,
+      "duplicate_idempotency_key_requests": 0,
+      "effectful_executions_by_idempotency_key": {},
+      "effectful_executions_by_session_task": {},
+      "highest_fence_by_operation": {},
+      "repeated_session_task_effectful_executions": 0,
+      "requests_by_idempotency_key": {},
+      "requests_by_session_task": {},
+      "total_effectful_executions": 0,
+      "total_requests": 0
+    },
+    "image_ids": {
+      "coordination-a": "sha256:9bcd899cf2f7d752828ee0929e9f8bd89fd066e59654c53aab3ebeeec40621cb",
+      "coordination-b": "sha256:9bcd899cf2f7d752828ee0929e9f8bd89fd066e59654c53aab3ebeeec40621cb",
+      "coordination-c": "sha256:9bcd899cf2f7d752828ee0929e9f8bd89fd066e59654c53aab3ebeeec40621cb",
+      "coordination-fault": "sha256:9bcd899cf2f7d752828ee0929e9f8bd89fd066e59654c53aab3ebeeec40621cb",
+      "slow-agent": "sha256:9bcd899cf2f7d752828ee0929e9f8bd89fd066e59654c53aab3ebeeec40621cb",
+      "summarizer": "sha256:9bcd899cf2f7d752828ee0929e9f8bd89fd066e59654c53aab3ebeeec40621cb"
+    },
+    "initial_error": "fault coordinator unexpectedly returned HTTP 200",
+    "recovery_registry": {
+      "agents": [
+        {
+          "agent_id": "slow-agent",
+          "agent_kind": "remote_a2a",
+          "availability_scope": "remote",
+          "description": "Fixture agent for slow summarize.",
+          "input_modes": [
+            "text"
+          ],
+          "invocation_endpoint": "http://slow-agent:8000/",
+          "name": "slow-agent",
+          "output_modes": [
+            "data"
+          ],
+          "owner_node_id": "",
+          "required_security_schemes": [],
+          "security_schemes": {},
+          "service_endpoint": "http://slow-agent:8000",
+          "skills": [
+            {
+              "auxiliary_eligible": false,
+              "capability_id": "slow-summarize",
+              "constraints": [],
+              "depends_on_requirement_ids": [],
+              "description": "",
+              "expected_evidence": [],
+              "input_modes": [
+                "text"
+              ],
+              "input_schema": {},
+              "name": "slow summarize",
+              "output_modes": [
+                "data"
+              ],
+              "output_schema": {},
+              "required_trust_level": "standard",
+              "requirement_id": "slow-summarize",
+              "side_effect_class": "idempotent",
+              "validation_contract": {
+                "artifact_kinds": [],
+                "evidence_types": [],
+                "json_schema": {},
+                "required_artifacts": [],
+                "required_fields": [],
+                "validator_id": ""
+              }
+            }
+          ],
+          "source_card": {},
+          "status": "available",
+          "supports_fencing": true,
+          "trust_level": "standard",
+          "validation_contract": {
+            "artifact_kinds": [],
+            "evidence_types": [],
+            "json_schema": {},
+            "required_artifacts": [],
+            "required_fields": [],
+            "validator_id": ""
+          }
+        },
+        {
+          "agent_id": "summarizer",
+          "agent_kind": "remote_a2a",
+          "availability_scope": "remote",
+          "description": "Fixture agent for summarize.",
+          "input_modes": [
+            "text"
+          ],
+          "invocation_endpoint": "http://summarizer:8000/",
+          "name": "summarizer",
+          "output_modes": [
+            "data"
+          ],
+          "owner_node_id": "",
+          "required_security_schemes": [],
+          "security_schemes": {},
+          "service_endpoint": "http://summarizer:8000",
+          "skills": [
+            {
+              "auxiliary_eligible": false,
+              "capability_id": "summarize",
+              "constraints": [],
+              "depends_on_requirement_ids": [],
+              "description": "",
+              "expected_evidence": [],
+              "input_modes": [
+                "text"
+              ],
+              "input_schema": {},
+              "name": "summarize",
+              "output_modes": [
+                "data"
+              ],
+              "output_schema": {},
+              "required_trust_level": "standard",
+              "requirement_id": "summarize",
+              "side_effect_class": "idempotent",
+              "validation_contract": {
+                "artifact_kinds": [],
+                "evidence_types": [],
+                "json_schema": {},
+                "required_artifacts": [],
+                "required_fields": [],
+                "validator_id": ""
+              }
+            }
+          ],
+          "source_card": {},
+          "status": "available",
+          "supports_fencing": true,
+          "trust_level": "standard",
+          "validation_contract": {
+            "artifact_kinds": [],
+            "evidence_types": [],
+            "json_schema": {},
+            "required_artifacts": [],
+            "required_fields": [],
+            "validator_id": ""
+          }
+        }
+      ],
+      "http_status": 200
+    },
+    "resume": {
+      "body": {
+        "artifacts": [],
+        "explanation": "Plan rejected by deterministic feasibility checks.",
+        "plan_id": "plan-0734a60c093340308f1ca01fe7019fab",
+        "plan_result": {
+          "feasibility_report": {
+            "capability_resolution": [],
+            "constraint_violations": [],
+            "evidence": [
+              {
+                "details": {},
+                "name": "well_formed",
+                "passed": true
+              },
+              {
+                "details": {},
+                "name": "covered",
+                "passed": false
+              },
+              {
+                "details": {},
+                "name": "total_assignment",
+                "passed": false
+              },
+              {
+                "details": {},
+                "name": "authorized",
+                "passed": true
+              },
+              {
+                "details": {},
+                "name": "compatible",
+                "passed": true
+              },
+              {
+                "details": {},
+                "name": "acyclic",
+                "passed": true
+              },
+              {
+                "details": {},
+                "name": "ordered",
+                "passed": true
+              },
+              {
+                "details": {},
+                "name": "requirements_complete",
+                "passed": true
+              },
+              {
+                "details": {},
+                "name": "complete",
+                "passed": true
+              },
+              {
+                "details": {},
+                "name": "verifiable",
+                "passed": true
+              },
+              {
+                "details": {
+                  "violations": []
+                },
+                "name": "constraints_satisfied",
+                "passed": true
+              }
+            ],
+            "explanation": "Plan rejected by deterministic feasibility checks.",
+            "feasible": false,
+            "generated_nlp_agents": [],
+            "matched_agents": {},
+            "missing_capabilities": [
+              "summarize"
+            ],
+            "risks": [
+              "Task t1 has no accountable executor."
+            ],
+            "schema_violations": [],
+            "validation_gaps": []
+          },
+          "plan_generation": 1,
+          "plan_id": "plan-0734a60c093340308f1ca01fe7019fab",
+          "proposal": {
+            "completion_contract": {
+              "require_all_task_validators": true,
+              "required_artifacts": [
+                "summary"
+              ],
+              "required_task_states": [
+                "completed"
+              ]
+            },
+            "completion_criteria": [
+              "summary artifact exists"
+            ],
+            "constraint_evidence": {},
+            "execution_order": [
+              "t1"
+            ],
+            "expected_artifacts": [
+              "summary"
+            ],
+            "generated_nlp_agents": [],
+            "selected_agents": {},
+            "tasks": [
+              {
+                "assigned_to": null,
+                "auxiliary_spec_id": null,
+                "capability_id": "summarize",
+                "depends_on": [],
+                "description": "",
+                "expected_artifacts": [
+                  "summary"
+                ],
+                "requirement_id": "summarize",
+                "requirement_name": "summarize",
+                "task_id": "t1",
+                "validation_contract": {
+                  "artifact_kinds": [],
+                  "evidence_types": [],
+                  "json_schema": {},
+                  "required_artifacts": [
+                    "summary"
+                  ],
+                  "required_fields": [],
+                  "validator_id": ""
+                }
+              }
+            ]
+          },
+          "registry_revision": 77,
+          "registry_snapshot": [],
+          "registry_snapshot_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "request": {
+            "constraints": [],
+            "context": {},
+            "required_artifacts": [
+              "summary"
+            ],
+            "requirements": [
+              {
+                "auxiliary_eligible": false,
+                "capability_id": "summarize",
+                "constraints": [],
+                "depends_on_requirement_ids": [],
+                "description": "",
+                "expected_evidence": [],
+                "input_modes": [],
+                "input_schema": {},
+                "name": "summarize",
+                "output_modes": [],
+                "output_schema": {},
+                "required_trust_level": "standard",
+                "requirement_id": "summarize",
+                "side_effect_class": "read_only",
+                "validation_contract": {
+                  "artifact_kinds": [],
+                  "evidence_types": [],
+                  "json_schema": {},
+                  "required_artifacts": [
+                    "summary"
+                  ],
+                  "required_fields": [],
+                  "validator_id": ""
+                }
+              }
+            ],
+            "user_goal": "Summarize through consensus-backed coordination."
+          },
+          "session_id": "after_external_dispatch-2-ba710f4672bb42e2a2765b2acf713bc5"
+        },
+        "session_id": "after_external_dispatch-2-ba710f4672bb42e2a2765b2acf713bc5",
+        "status": "infeasible",
+        "task_results": [],
+        "trace": [
+          {
+            "attempt_id": "",
+            "data": {
+              "attempt_id": "",
+              "payload": {
+                "expires_at": "2026-07-15T17:38:56.349420+00:00",
+                "fencing_token": 75,
+                "holder_id": "coordination-fault"
+              },
+              "plan_id": "",
+              "session_id": "after_external_dispatch-2-ba710f4672bb42e2a2765b2acf713bc5",
+              "task_id": ""
+            },
+            "event_type": "lease_acquired",
+            "message": "Ledger event lease_acquired.",
+            "plan_id": "",
+            "session_id": "after_external_dispatch-2-ba710f4672bb42e2a2765b2acf713bc5",
+            "source": "store",
+            "task_id": "",
+            "timestamp": "2026-07-15T17:38:51.367034Z"
+          },
+          {
+            "attempt_id": "",
+            "data": {
+              "attempt_id": "",
+              "payload": {
+                "context": {},
+                "payload": {
+                  "text": "after_external_dispatch-2-ba710f4672bb42e2a2765b2acf713bc5"
+                },
+                "user_request": {
+                  "constraints": [],
+                  "context": {},
+                  "required_artifacts": [
+                    "summary"
+                  ],
+                  "requirements": [
+                    {
+                      "auxiliary_eligible": false,
+                      "capability_id": "summarize",
+                      "constraints": [],
+                      "depends_on_requirement_ids": [],
+                      "description": "",
+                      "expected_evidence": [],
+                      "input_modes": [],
+                      "input_schema": {},
+                      "name": "summarize",
+                      "output_modes": [],
+                      "output_schema": {},
+                      "required_trust_level": "standard",
+                      "requirement_id": "summarize",
+                      "side_effect_class": "read_only",
+                      "validation_contract": {
+                        "artifact_kinds": [],
+                        "evidence_types": [],
+                        "json_schema": {},
+                        "required_artifacts": [
+                          "summary"
+                        ],
+                        "required_fields": [],
+                        "validator_id": ""
+                      }
+                    }
+                  ],
+                  "user_goal": "Summarize through consensus-backed coordination."
+                }
+              },
+              "plan_id": "plan-0734a60c093340308f1ca01fe7019fab",
+              "session_id": "after_external_dispatch-2-ba710f4672bb42e2a2765b2acf713bc5",
+              "task_id": ""
+            },
+            "event_type": "session_started",
+            "message": "Ledger event session_started.",
+            "plan_id": "plan-0734a60c093340308f1ca01fe7019fab",
+            "session_id": "after_external_dispatch-2-ba710f4672bb42e2a2765b2acf713bc5",
+            "source": "store",
+            "task_id": "",
+            "timestamp": "2026-07-15T17:38:51.398131Z"
+          },
+          {
+            "attempt_id": "",
+            "data": {
+              "attempt_id": "",
+              "payload": {
+                "registry_snapshot": []
+              },
+              "plan_id": "plan-0734a60c093340308f1ca01fe7019fab",
+              "session_id": "after_external_dispatch-2-ba710f4672bb42e2a2765b2acf713bc5",
+              "task_id": ""
+            },
+            "event_type": "registry_snapshot_recorded",
+            "message": "Ledger event registry_snapshot_recorded.",
+            "plan_id": "plan-0734a60c093340308f1ca01fe7019fab",
+            "session_id": "after_external_dispatch-2-ba710f4672bb42e2a2765b2acf713bc5",
+            "source": "store",
+            "task_id": "",
+            "timestamp": "2026-07-15T17:38:51.454669Z"
+          },
+          {
+            "attempt_id": "",
+            "data": {
+              "attempt_id": "",
+              "payload": {
+                "plan_result": {
+                  "feasibility_report": {
+                    "capability_resolution": [],
+                    "constraint_violations": [],
+                    "evidence": [
+                      {
+                        "details": {},
+                        "name": "well_formed",
+                        "passed": true
+                      },
+                      {
+                        "details": {},
+                        "name": "covered",
+                        "passed": false
+                      },
+                      {
+                        "details": {},
+                        "name": "total_assignment",
+                        "passed": false
+                      },
+                      {
+                        "details": {},
+                        "name": "authorized",
+                        "passed": true
+                      },
+                      {
+                        "details": {},
+                        "name": "compatible",
+                        "passed": true
+                      },
+                      {
+                        "details": {},
+                        "name": "acyclic",
+                        "passed": true
+                      },
+                      {
+                        "details": {},
+                        "name": "ordered",
+                        "passed": true
+                      },
+                      {
+                        "details": {},
+                        "name": "requirements_complete",
+                        "passed": true
+                      },
+                      {
+                        "details": {},
+                        "name": "complete",
+                        "passed": true
+                      },
+                      {
+                        "details": {},
+                        "name": "verifiable",
+                        "passed": true
+                      },
+                      {
+                        "details": {
+                          "violations": []
+                        },
+                        "name": "constraints_satisfied",
+                        "passed": true
+                      }
+                    ],
+                    "explanation": "Plan rejected by deterministic feasibility checks.",
+                    "feasible": false,
+                    "generated_nlp_agents": [],
+                    "matched_agents": {},
+                    "missing_capabilities": [
+                      "summarize"
+                    ],
+                    "risks": [
+                      "Task t1 has no accountable executor."
+                    ],
+                    "schema_violations": [],
+                    "validation_gaps": []
+                  },
+                  "plan_generation": 1,
+                  "plan_id": "plan-0734a60c093340308f1ca01fe7019fab",
+                  "proposal": {
+                    "completion_contract": {
+                      "require_all_task_validators": true,
+                      "required_artifacts": [
+                        "summary"
+                      ],
+                      "required_task_states": [
+                        "completed"
+                      ]
+                    },
+                    "completion_criteria": [
+                      "summary artifact exists"
+                    ],
+                    "constraint_evidence": {},
+                    "execution_order": [
+                      "t1"
+                    ],
+                    "expected_artifacts": [
+                      "summary"
+                    ],
+                    "generated_nlp_agents": [],
+                    "selected_agents": {},
+                    "tasks": [
+                      {
+                        "assigned_to": null,
+                        "auxiliary_spec_id": null,
+                        "capability_id": "summarize",
+                        "depends_on": [],
+                        "description": "",
+                        "expected_artifacts": [
+                          "summary"
+                        ],
+                        "requirement_id": "summarize",
+                        "requirement_name": "summarize",
+                        "task_id": "t1",
+                        "validation_contract": {
+                          "artifact_kinds": [],
+                          "evidence_types": [],
+                          "json_schema": {},
+                          "required_artifacts": [
+                            "summary"
+                          ],
+                          "required_fields": [],
+                          "validator_id": ""
+                        }
+                      }
+                    ]
+                  },
+                  "registry_revision": 77,
+                  "registry_snapshot": [],
+                  "registry_snapshot_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+                  "request": {
+                    "constraints": [],
+                    "context": {},
+                    "required_artifacts": [
+                      "summary"
+                    ],
+                    "requirements": [
+                      {
+                        "auxiliary_eligible": false,
+                        "capability_id": "summarize",
+                        "constraints": [],
+                        "depends_on_requirement_ids": [],
+                        "description": "",
+                        "expected_evidence": [],
+                        "input_modes": [],
+                        "input_schema": {},
+                        "name": "summarize",
+                        "output_modes": [],
+                        "output_schema": {},
+                        "required_trust_level": "standard",
+                        "requirement_id": "summarize",
+                        "side_effect_class": "read_only",
+                        "validation_contract": {
+                          "artifact_kinds": [],
+                          "evidence_types": [],
+                          "json_schema": {},
+                          "required_artifacts": [
+                            "summary"
+                          ],
+                          "required_fields": [],
+                          "validator_id": ""
+                        }
+                      }
+                    ],
+                    "user_goal": "Summarize through consensus-backed coordination."
+                  },
+                  "session_id": "after_external_dispatch-2-ba710f4672bb42e2a2765b2acf713bc5"
+                },
+                "run_result": {
+                  "artifacts": [],
+                  "explanation": "Plan rejected by deterministic feasibility checks.",
+                  "plan_id": "plan-0734a60c093340308f1ca01fe7019fab",
+                  "plan_result": {
+                    "feasibility_report": {
+                      "capability_resolution": [],
+                      "constraint_violations": [],
+                      "evidence": [
+                        {
+                          "details": {},
+                          "name": "well_formed",
+                          "passed": true
+                        },
+                        {
+                          "details": {},
+                          "name": "covered",
+                          "passed": false
+                        },
+                        {
+                          "details": {},
+                          "name": "total_assignment",
+                          "passed": false
+                        },
+                        {
+                          "details": {},
+                          "name": "authorized",
+                          "passed": true
+                        },
+                        {
+                          "details": {},
+                          "name": "compatible",
+                          "passed": true
+                        },
+                        {
+                          "details": {},
+                          "name": "acyclic",
+                          "passed": true
+                        },
+                        {
+                          "details": {},
+                          "name": "ordered",
+                          "passed": true
+                        },
+                        {
+                          "details": {},
+                          "name": "requirements_complete",
+                          "passed": true
+                        },
+                        {
+                          "details": {},
+                          "name": "complete",
+                          "passed": true
+                        },
+                        {
+                          "details": {},
+                          "name": "verifiable",
+                          "passed": true
+                        },
+                        {
+                          "details": {
+                            "violations": []
+                          },
+                          "name": "constraints_satisfied",
+                          "passed": true
+                        }
+                      ],
+                      "explanation": "Plan rejected by deterministic feasibility checks.",
+                      "feasible": false,
+                      "generated_nlp_agents": [],
+                      "matched_agents": {},
+                      "missing_capabilities": [
+                        "summarize"
+                      ],
+                      "risks": [
+                        "Task t1 has no accountable executor."
+                      ],
+                      "schema_violations": [],
+                      "validation_gaps": []
+                    },
+                    "plan_generation": 1,
+                    "plan_id": "plan-0734a60c093340308f1ca01fe7019fab",
+                    "proposal": {
+                      "completion_contract": {
+                        "require_all_task_validators": true,
+                        "required_artifacts": [
+                          "summary"
+                        ],
+                        "required_task_states": [
+                          "completed"
+                        ]
+                      },
+                      "completion_criteria": [
+                        "summary artifact exists"
+                      ],
+                      "constraint_evidence": {},
+                      "execution_order": [
+                        "t1"
+                      ],
+                      "expected_artifacts": [
+                        "summary"
+                      ],
+                      "generated_nlp_agents": [],
+                      "selected_agents": {},
+                      "tasks": [
+                        {
+                          "assigned_to": null,
+                          "auxiliary_spec_id": null,
+                          "capability_id": "summarize",
+                          "depends_on": [],
+                          "description": "",
+                          "expected_artifacts": [
+                            "summary"
+                          ],
+                          "requirement_id": "summarize",
+                          "requirement_name": "summarize",
+                          "task_id": "t1",
+                          "validation_contract": {
+                            "artifact_kinds": [],
+                            "evidence_types": [],
+                            "json_schema": {},
+                            "required_artifacts": [
+                              "summary"
+                            ],
+                            "required_fields": [],
+                            "validator_id": ""
+                          }
+                        }
+                      ]
+                    },
+                    "registry_revision": 77,
+                    "registry_snapshot": [],
+                    "registry_snapshot_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+                    "request": {
+                      "constraints": [],
+                      "context": {},
+                      "required_artifacts": [
+                        "summary"
+                      ],
+                      "requirements": [
+                        {
+                          "auxiliary_eligible": false,
+                          "capability_id": "summarize",
+                          "constraints": [],
+                          "depends_on_requirement_ids": [],
+                          "description": "",
+                          "expected_evidence": [],
+                          "input_modes": [],
+                          "input_schema": {},
+                          "name": "summarize",
+                          "output_modes": [],
+                          "output_schema": {},
+                          "required_trust_level": "standard",
+                          "requirement_id": "summarize",
+                          "side_effect_class": "read_only",
+                          "validation_contract": {
+                            "artifact_kinds": [],
+                            "evidence_types": [],
+                            "json_schema": {},
+                            "required_artifacts": [
+                              "summary"
+                            ],
+                            "required_fields": [],
+                            "validator_id": ""
+                          }
+                        }
+                      ],
+                      "user_goal": "Summarize through consensus-backed coordination."
+                    },
+                    "session_id": "after_external_dispatch-2-ba710f4672bb42e2a2765b2acf713bc5"
+                  },
+                  "session_id": "after_external_dispatch-2-ba710f4672bb42e2a2765b2acf713bc5",
+                  "status": "infeasible",
+                  "task_results": [],
+                  "trace": []
+                }
+              },
+              "plan_id": "plan-0734a60c093340308f1ca01fe7019fab",
+              "session_id": "after_external_dispatch-2-ba710f4672bb42e2a2765b2acf713bc5",
+              "task_id": ""
+            },
+            "event_type": "plan_infeasible",
+            "message": "Ledger event plan_infeasible.",
+            "plan_id": "plan-0734a60c093340308f1ca01fe7019fab",
+            "session_id": "after_external_dispatch-2-ba710f4672bb42e2a2765b2acf713bc5",
+            "source": "store",
+            "task_id": "",
+            "timestamp": "2026-07-15T17:38:51.477366Z"
+          },
+          {
+            "attempt_id": "",
+            "data": {
+              "attempt_id": "",
+              "payload": {
+                "fencing_token": 75,
+                "holder_id": "coordination-fault"
+              },
+              "plan_id": "",
+              "session_id": "after_external_dispatch-2-ba710f4672bb42e2a2765b2acf713bc5",
+              "task_id": ""
+            },
+            "event_type": "lease_released",
+            "message": "Ledger event lease_released.",
+            "plan_id": "",
+            "session_id": "after_external_dispatch-2-ba710f4672bb42e2a2765b2acf713bc5",
+            "source": "store",
+            "task_id": "",
+            "timestamp": "2026-07-15T17:38:51.549562Z"
+          },
+          {
+            "attempt_id": "",
+            "data": {
+              "attempt_id": "",
+              "payload": {
+                "expires_at": "2026-07-15T17:39:04.821878+00:00",
+                "fencing_token": 115,
+                "holder_id": "coordination-a"
+              },
+              "plan_id": "",
+              "session_id": "after_external_dispatch-2-ba710f4672bb42e2a2765b2acf713bc5",
+              "task_id": ""
+            },
+            "event_type": "lease_acquired",
+            "message": "Ledger event lease_acquired.",
+            "plan_id": "",
+            "session_id": "after_external_dispatch-2-ba710f4672bb42e2a2765b2acf713bc5",
+            "source": "store",
+            "task_id": "",
+            "timestamp": "2026-07-15T17:38:59.864668Z"
+          }
+        ]
+      },
+      "status_code": 200
+    }
+  },
+  "passed": false,
+  "primary": true,
+  "scenario": "crash-after_external_dispatch",
+  "status": "invariant_failed",
+  "topology": 3,
+  "trial": 2,
+  "unexecuted_checks": [],
+  "violated_checks": [
+    "one_terminal_result",
+    "receiver_fencing_tokens_positive",
+    "receiver_operation_keys_observed",
+    "session_recovered"
+  ]
+}
