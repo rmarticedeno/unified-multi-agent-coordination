@@ -1,0 +1,240 @@
+{
+  "checks": {
+    "quorum_loss_503": true,
+    "quorum_loss_detected_within_10s": true,
+    "quorum_restored": true
+  },
+  "duration_s": 30.928596400015522,
+  "error": "",
+  "executed_checks": [
+    "quorum_loss_503",
+    "quorum_loss_detected_within_10s",
+    "quorum_restored"
+  ],
+  "expected_checks": [
+    "quorum_loss_503",
+    "quorum_loss_detected_within_10s",
+    "quorum_restored"
+  ],
+  "observations": {
+    "image_ids": {
+      "coordination-a": "sha256:aa44c1d8e86471a1183dc80249d90b324d6ae835357bc58a4b53d8b31c447b98",
+      "coordination-b": "sha256:aa44c1d8e86471a1183dc80249d90b324d6ae835357bc58a4b53d8b31c447b98",
+      "coordination-c": "sha256:aa44c1d8e86471a1183dc80249d90b324d6ae835357bc58a4b53d8b31c447b98",
+      "slow-agent": "sha256:aa44c1d8e86471a1183dc80249d90b324d6ae835357bc58a4b53d8b31c447b98",
+      "summarizer": "sha256:aa44c1d8e86471a1183dc80249d90b324d6ae835357bc58a4b53d8b31c447b98"
+    },
+    "initial": {
+      "coordination-a": {
+        "active_voters": 3,
+        "authoritative_voters": 3,
+        "cluster_id": "thesis-coordination",
+        "configuration_generation": 0,
+        "configured_voter_target": 3,
+        "coordinator_nodes": 3,
+        "coordinator_only_nodes": 0,
+        "degraded": false,
+        "degraded_reason": "",
+        "discovery_method": "none",
+        "http_status": 200,
+        "leader": 18292091069950412911,
+        "learners": 0,
+        "live_voters": 3,
+        "member_id": 18292091069950412911,
+        "node_id": "coordination-a",
+        "pending_membership_changes": 0,
+        "pending_membership_operation": null,
+        "quorum": 2,
+        "quorum_available": true,
+        "revision": 68,
+        "role": "voter",
+        "role_agreement": {
+          "coordination-a": true,
+          "coordination-b": true,
+          "coordination-c": true
+        },
+        "state": "ready",
+        "steady_state": true
+      },
+      "coordination-b": {
+        "active_voters": 3,
+        "authoritative_voters": 3,
+        "cluster_id": "thesis-coordination",
+        "configuration_generation": 0,
+        "configured_voter_target": 3,
+        "coordinator_nodes": 3,
+        "coordinator_only_nodes": 0,
+        "degraded": false,
+        "degraded_reason": "",
+        "discovery_method": "multicast",
+        "http_status": 200,
+        "leader": 18292091069950412911,
+        "learners": 0,
+        "live_voters": 3,
+        "member_id": 7691967960392106522,
+        "node_id": "coordination-b",
+        "pending_membership_changes": 0,
+        "pending_membership_operation": null,
+        "quorum": 2,
+        "quorum_available": true,
+        "revision": 68,
+        "role": "voter",
+        "role_agreement": {
+          "coordination-a": true,
+          "coordination-b": true,
+          "coordination-c": true
+        },
+        "state": "ready",
+        "steady_state": true
+      },
+      "coordination-c": {
+        "active_voters": 3,
+        "authoritative_voters": 3,
+        "cluster_id": "thesis-coordination",
+        "configuration_generation": 0,
+        "configured_voter_target": 3,
+        "coordinator_nodes": 3,
+        "coordinator_only_nodes": 0,
+        "degraded": false,
+        "degraded_reason": "",
+        "discovery_method": "multicast",
+        "http_status": 200,
+        "leader": 18292091069950412911,
+        "learners": 0,
+        "live_voters": 3,
+        "member_id": 1492201971372631235,
+        "node_id": "coordination-c",
+        "pending_membership_changes": 0,
+        "pending_membership_operation": null,
+        "quorum": 2,
+        "quorum_available": true,
+        "revision": 68,
+        "role": "voter",
+        "role_agreement": {
+          "coordination-a": true,
+          "coordination-b": true,
+          "coordination-c": true
+        },
+        "state": "ready",
+        "steady_state": true
+      }
+    },
+    "leader": "coordination-a",
+    "quorum_detection_s": 8.262720700004138,
+    "quorum_response": {
+      "body": {
+        "code": "quorum_unavailable",
+        "message": "Authoritative readiness probe exceeded 8s.",
+        "retryable": true
+      },
+      "status_code": 503
+    },
+    "restored": {
+      "coordination-a": {
+        "active_voters": 3,
+        "authoritative_voters": 3,
+        "cluster_id": "thesis-coordination",
+        "configuration_generation": 0,
+        "configured_voter_target": 3,
+        "coordinator_nodes": 3,
+        "coordinator_only_nodes": 0,
+        "degraded": false,
+        "degraded_reason": "",
+        "discovery_method": "none",
+        "http_status": 200,
+        "leader": 7691967960392106522,
+        "learners": 0,
+        "live_voters": 3,
+        "member_id": 18292091069950412911,
+        "node_id": "coordination-a",
+        "pending_membership_changes": 0,
+        "pending_membership_operation": null,
+        "quorum": 2,
+        "quorum_available": true,
+        "revision": 80,
+        "role": "voter",
+        "role_agreement": {
+          "coordination-a": true,
+          "coordination-b": true,
+          "coordination-c": true
+        },
+        "state": "ready",
+        "steady_state": true
+      },
+      "coordination-b": {
+        "active_voters": 3,
+        "authoritative_voters": 3,
+        "cluster_id": "thesis-coordination",
+        "configuration_generation": 0,
+        "configured_voter_target": 3,
+        "coordinator_nodes": 3,
+        "coordinator_only_nodes": 0,
+        "degraded": false,
+        "degraded_reason": "",
+        "discovery_method": "persisted",
+        "http_status": 200,
+        "leader": 7691967960392106522,
+        "learners": 0,
+        "live_voters": 3,
+        "member_id": 7691967960392106522,
+        "node_id": "coordination-b",
+        "pending_membership_changes": 0,
+        "pending_membership_operation": null,
+        "quorum": 2,
+        "quorum_available": true,
+        "revision": 80,
+        "role": "voter",
+        "role_agreement": {
+          "coordination-a": true,
+          "coordination-b": true,
+          "coordination-c": true
+        },
+        "state": "ready",
+        "steady_state": true
+      },
+      "coordination-c": {
+        "active_voters": 3,
+        "authoritative_voters": 3,
+        "cluster_id": "thesis-coordination",
+        "configuration_generation": 0,
+        "configured_voter_target": 3,
+        "coordinator_nodes": 3,
+        "coordinator_only_nodes": 0,
+        "degraded": false,
+        "degraded_reason": "",
+        "discovery_method": "persisted",
+        "http_status": 200,
+        "leader": 7691967960392106522,
+        "learners": 0,
+        "live_voters": 3,
+        "member_id": 1492201971372631235,
+        "node_id": "coordination-c",
+        "pending_membership_changes": 0,
+        "pending_membership_operation": null,
+        "quorum": 2,
+        "quorum_available": true,
+        "revision": 80,
+        "role": "voter",
+        "role_agreement": {
+          "coordination-a": true,
+          "coordination-b": true,
+          "coordination-c": true
+        },
+        "state": "ready",
+        "steady_state": true
+      }
+    },
+    "stopped": [
+      "coordination-b",
+      "coordination-c"
+    ]
+  },
+  "passed": true,
+  "primary": true,
+  "scenario": "majority-loss-restoration",
+  "status": "passed",
+  "topology": 3,
+  "trial": 1,
+  "unexecuted_checks": [],
+  "violated_checks": []
+}

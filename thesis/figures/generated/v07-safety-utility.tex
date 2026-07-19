@@ -1,0 +1,19 @@
+\begin{tikzpicture}[x=8.0cm,y=5.2cm]
+\draw[->] (0,0) -- (1.02,0) node[right]{\scriptsize feasible recall};
+\draw[->] (0,0) -- (0,1.02) node[above]{\scriptsize unsafe-acceptance rate};
+\foreach \x in {0,0.25,0.5,0.75,1} {\draw[black!25] (\x,0)--(\x,1);\node[below] at (\x,0){\tiny \x};}
+\foreach \y in {0,0.25,0.5,0.75,1} {\draw[black!25] (0,\y)--(1,\y);\node[left] at (0,\y){\tiny \y};}
+\node[draw,fill=black,circle,minimum size=5pt,inner sep=1pt] at (0.0000,0.0000) {};
+\node[draw,fill=white,circle,minimum size=5pt,inner sep=1pt] at (1.0000,0.4062) {};
+\node[draw,fill=black,rectangle,minimum size=5pt,inner sep=1pt] at (0.5625,0.0000) {};
+\node[draw,fill=white,rectangle,minimum size=5pt,inner sep=1pt] at (1.0000,0.4844) {};
+\node[draw,fill=black,diamond,minimum size=5pt,inner sep=1pt] at (0.7812,0.0156) {};
+\node[draw,fill=white,diamond,minimum size=5pt,inner sep=1pt] at (0.9688,0.5000) {};
+\node[draw,fill=black,circle,minimum size=5pt,inner sep=1pt] at (1.06,0.98) {};
+\node[anchor=west] at (1.09,0.98){\scriptsize hybrid};
+\node[draw,fill=white,circle,minimum size=5pt,inner sep=1pt] at (1.06,0.94) {};
+\node[anchor=west] at (1.09,0.94){\scriptsize direct};
+\node[anchor=west] at (1.04,0.90) {\scriptsize Gemma E2B};
+\node[anchor=west] at (1.04,0.81) {\scriptsize Qwen 1.7B};
+\node[anchor=west] at (1.04,0.72) {\scriptsize Qwen 8B};
+\end{tikzpicture}

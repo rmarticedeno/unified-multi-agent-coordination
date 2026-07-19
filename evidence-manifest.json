@@ -1,10 +1,10 @@
 {
-  "schema_version": "0.6.0",
+  "schema_version": "0.7.0",
   "release_status": "technical-ready-administrative-blocked",
-  "technical_status": "evidence-complete-negative-outcomes",
-  "evaluated_source_commit": "3f8093af1ecc7c49312ac34856bba825bd81f381",
-  "packaging_commit": "63668b5d6232278894c769257fdbe3471d854bdd",
-  "dirty_state": false,
+  "technical_status": "evidence-complete-negative-v07-gates",
+  "evaluated_source_commit": "9224f4d29337a88f14e066879c9e3781406c98a4",
+  "packaging_commit": "UNFROZEN",
+  "dirty_state": true,
   "accepted_evidence": [
     "e/v5/provenance.json",
     "e/v5/collection-complete.json",
@@ -13,7 +13,9 @@
     "demo_runs/consensus/20260715T022727Z-3f8093a-v2/campaign.json",
     "demo_runs/deterministic/20260715T0255Z-3f8093a/deterministic.json",
     "demo_runs/system/20260715T0212Z-7a31b42/docker-system-report.json",
-    "demo_runs/postgres/20260715T0225Z-3f8093a-passed/distributed-system-report.json"
+    "demo_runs/postgres/20260715T0225Z-3f8093a-passed/distributed-system-report.json",
+    "e/v7/evidence-manifest.json",
+    "demo_runs/v0.7/20260718T205322Z-con-cf292a9c99/analysis-confirmatory-v0.7.0.json"
   ],
   "artifact_inventory": {
     "path": "e/artifact-manifest.json",
@@ -77,7 +79,10 @@
       "direct_repaired_accuracy": 0.5208333333333334,
       "direct_false_acceptance": 345,
       "paired_accuracy_difference_hybrid_minus_direct": -0.01388888888888895,
-      "matched_pair_clustered_bootstrap_95_ci": [-0.034722222222222224, 0.0],
+      "matched_pair_clustered_bootstrap_95_ci": [
+        -0.034722222222222224,
+        0.0
+      ],
       "all_planning_criteria_met": false
     }
   },
@@ -152,13 +157,13 @@
     "demo_runs/etcd-distributed-system-report.json"
   ],
   "current_local_validation": {
-    "test_count": 213,
-    "production_branch_coverage_percent": 90.16,
-    "tests": "213 passing on Windows",
-    "coverage": "90.16 percent production branch coverage; every declared production aggregate and critical-module threshold passes",
+    "test_count": 273,
+    "production_branch_coverage_percent": 90.29,
+    "tests": "273 passing on Windows",
+    "coverage": "90.29 percent branch-aware production coverage; all module gates pass",
     "deterministic": "clean 7/7 from commit 3f8093af1ecc7c49312ac34856bba825bd81f381",
     "third_party_a2a": "upstream-derived fixture pinned to a2a-samples commit 1bb0871294af52fdb2c7e5173e43fade0eb008ba",
-    "consensus_full": "clean complete 33-trial campaign; evidence valid, outcome failed, claim unsupported"
+    "consensus_full": "consensus-v4 45-trial campaign; evidence_valid=false, outcome=failed"
   },
   "legacy_evidence": [
     "demo_runs/end_to_end_scenarios.json",
@@ -170,10 +175,78 @@
   ],
   "reported_negative_outcomes": [
     "RQ4 comparative advantage is unsupported by v0.5",
-    "RQ5 consensus claim is unsupported by the clean complete campaign"
+    "RQ5 consensus claim is unsupported by the clean complete campaign",
+    "v0.7 gate failed: fail_closed",
+    "v0.7 gate failed: lexical_superiority",
+    "v0.7 gate failed: recall_noninferiority",
+    "v0.7 gate failed: useful_coordination"
   ],
   "open_gates": [
     "administrative: advisor metadata",
     "administrative: tribunal metadata"
-  ]
+  ],
+  "v07_study_evidence": {
+    "run_root": "demo_runs/v0.7/20260718T205322Z-con-cf292a9c99",
+    "analysis_file": "analysis-confirmatory-v0.7.0.json",
+    "analysis_sha256": "81104616b23ae0b3dc96ec5a5844cd247d78b33d02444eafba8938b8c74e94fe",
+    "artifact_manifest": "e/v7/evidence-manifest.json",
+    "artifact_manifest_sha256": "481619782a79af284a7de73f426626d89675c6cf4c86b68db93289869df80203",
+    "protocol_lock_sha256": "922d2013ff0d5b874c6ace9b998f340f27b7ffd1ef692d448dd39d12146c03b3",
+    "protocol_hash": "cecd9fc0ca08f56cc35193d06bec134de9e280ca28efa812cbbbc7896f2ddc81",
+    "corpus_hash": "f7ae3ba90a88ddd41af46c8c062da8c46864563ef792574b650aa6a755e6215a",
+    "evaluated_source_commit": "9224f4d29337a88f14e066879c9e3781406c98a4",
+    "dirty_state": true,
+    "evidence_valid": true,
+    "case_outputs": 768,
+    "models": [
+      "qwen/qwen3-1.7b",
+      "google/gemma-4-e2b",
+      "qwen/qwen3-8b"
+    ],
+    "primary_seed": 11,
+    "replication_seed": 29,
+    "predeclared_criteria": {
+      "fail_closed": false,
+      "lexical_superiority": false,
+      "recall_noninferiority": false,
+      "safety_superiority": true,
+      "symbolic_invariants": true,
+      "useful_coordination": false
+    },
+    "failed_criteria": [
+      "fail_closed",
+      "lexical_superiority",
+      "recall_noninferiority",
+      "useful_coordination"
+    ],
+    "all_criteria_met": false,
+    "author_only_labels": true,
+    "known_metadata_inconsistencies": [
+      {
+        "authoritative_protocol_lock": "production-semantic-v1-direct-v07-v1",
+        "field": "immutable_provenance.prompt_version",
+        "impact": "label-only provenance defect; protocol hash, source hashes, schemas, and raw prompts remain preserved",
+        "recorded": "defense-v0.3.0"
+      }
+    ]
+  },
+  "consensus_campaign_v4_evidence": {
+    "campaign_file": "demo_runs/consensus/20260718T233245Z-v4/campaign.json",
+    "sha256": "55ab8af4a53705ebcfdc63ce383660f22f2b1b642a9eecf2f355bcc543c3a493",
+    "schema_version": "consensus-campaign-v4",
+    "source_commit": "9224f4d29337a88f14e066879c9e3781406c98a4",
+    "dirty_state": true,
+    "evidence_valid": false,
+    "accepted": false,
+    "outcome": "failed",
+    "claim_status": "partially_supported",
+    "trial_count": 45,
+    "passed_trials": 40,
+    "invariant_failed_trials": 0,
+    "infrastructure_failed_trials": 2,
+    "safety_checks_expected": 177,
+    "safety_checks_executed": 167,
+    "safety_violations": 0,
+    "unexecuted_checks": 10
+  }
 }

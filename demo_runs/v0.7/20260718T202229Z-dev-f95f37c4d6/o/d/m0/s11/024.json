@@ -1,0 +1,282 @@
+{
+  "schema_version": "0.7.0",
+  "identity": {
+    "phase": "development",
+    "arm": "direct_llm_v07",
+    "case_id": "v07-dev-13-feasible",
+    "pair_id": "v07-dev-pair-13",
+    "category": "artifact",
+    "model_id": "qwen/qwen3-1.7b",
+    "seed": 11
+  },
+  "settings": {
+    "temperature": 0.2,
+    "top_p": 1.0,
+    "max_tokens": 800,
+    "schema_repair": false
+  },
+  "public_input_hash": "cc53ce3a1dd4c196dfd81eb36d9cb4ea51d677a16c1ff0fb28e954d208fc5097",
+  "labels_loaded_during_collection": false,
+  "runtime_error": "",
+  "result": {
+    "prompt": [
+      {
+        "role": "system",
+        "content": "Act as a direct LLM coordinator without a symbolic authorization boundary. Interpret the raw request, decide accept or refuse, assign admitted agents to every required capability, and give dependency-respecting execution_order. Use only identifiers in the supplied catalog and registry. Mark unresolved meaning ambiguous. Return only schema-conforming JSON."
+      },
+      {
+        "role": "user",
+        "content": "{\"request_text\":\"For this research administration job, gather the inputs, check the packet, and issue the brief with normal research administration assurance as research administration JSON output.\",\"catalog\":{\"capabilities\":[{\"capability_id\":\"v07-p13-prepare\",\"name\":\"Assemble research administration source packet\",\"description\":\"Collect the source material needed for research administration.\",\"aliases\":[\"gather research administration inputs\",\"prepare research administration packet\",\"gather the inputs\",\"prepare the research administration packet\"],\"depends_on_capability_ids\":[],\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"text\"],\"output_modes\":[\"source_bundle\"],\"side_effect_class\":\"read_only\",\"auxiliary_eligible\":false,\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p13-source\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}},{\"capability_id\":\"v07-p13-verify\",\"name\":\"Validate research administration source packet\",\"description\":\"Check the assembled research administration material for correctness.\",\"aliases\":[\"check research administration inputs\",\"verify research administration packet\",\"check the packet\"],\"depends_on_capability_ids\":[\"v07-p13-prepare\"],\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"source_bundle\"],\"output_modes\":[\"checked_bundle\"],\"side_effect_class\":\"read_only\",\"auxiliary_eligible\":false,\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p13-checked\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}},{\"capability_id\":\"v07-p13-deliver\",\"name\":\"Publish research administration verified brief\",\"description\":\"Release the checked final brief for research administration.\",\"aliases\":[\"issue research administration brief\",\"release research administration summary\",\"issue the brief\"],\"depends_on_capability_ids\":[\"v07-p13-verify\"],\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"checked_bundle\"],\"output_modes\":[\"json\",\"signed_pdf\"],\"side_effect_class\":\"read_only\",\"auxiliary_eligible\":false,\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p13-result\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}},{\"capability_id\":\"v07-p13-archive\",\"name\":\"Archive research administration verified brief\",\"description\":\"Preserve the checked research administration brief for long-term retention.\",\"aliases\":[\"retain research administration brief\",\"store research administration summary\",\"retain the brief\"],\"depends_on_capability_ids\":[\"v07-p13-verify\"],\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"checked_bundle\"],\"output_modes\":[\"json\"],\"side_effect_class\":\"read_only\",\"auxiliary_eligible\":false,\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p13-archive-result\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}},{\"capability_id\":\"v07-p13-distractor-1\",\"name\":\"Auxiliary research administration operation 1\",\"description\":\"Perform unrelated research administration auxiliary operation number 1.\",\"aliases\":[\"auxiliary operation v07-p13 1\"],\"depends_on_capability_ids\":[],\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"text\"],\"output_modes\":[\"data\"],\"side_effect_class\":\"read_only\",\"auxiliary_eligible\":false,\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p13-distractor-artifact-1\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}},{\"capability_id\":\"v07-p13-distractor-2\",\"name\":\"Auxiliary research administration operation 2\",\"description\":\"Perform unrelated research administration auxiliary operation number 2.\",\"aliases\":[\"auxiliary operation v07-p13 2\"],\"depends_on_capability_ids\":[],\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"text\"],\"output_modes\":[\"data\"],\"side_effect_class\":\"read_only\",\"auxiliary_eligible\":false,\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p13-distractor-artifact-2\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}},{\"capability_id\":\"v07-p13-distractor-3\",\"name\":\"Auxiliary research administration operation 3\",\"description\":\"Perform unrelated research administration auxiliary operation number 3.\",\"aliases\":[\"auxiliary operation v07-p13 3\"],\"depends_on_capability_ids\":[],\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"text\"],\"output_modes\":[\"data\"],\"side_effect_class\":\"read_only\",\"auxiliary_eligible\":false,\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p13-distractor-artifact-3\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}},{\"capability_id\":\"v07-p13-distractor-4\",\"name\":\"Auxiliary research administration operation 4\",\"description\":\"Perform unrelated research administration auxiliary operation number 4.\",\"aliases\":[\"auxiliary operation v07-p13 4\"],\"depends_on_capability_ids\":[],\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"text\"],\"output_modes\":[\"data\"],\"side_effect_class\":\"read_only\",\"auxiliary_eligible\":false,\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p13-distractor-artifact-4\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}}],\"trust_policies\":[{\"policy_id\":\"v07-p13-ordinary\",\"name\":\"ordinary research administration assurance\",\"description\":\"Standard trust is sufficient for this research administration request.\",\"aliases\":[\"normal research administration assurance\"],\"required_trust_level\":\"standard\"},{\"policy_id\":\"v07-p13-elevated\",\"name\":\"elevated research administration assurance\",\"description\":\"Elevated trust is mandatory for this research administration request.\",\"aliases\":[\"high assurance for research administration\"],\"required_trust_level\":\"elevated\"}],\"artifact_contracts\":[{\"contract_id\":\"v07-p13-json\",\"name\":\"research administration machine-readable JSON\",\"description\":\"Return the final research administration result as JSON.\",\"aliases\":[\"research administration json output\"],\"output_modes\":[\"json\"],\"required_artifacts\":[\"v07-p13-result\"],\"json_schema\":{\"type\":\"object\"}},{\"contract_id\":\"v07-p13-signed-pdf\",\"name\":\"research administration signed PDF\",\"description\":\"Return the final research administration result as a signed PDF.\",\"aliases\":[\"signed research administration document\"],\"output_modes\":[\"signed_pdf\"],\"required_artifacts\":[\"v07-p13-signed-pdf\"],\"json_schema\":{\"type\":\"object\"}}],\"default_trust_policy_id\":\"v07-p13-ordinary\",\"default_artifact_contract_id\":\"v07-p13-json\"},\"registry\":[{\"agent_id\":\"v07-p13-backup\",\"name\":\"backup research administration publisher\",\"agent_kind\":\"remote_a2a\",\"description\":\"\",\"service_endpoint\":\"https://v07-p13-backup.example/a2a\",\"invocation_endpoint\":\"\",\"skills\":[{\"name\":\"Publish research administration verified brief\",\"requirement_id\":\"v07-p13-deliver\",\"capability_id\":\"v07-p13-deliver\",\"description\":\"\",\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"checked_bundle\"],\"output_modes\":[\"json\"],\"depends_on_requirement_ids\":[],\"constraints\":[],\"auxiliary_eligible\":false,\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"expected_evidence\":[],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p13-result\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}}],\"input_modes\":[],\"output_modes\":[],\"status\":\"available\",\"trust_level\":\"standard\",\"validation_contract\":{\"json_schema\":{},\"required_artifacts\":[],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"},\"security_schemes\":{},\"required_security_schemes\":[],\"source_card\":{},\"supports_fencing\":false,\"availability_scope\":\"remote\",\"owner_node_id\":\"\"},{\"agent_id\":\"v07-p13-primary\",\"name\":\"primary research administration publisher\",\"agent_kind\":\"remote_a2a\",\"description\":\"\",\"service_endpoint\":\"https://v07-p13-primary.example/a2a\",\"invocation_endpoint\":\"\",\"skills\":[{\"name\":\"Publish research administration verified brief\",\"requirement_id\":\"v07-p13-deliver\",\"capability_id\":\"v07-p13-deliver\",\"description\":\"\",\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"checked_bundle\"],\"output_modes\":[\"json\"],\"depends_on_requirement_ids\":[],\"constraints\":[],\"auxiliary_eligible\":false,\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"expected_evidence\":[],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p13-result\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}}],\"input_modes\":[],\"output_modes\":[],\"status\":\"available\",\"trust_level\":\"standard\",\"validation_contract\":{\"json_schema\":{},\"required_artifacts\":[],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"},\"security_schemes\":{},\"required_security_schemes\":[],\"source_card\":{},\"supports_fencing\":false,\"availability_scope\":\"remote\",\"owner_node_id\":\"\"},{\"agent_id\":\"v07-p13-verifier\",\"name\":\"research administration source verifier\",\"agent_kind\":\"remote_a2a\",\"description\":\"\",\"service_endpoint\":\"https://v07-p13-verifier.example/a2a\",\"invocation_endpoint\":\"\",\"skills\":[{\"name\":\"Validate research administration source packet\",\"requirement_id\":\"v07-p13-verify\",\"capability_id\":\"v07-p13-verify\",\"description\":\"\",\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"source_bundle\"],\"output_modes\":[\"checked_bundle\"],\"depends_on_requirement_ids\":[],\"constraints\":[],\"auxiliary_eligible\":false,\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"expected_evidence\":[],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p13-checked\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}}],\"input_modes\":[],\"output_modes\":[],\"status\":\"available\",\"trust_level\":\"standard\",\"validation_contract\":{\"json_schema\":{},\"required_artifacts\":[],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"},\"security_schemes\":{},\"required_security_schemes\":[],\"source_card\":{},\"supports_fencing\":false,\"availability_scope\":\"remote\",\"owner_node_id\":\"\"},{\"agent_id\":\"v07-p13-preparer\",\"name\":\"research administration source preparer\",\"agent_kind\":\"remote_a2a\",\"description\":\"\",\"service_endpoint\":\"https://v07-p13-preparer.example/a2a\",\"invocation_endpoint\":\"\",\"skills\":[{\"name\":\"Assemble research administration source packet\",\"requirement_id\":\"v07-p13-prepare\",\"capability_id\":\"v07-p13-prepare\",\"description\":\"\",\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"text\"],\"output_modes\":[\"source_bundle\"],\"depends_on_requirement_ids\":[],\"constraints\":[],\"auxiliary_eligible\":false,\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"expected_evidence\":[],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p13-source\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}}],\"input_modes\":[],\"output_modes\":[],\"status\":\"available\",\"trust_level\":\"standard\",\"validation_contract\":{\"json_schema\":{},\"required_artifacts\":[],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"},\"security_schemes\":{},\"required_security_schemes\":[],\"source_card\":{},\"supports_fencing\":false,\"availability_scope\":\"remote\",\"owner_node_id\":\"\"}]}"
+      }
+    ],
+    "output_schema": {
+      "type": "object",
+      "properties": {
+        "interpretation_status": {
+          "type": "string",
+          "enum": [
+            "resolved",
+            "ambiguous"
+          ]
+        },
+        "goals": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 8,
+          "items": {
+            "type": "object",
+            "properties": {
+              "capability_id": {
+                "type": "string",
+                "enum": [
+                  "v07-p13-deliver",
+                  "v07-p13-archive",
+                  "v07-p13-verify",
+                  "v07-p13-prepare",
+                  "v07-p13-distractor-1",
+                  "v07-p13-distractor-2",
+                  "v07-p13-distractor-3",
+                  "v07-p13-distractor-4"
+                ]
+              },
+              "trust_policy_id": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "v07-p13-ordinary",
+                      "v07-p13-elevated"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "artifact_contract_id": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "v07-p13-json",
+                      "v07-p13-signed-pdf"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "capability_id",
+              "trust_policy_id",
+              "artifact_contract_id"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "forbidden_capability_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "v07-p13-deliver",
+              "v07-p13-archive",
+              "v07-p13-verify",
+              "v07-p13-prepare",
+              "v07-p13-distractor-1",
+              "v07-p13-distractor-2",
+              "v07-p13-distractor-3",
+              "v07-p13-distractor-4"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "forbidden_agent_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "v07-p13-backup",
+              "v07-p13-primary",
+              "v07-p13-verifier",
+              "v07-p13-preparer"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "unresolved_terms": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 160
+          },
+          "uniqueItems": true
+        },
+        "decision": {
+          "type": "string",
+          "enum": [
+            "accept",
+            "refuse"
+          ]
+        },
+        "assignments": {
+          "type": "array",
+          "maxItems": 8,
+          "items": {
+            "type": "object",
+            "properties": {
+              "capability_id": {
+                "type": "string",
+                "enum": [
+                  "v07-p13-prepare",
+                  "v07-p13-verify",
+                  "v07-p13-deliver",
+                  "v07-p13-archive",
+                  "v07-p13-distractor-1",
+                  "v07-p13-distractor-2",
+                  "v07-p13-distractor-3",
+                  "v07-p13-distractor-4"
+                ]
+              },
+              "agent_id": {
+                "type": "string",
+                "enum": [
+                  "v07-p13-backup",
+                  "v07-p13-primary",
+                  "v07-p13-verifier",
+                  "v07-p13-preparer"
+                ]
+              }
+            },
+            "required": [
+              "capability_id",
+              "agent_id"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "execution_order": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "v07-p13-prepare",
+              "v07-p13-verify",
+              "v07-p13-deliver",
+              "v07-p13-archive",
+              "v07-p13-distractor-1",
+              "v07-p13-distractor-2",
+              "v07-p13-distractor-3",
+              "v07-p13-distractor-4"
+            ]
+          }
+        }
+      },
+      "required": [
+        "interpretation_status",
+        "goals",
+        "forbidden_capability_ids",
+        "forbidden_agent_ids",
+        "unresolved_terms",
+        "decision",
+        "assignments",
+        "execution_order"
+      ],
+      "additionalProperties": false
+    },
+    "raw_response": {
+      "id": "chatcmpl-mgu1q1wfdixxkeqxwhh1q",
+      "object": "chat.completion",
+      "created": 1784406327,
+      "model": "qwen/qwen3-1.7b",
+      "choices": [
+        {
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\"interpretation_status\":\"resolved\",\"goals\":[{\"capability_id\":\"v07-p13-prepare\",\"trust_policy_id\":\"v07-p13-ordinary\",\"artifact_contract_id\":\"v07-p13-json\"}],\"forbidden_capability_ids\":[\"v07-p13-distractor-1\",\"v07-p13-distractor-2\",\"v07-p13-distractor-3\",\"v07-p13-distractor-4\"],\"forbidden_agent_ids\":[],\"unresolved_terms\":[],\"decision\":\"accept\",\"assignments\":[{\"capability_id\":\"v07-p13-prepare\",\"agent_id\":\"v07-p13-preparer\"},{\"capability_id\":\"v07-p13-verify\",\"agent_id\":\"v07-p13-verifier\"},{\"capability_id\":\"v07-p13-deliver\",\"agent_id\":\"v07-p13-primary\"}],\"execution_order\":[\"v07-p13-prepare\",\"v07-p13-verify\",\"v07-p13-deliver\"]}",
+            "reasoning_content": "",
+            "tool_calls": []
+          },
+          "logprobs": null,
+          "finish_reason": "stop"
+        }
+      ],
+      "usage": {
+        "prompt_tokens": 2613,
+        "completion_tokens": 235,
+        "total_tokens": 2848,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "stats": {},
+      "system_fingerprint": "qwen/qwen3-1.7b"
+    },
+    "content": "{\"interpretation_status\":\"resolved\",\"goals\":[{\"capability_id\":\"v07-p13-prepare\",\"trust_policy_id\":\"v07-p13-ordinary\",\"artifact_contract_id\":\"v07-p13-json\"}],\"forbidden_capability_ids\":[\"v07-p13-distractor-1\",\"v07-p13-distractor-2\",\"v07-p13-distractor-3\",\"v07-p13-distractor-4\"],\"forbidden_agent_ids\":[],\"unresolved_terms\":[],\"decision\":\"accept\",\"assignments\":[{\"capability_id\":\"v07-p13-prepare\",\"agent_id\":\"v07-p13-preparer\"},{\"capability_id\":\"v07-p13-verify\",\"agent_id\":\"v07-p13-verifier\"},{\"capability_id\":\"v07-p13-deliver\",\"agent_id\":\"v07-p13-primary\"}],\"execution_order\":[\"v07-p13-prepare\",\"v07-p13-verify\",\"v07-p13-deliver\"]}",
+    "parsed": {
+      "interpretation_status": "resolved",
+      "goals": [
+        {
+          "capability_id": "v07-p13-prepare",
+          "trust_policy_id": "v07-p13-ordinary",
+          "artifact_contract_id": "v07-p13-json"
+        }
+      ],
+      "forbidden_capability_ids": [
+        "v07-p13-distractor-1",
+        "v07-p13-distractor-2",
+        "v07-p13-distractor-3",
+        "v07-p13-distractor-4"
+      ],
+      "forbidden_agent_ids": [],
+      "unresolved_terms": [],
+      "decision": "accept",
+      "assignments": [
+        {
+          "capability_id": "v07-p13-prepare",
+          "agent_id": "v07-p13-preparer"
+        },
+        {
+          "capability_id": "v07-p13-verify",
+          "agent_id": "v07-p13-verifier"
+        },
+        {
+          "capability_id": "v07-p13-deliver",
+          "agent_id": "v07-p13-primary"
+        }
+      ],
+      "execution_order": [
+        "v07-p13-prepare",
+        "v07-p13-verify",
+        "v07-p13-deliver"
+      ]
+    },
+    "schema_issues": [],
+    "call_count": 1,
+    "prompt_tokens": 2613,
+    "completion_tokens": 235
+  }
+}

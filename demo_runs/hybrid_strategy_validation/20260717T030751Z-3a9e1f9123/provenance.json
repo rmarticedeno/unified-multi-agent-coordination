@@ -1,0 +1,7 @@
+{
+  "fixture": "hybrid-strategy-validation",
+  "public_fixture_hash": "3a9e1f912347b1f0f849c3ea54bc6f660d5b75b5b9e04240415deb83d1beafcc",
+  "source_hash": "43183517593acfecf628a93d77939c7849d8afed7f57b82b4939f4719f6869cf",
+  "expected_data_loaded_during_collection": false,
+  "created_at": "2026-07-17T03:07:51.543828+00:00"
+}

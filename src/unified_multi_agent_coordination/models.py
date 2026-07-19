@@ -305,6 +305,9 @@ class CoordinationPlanResult(BaseModel):
     registry_snapshot: list[AgentRegistryEntry] = Field(default_factory=list)
     registry_revision: int = 0
     registry_snapshot_hash: str = ""
+    semantic_intent: JsonObject = Field(default_factory=dict)
+    admission_issues: list[JsonObject] = Field(default_factory=list)
+    planning_diagnostics: JsonObject = Field(default_factory=dict)
 
 
 class PlanGeneration(BaseModel):

@@ -14,7 +14,7 @@ from unified_multi_agent_coordination.consensus_campaign import (
 )
 
 
-def test_full_consensus_campaign_constructs_exact_v3_trial_matrix():
+def test_full_consensus_campaign_constructs_exact_v4_trial_matrix():
     matrix = expected_scenarios(3, smoke=False)
     assert len(matrix) == 45
     assert len(set(matrix)) == 45
@@ -30,6 +30,12 @@ def test_full_consensus_campaign_constructs_exact_v3_trial_matrix():
             "concurrent-ownership",
         )
     )
+
+
+def test_compose_profiles_cover_large_topologies_and_chaos():
+    assert consensus_campaign._profiles(3) == ()
+    assert consensus_campaign._profiles(5) == ("five",)
+    assert consensus_campaign._profiles(7, chaos=True) == ("seven", "chaos")
 
 
 def test_compose_trials_always_use_prebuilt_image_and_no_build(tmp_path, monkeypatch):
@@ -264,6 +270,11 @@ def test_all_consensus_scenario_actions_execute_with_controlled_observations(tmp
         lambda names, target, _failed, _replacement: steady(names, target),
     )
     monkeypatch.setattr(consensus_campaign, "_coordinate", coordinate)
+    monkeypatch.setattr(
+        consensus_campaign,
+        "_wait_registered_agent",
+        lambda _url, _agent_id: asyncio.sleep(0, result={"http_status": 200}),
+    )
     monkeypatch.setattr(consensus_campaign, "_update_target", update)
     monkeypatch.setattr(consensus_campaign, "_ready", lambda _url: _return(_response(503)))
     monkeypatch.setattr(
@@ -380,6 +391,11 @@ def test_coordinate_http_failure_is_preserved_as_liveness_observation(monkeypatc
         raise httpx.ReadTimeout("bounded timeout")
 
     monkeypatch.setattr(consensus_campaign, "_coordinate", fail)
+    monkeypatch.setattr(
+        consensus_campaign,
+        "_wait_registered_agent",
+        lambda _url, _agent_id: asyncio.sleep(0, result={"http_status": 200}),
+    )
     response, error = asyncio.run(
         consensus_campaign._coordinate_observed("http://coordinator", "session")
     )
@@ -551,7 +567,7 @@ def test_full_campaign_report_preserves_failed_but_valid_matrix(tmp_path, monkey
         run_campaign(tmp_path / "full", 3, promotion_candidate=True, build_image=False)
     )
 
-    assert report["schema_version"] == "consensus-campaign-v3"
+    assert report["schema_version"] == "consensus-campaign-v4"
     assert report["trial_count"] == 45
     assert report["primary_trial_count"] == 42
     assert report["supplementary_trial_count"] == 3

@@ -11,13 +11,15 @@ The protocol-independent theory from Chapter~\ref{chap:theoretical-solution} is 
 
 The implementation separates two roles. \texttt{CoordinationSdk} is the communication and runtime middleware. It registers remote A2A agents, local Python agents, and Lingo-backed linguistic agents; normalizes their capabilities; dispatches authorized tasks; converts artifacts; records runtime failures; and exposes communication traces. It does not plan, decide feasibility, authorize decompositions, or coordinate complete user requests.
 
-\texttt{CoordinationAgent} is the central coordinating role. It receives the user request, uses the SDK to inspect the registry and capability index, invokes SDK-registered linguistic capabilities when interpretation or candidate planning is needed, builds direct or decomposed candidate plans, calls the symbolic \texttt{FeasibilityAnalyzer}, authorizes or refuses the plan, dispatches only authorized tasks through the SDK, and aggregates the final result. The agent never calls raw A2A transports, raw local handlers, or raw Lingo runtimes directly. All execution traffic still passes through \texttt{CoordinationSdk}.
+\texttt{CoordinationAgent} is the central coordinating role. It receives either an authoritative typed request or raw language plus a semantic catalog, uses a strict linguistic interpreter only for catalog identifier selection, admits the result deterministically, invokes one shared \texttt{SymbolicPlanCompiler}, calls the \texttt{FeasibilityAnalyzer}, authorizes or refuses the plan, dispatches only authorized tasks through the SDK, and aggregates the final result. The agent never calls raw A2A transports, raw local handlers, or raw Lingo runtimes directly. All execution traffic still passes through \texttt{CoordinationSdk}.
 
 A2A remains the default wire model for independently deployed agents. Remote agents are admitted through A2A Agent Cards and invoked through A2A-compatible task exchange. Local Python agents and Lingo-based linguistic agents are registered through the SDK and normalized into the same internal agent records, with identity, capabilities, input and output modes, trust metadata, invocation endpoint, and validation contract. Local and linguistic agent authors are therefore not required to implement A2A plumbing, while the coordination agent can reason over a uniform registry.
 
 The prototype also uses Lingo as an optional linguistic and context-engineering substrate \cite{lingo2026}. Lingo is not hidden inside the SDK as a coordinator. Instead, Lingo-backed interpretation, extraction, classification, or candidate-planning behavior is exposed as SDK-registered linguistic capabilities. Non-linguistic local agents can use the SDK without depending on Lingo. The prototype dependency set pins \texttt{lingo-ai==2.0.2} and uses \texttt{a2a-sdk}, \texttt{pydantic}, \texttt{httpx}, \texttt{FastAPI}, \texttt{Uvicorn}, \texttt{pytest}, and \texttt{pytest-asyncio} for the executable implementation, service wrapper, and tests.
 
-The version 0.4 bridge narrows candidate planning further. The model returns a \texttt{LinguisticPlanDraft} containing only canonical requirement/capability selections, dependencies expressed between requirement identifiers, unresolved terms, and rationale. It cannot generate task identifiers, providers, trust, credentials, contracts, schemas, artifacts, or authority. A deterministic \texttt{PlanHydrator} verifies complete and unique requirement coverage, exact capability identity, provider availability, dependency references, and acyclicity; it then selects the lexicographically first admitted provider and constructs tasks, assignments, validation contracts, artifact obligations, execution order, and completion contract from the admitted request and registry. Hydration errors may support one bounded repair attempt, after which failure remains closed. Direct deterministic planning still precedes this linguistic fallback when exact matching already decides the plan.
+The production bridge no longer asks a model to copy requirement identifiers or dependencies from an already typed request. Raw-language coordination requires a \texttt{SemanticCatalog} defining stable capability identifiers, dependencies, aliases, trust policies, artifact contracts, schemas, modalities, side-effect classes, defaults, auxiliary eligibility, and validation contracts. The strict wire response has no rationale or defaults: it requires interpretation status, goal selections, forbidden capabilities, forbidden agents, and unresolved terms, with request-specific identifier enumerations and no extra fields. The production interpreter can support a bounded schema-only repair, but the frozen v0.7 experiment disables that repair and scores invalid schema as failure. Deterministic admission validates identifiers before canonicalization, preserves ambiguity and unresolved terms, unions model-derived and exact-text exclusions, rejects contradictions, and then applies dependency closure, branch-specific trust, contracts, artifacts, and typed exclusions. \texttt{LinguisticPlanDraft} and \texttt{PlanHydrator} remain only to reproduce the historical version 0.4 and 0.5 designs.
+
+\texttt{SymbolicPlanCompiler} is shared by typed callers, raw-language production coordination, and developmental validation. It validates requirement identity, dependencies, cycles, and contracts; builds task identity, dependencies, deterministic topological execution order, artifacts, validators, and the completion contract; and searches across compatible provider assignments rather than selecting the first advertised match. Compatibility and feasibility evaluation covers status, capability identity, modality, schema, trust, fencing, validation evidence, and exclusions; this is not a claim that every predicate is applied as an up-front registry prefilter. Feasible assignments are ranked deterministically by least sufficient privilege, effect fencing, availability scope, and stable agent identity, independently of registry enumeration order. The search is bounded at 4,096 assignments and fails closed on exhaustion while preserving reproducible recovery diagnostics. Auxiliary synthesis is considered only after normal provider search fails for an explicitly eligible requirement.
 
 Three runtime mechanisms are also explicit secure-default policies: dependency dispatch requires successful predecessors, auxiliary admission requires eligibility, plan-local lifecycle, non-persistence, validation, and read-only authority, and durable trace evidence is exposed from persisted store events. Unsafe alternatives exist only as named experimental negative controls in the runtime-ablation runner; production constructors select the strict policies by default. The trace negative control removes returned diagnostic evidence without deleting state-critical events, leases, fencing, attempts, or terminal records.
 
@@ -26,7 +28,9 @@ For deployment and reproducibility, the repository includes a thin HTTP service 
 The mapping between formal objects and implementation records is direct. The records defined in Section~\ref{sec:data-structures} materialize the formal objects of Chapter~\ref{chap:theoretical-solution} as follows.
 
 \begin{itemize}
-  \item \texttt{CoordinationAgent} materializes the central coordinating authority. It owns interpretation workflow, direct matching, decomposition, feasibility checks, auxiliary decisions, authorization, and final result construction.
+  \item \texttt{CoordinationAgent} materializes the central coordinating authority. It owns semantic admission workflow, symbolic compilation, feasibility checks, auxiliary decisions, authorization, and final result construction.
+  \item \texttt{SemanticCatalog}, \texttt{SemanticIntentOutput}, and \texttt{SemanticRequestAdmitter} materialize the strict linguistic boundary and deterministic conversion from selected semantics to \texttt{ProblemRequest}.
+  \item \texttt{SymbolicPlanCompiler} materializes deterministic dependency closure, plan construction, bounded provider assignment search, and stable feasible ranking.
   \item \texttt{CoordinationSdk} materializes the communication abstraction. It owns registry admission, A2A gateway behavior, local and Lingo runtimes, task dispatch, artifact normalization, runtime failure recording, and communication trace access.
   \item \texttt{CoordinationStore} materializes durable coordination state. Its JSONL and PostgreSQL adapters preserve local and legacy backends. Its etcd adapter is authoritative in the fault-tolerant topology and stores sessions, events, leases, registry snapshots, plan generations, commitments, attempts, artifacts, and terminal results through revision-checked transactions.
   \item \texttt{AgentRegistryEntry} materializes an agent $a$ (Definition~\ref{def:agent}), supplying $\mathit{id}$, declared capabilities $C(a)$, input modes $M_{\mathrm{in}}(a)$, output modes $M_{\mathrm{out}}(a)$, local admission policy $\tau(a)$, observable status $\sigma(a)$, and the invocation endpoint used by the SDK.
@@ -60,7 +64,7 @@ The private SDK subsystems keep communication responsibilities simple. The Regis
 \toprule
 \textbf{Component} & \textbf{Role in the implementation} \\
 \midrule
-\texttt{CoordinationAgent} & Owns interpretation workflow, direct matching, decomposition, feasibility checks, auxiliary decisions, authorization, and final result construction. \\
+\texttt{CoordinationAgent} & Owns semantic admission, shared symbolic compilation, feasibility checks, auxiliary decisions, authorization, and final result construction. \\
 \texttt{CoordinationSdk} & Exposes middleware operations for registration, registry inspection, capability indexing, task dispatch, artifact normalization, runtime failure reporting, traces, and session reset. \\
 \texttt{FeasibilityAnalyzer} & Applies deterministic checks for the \texttt{CoordinationAgent}; it is not part of the SDK's communication boundary. \\
 A2A Gateway & Handles Agent Card ingestion and A2A-compatible communication with remote agents. \\
@@ -290,21 +294,24 @@ sdk.register_linguistic_agent(name, capabilities, lingo_app_or_flow, ...)
 result = agent.coordinate(user_request, context=session_context)
 \end{Verbatim}
 
-Inside \texttt{coordinate}, the \texttt{CoordinationAgent} performs the simple-first decision process. It asks the SDK for the current registry and capability index, transforms or admits the user's message into a typed \texttt{ProblemRequest}, attempts direct capability matching, requests candidate decomposition only when direct delegation is insufficient, checks the proposal with the \texttt{FeasibilityAnalyzer}, adds a bounded auxiliary specification only when the feasibility model permits it, and dispatches authorized tasks through the SDK.
+Inside \texttt{coordinate}, the \texttt{CoordinationAgent} reads the current registry, bypasses linguistic inference for a typed \texttt{ProblemRequest}, or requires a catalog for raw language. A raw request receives a strict semantic-selection call; production may permit at most one schema-only repair, whereas the v0.7 confirmatory protocol disables repair. Semantic ambiguity and feasibility failures never trigger repair. Deterministic admission constructs the request, and the shared compiler performs dependency closure, plan construction, bounded provider search, and symbolic feasibility. A bounded auxiliary specification is considered only after ordinary provider search fails. The agent records semantic generation, repair when enabled, admission, compilation, provider search, and authorization as distinct stages and dispatches only an authorized plan.
 
 \begin{Verbatim}[fontsize=\small,breaklines=true,breakanywhere=true]
 CoordinationAgent.coordinate(problem):
   registry = sdk.registry_snapshot()
-  capabilities = sdk.capability_index()
-  request = interpret_or_admit_problem(problem, sdk)
+  request = problem if typed(problem) else
+      semantic_admitter.admit(
+          strict_semantic_selection(problem, semantic_catalog),
+          semantic_catalog)
 
-  candidate_plan = direct_or_decomposed_plan(request, capabilities, sdk)
-  report = feasibility_analyzer.check(request, registry, candidate_plan)
+  compilation = symbolic_plan_compiler.compile(request, registry)
+  report = compilation.report
 
   if report.has_auxiliary_eligible_gap:
       auxiliary = auxiliary_factory.specify(report.gap)
-      candidate_plan = candidate_plan.with_auxiliary_agent(auxiliary)
-      report = feasibility_analyzer.check(request, registry, candidate_plan)
+      compilation = symbolic_plan_compiler.compile(
+          request, registry, auxiliary)
+      report = compilation.report
 
   if report.is_not_feasible:
       return structured_infeasibility(report)
@@ -366,7 +373,7 @@ Final Result or Structured Infeasibility Report
 
 \section{Execution Sequence}
 
-The execution sequence begins when the user or application submits a problem request to \texttt{CoordinationAgent.coordinate}. The coordination agent asks the SDK for the current registry snapshot and capability index. It obtains a typed problem representation from a structured caller or by invoking a registered linguistic capability through the SDK. The coordination agent then attempts direct matching before considering decomposition. The \texttt{FeasibilityAnalyzer} checks the candidate plan and either approves it, permits an auxiliary NLP specification to be added, or rejects it as infeasible. Approved tasks are dispatched through \texttt{sdk.send\_task(...)}. The SDK chooses the correct internal runtime, records status and failures, normalizes artifacts, and exposes communication trace events. The coordination agent aggregates the authorized outputs or returns an infeasibility report.
+The execution sequence begins when the user or application submits a problem request to \texttt{CoordinationAgent.coordinate}. The coordination agent asks the SDK for the current registry snapshot. A structured caller's typed request bypasses the LLM. Raw language requires an explicitly admitted catalog; absence of a catalog produces structured fail-closed infeasibility. The strict interpreter selects semantic identifiers, deterministic admission constructs the typed request, and \texttt{SymbolicPlanCompiler} evaluates all bounded provider assignments. The \texttt{FeasibilityAnalyzer} approves the selected plan, permits an eligible auxiliary specification only after normal search fails, or rejects the request. Approved tasks are dispatched through \texttt{sdk.send\_task(...)}. The SDK chooses the correct internal runtime, records status and failures, normalizes artifacts, and exposes communication trace events.
 
 \begin{figure}[htbp]
 \centering
@@ -375,10 +382,11 @@ The execution sequence begins when the user or application submits a problem req
 \begin{enumerate}
 \item User or application submits a problem and constraints to \texttt{CoordinationAgent}.
 \item Coordination agent reads registry and capabilities through \texttt{CoordinationSdk}.
-\item Coordination agent obtains or constructs a typed \texttt{ProblemRequest}.
-\item Coordination agent attempts direct capability matching before decomposition.
-\item Coordination agent requests candidate planning only when direct matching is insufficient.
-\item Feasibility Analyzer validates skills, modalities, dependencies, authority, and evidence contracts.
+\item A typed \texttt{ProblemRequest} bypasses linguistic inference; raw language requires a semantic catalog.
+\item The strict interpreter selects only admitted semantic identifiers or reports ambiguity.
+\item Deterministic admission computes dependencies and copies authoritative contracts into the typed request.
+\item The shared compiler searches compatible providers and constructs the complete symbolic plan.
+\item Feasibility Analyzer validates skills, modalities, schemas, dependencies, authority, fencing, exclusions, and evidence contracts.
 \item Auxiliary Capability Factory adds a temporary specification only when justified.
 \item Coordination agent dispatches authorized tasks through \texttt{sdk.send\_task(...)}.
 \item SDK records runtime status, errors, artifacts, and communication evidence.
@@ -420,7 +428,7 @@ The target number of voting etcd members is stored in authoritative cluster conf
 \end{tabular}
 \end{table}
 
-Every coordinator runs a \texttt{MembershipReconciler}; an etcd lease elects one active reconciler and another takes over after lease loss. A joining node first records an authenticated intent. If more voters are needed, the reconciler adds it as a learner and promotes it only after etcd confirms synchronization. Otherwise it becomes coordinator-only. Membership changes are serialized one at a time, as recommended for etcd reconfiguration \cite{etcdreconfiguration}. Graceful scale-down drains and removes one voter at a time. A failed voter is replaced only while the remaining members retain quorum and a healthy replacement is available. Short heartbeat loss is insufficient for eviction, and majority loss stops automatic reconfiguration because no safe consensus decision can be committed.
+Every coordinator runs a \texttt{MembershipReconciler}; an etcd lease elects one active reconciler and another takes over after lease loss. A joining node first records an authenticated intent. If more voters are needed, the reconciler adds it as a learner and promotes it only after etcd confirms synchronization. Otherwise it becomes coordinator-only. Membership changes are serialized one at a time, as recommended for etcd reconfiguration \cite{etcdreconfiguration}. The operation record is advanced and completed through revision compare-and-swap transactions, so a concurrent, different membership request is refused instead of reusing the pending operation. If the reconciler stops after adding or synchronizing a learner, its successor resumes the recorded phase and promotes or removes the same member without issuing a conflicting operation. Graceful scale-down drains and removes one voter at a time. A failed voter is replaced only while the remaining members retain quorum and a healthy replacement is available. Short heartbeat loss is insufficient for eviction, and majority loss stops automatic reconfiguration because no safe consensus decision can be committed. The campaign driver additionally waits for the fixture agent's registry entry before dispatch, preventing an empty snapshot from being misclassified as a coordination failure.
 
 The \texttt{EtcdCoordinationStore} and \texttt{EtcdAgentRegistry} use etcd's v3 HTTP gateway. The client rotates endpoints, bounds retries, performs linearizable reads and transactions, renews leases, and resumes watches from revisions. Session ownership is attached to a lease; the ownership revision is its fencing token. Every state mutation compares owner identity and fencing revision. Attempt creation and its event are atomic, a result requires a started attempt, and terminal creation compares that no terminal key exists. Registry entries use renewable TTL leases, and each authorized plan binds both a registry snapshot hash and its etcd revision. If quorum is unavailable, authorization, dispatch, retry, recovery, and terminal completion fail closed. JSONL and PostgreSQL remain compatibility backends, while PostgreSQL may receive asynchronous audit projections that do not affect readiness.
 

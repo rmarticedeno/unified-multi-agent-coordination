@@ -5,6 +5,7 @@ from __future__ import annotations
 import asyncio
 from contextlib import asynccontextmanager
 import os
+from pathlib import Path
 from typing import Any, Literal, cast
 
 from fastapi import FastAPI, HTTPException, Request
@@ -38,6 +39,10 @@ from .models import (
     SolutionProposal,
 )
 from .feasibility import FeasibilityAnalyzer
+from .semantic_admission import (
+    OpenAICompatibleSemanticInterpreter,
+    SemanticCatalog,
+)
 
 
 class PlanRequest(BaseModel):
@@ -46,6 +51,7 @@ class PlanRequest(BaseModel):
     user_request: str | None = None
     problem: ProblemRequest | None = None
     context: dict[str, Any] = Field(default_factory=dict)
+    semantic_catalog: SemanticCatalog | None = None
 
 
 class CoordinateRequest(PlanRequest):
@@ -105,6 +111,27 @@ def agent_from_env(sdk: CoordinationSdk) -> CoordinationAgent:
             str(max(lease_ttl_s / 2, 0.1)),
         )
     )
+    catalog_path = os.getenv("COORDINATION_SEMANTIC_CATALOG_PATH") or ""
+    semantic_catalog = (
+        SemanticCatalog.model_validate_json(
+            Path(catalog_path).read_text(encoding="utf-8")
+        )
+        if catalog_path
+        else None
+    )
+    semantic_model = os.getenv("COORDINATION_SEMANTIC_MODEL") or ""
+    semantic_interpreter = (
+        OpenAICompatibleSemanticInterpreter(
+            semantic_model,
+            endpoint=os.getenv(
+                "COORDINATION_SEMANTIC_ENDPOINT",
+                "http://127.0.0.1:1234/v1",
+            ),
+            seed=int(os.getenv("COORDINATION_SEMANTIC_SEED", "11")),
+        )
+        if semantic_model
+        else None
+    )
     return CoordinationAgent(
         sdk=sdk,
         feasibility_analyzer=FeasibilityAnalyzer(
@@ -120,6 +147,8 @@ def agent_from_env(sdk: CoordinationSdk) -> CoordinationAgent:
         coordinator_id=os.getenv("COORDINATION_COORDINATOR_ID") or None,
         lease_ttl_s=lease_ttl_s,
         lease_renew_interval_s=lease_renew_interval_s,
+        semantic_catalog=semantic_catalog,
+        semantic_interpreter=semantic_interpreter,
         max_concurrent_dispatches=int(
             os.getenv("COORDINATION_MAX_CONCURRENT_DISPATCHES", "16")
         ),
@@ -386,6 +415,7 @@ def create_app(
             return await app.state.agent.build_solution_plan(
                 _request_input(request),
                 context=request.context,
+                semantic_catalog=request.semantic_catalog,
             )
         except RemoteRegistryError as exc:
             raise HTTPException(status_code=502, detail=str(exc)) from exc
@@ -399,6 +429,7 @@ def create_app(
                 payload=request.payload,
                 timeout_s=request.timeout_s,
                 session_id=request.session_id,
+                semantic_catalog=request.semantic_catalog,
             )
         except EtcdQuorumUnavailableError:
             raise

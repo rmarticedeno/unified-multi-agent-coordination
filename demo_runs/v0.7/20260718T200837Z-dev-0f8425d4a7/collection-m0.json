@@ -1,0 +1,7 @@
+{
+  "model": "qwen/qwen3-1.7b",
+  "expected_outputs": 192,
+  "observed_outputs": 192,
+  "runtime_errors": 0,
+  "complete": true
+}

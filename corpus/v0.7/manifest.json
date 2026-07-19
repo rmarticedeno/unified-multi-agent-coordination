@@ -1,0 +1,22 @@
+{
+  "version": "0.7",
+  "generated_at": "2026-07-18T20:35:43.861343+00:00",
+  "corpus_hash": "f7ae3ba90a88ddd41af46c8c062da8c46864563ef792574b650aa6a755e6215a",
+  "development_case_count": 48,
+  "confirmatory_case_count": 64,
+  "confirmatory_matched_pair_count": 32,
+  "category_case_counts": {
+    "adversarial": 8,
+    "ambiguity": 8,
+    "artifact": 8,
+    "dependencies": 8,
+    "negation": 8,
+    "paraphrase": 8,
+    "provider_recovery": 8,
+    "trust": 8
+  },
+  "primary_seed": 11,
+  "replication_seed": 29,
+  "primary_statistical_unit": "matched case pair",
+  "labels_exposed_during_collection": false
+}

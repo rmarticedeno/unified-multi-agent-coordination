@@ -1,0 +1,13 @@
+{
+  "annotation_type": "author_labeled",
+  "author": "Roberto Marti Cedeno",
+  "annotation_date": "2026-07-18T20:35:43.861343+00:00",
+  "labeling_protocol_version": "qwen-first-production-path-v1",
+  "corpus_version": "0.7",
+  "corpus_hash": "f7ae3ba90a88ddd41af46c8c062da8c46864563ef792574b650aa6a755e6215a",
+  "frozen": true,
+  "pre_specified_before_confirmatory_collection": true,
+  "label_hidden_during_inference": true,
+  "independent_adjudication": false,
+  "limitation": "Author-only labels are not an independent benchmark."
+}

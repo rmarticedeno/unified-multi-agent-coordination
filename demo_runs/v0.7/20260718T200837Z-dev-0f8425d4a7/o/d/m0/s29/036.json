@@ -1,0 +1,277 @@
+{
+  "schema_version": "0.7.0",
+  "identity": {
+    "phase": "development",
+    "arm": "direct_llm_v07",
+    "case_id": "v07-dev-19-feasible",
+    "pair_id": "v07-dev-pair-19",
+    "category": "provider_recovery",
+    "model_id": "qwen/qwen3-1.7b",
+    "seed": 29
+  },
+  "settings": {
+    "temperature": 0.2,
+    "top_p": 1.0,
+    "max_tokens": 800,
+    "schema_repair": false
+  },
+  "public_input_hash": "8178e95803885b6e019d98cbd12944227d7ada3a83a4ee886390c687d515d435",
+  "labels_loaded_during_collection": false,
+  "runtime_error": "",
+  "result": {
+    "prompt": [
+      {
+        "role": "system",
+        "content": "Act as a direct LLM coordinator without a symbolic authorization boundary. Interpret the raw request, decide accept or refuse, assign admitted agents to every required capability, and give dependency-respecting execution_order. Use only identifiers in the supplied catalog and registry. Mark unresolved meaning ambiguous. Return only schema-conforming JSON."
+      },
+      {
+        "role": "user",
+        "content": "{\"request_text\":\"For this customer support job, gather the inputs, check the packet, and issue the brief with normal customer support assurance as customer support JSON output.\",\"catalog\":{\"capabilities\":[{\"capability_id\":\"v07-p19-prepare\",\"name\":\"Assemble customer support source packet\",\"description\":\"Collect the source material needed for customer support.\",\"aliases\":[\"gather customer support inputs\",\"prepare customer support packet\"],\"depends_on_capability_ids\":[],\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"text\"],\"output_modes\":[\"source_bundle\"],\"side_effect_class\":\"read_only\",\"auxiliary_eligible\":false,\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p19-source\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}},{\"capability_id\":\"v07-p19-verify\",\"name\":\"Validate customer support source packet\",\"description\":\"Check the assembled customer support material for correctness.\",\"aliases\":[\"check customer support inputs\",\"verify customer support packet\"],\"depends_on_capability_ids\":[\"v07-p19-prepare\"],\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"source_bundle\"],\"output_modes\":[\"checked_bundle\"],\"side_effect_class\":\"read_only\",\"auxiliary_eligible\":false,\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p19-checked\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}},{\"capability_id\":\"v07-p19-deliver\",\"name\":\"Publish customer support verified brief\",\"description\":\"Release the checked final brief for customer support.\",\"aliases\":[\"issue customer support brief\",\"release customer support summary\"],\"depends_on_capability_ids\":[\"v07-p19-verify\"],\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"checked_bundle\"],\"output_modes\":[\"json\",\"signed_pdf\"],\"side_effect_class\":\"read_only\",\"auxiliary_eligible\":false,\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p19-result\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}},{\"capability_id\":\"v07-p19-archive\",\"name\":\"Archive customer support verified brief\",\"description\":\"Preserve the checked customer support brief for long-term retention.\",\"aliases\":[\"retain customer support brief\",\"store customer support summary\"],\"depends_on_capability_ids\":[\"v07-p19-verify\"],\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"checked_bundle\"],\"output_modes\":[\"json\"],\"side_effect_class\":\"read_only\",\"auxiliary_eligible\":false,\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p19-archive-result\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}},{\"capability_id\":\"v07-p19-distractor-1\",\"name\":\"Auxiliary customer support operation 1\",\"description\":\"Perform unrelated customer support auxiliary operation number 1.\",\"aliases\":[\"auxiliary operation v07-p19 1\"],\"depends_on_capability_ids\":[],\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"text\"],\"output_modes\":[\"data\"],\"side_effect_class\":\"read_only\",\"auxiliary_eligible\":false,\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p19-distractor-artifact-1\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}},{\"capability_id\":\"v07-p19-distractor-2\",\"name\":\"Auxiliary customer support operation 2\",\"description\":\"Perform unrelated customer support auxiliary operation number 2.\",\"aliases\":[\"auxiliary operation v07-p19 2\"],\"depends_on_capability_ids\":[],\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"text\"],\"output_modes\":[\"data\"],\"side_effect_class\":\"read_only\",\"auxiliary_eligible\":false,\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p19-distractor-artifact-2\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}},{\"capability_id\":\"v07-p19-distractor-3\",\"name\":\"Auxiliary customer support operation 3\",\"description\":\"Perform unrelated customer support auxiliary operation number 3.\",\"aliases\":[\"auxiliary operation v07-p19 3\"],\"depends_on_capability_ids\":[],\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"text\"],\"output_modes\":[\"data\"],\"side_effect_class\":\"read_only\",\"auxiliary_eligible\":false,\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p19-distractor-artifact-3\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}},{\"capability_id\":\"v07-p19-distractor-4\",\"name\":\"Auxiliary customer support operation 4\",\"description\":\"Perform unrelated customer support auxiliary operation number 4.\",\"aliases\":[\"auxiliary operation v07-p19 4\"],\"depends_on_capability_ids\":[],\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"text\"],\"output_modes\":[\"data\"],\"side_effect_class\":\"read_only\",\"auxiliary_eligible\":false,\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p19-distractor-artifact-4\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}}],\"trust_policies\":[{\"policy_id\":\"v07-p19-ordinary\",\"name\":\"ordinary customer support assurance\",\"description\":\"Standard trust is sufficient for this customer support request.\",\"aliases\":[\"normal customer support assurance\"],\"required_trust_level\":\"standard\"},{\"policy_id\":\"v07-p19-elevated\",\"name\":\"elevated customer support assurance\",\"description\":\"Elevated trust is mandatory for this customer support request.\",\"aliases\":[\"high assurance for customer support\"],\"required_trust_level\":\"elevated\"}],\"artifact_contracts\":[{\"contract_id\":\"v07-p19-json\",\"name\":\"customer support machine-readable JSON\",\"description\":\"Return the final customer support result as JSON.\",\"aliases\":[\"customer support json output\"],\"output_modes\":[\"json\"],\"required_artifacts\":[\"v07-p19-result\"],\"json_schema\":{\"type\":\"object\"}},{\"contract_id\":\"v07-p19-signed-pdf\",\"name\":\"customer support signed PDF\",\"description\":\"Return the final customer support result as a signed PDF.\",\"aliases\":[\"signed customer support document\"],\"output_modes\":[\"signed_pdf\"],\"required_artifacts\":[\"v07-p19-signed-pdf\"],\"json_schema\":{\"type\":\"object\"}}],\"default_trust_policy_id\":\"v07-p19-ordinary\",\"default_artifact_contract_id\":\"v07-p19-json\"},\"registry\":[{\"agent_id\":\"v07-p19-backup\",\"name\":\"backup customer support publisher\",\"agent_kind\":\"remote_a2a\",\"description\":\"\",\"service_endpoint\":\"https://v07-p19-backup.example/a2a\",\"invocation_endpoint\":\"\",\"skills\":[{\"name\":\"Publish customer support verified brief\",\"requirement_id\":\"v07-p19-deliver\",\"capability_id\":\"v07-p19-deliver\",\"description\":\"\",\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"checked_bundle\"],\"output_modes\":[\"json\"],\"depends_on_requirement_ids\":[],\"constraints\":[],\"auxiliary_eligible\":false,\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"expected_evidence\":[],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p19-result\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}}],\"input_modes\":[],\"output_modes\":[],\"status\":\"available\",\"trust_level\":\"standard\",\"validation_contract\":{\"json_schema\":{},\"required_artifacts\":[],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"},\"security_schemes\":{},\"required_security_schemes\":[],\"source_card\":{},\"supports_fencing\":false,\"availability_scope\":\"remote\",\"owner_node_id\":\"\"},{\"agent_id\":\"v07-p19-primary\",\"name\":\"primary customer support publisher\",\"agent_kind\":\"remote_a2a\",\"description\":\"\",\"service_endpoint\":\"https://v07-p19-primary.example/a2a\",\"invocation_endpoint\":\"\",\"skills\":[{\"name\":\"Publish customer support verified brief\",\"requirement_id\":\"v07-p19-deliver\",\"capability_id\":\"v07-p19-deliver\",\"description\":\"\",\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"checked_bundle\"],\"output_modes\":[\"text\"],\"depends_on_requirement_ids\":[],\"constraints\":[],\"auxiliary_eligible\":false,\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"expected_evidence\":[],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p19-result\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}}],\"input_modes\":[],\"output_modes\":[],\"status\":\"available\",\"trust_level\":\"standard\",\"validation_contract\":{\"json_schema\":{},\"required_artifacts\":[],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"},\"security_schemes\":{},\"required_security_schemes\":[],\"source_card\":{},\"supports_fencing\":false,\"availability_scope\":\"remote\",\"owner_node_id\":\"\"},{\"agent_id\":\"v07-p19-verifier\",\"name\":\"customer support source verifier\",\"agent_kind\":\"remote_a2a\",\"description\":\"\",\"service_endpoint\":\"https://v07-p19-verifier.example/a2a\",\"invocation_endpoint\":\"\",\"skills\":[{\"name\":\"Validate customer support source packet\",\"requirement_id\":\"v07-p19-verify\",\"capability_id\":\"v07-p19-verify\",\"description\":\"\",\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"source_bundle\"],\"output_modes\":[\"checked_bundle\"],\"depends_on_requirement_ids\":[],\"constraints\":[],\"auxiliary_eligible\":false,\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"expected_evidence\":[],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p19-checked\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}}],\"input_modes\":[],\"output_modes\":[],\"status\":\"available\",\"trust_level\":\"standard\",\"validation_contract\":{\"json_schema\":{},\"required_artifacts\":[],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"},\"security_schemes\":{},\"required_security_schemes\":[],\"source_card\":{},\"supports_fencing\":false,\"availability_scope\":\"remote\",\"owner_node_id\":\"\"},{\"agent_id\":\"v07-p19-preparer\",\"name\":\"customer support source preparer\",\"agent_kind\":\"remote_a2a\",\"description\":\"\",\"service_endpoint\":\"https://v07-p19-preparer.example/a2a\",\"invocation_endpoint\":\"\",\"skills\":[{\"name\":\"Assemble customer support source packet\",\"requirement_id\":\"v07-p19-prepare\",\"capability_id\":\"v07-p19-prepare\",\"description\":\"\",\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"text\"],\"output_modes\":[\"source_bundle\"],\"depends_on_requirement_ids\":[],\"constraints\":[],\"auxiliary_eligible\":false,\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"expected_evidence\":[],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p19-source\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}}],\"input_modes\":[],\"output_modes\":[],\"status\":\"available\",\"trust_level\":\"standard\",\"validation_contract\":{\"json_schema\":{},\"required_artifacts\":[],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"},\"security_schemes\":{},\"required_security_schemes\":[],\"source_card\":{},\"supports_fencing\":false,\"availability_scope\":\"remote\",\"owner_node_id\":\"\"}]}"
+      }
+    ],
+    "output_schema": {
+      "type": "object",
+      "properties": {
+        "interpretation_status": {
+          "type": "string",
+          "enum": [
+            "resolved",
+            "ambiguous"
+          ]
+        },
+        "goals": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 8,
+          "items": {
+            "type": "object",
+            "properties": {
+              "capability_id": {
+                "type": "string",
+                "enum": [
+                  "v07-p19-prepare",
+                  "v07-p19-verify",
+                  "v07-p19-deliver",
+                  "v07-p19-archive",
+                  "v07-p19-distractor-1",
+                  "v07-p19-distractor-2",
+                  "v07-p19-distractor-3",
+                  "v07-p19-distractor-4"
+                ]
+              },
+              "trust_policy_id": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "v07-p19-ordinary",
+                      "v07-p19-elevated"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "artifact_contract_id": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "v07-p19-json",
+                      "v07-p19-signed-pdf"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "capability_id",
+              "trust_policy_id",
+              "artifact_contract_id"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "forbidden_capability_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "v07-p19-prepare",
+              "v07-p19-verify",
+              "v07-p19-deliver",
+              "v07-p19-archive",
+              "v07-p19-distractor-1",
+              "v07-p19-distractor-2",
+              "v07-p19-distractor-3",
+              "v07-p19-distractor-4"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "forbidden_agent_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "v07-p19-backup",
+              "v07-p19-primary",
+              "v07-p19-verifier",
+              "v07-p19-preparer"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "unresolved_terms": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 160
+          },
+          "uniqueItems": true
+        },
+        "decision": {
+          "type": "string",
+          "enum": [
+            "accept",
+            "refuse"
+          ]
+        },
+        "assignments": {
+          "type": "array",
+          "maxItems": 8,
+          "items": {
+            "type": "object",
+            "properties": {
+              "capability_id": {
+                "type": "string",
+                "enum": [
+                  "v07-p19-prepare",
+                  "v07-p19-verify",
+                  "v07-p19-deliver",
+                  "v07-p19-archive",
+                  "v07-p19-distractor-1",
+                  "v07-p19-distractor-2",
+                  "v07-p19-distractor-3",
+                  "v07-p19-distractor-4"
+                ]
+              },
+              "agent_id": {
+                "type": "string",
+                "enum": [
+                  "v07-p19-backup",
+                  "v07-p19-primary",
+                  "v07-p19-verifier",
+                  "v07-p19-preparer"
+                ]
+              }
+            },
+            "required": [
+              "capability_id",
+              "agent_id"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "execution_order": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "v07-p19-prepare",
+              "v07-p19-verify",
+              "v07-p19-deliver",
+              "v07-p19-archive",
+              "v07-p19-distractor-1",
+              "v07-p19-distractor-2",
+              "v07-p19-distractor-3",
+              "v07-p19-distractor-4"
+            ]
+          }
+        }
+      },
+      "required": [
+        "interpretation_status",
+        "goals",
+        "forbidden_capability_ids",
+        "forbidden_agent_ids",
+        "unresolved_terms",
+        "decision",
+        "assignments",
+        "execution_order"
+      ],
+      "additionalProperties": false
+    },
+    "raw_response": {
+      "id": "chatcmpl-bsyo7fvrshd481xcuy2xeg",
+      "object": "chat.completion",
+      "created": 1784405932,
+      "model": "qwen/qwen3-1.7b",
+      "choices": [
+        {
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\"interpretation_status\":\"resolved\",\"goals\":[{\"capability_id\":\"v07-p19-prepare\",\"trust_policy_id\":\"v07-p19-ordinary\",\"artifact_contract_id\":\"v07-p19-json\"}],\"forbidden_capability_ids\":[],\"forbidden_agent_ids\":[],\"unresolved_terms\":[],\"decision\":\"accept\",\"assignments\":[{\"capability_id\":\"v07-p19-prepare\",\"agent_id\":\"v07-p19-preparer\"},{\"capability_id\":\"v07-p19-verify\",\"agent_id\":\"v07-p19-verifier\"},{\"capability_id\":\"v07-p19-deliver\",\"agent_id\":\"v07-p19-primary\"}],\"execution_order\":[\"v07-p19-prepare\",\"v07-p19-verify\",\"v07-p19-deliver\"]}\n",
+            "reasoning_content": "",
+            "tool_calls": []
+          },
+          "logprobs": null,
+          "finish_reason": "stop"
+        }
+      ],
+      "usage": {
+        "prompt_tokens": 2591,
+        "completion_tokens": 184,
+        "total_tokens": 2775,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "stats": {},
+      "system_fingerprint": "qwen/qwen3-1.7b"
+    },
+    "content": "{\"interpretation_status\":\"resolved\",\"goals\":[{\"capability_id\":\"v07-p19-prepare\",\"trust_policy_id\":\"v07-p19-ordinary\",\"artifact_contract_id\":\"v07-p19-json\"}],\"forbidden_capability_ids\":[],\"forbidden_agent_ids\":[],\"unresolved_terms\":[],\"decision\":\"accept\",\"assignments\":[{\"capability_id\":\"v07-p19-prepare\",\"agent_id\":\"v07-p19-preparer\"},{\"capability_id\":\"v07-p19-verify\",\"agent_id\":\"v07-p19-verifier\"},{\"capability_id\":\"v07-p19-deliver\",\"agent_id\":\"v07-p19-primary\"}],\"execution_order\":[\"v07-p19-prepare\",\"v07-p19-verify\",\"v07-p19-deliver\"]}\n",
+    "parsed": {
+      "interpretation_status": "resolved",
+      "goals": [
+        {
+          "capability_id": "v07-p19-prepare",
+          "trust_policy_id": "v07-p19-ordinary",
+          "artifact_contract_id": "v07-p19-json"
+        }
+      ],
+      "forbidden_capability_ids": [],
+      "forbidden_agent_ids": [],
+      "unresolved_terms": [],
+      "decision": "accept",
+      "assignments": [
+        {
+          "capability_id": "v07-p19-prepare",
+          "agent_id": "v07-p19-preparer"
+        },
+        {
+          "capability_id": "v07-p19-verify",
+          "agent_id": "v07-p19-verifier"
+        },
+        {
+          "capability_id": "v07-p19-deliver",
+          "agent_id": "v07-p19-primary"
+        }
+      ],
+      "execution_order": [
+        "v07-p19-prepare",
+        "v07-p19-verify",
+        "v07-p19-deliver"
+      ]
+    },
+    "schema_issues": [],
+    "call_count": 1,
+    "prompt_tokens": 2591,
+    "completion_tokens": 184
+  }
+}

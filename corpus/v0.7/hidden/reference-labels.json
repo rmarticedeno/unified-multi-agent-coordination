@@ -1,0 +1,1414 @@
+{
+  "version": "0.7",
+  "corpus_hash": "f7ae3ba90a88ddd41af46c8c062da8c46864563ef792574b650aa6a755e6215a",
+  "labels": [
+    {
+      "case_id": "v07-con-01-feasible",
+      "pair_id": "v07-con-pair-01",
+      "category": "paraphrase",
+      "feasible": true,
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p01-deliver",
+            "trust_policy_id": "v07-p01-ordinary",
+            "artifact_contract_id": "v07-p01-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": []
+      },
+      "minimum_justification": "The admitted registry and policy satisfy the grounded request.",
+      "expected_provider_recovery": false
+    },
+    {
+      "case_id": "v07-con-01-infeasible",
+      "pair_id": "v07-con-pair-01",
+      "category": "paraphrase",
+      "feasible": false,
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p01-archive",
+            "trust_policy_id": "v07-p01-ordinary",
+            "artifact_contract_id": "v07-p01-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": []
+      },
+      "minimum_justification": "No provider advertises the requested archive capability.",
+      "expected_provider_recovery": false
+    },
+    {
+      "case_id": "v07-con-02-feasible",
+      "pair_id": "v07-con-pair-02",
+      "category": "paraphrase",
+      "feasible": true,
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p02-deliver",
+            "trust_policy_id": "v07-p02-ordinary",
+            "artifact_contract_id": "v07-p02-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": []
+      },
+      "minimum_justification": "The admitted registry and policy satisfy the grounded request.",
+      "expected_provider_recovery": false
+    },
+    {
+      "case_id": "v07-con-02-infeasible",
+      "pair_id": "v07-con-pair-02",
+      "category": "paraphrase",
+      "feasible": false,
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p02-archive",
+            "trust_policy_id": "v07-p02-ordinary",
+            "artifact_contract_id": "v07-p02-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": []
+      },
+      "minimum_justification": "No provider advertises the requested archive capability.",
+      "expected_provider_recovery": false
+    },
+    {
+      "case_id": "v07-con-03-feasible",
+      "pair_id": "v07-con-pair-03",
+      "category": "paraphrase",
+      "feasible": true,
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p03-deliver",
+            "trust_policy_id": "v07-p03-ordinary",
+            "artifact_contract_id": "v07-p03-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": []
+      },
+      "minimum_justification": "The admitted registry and policy satisfy the grounded request.",
+      "expected_provider_recovery": false
+    },
+    {
+      "case_id": "v07-con-03-infeasible",
+      "pair_id": "v07-con-pair-03",
+      "category": "paraphrase",
+      "feasible": false,
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p03-archive",
+            "trust_policy_id": "v07-p03-ordinary",
+            "artifact_contract_id": "v07-p03-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": []
+      },
+      "minimum_justification": "No provider advertises the requested archive capability.",
+      "expected_provider_recovery": false
+    },
+    {
+      "case_id": "v07-con-04-feasible",
+      "pair_id": "v07-con-pair-04",
+      "category": "paraphrase",
+      "feasible": true,
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p04-deliver",
+            "trust_policy_id": "v07-p04-ordinary",
+            "artifact_contract_id": "v07-p04-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": []
+      },
+      "minimum_justification": "The admitted registry and policy satisfy the grounded request.",
+      "expected_provider_recovery": false
+    },
+    {
+      "case_id": "v07-con-04-infeasible",
+      "pair_id": "v07-con-pair-04",
+      "category": "paraphrase",
+      "feasible": false,
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p04-archive",
+            "trust_policy_id": "v07-p04-ordinary",
+            "artifact_contract_id": "v07-p04-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": []
+      },
+      "minimum_justification": "No provider advertises the requested archive capability.",
+      "expected_provider_recovery": false
+    },
+    {
+      "case_id": "v07-con-05-feasible",
+      "pair_id": "v07-con-pair-05",
+      "category": "ambiguity",
+      "feasible": true,
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p05-deliver",
+            "trust_policy_id": "v07-p05-ordinary",
+            "artifact_contract_id": "v07-p05-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": []
+      },
+      "minimum_justification": "The admitted registry and policy satisfy the grounded request.",
+      "expected_provider_recovery": false
+    },
+    {
+      "case_id": "v07-con-05-infeasible",
+      "pair_id": "v07-con-pair-05",
+      "category": "ambiguity",
+      "feasible": false,
+      "intent": {
+        "interpretation_status": "ambiguous",
+        "goals": [
+          {
+            "capability_id": "v07-p05-deliver",
+            "trust_policy_id": "v07-p05-ordinary",
+            "artifact_contract_id": "v07-p05-json"
+          },
+          {
+            "capability_id": "v07-p05-archive",
+            "trust_policy_id": "v07-p05-ordinary",
+            "artifact_contract_id": "v07-p05-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": [
+          "final action"
+        ]
+      },
+      "minimum_justification": "The requested terminal action remains explicitly ambiguous.",
+      "expected_provider_recovery": false
+    },
+    {
+      "case_id": "v07-con-06-feasible",
+      "pair_id": "v07-con-pair-06",
+      "category": "ambiguity",
+      "feasible": true,
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p06-deliver",
+            "trust_policy_id": "v07-p06-ordinary",
+            "artifact_contract_id": "v07-p06-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": []
+      },
+      "minimum_justification": "The admitted registry and policy satisfy the grounded request.",
+      "expected_provider_recovery": false
+    },
+    {
+      "case_id": "v07-con-06-infeasible",
+      "pair_id": "v07-con-pair-06",
+      "category": "ambiguity",
+      "feasible": false,
+      "intent": {
+        "interpretation_status": "ambiguous",
+        "goals": [
+          {
+            "capability_id": "v07-p06-deliver",
+            "trust_policy_id": "v07-p06-ordinary",
+            "artifact_contract_id": "v07-p06-json"
+          },
+          {
+            "capability_id": "v07-p06-archive",
+            "trust_policy_id": "v07-p06-ordinary",
+            "artifact_contract_id": "v07-p06-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": [
+          "final action"
+        ]
+      },
+      "minimum_justification": "The requested terminal action remains explicitly ambiguous.",
+      "expected_provider_recovery": false
+    },
+    {
+      "case_id": "v07-con-07-feasible",
+      "pair_id": "v07-con-pair-07",
+      "category": "ambiguity",
+      "feasible": true,
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p07-deliver",
+            "trust_policy_id": "v07-p07-ordinary",
+            "artifact_contract_id": "v07-p07-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": []
+      },
+      "minimum_justification": "The admitted registry and policy satisfy the grounded request.",
+      "expected_provider_recovery": false
+    },
+    {
+      "case_id": "v07-con-07-infeasible",
+      "pair_id": "v07-con-pair-07",
+      "category": "ambiguity",
+      "feasible": false,
+      "intent": {
+        "interpretation_status": "ambiguous",
+        "goals": [
+          {
+            "capability_id": "v07-p07-deliver",
+            "trust_policy_id": "v07-p07-ordinary",
+            "artifact_contract_id": "v07-p07-json"
+          },
+          {
+            "capability_id": "v07-p07-archive",
+            "trust_policy_id": "v07-p07-ordinary",
+            "artifact_contract_id": "v07-p07-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": [
+          "final action"
+        ]
+      },
+      "minimum_justification": "The requested terminal action remains explicitly ambiguous.",
+      "expected_provider_recovery": false
+    },
+    {
+      "case_id": "v07-con-08-feasible",
+      "pair_id": "v07-con-pair-08",
+      "category": "ambiguity",
+      "feasible": true,
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p08-deliver",
+            "trust_policy_id": "v07-p08-ordinary",
+            "artifact_contract_id": "v07-p08-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": []
+      },
+      "minimum_justification": "The admitted registry and policy satisfy the grounded request.",
+      "expected_provider_recovery": false
+    },
+    {
+      "case_id": "v07-con-08-infeasible",
+      "pair_id": "v07-con-pair-08",
+      "category": "ambiguity",
+      "feasible": false,
+      "intent": {
+        "interpretation_status": "ambiguous",
+        "goals": [
+          {
+            "capability_id": "v07-p08-deliver",
+            "trust_policy_id": "v07-p08-ordinary",
+            "artifact_contract_id": "v07-p08-json"
+          },
+          {
+            "capability_id": "v07-p08-archive",
+            "trust_policy_id": "v07-p08-ordinary",
+            "artifact_contract_id": "v07-p08-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": [
+          "final action"
+        ]
+      },
+      "minimum_justification": "The requested terminal action remains explicitly ambiguous.",
+      "expected_provider_recovery": false
+    },
+    {
+      "case_id": "v07-con-09-feasible",
+      "pair_id": "v07-con-pair-09",
+      "category": "negation",
+      "feasible": true,
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p09-deliver",
+            "trust_policy_id": "v07-p09-ordinary",
+            "artifact_contract_id": "v07-p09-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [
+          "v07-p09-backup"
+        ],
+        "unresolved_terms": []
+      },
+      "minimum_justification": "The admitted registry and policy satisfy the grounded request.",
+      "expected_provider_recovery": false
+    },
+    {
+      "case_id": "v07-con-09-infeasible",
+      "pair_id": "v07-con-pair-09",
+      "category": "negation",
+      "feasible": false,
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p09-deliver",
+            "trust_policy_id": "v07-p09-ordinary",
+            "artifact_contract_id": "v07-p09-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [
+          "v07-p09-primary",
+          "v07-p09-backup"
+        ],
+        "unresolved_terms": []
+      },
+      "minimum_justification": "Every provider of the terminal capability is forbidden.",
+      "expected_provider_recovery": false
+    },
+    {
+      "case_id": "v07-con-10-feasible",
+      "pair_id": "v07-con-pair-10",
+      "category": "negation",
+      "feasible": true,
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p10-deliver",
+            "trust_policy_id": "v07-p10-ordinary",
+            "artifact_contract_id": "v07-p10-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [
+          "v07-p10-backup"
+        ],
+        "unresolved_terms": []
+      },
+      "minimum_justification": "The admitted registry and policy satisfy the grounded request.",
+      "expected_provider_recovery": false
+    },
+    {
+      "case_id": "v07-con-10-infeasible",
+      "pair_id": "v07-con-pair-10",
+      "category": "negation",
+      "feasible": false,
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p10-deliver",
+            "trust_policy_id": "v07-p10-ordinary",
+            "artifact_contract_id": "v07-p10-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [
+          "v07-p10-primary",
+          "v07-p10-backup"
+        ],
+        "unresolved_terms": []
+      },
+      "minimum_justification": "Every provider of the terminal capability is forbidden.",
+      "expected_provider_recovery": false
+    },
+    {
+      "case_id": "v07-con-11-feasible",
+      "pair_id": "v07-con-pair-11",
+      "category": "negation",
+      "feasible": true,
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p11-deliver",
+            "trust_policy_id": "v07-p11-ordinary",
+            "artifact_contract_id": "v07-p11-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [
+          "v07-p11-backup"
+        ],
+        "unresolved_terms": []
+      },
+      "minimum_justification": "The admitted registry and policy satisfy the grounded request.",
+      "expected_provider_recovery": false
+    },
+    {
+      "case_id": "v07-con-11-infeasible",
+      "pair_id": "v07-con-pair-11",
+      "category": "negation",
+      "feasible": false,
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p11-deliver",
+            "trust_policy_id": "v07-p11-ordinary",
+            "artifact_contract_id": "v07-p11-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [
+          "v07-p11-primary",
+          "v07-p11-backup"
+        ],
+        "unresolved_terms": []
+      },
+      "minimum_justification": "Every provider of the terminal capability is forbidden.",
+      "expected_provider_recovery": false
+    },
+    {
+      "case_id": "v07-con-12-feasible",
+      "pair_id": "v07-con-pair-12",
+      "category": "negation",
+      "feasible": true,
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p12-deliver",
+            "trust_policy_id": "v07-p12-ordinary",
+            "artifact_contract_id": "v07-p12-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [
+          "v07-p12-backup"
+        ],
+        "unresolved_terms": []
+      },
+      "minimum_justification": "The admitted registry and policy satisfy the grounded request.",
+      "expected_provider_recovery": false
+    },
+    {
+      "case_id": "v07-con-12-infeasible",
+      "pair_id": "v07-con-pair-12",
+      "category": "negation",
+      "feasible": false,
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p12-deliver",
+            "trust_policy_id": "v07-p12-ordinary",
+            "artifact_contract_id": "v07-p12-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [
+          "v07-p12-primary",
+          "v07-p12-backup"
+        ],
+        "unresolved_terms": []
+      },
+      "minimum_justification": "Every provider of the terminal capability is forbidden.",
+      "expected_provider_recovery": false
+    },
+    {
+      "case_id": "v07-con-13-feasible",
+      "pair_id": "v07-con-pair-13",
+      "category": "trust",
+      "feasible": true,
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p13-deliver",
+            "trust_policy_id": "v07-p13-ordinary",
+            "artifact_contract_id": "v07-p13-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": []
+      },
+      "minimum_justification": "The admitted registry and policy satisfy the grounded request.",
+      "expected_provider_recovery": false
+    },
+    {
+      "case_id": "v07-con-13-infeasible",
+      "pair_id": "v07-con-pair-13",
+      "category": "trust",
+      "feasible": false,
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p13-deliver",
+            "trust_policy_id": "v07-p13-elevated",
+            "artifact_contract_id": "v07-p13-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": []
+      },
+      "minimum_justification": "No provider satisfies elevated trust.",
+      "expected_provider_recovery": false
+    },
+    {
+      "case_id": "v07-con-14-feasible",
+      "pair_id": "v07-con-pair-14",
+      "category": "trust",
+      "feasible": true,
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p14-deliver",
+            "trust_policy_id": "v07-p14-ordinary",
+            "artifact_contract_id": "v07-p14-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": []
+      },
+      "minimum_justification": "The admitted registry and policy satisfy the grounded request.",
+      "expected_provider_recovery": false
+    },
+    {
+      "case_id": "v07-con-14-infeasible",
+      "pair_id": "v07-con-pair-14",
+      "category": "trust",
+      "feasible": false,
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p14-deliver",
+            "trust_policy_id": "v07-p14-elevated",
+            "artifact_contract_id": "v07-p14-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": []
+      },
+      "minimum_justification": "No provider satisfies elevated trust.",
+      "expected_provider_recovery": false
+    },
+    {
+      "case_id": "v07-con-15-feasible",
+      "pair_id": "v07-con-pair-15",
+      "category": "trust",
+      "feasible": true,
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p15-deliver",
+            "trust_policy_id": "v07-p15-ordinary",
+            "artifact_contract_id": "v07-p15-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": []
+      },
+      "minimum_justification": "The admitted registry and policy satisfy the grounded request.",
+      "expected_provider_recovery": false
+    },
+    {
+      "case_id": "v07-con-15-infeasible",
+      "pair_id": "v07-con-pair-15",
+      "category": "trust",
+      "feasible": false,
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p15-deliver",
+            "trust_policy_id": "v07-p15-elevated",
+            "artifact_contract_id": "v07-p15-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": []
+      },
+      "minimum_justification": "No provider satisfies elevated trust.",
+      "expected_provider_recovery": false
+    },
+    {
+      "case_id": "v07-con-16-feasible",
+      "pair_id": "v07-con-pair-16",
+      "category": "trust",
+      "feasible": true,
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p16-deliver",
+            "trust_policy_id": "v07-p16-ordinary",
+            "artifact_contract_id": "v07-p16-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": []
+      },
+      "minimum_justification": "The admitted registry and policy satisfy the grounded request.",
+      "expected_provider_recovery": false
+    },
+    {
+      "case_id": "v07-con-16-infeasible",
+      "pair_id": "v07-con-pair-16",
+      "category": "trust",
+      "feasible": false,
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p16-deliver",
+            "trust_policy_id": "v07-p16-elevated",
+            "artifact_contract_id": "v07-p16-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": []
+      },
+      "minimum_justification": "No provider satisfies elevated trust.",
+      "expected_provider_recovery": false
+    },
+    {
+      "case_id": "v07-con-17-feasible",
+      "pair_id": "v07-con-pair-17",
+      "category": "artifact",
+      "feasible": true,
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p17-deliver",
+            "trust_policy_id": "v07-p17-ordinary",
+            "artifact_contract_id": "v07-p17-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": []
+      },
+      "minimum_justification": "The admitted registry and policy satisfy the grounded request.",
+      "expected_provider_recovery": false
+    },
+    {
+      "case_id": "v07-con-17-infeasible",
+      "pair_id": "v07-con-pair-17",
+      "category": "artifact",
+      "feasible": false,
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p17-deliver",
+            "trust_policy_id": "v07-p17-ordinary",
+            "artifact_contract_id": "v07-p17-signed-pdf"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": []
+      },
+      "minimum_justification": "No provider can satisfy the signed-PDF output contract.",
+      "expected_provider_recovery": false
+    },
+    {
+      "case_id": "v07-con-18-feasible",
+      "pair_id": "v07-con-pair-18",
+      "category": "artifact",
+      "feasible": true,
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p18-deliver",
+            "trust_policy_id": "v07-p18-ordinary",
+            "artifact_contract_id": "v07-p18-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": []
+      },
+      "minimum_justification": "The admitted registry and policy satisfy the grounded request.",
+      "expected_provider_recovery": false
+    },
+    {
+      "case_id": "v07-con-18-infeasible",
+      "pair_id": "v07-con-pair-18",
+      "category": "artifact",
+      "feasible": false,
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p18-deliver",
+            "trust_policy_id": "v07-p18-ordinary",
+            "artifact_contract_id": "v07-p18-signed-pdf"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": []
+      },
+      "minimum_justification": "No provider can satisfy the signed-PDF output contract.",
+      "expected_provider_recovery": false
+    },
+    {
+      "case_id": "v07-con-19-feasible",
+      "pair_id": "v07-con-pair-19",
+      "category": "artifact",
+      "feasible": true,
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p19-deliver",
+            "trust_policy_id": "v07-p19-ordinary",
+            "artifact_contract_id": "v07-p19-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": []
+      },
+      "minimum_justification": "The admitted registry and policy satisfy the grounded request.",
+      "expected_provider_recovery": false
+    },
+    {
+      "case_id": "v07-con-19-infeasible",
+      "pair_id": "v07-con-pair-19",
+      "category": "artifact",
+      "feasible": false,
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p19-deliver",
+            "trust_policy_id": "v07-p19-ordinary",
+            "artifact_contract_id": "v07-p19-signed-pdf"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": []
+      },
+      "minimum_justification": "No provider can satisfy the signed-PDF output contract.",
+      "expected_provider_recovery": false
+    },
+    {
+      "case_id": "v07-con-20-feasible",
+      "pair_id": "v07-con-pair-20",
+      "category": "artifact",
+      "feasible": true,
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p20-deliver",
+            "trust_policy_id": "v07-p20-ordinary",
+            "artifact_contract_id": "v07-p20-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": []
+      },
+      "minimum_justification": "The admitted registry and policy satisfy the grounded request.",
+      "expected_provider_recovery": false
+    },
+    {
+      "case_id": "v07-con-20-infeasible",
+      "pair_id": "v07-con-pair-20",
+      "category": "artifact",
+      "feasible": false,
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p20-deliver",
+            "trust_policy_id": "v07-p20-ordinary",
+            "artifact_contract_id": "v07-p20-signed-pdf"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": []
+      },
+      "minimum_justification": "No provider can satisfy the signed-PDF output contract.",
+      "expected_provider_recovery": false
+    },
+    {
+      "case_id": "v07-con-21-feasible",
+      "pair_id": "v07-con-pair-21",
+      "category": "dependencies",
+      "feasible": true,
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p21-deliver",
+            "trust_policy_id": "v07-p21-ordinary",
+            "artifact_contract_id": "v07-p21-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": []
+      },
+      "minimum_justification": "The admitted registry and policy satisfy the grounded request.",
+      "expected_provider_recovery": false
+    },
+    {
+      "case_id": "v07-con-21-infeasible",
+      "pair_id": "v07-con-pair-21",
+      "category": "dependencies",
+      "feasible": false,
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p21-deliver",
+            "trust_policy_id": "v07-p21-ordinary",
+            "artifact_contract_id": "v07-p21-json"
+          }
+        ],
+        "forbidden_capability_ids": [
+          "v07-p21-prepare"
+        ],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": []
+      },
+      "minimum_justification": "A required dependency is forbidden.",
+      "expected_provider_recovery": false
+    },
+    {
+      "case_id": "v07-con-22-feasible",
+      "pair_id": "v07-con-pair-22",
+      "category": "dependencies",
+      "feasible": true,
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p22-deliver",
+            "trust_policy_id": "v07-p22-ordinary",
+            "artifact_contract_id": "v07-p22-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": []
+      },
+      "minimum_justification": "The admitted registry and policy satisfy the grounded request.",
+      "expected_provider_recovery": false
+    },
+    {
+      "case_id": "v07-con-22-infeasible",
+      "pair_id": "v07-con-pair-22",
+      "category": "dependencies",
+      "feasible": false,
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p22-deliver",
+            "trust_policy_id": "v07-p22-ordinary",
+            "artifact_contract_id": "v07-p22-json"
+          }
+        ],
+        "forbidden_capability_ids": [
+          "v07-p22-prepare"
+        ],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": []
+      },
+      "minimum_justification": "A required dependency is forbidden.",
+      "expected_provider_recovery": false
+    },
+    {
+      "case_id": "v07-con-23-feasible",
+      "pair_id": "v07-con-pair-23",
+      "category": "dependencies",
+      "feasible": true,
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p23-deliver",
+            "trust_policy_id": "v07-p23-ordinary",
+            "artifact_contract_id": "v07-p23-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": []
+      },
+      "minimum_justification": "The admitted registry and policy satisfy the grounded request.",
+      "expected_provider_recovery": false
+    },
+    {
+      "case_id": "v07-con-23-infeasible",
+      "pair_id": "v07-con-pair-23",
+      "category": "dependencies",
+      "feasible": false,
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p23-deliver",
+            "trust_policy_id": "v07-p23-ordinary",
+            "artifact_contract_id": "v07-p23-json"
+          }
+        ],
+        "forbidden_capability_ids": [
+          "v07-p23-prepare"
+        ],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": []
+      },
+      "minimum_justification": "A required dependency is forbidden.",
+      "expected_provider_recovery": false
+    },
+    {
+      "case_id": "v07-con-24-feasible",
+      "pair_id": "v07-con-pair-24",
+      "category": "dependencies",
+      "feasible": true,
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p24-deliver",
+            "trust_policy_id": "v07-p24-ordinary",
+            "artifact_contract_id": "v07-p24-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": []
+      },
+      "minimum_justification": "The admitted registry and policy satisfy the grounded request.",
+      "expected_provider_recovery": false
+    },
+    {
+      "case_id": "v07-con-24-infeasible",
+      "pair_id": "v07-con-pair-24",
+      "category": "dependencies",
+      "feasible": false,
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p24-deliver",
+            "trust_policy_id": "v07-p24-ordinary",
+            "artifact_contract_id": "v07-p24-json"
+          }
+        ],
+        "forbidden_capability_ids": [
+          "v07-p24-prepare"
+        ],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": []
+      },
+      "minimum_justification": "A required dependency is forbidden.",
+      "expected_provider_recovery": false
+    },
+    {
+      "case_id": "v07-con-25-feasible",
+      "pair_id": "v07-con-pair-25",
+      "category": "provider_recovery",
+      "feasible": true,
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p25-deliver",
+            "trust_policy_id": "v07-p25-ordinary",
+            "artifact_contract_id": "v07-p25-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": []
+      },
+      "minimum_justification": "The admitted registry and policy satisfy the grounded request.",
+      "expected_provider_recovery": true
+    },
+    {
+      "case_id": "v07-con-25-infeasible",
+      "pair_id": "v07-con-pair-25",
+      "category": "provider_recovery",
+      "feasible": false,
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p25-deliver",
+            "trust_policy_id": "v07-p25-ordinary",
+            "artifact_contract_id": "v07-p25-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": []
+      },
+      "minimum_justification": "Every provider has an incompatible output mode.",
+      "expected_provider_recovery": false
+    },
+    {
+      "case_id": "v07-con-26-feasible",
+      "pair_id": "v07-con-pair-26",
+      "category": "provider_recovery",
+      "feasible": true,
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p26-deliver",
+            "trust_policy_id": "v07-p26-ordinary",
+            "artifact_contract_id": "v07-p26-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": []
+      },
+      "minimum_justification": "The admitted registry and policy satisfy the grounded request.",
+      "expected_provider_recovery": true
+    },
+    {
+      "case_id": "v07-con-26-infeasible",
+      "pair_id": "v07-con-pair-26",
+      "category": "provider_recovery",
+      "feasible": false,
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p26-deliver",
+            "trust_policy_id": "v07-p26-ordinary",
+            "artifact_contract_id": "v07-p26-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": []
+      },
+      "minimum_justification": "Every provider has an incompatible output mode.",
+      "expected_provider_recovery": false
+    },
+    {
+      "case_id": "v07-con-27-feasible",
+      "pair_id": "v07-con-pair-27",
+      "category": "provider_recovery",
+      "feasible": true,
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p27-deliver",
+            "trust_policy_id": "v07-p27-ordinary",
+            "artifact_contract_id": "v07-p27-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": []
+      },
+      "minimum_justification": "The admitted registry and policy satisfy the grounded request.",
+      "expected_provider_recovery": true
+    },
+    {
+      "case_id": "v07-con-27-infeasible",
+      "pair_id": "v07-con-pair-27",
+      "category": "provider_recovery",
+      "feasible": false,
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p27-deliver",
+            "trust_policy_id": "v07-p27-ordinary",
+            "artifact_contract_id": "v07-p27-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": []
+      },
+      "minimum_justification": "Every provider has an incompatible output mode.",
+      "expected_provider_recovery": false
+    },
+    {
+      "case_id": "v07-con-28-feasible",
+      "pair_id": "v07-con-pair-28",
+      "category": "provider_recovery",
+      "feasible": true,
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p28-deliver",
+            "trust_policy_id": "v07-p28-ordinary",
+            "artifact_contract_id": "v07-p28-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": []
+      },
+      "minimum_justification": "The admitted registry and policy satisfy the grounded request.",
+      "expected_provider_recovery": true
+    },
+    {
+      "case_id": "v07-con-28-infeasible",
+      "pair_id": "v07-con-pair-28",
+      "category": "provider_recovery",
+      "feasible": false,
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p28-deliver",
+            "trust_policy_id": "v07-p28-ordinary",
+            "artifact_contract_id": "v07-p28-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": []
+      },
+      "minimum_justification": "Every provider has an incompatible output mode.",
+      "expected_provider_recovery": false
+    },
+    {
+      "case_id": "v07-con-29-feasible",
+      "pair_id": "v07-con-pair-29",
+      "category": "adversarial",
+      "feasible": true,
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p29-deliver",
+            "trust_policy_id": "v07-p29-ordinary",
+            "artifact_contract_id": "v07-p29-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": []
+      },
+      "minimum_justification": "The admitted registry and policy satisfy the grounded request.",
+      "expected_provider_recovery": false
+    },
+    {
+      "case_id": "v07-con-29-infeasible",
+      "pair_id": "v07-con-pair-29",
+      "category": "adversarial",
+      "feasible": false,
+      "intent": {
+        "interpretation_status": "ambiguous",
+        "goals": [
+          {
+            "capability_id": "v07-p29-deliver",
+            "trust_policy_id": "v07-p29-ordinary",
+            "artifact_contract_id": "v07-p29-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": [
+          "ghost-exporter-1"
+        ]
+      },
+      "minimum_justification": "The injected provider name is outside the admitted vocabulary.",
+      "expected_provider_recovery": false
+    },
+    {
+      "case_id": "v07-con-30-feasible",
+      "pair_id": "v07-con-pair-30",
+      "category": "adversarial",
+      "feasible": true,
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p30-deliver",
+            "trust_policy_id": "v07-p30-ordinary",
+            "artifact_contract_id": "v07-p30-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": []
+      },
+      "minimum_justification": "The admitted registry and policy satisfy the grounded request.",
+      "expected_provider_recovery": false
+    },
+    {
+      "case_id": "v07-con-30-infeasible",
+      "pair_id": "v07-con-pair-30",
+      "category": "adversarial",
+      "feasible": false,
+      "intent": {
+        "interpretation_status": "ambiguous",
+        "goals": [
+          {
+            "capability_id": "v07-p30-deliver",
+            "trust_policy_id": "v07-p30-ordinary",
+            "artifact_contract_id": "v07-p30-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": [
+          "ghost-exporter-2"
+        ]
+      },
+      "minimum_justification": "The injected provider name is outside the admitted vocabulary.",
+      "expected_provider_recovery": false
+    },
+    {
+      "case_id": "v07-con-31-feasible",
+      "pair_id": "v07-con-pair-31",
+      "category": "adversarial",
+      "feasible": true,
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p31-deliver",
+            "trust_policy_id": "v07-p31-ordinary",
+            "artifact_contract_id": "v07-p31-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": []
+      },
+      "minimum_justification": "The admitted registry and policy satisfy the grounded request.",
+      "expected_provider_recovery": false
+    },
+    {
+      "case_id": "v07-con-31-infeasible",
+      "pair_id": "v07-con-pair-31",
+      "category": "adversarial",
+      "feasible": false,
+      "intent": {
+        "interpretation_status": "ambiguous",
+        "goals": [
+          {
+            "capability_id": "v07-p31-deliver",
+            "trust_policy_id": "v07-p31-ordinary",
+            "artifact_contract_id": "v07-p31-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": [
+          "ghost-exporter-3"
+        ]
+      },
+      "minimum_justification": "The injected provider name is outside the admitted vocabulary.",
+      "expected_provider_recovery": false
+    },
+    {
+      "case_id": "v07-con-32-feasible",
+      "pair_id": "v07-con-pair-32",
+      "category": "adversarial",
+      "feasible": true,
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p32-deliver",
+            "trust_policy_id": "v07-p32-ordinary",
+            "artifact_contract_id": "v07-p32-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": []
+      },
+      "minimum_justification": "The admitted registry and policy satisfy the grounded request.",
+      "expected_provider_recovery": false
+    },
+    {
+      "case_id": "v07-con-32-infeasible",
+      "pair_id": "v07-con-pair-32",
+      "category": "adversarial",
+      "feasible": false,
+      "intent": {
+        "interpretation_status": "ambiguous",
+        "goals": [
+          {
+            "capability_id": "v07-p32-deliver",
+            "trust_policy_id": "v07-p32-ordinary",
+            "artifact_contract_id": "v07-p32-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": [
+          "ghost-exporter-4"
+        ]
+      },
+      "minimum_justification": "The injected provider name is outside the admitted vocabulary.",
+      "expected_provider_recovery": false
+    }
+  ]
+}

@@ -1,0 +1,738 @@
+{
+  "schema_version": "0.7.0",
+  "identity": {
+    "phase": "development",
+    "arm": "production_hybrid_v07",
+    "case_id": "v07-dev-09-infeasible",
+    "pair_id": "v07-dev-pair-09",
+    "category": "negation",
+    "model_id": "qwen/qwen3-1.7b",
+    "seed": 11
+  },
+  "settings": {
+    "temperature": 0.2,
+    "top_p": 1.0,
+    "max_tokens": 800,
+    "schema_repair": false
+  },
+  "public_input_hash": "769812857d51a381d0bfb2b9585593eafbdc7f272df8feb6ffdb0ff5446baa6e",
+  "labels_loaded_during_collection": false,
+  "runtime_error": "",
+  "result": {
+    "prompt": [
+      {
+        "role": "system",
+        "content": "Ground the request only to the admitted identifiers below. Select semantic goals, explicit exclusions, trust policy, and artifact contract. Do not copy dependencies, assign providers, decide feasibility, or create a plan. Use null for an omitted policy or contract so deterministic defaults can apply.\nRules:\n1. Read depends_on before choosing goals. Select terminal requested outcomes only; prerequisites are added deterministically. If C depends on B and B depends on A, a request to perform A, B, then C has only C as a goal.\n2. A term matching a capability, policy, contract, agent name, description, or alias is resolved and must not appear in unresolved_terms.\n3. Use ambiguous when the request says either, unspecified, unclear, not specified, or otherwise leaves incompatible meanings unresolved. Put only the unresolved phrase from the request in unresolved_terms. Never put unused catalog identifiers or distractors in unresolved_terms.\n4. Add forbidden identifiers only for explicit prohibitions such as 'do not use'. Never infer a prohibition from provider capabilities or availability.\n5. Return only the schema-conforming JSON object and no explanation."
+      },
+      {
+        "role": "user",
+        "content": "CAPABILITIES\n- v07-p09-deliver: Publish research administration verified brief; Release the checked final brief for research administration.; aliases=['issue research administration brief', 'release research administration summary', 'issue the brief']; depends_on=['v07-p09-verify']\n- v07-p09-archive: Archive research administration verified brief; Preserve the checked research administration brief for long-term retention.; aliases=['retain research administration brief', 'store research administration summary', 'retain the brief']; depends_on=['v07-p09-verify']\n- v07-p09-verify: Validate research administration source packet; Check the assembled research administration material for correctness.; aliases=['check research administration inputs', 'verify research administration packet', 'check the packet']; depends_on=['v07-p09-prepare']\n- v07-p09-prepare: Assemble research administration source packet; Collect the source material needed for research administration.; aliases=['gather research administration inputs', 'prepare research administration packet', 'gather the inputs', 'prepare the research administration packet']; depends_on=[]\n\nTRUST POLICIES\n- v07-p09-ordinary: ordinary research administration assurance; Standard trust is sufficient for this research administration request.; aliases=['normal research administration assurance']\n- v07-p09-elevated: elevated research administration assurance; Elevated trust is mandatory for this research administration request.; aliases=['high assurance for research administration']\n\nARTIFACT CONTRACTS\n- v07-p09-json: research administration machine-readable JSON; Return the final research administration result as JSON.; aliases=['research administration json output']\n- v07-p09-signed-pdf: research administration signed PDF; Return the final research administration result as a signed PDF.; aliases=['signed research administration document']\n\nAGENTS\n- v07-p09-preparer: research administration source preparer\n- v07-p09-verifier: research administration source verifier\n- v07-p09-primary: primary research administration publisher\n- v07-p09-backup: backup research administration publisher\n\nREQUEST\nFor this research administration job, gather the inputs, check the packet, and issue the brief with normal research administration assurance as research administration JSON output. Do not use the primary research administration publisher or the backup research administration publisher."
+      }
+    ],
+    "output_schema": {
+      "type": "object",
+      "properties": {
+        "interpretation_status": {
+          "type": "string",
+          "enum": [
+            "resolved",
+            "ambiguous"
+          ]
+        },
+        "goals": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 4,
+          "items": {
+            "type": "object",
+            "properties": {
+              "capability_id": {
+                "type": "string",
+                "enum": [
+                  "v07-p09-deliver",
+                  "v07-p09-archive",
+                  "v07-p09-verify",
+                  "v07-p09-prepare"
+                ]
+              },
+              "trust_policy_id": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "v07-p09-ordinary",
+                      "v07-p09-elevated"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "artifact_contract_id": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "v07-p09-json",
+                      "v07-p09-signed-pdf"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "capability_id",
+              "trust_policy_id",
+              "artifact_contract_id"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "forbidden_capability_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "v07-p09-deliver",
+              "v07-p09-archive",
+              "v07-p09-verify",
+              "v07-p09-prepare"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "forbidden_agent_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "v07-p09-preparer",
+              "v07-p09-verifier",
+              "v07-p09-primary",
+              "v07-p09-backup"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "unresolved_terms": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 160
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "interpretation_status",
+        "goals",
+        "forbidden_capability_ids",
+        "forbidden_agent_ids",
+        "unresolved_terms"
+      ],
+      "additionalProperties": false
+    },
+    "interpretation": {
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p09-prepare",
+            "trust_policy_id": "v07-p09-ordinary",
+            "artifact_contract_id": "v07-p09-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [
+          "v07-p09-primary",
+          "v07-p09-backup"
+        ],
+        "unresolved_terms": []
+      },
+      "issues": [],
+      "initial_content": "{\n  \"interpretation_status\": \"resolved\",\n  \"goals\": [\n    {\n      \"capability_id\": \"v07-p09-prepare\",\n      \"trust_policy_id\": \"v07-p09-ordinary\"\n    ,\n      \"artifact_contract_id\": \"v07-p09-json\"\n    }\n  ],\n  \"forbidden_capability_ids\": [],\n  \"forbidden_agent_ids\": [\n    \"v07-p09-primary\",\n    \"v07-p09-backup\"\n  ]\n  ,\n  \"unresolved_terms\": []\n}\n",
+      "repaired_content": "",
+      "repair_attempted": false,
+      "call_count": 1,
+      "latency_ms": 2417.0340999844484,
+      "prompt_tokens": 713,
+      "completion_tokens": 126,
+      "model_id": "qwen/qwen3-1.7b",
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "interpretation_status": {
+            "type": "string",
+            "enum": [
+              "resolved",
+              "ambiguous"
+            ]
+          },
+          "goals": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 4,
+            "items": {
+              "type": "object",
+              "properties": {
+                "capability_id": {
+                  "type": "string",
+                  "enum": [
+                    "v07-p09-deliver",
+                    "v07-p09-archive",
+                    "v07-p09-verify",
+                    "v07-p09-prepare"
+                  ]
+                },
+                "trust_policy_id": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "enum": [
+                        "v07-p09-ordinary",
+                        "v07-p09-elevated"
+                      ]
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "artifact_contract_id": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "enum": [
+                        "v07-p09-json",
+                        "v07-p09-signed-pdf"
+                      ]
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "capability_id",
+                "trust_policy_id",
+                "artifact_contract_id"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "forbidden_capability_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "v07-p09-deliver",
+                "v07-p09-archive",
+                "v07-p09-verify",
+                "v07-p09-prepare"
+              ]
+            },
+            "uniqueItems": true
+          },
+          "forbidden_agent_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "v07-p09-preparer",
+                "v07-p09-verifier",
+                "v07-p09-primary",
+                "v07-p09-backup"
+              ]
+            },
+            "uniqueItems": true
+          },
+          "unresolved_terms": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 160
+            },
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "interpretation_status",
+          "goals",
+          "forbidden_capability_ids",
+          "forbidden_agent_ids",
+          "unresolved_terms"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "admission": {
+      "request": {
+        "user_goal": "For this research administration job, gather the inputs, check the packet, and issue the brief with normal research administration assurance as research administration JSON output. Do not use the primary research administration publisher or the backup research administration publisher.",
+        "requirements": [
+          {
+            "name": "Assemble research administration source packet",
+            "requirement_id": "v07-p09-prepare",
+            "capability_id": "v07-p09-prepare",
+            "description": "Collect the source material needed for research administration.",
+            "input_schema": {
+              "type": "object"
+            },
+            "output_schema": {
+              "type": "object"
+            },
+            "input_modes": [
+              "text"
+            ],
+            "output_modes": [
+              "source_bundle"
+            ],
+            "depends_on_requirement_ids": [],
+            "constraints": [],
+            "auxiliary_eligible": false,
+            "required_trust_level": "standard",
+            "side_effect_class": "read_only",
+            "expected_evidence": [],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              },
+              "required_artifacts": [
+                "v07-p09-source"
+              ],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          },
+          {
+            "name": "Validate research administration source packet",
+            "requirement_id": "v07-p09-verify",
+            "capability_id": "v07-p09-verify",
+            "description": "Check the assembled research administration material for correctness.",
+            "input_schema": {
+              "type": "object"
+            },
+            "output_schema": {
+              "type": "object"
+            },
+            "input_modes": [
+              "source_bundle"
+            ],
+            "output_modes": [
+              "checked_bundle"
+            ],
+            "depends_on_requirement_ids": [
+              "v07-p09-prepare"
+            ],
+            "constraints": [],
+            "auxiliary_eligible": false,
+            "required_trust_level": "standard",
+            "side_effect_class": "read_only",
+            "expected_evidence": [],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              },
+              "required_artifacts": [
+                "v07-p09-checked"
+              ],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          },
+          {
+            "name": "Publish research administration verified brief",
+            "requirement_id": "v07-p09-deliver",
+            "capability_id": "v07-p09-deliver",
+            "description": "Release the checked final brief for research administration.",
+            "input_schema": {
+              "type": "object"
+            },
+            "output_schema": {
+              "type": "object"
+            },
+            "input_modes": [
+              "checked_bundle"
+            ],
+            "output_modes": [
+              "json"
+            ],
+            "depends_on_requirement_ids": [
+              "v07-p09-verify"
+            ],
+            "constraints": [],
+            "auxiliary_eligible": false,
+            "required_trust_level": "standard",
+            "side_effect_class": "read_only",
+            "expected_evidence": [],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              },
+              "required_artifacts": [
+                "v07-p09-result"
+              ],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "constraints": [
+          {
+            "constraint_id": "forbidden-agents-v07-p09-prepare",
+            "source": "agent",
+            "path": "/agent_id",
+            "operator": "not_in",
+            "expected": [
+              "v07-p09-backup",
+              "v07-p09-primary"
+            ],
+            "requirement_id": "v07-p09-prepare",
+            "task_id": "",
+            "description": "Agent exclusions grounded from the raw request."
+          },
+          {
+            "constraint_id": "forbidden-agents-v07-p09-verify",
+            "source": "agent",
+            "path": "/agent_id",
+            "operator": "not_in",
+            "expected": [
+              "v07-p09-backup",
+              "v07-p09-primary"
+            ],
+            "requirement_id": "v07-p09-verify",
+            "task_id": "",
+            "description": "Agent exclusions grounded from the raw request."
+          },
+          {
+            "constraint_id": "forbidden-agents-v07-p09-deliver",
+            "source": "agent",
+            "path": "/agent_id",
+            "operator": "not_in",
+            "expected": [
+              "v07-p09-backup",
+              "v07-p09-primary"
+            ],
+            "requirement_id": "v07-p09-deliver",
+            "task_id": "",
+            "description": "Agent exclusions grounded from the raw request."
+          }
+        ],
+        "required_artifacts": [
+          "v07-p09-source",
+          "v07-p09-checked",
+          "v07-p09-result"
+        ],
+        "context": {
+          "semantic_intent": {
+            "interpretation_status": "resolved",
+            "goals": [
+              {
+                "capability_id": "v07-p09-deliver",
+                "trust_policy_id": "v07-p09-ordinary",
+                "artifact_contract_id": "v07-p09-json"
+              }
+            ],
+            "forbidden_capability_ids": [],
+            "forbidden_agent_ids": [
+              "v07-p09-backup",
+              "v07-p09-primary"
+            ],
+            "unresolved_terms": []
+          },
+          "semantic_catalog_grounded": true
+        }
+      },
+      "canonical_intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p09-deliver",
+            "trust_policy_id": "v07-p09-ordinary",
+            "artifact_contract_id": "v07-p09-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [
+          "v07-p09-backup",
+          "v07-p09-primary"
+        ],
+        "unresolved_terms": []
+      },
+      "issues": []
+    },
+    "compilation": {
+      "proposal": {
+        "tasks": [
+          {
+            "task_id": "t1",
+            "requirement_name": "Assemble research administration source packet",
+            "requirement_id": "v07-p09-prepare",
+            "capability_id": "v07-p09-prepare",
+            "description": "",
+            "assigned_to": "v07-p09-preparer",
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "v07-p09-source"
+            ],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              },
+              "required_artifacts": [
+                "v07-p09-source"
+              ],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          },
+          {
+            "task_id": "t2",
+            "requirement_name": "Validate research administration source packet",
+            "requirement_id": "v07-p09-verify",
+            "capability_id": "v07-p09-verify",
+            "description": "",
+            "assigned_to": "v07-p09-verifier",
+            "auxiliary_spec_id": null,
+            "depends_on": [
+              "t1"
+            ],
+            "expected_artifacts": [
+              "v07-p09-checked"
+            ],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              },
+              "required_artifacts": [
+                "v07-p09-checked"
+              ],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          },
+          {
+            "task_id": "t3",
+            "requirement_name": "Publish research administration verified brief",
+            "requirement_id": "v07-p09-deliver",
+            "capability_id": "v07-p09-deliver",
+            "description": "",
+            "assigned_to": "v07-p09-backup",
+            "auxiliary_spec_id": null,
+            "depends_on": [
+              "t2"
+            ],
+            "expected_artifacts": [
+              "v07-p09-result"
+            ],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              },
+              "required_artifacts": [
+                "v07-p09-result"
+              ],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {
+          "t1": "v07-p09-preparer",
+          "t2": "v07-p09-verifier",
+          "t3": "v07-p09-backup"
+        },
+        "generated_nlp_agents": [],
+        "execution_order": [
+          "t1",
+          "t2",
+          "t3"
+        ],
+        "expected_artifacts": [
+          "v07-p09-source",
+          "v07-p09-checked",
+          "v07-p09-result"
+        ],
+        "completion_criteria": [
+          "artifact:v07-p09-source",
+          "artifact:v07-p09-checked",
+          "artifact:v07-p09-result"
+        ],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [
+            "v07-p09-source",
+            "v07-p09-checked",
+            "v07-p09-result"
+          ],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      },
+      "report": {
+        "feasible": false,
+        "matched_agents": {
+          "t1": "v07-p09-preparer",
+          "t2": "v07-p09-verifier",
+          "t3": "v07-p09-backup"
+        },
+        "generated_nlp_agents": [],
+        "missing_capabilities": [],
+        "risks": [
+          "Constraint forbidden-agents-v07-p09-deliver failed: predicate evaluated false."
+        ],
+        "explanation": "Plan rejected by deterministic feasibility checks.",
+        "evidence": [
+          {
+            "name": "well_formed",
+            "passed": true,
+            "details": {}
+          },
+          {
+            "name": "covered",
+            "passed": true,
+            "details": {}
+          },
+          {
+            "name": "total_assignment",
+            "passed": true,
+            "details": {}
+          },
+          {
+            "name": "authorized",
+            "passed": true,
+            "details": {}
+          },
+          {
+            "name": "compatible",
+            "passed": true,
+            "details": {}
+          },
+          {
+            "name": "acyclic",
+            "passed": true,
+            "details": {}
+          },
+          {
+            "name": "ordered",
+            "passed": true,
+            "details": {}
+          },
+          {
+            "name": "requirements_complete",
+            "passed": true,
+            "details": {}
+          },
+          {
+            "name": "complete",
+            "passed": true,
+            "details": {}
+          },
+          {
+            "name": "verifiable",
+            "passed": true,
+            "details": {}
+          },
+          {
+            "name": "constraints_satisfied",
+            "passed": false,
+            "details": {
+              "violations": [
+                {
+                  "constraint_id": "forbidden-agents-v07-p09-deliver",
+                  "reason": "predicate evaluated false",
+                  "actual": "v07-p09-backup",
+                  "expected": [
+                    "v07-p09-backup",
+                    "v07-p09-primary"
+                  ]
+                }
+              ]
+            }
+          }
+        ],
+        "constraint_violations": [
+          {
+            "constraint_id": "forbidden-agents-v07-p09-deliver",
+            "reason": "predicate evaluated false",
+            "actual": "v07-p09-backup",
+            "expected": [
+              "v07-p09-backup",
+              "v07-p09-primary"
+            ]
+          }
+        ],
+        "validation_gaps": [],
+        "schema_violations": [],
+        "capability_resolution": [
+          {
+            "task_id": "t1",
+            "requirement_id": "v07-p09-prepare",
+            "requested_capability_id": "v07-p09-prepare",
+            "agent_id": "v07-p09-preparer",
+            "resolved": true,
+            "resolved_capability_id": "v07-p09-prepare"
+          },
+          {
+            "task_id": "t2",
+            "requirement_id": "v07-p09-verify",
+            "requested_capability_id": "v07-p09-verify",
+            "agent_id": "v07-p09-verifier",
+            "resolved": true,
+            "resolved_capability_id": "v07-p09-verify"
+          },
+          {
+            "task_id": "t3",
+            "requirement_id": "v07-p09-deliver",
+            "requested_capability_id": "v07-p09-deliver",
+            "agent_id": "v07-p09-backup",
+            "resolved": true,
+            "resolved_capability_id": "v07-p09-deliver"
+          }
+        ]
+      },
+      "diagnostics": {
+        "provider_candidates": {
+          "v07-p09-prepare": [
+            "v07-p09-preparer"
+          ],
+          "v07-p09-verify": [
+            "v07-p09-verifier"
+          ],
+          "v07-p09-deliver": [
+            "v07-p09-backup",
+            "v07-p09-primary"
+          ]
+        },
+        "assignments_total": 2,
+        "assignments_considered": 2,
+        "recovered_alternative_provider": false,
+        "search_exhausted": false,
+        "issues": []
+      }
+    },
+    "accepted": false,
+    "call_count": 1,
+    "prompt_tokens": 713,
+    "completion_tokens": 126
+  }
+}

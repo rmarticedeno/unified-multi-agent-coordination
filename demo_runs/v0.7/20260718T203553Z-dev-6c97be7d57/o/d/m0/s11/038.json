@@ -1,0 +1,319 @@
+{
+  "schema_version": "0.7.0",
+  "identity": {
+    "phase": "development",
+    "arm": "direct_llm_v07",
+    "case_id": "v07-dev-20-feasible",
+    "pair_id": "v07-dev-pair-20",
+    "category": "provider_recovery",
+    "model_id": "qwen/qwen3-1.7b",
+    "seed": 11
+  },
+  "settings": {
+    "temperature": 0.2,
+    "top_p": 1.0,
+    "max_tokens": 800,
+    "schema_repair": false
+  },
+  "public_input_hash": "d96db8fbb634745050958a871627230971b9704b9367dfb39ea7a04c36dffc82",
+  "labels_loaded_during_collection": false,
+  "runtime_error": "",
+  "result": {
+    "prompt": [
+      {
+        "role": "system",
+        "content": "Act as a direct LLM coordinator without a symbolic authorization boundary. Interpret the raw request, decide accept or refuse, assign admitted agents to every required capability, and give dependency-respecting execution_order. Use only identifiers in the supplied catalog and registry. Mark unresolved meaning ambiguous. Return only schema-conforming JSON."
+      },
+      {
+        "role": "user",
+        "content": "{\"request_text\":\"Using the admitted sensor inspection services, gather the inputs, check the packet, and issue the brief with normal sensor inspection assurance as sensor inspection JSON output.\",\"catalog\":{\"capabilities\":[{\"capability_id\":\"v07-p20-prepare\",\"name\":\"Assemble sensor inspection source packet\",\"description\":\"Collect the source material needed for sensor inspection.\",\"aliases\":[\"gather sensor inspection inputs\",\"prepare sensor inspection packet\",\"gather the inputs\",\"prepare the sensor inspection packet\"],\"depends_on_capability_ids\":[],\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"text\"],\"output_modes\":[\"source_bundle\"],\"side_effect_class\":\"read_only\",\"auxiliary_eligible\":false,\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p20-source\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}},{\"capability_id\":\"v07-p20-verify\",\"name\":\"Validate sensor inspection source packet\",\"description\":\"Check the assembled sensor inspection material for correctness.\",\"aliases\":[\"check sensor inspection inputs\",\"verify sensor inspection packet\",\"check the packet\"],\"depends_on_capability_ids\":[\"v07-p20-prepare\"],\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"source_bundle\"],\"output_modes\":[\"checked_bundle\"],\"side_effect_class\":\"read_only\",\"auxiliary_eligible\":false,\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p20-checked\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}},{\"capability_id\":\"v07-p20-deliver\",\"name\":\"Publish sensor inspection verified brief\",\"description\":\"Release the checked final brief for sensor inspection.\",\"aliases\":[\"issue sensor inspection brief\",\"release sensor inspection summary\",\"issue the brief\"],\"depends_on_capability_ids\":[\"v07-p20-verify\"],\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"checked_bundle\"],\"output_modes\":[\"json\",\"signed_pdf\"],\"side_effect_class\":\"read_only\",\"auxiliary_eligible\":false,\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p20-result\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}},{\"capability_id\":\"v07-p20-archive\",\"name\":\"Archive sensor inspection verified brief\",\"description\":\"Preserve the checked sensor inspection brief for long-term retention.\",\"aliases\":[\"retain sensor inspection brief\",\"store sensor inspection summary\",\"retain the brief\"],\"depends_on_capability_ids\":[\"v07-p20-verify\"],\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"checked_bundle\"],\"output_modes\":[\"json\"],\"side_effect_class\":\"read_only\",\"auxiliary_eligible\":false,\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p20-archive-result\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}},{\"capability_id\":\"v07-p20-distractor-1\",\"name\":\"Auxiliary sensor inspection operation 1\",\"description\":\"Perform unrelated sensor inspection auxiliary operation number 1.\",\"aliases\":[\"auxiliary operation v07-p20 1\"],\"depends_on_capability_ids\":[],\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"text\"],\"output_modes\":[\"data\"],\"side_effect_class\":\"read_only\",\"auxiliary_eligible\":false,\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p20-distractor-artifact-1\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}},{\"capability_id\":\"v07-p20-distractor-2\",\"name\":\"Auxiliary sensor inspection operation 2\",\"description\":\"Perform unrelated sensor inspection auxiliary operation number 2.\",\"aliases\":[\"auxiliary operation v07-p20 2\"],\"depends_on_capability_ids\":[],\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"text\"],\"output_modes\":[\"data\"],\"side_effect_class\":\"read_only\",\"auxiliary_eligible\":false,\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p20-distractor-artifact-2\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}},{\"capability_id\":\"v07-p20-distractor-3\",\"name\":\"Auxiliary sensor inspection operation 3\",\"description\":\"Perform unrelated sensor inspection auxiliary operation number 3.\",\"aliases\":[\"auxiliary operation v07-p20 3\"],\"depends_on_capability_ids\":[],\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"text\"],\"output_modes\":[\"data\"],\"side_effect_class\":\"read_only\",\"auxiliary_eligible\":false,\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p20-distractor-artifact-3\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}},{\"capability_id\":\"v07-p20-distractor-4\",\"name\":\"Auxiliary sensor inspection operation 4\",\"description\":\"Perform unrelated sensor inspection auxiliary operation number 4.\",\"aliases\":[\"auxiliary operation v07-p20 4\"],\"depends_on_capability_ids\":[],\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"text\"],\"output_modes\":[\"data\"],\"side_effect_class\":\"read_only\",\"auxiliary_eligible\":false,\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p20-distractor-artifact-4\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}},{\"capability_id\":\"v07-p20-distractor-5\",\"name\":\"Auxiliary sensor inspection operation 5\",\"description\":\"Perform unrelated sensor inspection auxiliary operation number 5.\",\"aliases\":[\"auxiliary operation v07-p20 5\"],\"depends_on_capability_ids\":[],\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"text\"],\"output_modes\":[\"data\"],\"side_effect_class\":\"read_only\",\"auxiliary_eligible\":false,\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p20-distractor-artifact-5\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}},{\"capability_id\":\"v07-p20-distractor-6\",\"name\":\"Auxiliary sensor inspection operation 6\",\"description\":\"Perform unrelated sensor inspection auxiliary operation number 6.\",\"aliases\":[\"auxiliary operation v07-p20 6\"],\"depends_on_capability_ids\":[],\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"text\"],\"output_modes\":[\"data\"],\"side_effect_class\":\"read_only\",\"auxiliary_eligible\":false,\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p20-distractor-artifact-6\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}},{\"capability_id\":\"v07-p20-distractor-7\",\"name\":\"Auxiliary sensor inspection operation 7\",\"description\":\"Perform unrelated sensor inspection auxiliary operation number 7.\",\"aliases\":[\"auxiliary operation v07-p20 7\"],\"depends_on_capability_ids\":[],\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"text\"],\"output_modes\":[\"data\"],\"side_effect_class\":\"read_only\",\"auxiliary_eligible\":false,\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p20-distractor-artifact-7\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}},{\"capability_id\":\"v07-p20-distractor-8\",\"name\":\"Auxiliary sensor inspection operation 8\",\"description\":\"Perform unrelated sensor inspection auxiliary operation number 8.\",\"aliases\":[\"auxiliary operation v07-p20 8\"],\"depends_on_capability_ids\":[],\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"text\"],\"output_modes\":[\"data\"],\"side_effect_class\":\"read_only\",\"auxiliary_eligible\":false,\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p20-distractor-artifact-8\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}},{\"capability_id\":\"v07-p20-distractor-9\",\"name\":\"Auxiliary sensor inspection operation 9\",\"description\":\"Perform unrelated sensor inspection auxiliary operation number 9.\",\"aliases\":[\"auxiliary operation v07-p20 9\"],\"depends_on_capability_ids\":[],\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"text\"],\"output_modes\":[\"data\"],\"side_effect_class\":\"read_only\",\"auxiliary_eligible\":false,\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p20-distractor-artifact-9\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}},{\"capability_id\":\"v07-p20-distractor-10\",\"name\":\"Auxiliary sensor inspection operation 10\",\"description\":\"Perform unrelated sensor inspection auxiliary operation number 10.\",\"aliases\":[\"auxiliary operation v07-p20 10\"],\"depends_on_capability_ids\":[],\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"text\"],\"output_modes\":[\"data\"],\"side_effect_class\":\"read_only\",\"auxiliary_eligible\":false,\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p20-distractor-artifact-10\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}},{\"capability_id\":\"v07-p20-distractor-11\",\"name\":\"Auxiliary sensor inspection operation 11\",\"description\":\"Perform unrelated sensor inspection auxiliary operation number 11.\",\"aliases\":[\"auxiliary operation v07-p20 11\"],\"depends_on_capability_ids\":[],\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"text\"],\"output_modes\":[\"data\"],\"side_effect_class\":\"read_only\",\"auxiliary_eligible\":false,\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p20-distractor-artifact-11\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}},{\"capability_id\":\"v07-p20-distractor-12\",\"name\":\"Auxiliary sensor inspection operation 12\",\"description\":\"Perform unrelated sensor inspection auxiliary operation number 12.\",\"aliases\":[\"auxiliary operation v07-p20 12\"],\"depends_on_capability_ids\":[],\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"text\"],\"output_modes\":[\"data\"],\"side_effect_class\":\"read_only\",\"auxiliary_eligible\":false,\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p20-distractor-artifact-12\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}}],\"trust_policies\":[{\"policy_id\":\"v07-p20-ordinary\",\"name\":\"ordinary sensor inspection assurance\",\"description\":\"Standard trust is sufficient for this sensor inspection request.\",\"aliases\":[\"normal sensor inspection assurance\"],\"required_trust_level\":\"standard\"},{\"policy_id\":\"v07-p20-elevated\",\"name\":\"elevated sensor inspection assurance\",\"description\":\"Elevated trust is mandatory for this sensor inspection request.\",\"aliases\":[\"high assurance for sensor inspection\"],\"required_trust_level\":\"elevated\"}],\"artifact_contracts\":[{\"contract_id\":\"v07-p20-json\",\"name\":\"sensor inspection machine-readable JSON\",\"description\":\"Return the final sensor inspection result as JSON.\",\"aliases\":[\"sensor inspection json output\"],\"output_modes\":[\"json\"],\"required_artifacts\":[\"v07-p20-result\"],\"json_schema\":{\"type\":\"object\"}},{\"contract_id\":\"v07-p20-signed-pdf\",\"name\":\"sensor inspection signed PDF\",\"description\":\"Return the final sensor inspection result as a signed PDF.\",\"aliases\":[\"signed sensor inspection document\"],\"output_modes\":[\"signed_pdf\"],\"required_artifacts\":[\"v07-p20-signed-pdf\"],\"json_schema\":{\"type\":\"object\"}}],\"default_trust_policy_id\":\"v07-p20-ordinary\",\"default_artifact_contract_id\":\"v07-p20-json\"},\"registry\":[{\"agent_id\":\"v07-p20-preparer\",\"name\":\"sensor inspection source preparer\",\"agent_kind\":\"remote_a2a\",\"description\":\"\",\"service_endpoint\":\"https://v07-p20-preparer.example/a2a\",\"invocation_endpoint\":\"\",\"skills\":[{\"name\":\"Assemble sensor inspection source packet\",\"requirement_id\":\"v07-p20-prepare\",\"capability_id\":\"v07-p20-prepare\",\"description\":\"\",\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"text\"],\"output_modes\":[\"source_bundle\"],\"depends_on_requirement_ids\":[],\"constraints\":[],\"auxiliary_eligible\":false,\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"expected_evidence\":[],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p20-source\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}}],\"input_modes\":[],\"output_modes\":[],\"status\":\"available\",\"trust_level\":\"standard\",\"validation_contract\":{\"json_schema\":{},\"required_artifacts\":[],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"},\"security_schemes\":{},\"required_security_schemes\":[],\"source_card\":{},\"supports_fencing\":false,\"availability_scope\":\"remote\",\"owner_node_id\":\"\"},{\"agent_id\":\"v07-p20-verifier\",\"name\":\"sensor inspection source verifier\",\"agent_kind\":\"remote_a2a\",\"description\":\"\",\"service_endpoint\":\"https://v07-p20-verifier.example/a2a\",\"invocation_endpoint\":\"\",\"skills\":[{\"name\":\"Validate sensor inspection source packet\",\"requirement_id\":\"v07-p20-verify\",\"capability_id\":\"v07-p20-verify\",\"description\":\"\",\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"source_bundle\"],\"output_modes\":[\"checked_bundle\"],\"depends_on_requirement_ids\":[],\"constraints\":[],\"auxiliary_eligible\":false,\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"expected_evidence\":[],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p20-checked\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}}],\"input_modes\":[],\"output_modes\":[],\"status\":\"available\",\"trust_level\":\"standard\",\"validation_contract\":{\"json_schema\":{},\"required_artifacts\":[],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"},\"security_schemes\":{},\"required_security_schemes\":[],\"source_card\":{},\"supports_fencing\":false,\"availability_scope\":\"remote\",\"owner_node_id\":\"\"},{\"agent_id\":\"v07-p20-primary\",\"name\":\"primary sensor inspection publisher\",\"agent_kind\":\"remote_a2a\",\"description\":\"\",\"service_endpoint\":\"https://v07-p20-primary.example/a2a\",\"invocation_endpoint\":\"\",\"skills\":[{\"name\":\"Publish sensor inspection verified brief\",\"requirement_id\":\"v07-p20-deliver\",\"capability_id\":\"v07-p20-deliver\",\"description\":\"\",\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"checked_bundle\"],\"output_modes\":[\"text\"],\"depends_on_requirement_ids\":[],\"constraints\":[],\"auxiliary_eligible\":false,\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"expected_evidence\":[],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p20-result\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}}],\"input_modes\":[],\"output_modes\":[],\"status\":\"available\",\"trust_level\":\"standard\",\"validation_contract\":{\"json_schema\":{},\"required_artifacts\":[],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"},\"security_schemes\":{},\"required_security_schemes\":[],\"source_card\":{},\"supports_fencing\":false,\"availability_scope\":\"remote\",\"owner_node_id\":\"\"},{\"agent_id\":\"v07-p20-backup\",\"name\":\"backup sensor inspection publisher\",\"agent_kind\":\"remote_a2a\",\"description\":\"\",\"service_endpoint\":\"https://v07-p20-backup.example/a2a\",\"invocation_endpoint\":\"\",\"skills\":[{\"name\":\"Publish sensor inspection verified brief\",\"requirement_id\":\"v07-p20-deliver\",\"capability_id\":\"v07-p20-deliver\",\"description\":\"\",\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"checked_bundle\"],\"output_modes\":[\"json\"],\"depends_on_requirement_ids\":[],\"constraints\":[],\"auxiliary_eligible\":false,\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"expected_evidence\":[],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p20-result\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}}],\"input_modes\":[],\"output_modes\":[],\"status\":\"available\",\"trust_level\":\"standard\",\"validation_contract\":{\"json_schema\":{},\"required_artifacts\":[],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"},\"security_schemes\":{},\"required_security_schemes\":[],\"source_card\":{},\"supports_fencing\":false,\"availability_scope\":\"remote\",\"owner_node_id\":\"\"}]}"
+      }
+    ],
+    "output_schema": {
+      "type": "object",
+      "properties": {
+        "interpretation_status": {
+          "type": "string",
+          "enum": [
+            "resolved",
+            "ambiguous"
+          ]
+        },
+        "goals": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 16,
+          "items": {
+            "type": "object",
+            "properties": {
+              "capability_id": {
+                "type": "string",
+                "enum": [
+                  "v07-p20-deliver",
+                  "v07-p20-archive",
+                  "v07-p20-verify",
+                  "v07-p20-prepare",
+                  "v07-p20-distractor-1",
+                  "v07-p20-distractor-2",
+                  "v07-p20-distractor-3",
+                  "v07-p20-distractor-4",
+                  "v07-p20-distractor-5",
+                  "v07-p20-distractor-6",
+                  "v07-p20-distractor-7",
+                  "v07-p20-distractor-8",
+                  "v07-p20-distractor-9",
+                  "v07-p20-distractor-10",
+                  "v07-p20-distractor-11",
+                  "v07-p20-distractor-12"
+                ]
+              },
+              "trust_policy_id": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "v07-p20-ordinary",
+                      "v07-p20-elevated"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "artifact_contract_id": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "v07-p20-json",
+                      "v07-p20-signed-pdf"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "capability_id",
+              "trust_policy_id",
+              "artifact_contract_id"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "forbidden_capability_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "v07-p20-deliver",
+              "v07-p20-archive",
+              "v07-p20-verify",
+              "v07-p20-prepare",
+              "v07-p20-distractor-1",
+              "v07-p20-distractor-2",
+              "v07-p20-distractor-3",
+              "v07-p20-distractor-4",
+              "v07-p20-distractor-5",
+              "v07-p20-distractor-6",
+              "v07-p20-distractor-7",
+              "v07-p20-distractor-8",
+              "v07-p20-distractor-9",
+              "v07-p20-distractor-10",
+              "v07-p20-distractor-11",
+              "v07-p20-distractor-12"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "forbidden_agent_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "v07-p20-preparer",
+              "v07-p20-verifier",
+              "v07-p20-primary",
+              "v07-p20-backup"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "unresolved_terms": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 160
+          },
+          "uniqueItems": true
+        },
+        "decision": {
+          "type": "string",
+          "enum": [
+            "accept",
+            "refuse"
+          ]
+        },
+        "assignments": {
+          "type": "array",
+          "maxItems": 16,
+          "items": {
+            "type": "object",
+            "properties": {
+              "capability_id": {
+                "type": "string",
+                "enum": [
+                  "v07-p20-prepare",
+                  "v07-p20-verify",
+                  "v07-p20-deliver",
+                  "v07-p20-archive",
+                  "v07-p20-distractor-1",
+                  "v07-p20-distractor-2",
+                  "v07-p20-distractor-3",
+                  "v07-p20-distractor-4",
+                  "v07-p20-distractor-5",
+                  "v07-p20-distractor-6",
+                  "v07-p20-distractor-7",
+                  "v07-p20-distractor-8",
+                  "v07-p20-distractor-9",
+                  "v07-p20-distractor-10",
+                  "v07-p20-distractor-11",
+                  "v07-p20-distractor-12"
+                ]
+              },
+              "agent_id": {
+                "type": "string",
+                "enum": [
+                  "v07-p20-preparer",
+                  "v07-p20-verifier",
+                  "v07-p20-primary",
+                  "v07-p20-backup"
+                ]
+              }
+            },
+            "required": [
+              "capability_id",
+              "agent_id"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "execution_order": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "v07-p20-prepare",
+              "v07-p20-verify",
+              "v07-p20-deliver",
+              "v07-p20-archive",
+              "v07-p20-distractor-1",
+              "v07-p20-distractor-2",
+              "v07-p20-distractor-3",
+              "v07-p20-distractor-4",
+              "v07-p20-distractor-5",
+              "v07-p20-distractor-6",
+              "v07-p20-distractor-7",
+              "v07-p20-distractor-8",
+              "v07-p20-distractor-9",
+              "v07-p20-distractor-10",
+              "v07-p20-distractor-11",
+              "v07-p20-distractor-12"
+            ]
+          }
+        }
+      },
+      "required": [
+        "interpretation_status",
+        "goals",
+        "forbidden_capability_ids",
+        "forbidden_agent_ids",
+        "unresolved_terms",
+        "decision",
+        "assignments",
+        "execution_order"
+      ],
+      "additionalProperties": false
+    },
+    "raw_response": {
+      "id": "chatcmpl-yyp5hhc9h1agr96i595fhq",
+      "object": "chat.completion",
+      "created": 1784407232,
+      "model": "qwen/qwen3-1.7b",
+      "choices": [
+        {
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\"interpretation_status\":\"resolved\",\"goals\":[{\"capability_id\":\"v07-p20-prepare\",\"trust_policy_id\":\"v07-p20-ordinary\",\"artifact_contract_id\":\"v07-p20-json\"},{\"capability_id\":\"v07-p20-verify\",\"trust_policy_id\":\"v07-p20-ordinary\",\"artifact_contract_id\":\"v07-p20-json\"},{\"capability_id\":\"v07-p20-deliver\",\"trust_policy_id\":\"v07-p20-ordinary\",\"artifact_contract_id\":\"v07-p20-json\"}],\"forbidden_capability_ids\":[],\"forbidden_agent_ids\":[],\"unresolved_terms\":[],\"decision\":\"accept\",\"assignments\":[{\"capability_id\":\"v07-p20-prepare\",\"agent_id\":\"v07-p20-preparer\"},{\"capability_id\":\"v07-p20-verify\",\"agent_id\":\"v07-p20-verifier\"},{\"capability_id\":\"v07-p20-deliver\",\"agent_id\":\"v07-p20-primary\"}],\"execution_order\":[\"v07-p20-prepare\",\"v07-p20-verify\",\"v07-p20-deliver\"]}",
+            "reasoning_content": "",
+            "tool_calls": []
+          },
+          "logprobs": null,
+          "finish_reason": "stop"
+        }
+      ],
+      "usage": {
+        "prompt_tokens": 3773,
+        "completion_tokens": 261,
+        "total_tokens": 4034,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "stats": {},
+      "system_fingerprint": "qwen/qwen3-1.7b"
+    },
+    "content": "{\"interpretation_status\":\"resolved\",\"goals\":[{\"capability_id\":\"v07-p20-prepare\",\"trust_policy_id\":\"v07-p20-ordinary\",\"artifact_contract_id\":\"v07-p20-json\"},{\"capability_id\":\"v07-p20-verify\",\"trust_policy_id\":\"v07-p20-ordinary\",\"artifact_contract_id\":\"v07-p20-json\"},{\"capability_id\":\"v07-p20-deliver\",\"trust_policy_id\":\"v07-p20-ordinary\",\"artifact_contract_id\":\"v07-p20-json\"}],\"forbidden_capability_ids\":[],\"forbidden_agent_ids\":[],\"unresolved_terms\":[],\"decision\":\"accept\",\"assignments\":[{\"capability_id\":\"v07-p20-prepare\",\"agent_id\":\"v07-p20-preparer\"},{\"capability_id\":\"v07-p20-verify\",\"agent_id\":\"v07-p20-verifier\"},{\"capability_id\":\"v07-p20-deliver\",\"agent_id\":\"v07-p20-primary\"}],\"execution_order\":[\"v07-p20-prepare\",\"v07-p20-verify\",\"v07-p20-deliver\"]}",
+    "parsed": {
+      "interpretation_status": "resolved",
+      "goals": [
+        {
+          "capability_id": "v07-p20-prepare",
+          "trust_policy_id": "v07-p20-ordinary",
+          "artifact_contract_id": "v07-p20-json"
+        },
+        {
+          "capability_id": "v07-p20-verify",
+          "trust_policy_id": "v07-p20-ordinary",
+          "artifact_contract_id": "v07-p20-json"
+        },
+        {
+          "capability_id": "v07-p20-deliver",
+          "trust_policy_id": "v07-p20-ordinary",
+          "artifact_contract_id": "v07-p20-json"
+        }
+      ],
+      "forbidden_capability_ids": [],
+      "forbidden_agent_ids": [],
+      "unresolved_terms": [],
+      "decision": "accept",
+      "assignments": [
+        {
+          "capability_id": "v07-p20-prepare",
+          "agent_id": "v07-p20-preparer"
+        },
+        {
+          "capability_id": "v07-p20-verify",
+          "agent_id": "v07-p20-verifier"
+        },
+        {
+          "capability_id": "v07-p20-deliver",
+          "agent_id": "v07-p20-primary"
+        }
+      ],
+      "execution_order": [
+        "v07-p20-prepare",
+        "v07-p20-verify",
+        "v07-p20-deliver"
+      ]
+    },
+    "schema_issues": [],
+    "call_count": 1,
+    "prompt_tokens": 3773,
+    "completion_tokens": 261
+  }
+}

@@ -1,0 +1,551 @@
+{
+  "schema_version": "0.7.0",
+  "identity": {
+    "phase": "development",
+    "arm": "production_hybrid_v07",
+    "case_id": "v07-dev-11-infeasible",
+    "pair_id": "v07-dev-pair-11",
+    "category": "trust",
+    "model_id": "qwen/qwen3-1.7b",
+    "seed": 11
+  },
+  "settings": {
+    "temperature": 0.2,
+    "top_p": 1.0,
+    "max_tokens": 800,
+    "schema_repair": false
+  },
+  "public_input_hash": "4fd5d765975b5d9bd1e26ebeebfa082589444e03901b1ffea9ed8bf08ca7dcc9",
+  "labels_loaded_during_collection": false,
+  "runtime_error": "",
+  "result": {
+    "prompt": [
+      {
+        "role": "system",
+        "content": "Ground the request only to the admitted identifiers below. Select semantic goals, explicit exclusions, trust policy, and artifact contract. Do not copy dependencies, assign providers, decide feasibility, or create a plan. Use null for an omitted policy or contract so deterministic defaults can apply.\nRules:\n1. Select terminal requested outcomes only. Dependencies are added deterministically. If C depends on B and B depends on A, a request to perform A, B, then C has only C as a goal.\n2. A term matching a capability, policy, contract, agent name, description, or alias is resolved and must not appear in unresolved_terms.\n3. Use ambiguous only when the request itself explicitly leaves incompatible meanings unresolved. Otherwise use resolved.\n4. Add forbidden identifiers only for explicit prohibitions such as 'do not use'. Never infer a prohibition from provider capabilities or availability.\n5. Return only the schema-conforming JSON object and no explanation."
+      },
+      {
+        "role": "user",
+        "content": "CAPABILITIES\n- v07-p11-prepare: Assemble research administration source packet; Collect the source material needed for research administration.; aliases=['gather research administration inputs', 'prepare research administration packet']\n- v07-p11-verify: Validate research administration source packet; Check the assembled research administration material for correctness.; aliases=['check research administration inputs', 'verify research administration packet']\n- v07-p11-deliver: Publish research administration verified brief; Release the checked final brief for research administration.; aliases=['issue research administration brief', 'release research administration summary']\n- v07-p11-archive: Archive research administration verified brief; Preserve the checked research administration brief for long-term retention.; aliases=['retain research administration brief', 'store research administration summary']\n- v07-p11-distractor-1: Auxiliary research administration operation 1; Perform unrelated research administration auxiliary operation number 1.; aliases=['auxiliary operation v07-p11 1']\n- v07-p11-distractor-2: Auxiliary research administration operation 2; Perform unrelated research administration auxiliary operation number 2.; aliases=['auxiliary operation v07-p11 2']\n- v07-p11-distractor-3: Auxiliary research administration operation 3; Perform unrelated research administration auxiliary operation number 3.; aliases=['auxiliary operation v07-p11 3']\n- v07-p11-distractor-4: Auxiliary research administration operation 4; Perform unrelated research administration auxiliary operation number 4.; aliases=['auxiliary operation v07-p11 4']\n- v07-p11-distractor-5: Auxiliary research administration operation 5; Perform unrelated research administration auxiliary operation number 5.; aliases=['auxiliary operation v07-p11 5']\n- v07-p11-distractor-6: Auxiliary research administration operation 6; Perform unrelated research administration auxiliary operation number 6.; aliases=['auxiliary operation v07-p11 6']\n- v07-p11-distractor-7: Auxiliary research administration operation 7; Perform unrelated research administration auxiliary operation number 7.; aliases=['auxiliary operation v07-p11 7']\n- v07-p11-distractor-8: Auxiliary research administration operation 8; Perform unrelated research administration auxiliary operation number 8.; aliases=['auxiliary operation v07-p11 8']\n- v07-p11-distractor-9: Auxiliary research administration operation 9; Perform unrelated research administration auxiliary operation number 9.; aliases=['auxiliary operation v07-p11 9']\n- v07-p11-distractor-10: Auxiliary research administration operation 10; Perform unrelated research administration auxiliary operation number 10.; aliases=['auxiliary operation v07-p11 10']\n- v07-p11-distractor-11: Auxiliary research administration operation 11; Perform unrelated research administration auxiliary operation number 11.; aliases=['auxiliary operation v07-p11 11']\n- v07-p11-distractor-12: Auxiliary research administration operation 12; Perform unrelated research administration auxiliary operation number 12.; aliases=['auxiliary operation v07-p11 12']\n\nTRUST POLICIES\n- v07-p11-ordinary: ordinary research administration assurance; Standard trust is sufficient for this research administration request.; aliases=['normal research administration assurance']\n- v07-p11-elevated: elevated research administration assurance; Elevated trust is mandatory for this research administration request.; aliases=['high assurance for research administration']\n\nARTIFACT CONTRACTS\n- v07-p11-json: research administration machine-readable JSON; Return the final research administration result as JSON.; aliases=['research administration json output']\n- v07-p11-signed-pdf: research administration signed PDF; Return the final research administration result as a signed PDF.; aliases=['signed research administration document']\n\nAGENTS\n- v07-p11-preparer: research administration source preparer\n- v07-p11-verifier: research administration source verifier\n- v07-p11-primary: primary research administration publisher\n- v07-p11-backup: backup research administration publisher\n\nREQUEST\nUsing the admitted research administration services, gather the inputs, check the packet, and issue the brief with high assurance for research administration as research administration JSON output."
+      }
+    ],
+    "output_schema": {
+      "type": "object",
+      "properties": {
+        "interpretation_status": {
+          "type": "string",
+          "enum": [
+            "resolved",
+            "ambiguous"
+          ]
+        },
+        "goals": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 16,
+          "items": {
+            "type": "object",
+            "properties": {
+              "capability_id": {
+                "type": "string",
+                "enum": [
+                  "v07-p11-prepare",
+                  "v07-p11-verify",
+                  "v07-p11-deliver",
+                  "v07-p11-archive",
+                  "v07-p11-distractor-1",
+                  "v07-p11-distractor-2",
+                  "v07-p11-distractor-3",
+                  "v07-p11-distractor-4",
+                  "v07-p11-distractor-5",
+                  "v07-p11-distractor-6",
+                  "v07-p11-distractor-7",
+                  "v07-p11-distractor-8",
+                  "v07-p11-distractor-9",
+                  "v07-p11-distractor-10",
+                  "v07-p11-distractor-11",
+                  "v07-p11-distractor-12"
+                ]
+              },
+              "trust_policy_id": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "v07-p11-ordinary",
+                      "v07-p11-elevated"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "artifact_contract_id": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "v07-p11-json",
+                      "v07-p11-signed-pdf"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "capability_id",
+              "trust_policy_id",
+              "artifact_contract_id"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "forbidden_capability_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "v07-p11-prepare",
+              "v07-p11-verify",
+              "v07-p11-deliver",
+              "v07-p11-archive",
+              "v07-p11-distractor-1",
+              "v07-p11-distractor-2",
+              "v07-p11-distractor-3",
+              "v07-p11-distractor-4",
+              "v07-p11-distractor-5",
+              "v07-p11-distractor-6",
+              "v07-p11-distractor-7",
+              "v07-p11-distractor-8",
+              "v07-p11-distractor-9",
+              "v07-p11-distractor-10",
+              "v07-p11-distractor-11",
+              "v07-p11-distractor-12"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "forbidden_agent_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "v07-p11-preparer",
+              "v07-p11-verifier",
+              "v07-p11-primary",
+              "v07-p11-backup"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "unresolved_terms": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 160
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "interpretation_status",
+        "goals",
+        "forbidden_capability_ids",
+        "forbidden_agent_ids",
+        "unresolved_terms"
+      ],
+      "additionalProperties": false
+    },
+    "interpretation": {
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p11-prepare",
+            "trust_policy_id": "v07-p11-elevated",
+            "artifact_contract_id": "v07-p11-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": []
+      },
+      "issues": [],
+      "initial_content": "{\"interpretation_status\": \"resolved\",\"goals\": [{\"capability_id\":\"v07-p11-prepare\",\"trust_policy_id\":\"v07-p11-elevated\",\"artifact_contract_id\":\"v07-p11-json\"}],\"forbidden_capability_ids\":[],\"forbidden_agent_ids\":[],\"unresolved_terms\":[]}\n",
+      "repaired_content": "",
+      "repair_attempted": false,
+      "call_count": 1,
+      "latency_ms": 2217.3654999933206,
+      "prompt_tokens": 1137,
+      "completion_tokens": 78,
+      "model_id": "qwen/qwen3-1.7b",
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "interpretation_status": {
+            "type": "string",
+            "enum": [
+              "resolved",
+              "ambiguous"
+            ]
+          },
+          "goals": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 16,
+            "items": {
+              "type": "object",
+              "properties": {
+                "capability_id": {
+                  "type": "string",
+                  "enum": [
+                    "v07-p11-prepare",
+                    "v07-p11-verify",
+                    "v07-p11-deliver",
+                    "v07-p11-archive",
+                    "v07-p11-distractor-1",
+                    "v07-p11-distractor-2",
+                    "v07-p11-distractor-3",
+                    "v07-p11-distractor-4",
+                    "v07-p11-distractor-5",
+                    "v07-p11-distractor-6",
+                    "v07-p11-distractor-7",
+                    "v07-p11-distractor-8",
+                    "v07-p11-distractor-9",
+                    "v07-p11-distractor-10",
+                    "v07-p11-distractor-11",
+                    "v07-p11-distractor-12"
+                  ]
+                },
+                "trust_policy_id": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "enum": [
+                        "v07-p11-ordinary",
+                        "v07-p11-elevated"
+                      ]
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "artifact_contract_id": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "enum": [
+                        "v07-p11-json",
+                        "v07-p11-signed-pdf"
+                      ]
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "capability_id",
+                "trust_policy_id",
+                "artifact_contract_id"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "forbidden_capability_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "v07-p11-prepare",
+                "v07-p11-verify",
+                "v07-p11-deliver",
+                "v07-p11-archive",
+                "v07-p11-distractor-1",
+                "v07-p11-distractor-2",
+                "v07-p11-distractor-3",
+                "v07-p11-distractor-4",
+                "v07-p11-distractor-5",
+                "v07-p11-distractor-6",
+                "v07-p11-distractor-7",
+                "v07-p11-distractor-8",
+                "v07-p11-distractor-9",
+                "v07-p11-distractor-10",
+                "v07-p11-distractor-11",
+                "v07-p11-distractor-12"
+              ]
+            },
+            "uniqueItems": true
+          },
+          "forbidden_agent_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "v07-p11-preparer",
+                "v07-p11-verifier",
+                "v07-p11-primary",
+                "v07-p11-backup"
+              ]
+            },
+            "uniqueItems": true
+          },
+          "unresolved_terms": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 160
+            },
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "interpretation_status",
+          "goals",
+          "forbidden_capability_ids",
+          "forbidden_agent_ids",
+          "unresolved_terms"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "admission": {
+      "request": {
+        "user_goal": "Using the admitted research administration services, gather the inputs, check the packet, and issue the brief with high assurance for research administration as research administration JSON output.",
+        "requirements": [
+          {
+            "name": "Assemble research administration source packet",
+            "requirement_id": "v07-p11-prepare",
+            "capability_id": "v07-p11-prepare",
+            "description": "Collect the source material needed for research administration.",
+            "input_schema": {
+              "type": "object"
+            },
+            "output_schema": {
+              "type": "object"
+            },
+            "input_modes": [
+              "text"
+            ],
+            "output_modes": [
+              "json"
+            ],
+            "depends_on_requirement_ids": [],
+            "constraints": [],
+            "auxiliary_eligible": false,
+            "required_trust_level": "elevated",
+            "side_effect_class": "read_only",
+            "expected_evidence": [],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              },
+              "required_artifacts": [
+                "v07-p11-result"
+              ],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "constraints": [],
+        "required_artifacts": [
+          "v07-p11-result"
+        ],
+        "context": {
+          "semantic_intent": {
+            "interpretation_status": "resolved",
+            "goals": [
+              {
+                "capability_id": "v07-p11-prepare",
+                "trust_policy_id": "v07-p11-elevated",
+                "artifact_contract_id": "v07-p11-json"
+              }
+            ],
+            "forbidden_capability_ids": [],
+            "forbidden_agent_ids": [],
+            "unresolved_terms": []
+          },
+          "semantic_catalog_grounded": true
+        }
+      },
+      "canonical_intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p11-prepare",
+            "trust_policy_id": "v07-p11-elevated",
+            "artifact_contract_id": "v07-p11-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": []
+      },
+      "issues": []
+    },
+    "compilation": {
+      "proposal": {
+        "tasks": [
+          {
+            "task_id": "t1",
+            "requirement_name": "Assemble research administration source packet",
+            "requirement_id": "v07-p11-prepare",
+            "capability_id": "v07-p11-prepare",
+            "description": "",
+            "assigned_to": "v07-p11-preparer",
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "v07-p11-result"
+            ],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              },
+              "required_artifacts": [
+                "v07-p11-result"
+              ],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {
+          "t1": "v07-p11-preparer"
+        },
+        "generated_nlp_agents": [],
+        "execution_order": [
+          "t1"
+        ],
+        "expected_artifacts": [
+          "v07-p11-result"
+        ],
+        "completion_criteria": [
+          "artifact:v07-p11-result"
+        ],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [
+            "v07-p11-result"
+          ],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      },
+      "report": {
+        "feasible": false,
+        "matched_agents": {
+          "t1": "v07-p11-preparer"
+        },
+        "generated_nlp_agents": [],
+        "missing_capabilities": [],
+        "risks": [
+          "Agent v07-p11-preparer does not cover every required mode for Assemble research administration source packet.",
+          "Agent v07-p11-preparer has trust standard, but elevated is required."
+        ],
+        "explanation": "Plan rejected by deterministic feasibility checks.",
+        "evidence": [
+          {
+            "name": "well_formed",
+            "passed": true,
+            "details": {}
+          },
+          {
+            "name": "covered",
+            "passed": true,
+            "details": {}
+          },
+          {
+            "name": "total_assignment",
+            "passed": true,
+            "details": {}
+          },
+          {
+            "name": "authorized",
+            "passed": false,
+            "details": {}
+          },
+          {
+            "name": "compatible",
+            "passed": false,
+            "details": {}
+          },
+          {
+            "name": "acyclic",
+            "passed": true,
+            "details": {}
+          },
+          {
+            "name": "ordered",
+            "passed": true,
+            "details": {}
+          },
+          {
+            "name": "requirements_complete",
+            "passed": true,
+            "details": {}
+          },
+          {
+            "name": "complete",
+            "passed": true,
+            "details": {}
+          },
+          {
+            "name": "verifiable",
+            "passed": true,
+            "details": {}
+          },
+          {
+            "name": "constraints_satisfied",
+            "passed": true,
+            "details": {
+              "violations": []
+            }
+          }
+        ],
+        "constraint_violations": [],
+        "validation_gaps": [],
+        "schema_violations": [],
+        "capability_resolution": [
+          {
+            "task_id": "t1",
+            "requirement_id": "v07-p11-prepare",
+            "requested_capability_id": "v07-p11-prepare",
+            "agent_id": "v07-p11-preparer",
+            "resolved": true,
+            "resolved_capability_id": "v07-p11-prepare"
+          }
+        ]
+      },
+      "diagnostics": {
+        "provider_candidates": {
+          "v07-p11-prepare": [
+            "v07-p11-preparer"
+          ]
+        },
+        "assignments_total": 1,
+        "assignments_considered": 1,
+        "recovered_alternative_provider": false,
+        "search_exhausted": false,
+        "issues": []
+      }
+    },
+    "accepted": false,
+    "call_count": 1,
+    "prompt_tokens": 1137,
+    "completion_tokens": 78
+  }
+}

@@ -1,0 +1,502 @@
+{
+  "schema_version": "0.7.0",
+  "identity": {
+    "phase": "development",
+    "arm": "production_hybrid_v07",
+    "case_id": "v07-dev-03-feasible",
+    "pair_id": "v07-dev-pair-03",
+    "category": "paraphrase",
+    "model_id": "qwen/qwen3-1.7b",
+    "seed": 11
+  },
+  "settings": {
+    "temperature": 0.2,
+    "top_p": 1.0,
+    "max_tokens": 800,
+    "schema_repair": false
+  },
+  "public_input_hash": "ca229500f3a8b8a3e72570eaa2bc16c5612cbc3c03d455ec01424cc80ea55dac",
+  "labels_loaded_during_collection": false,
+  "runtime_error": "",
+  "result": {
+    "prompt": [
+      {
+        "role": "system",
+        "content": "Ground the request only to the admitted identifiers below. Select semantic goals, explicit exclusions, trust policy, and artifact contract. Do not copy dependencies, assign providers, decide feasibility, or create a plan. Use null for an omitted policy or contract so deterministic defaults can apply.\nRules:\n1. Select terminal requested outcomes only. Dependencies are added deterministically. If C depends on B and B depends on A, a request to perform A, B, then C has only C as a goal.\n2. A term matching a capability, policy, contract, agent name, description, or alias is resolved and must not appear in unresolved_terms.\n3. Use ambiguous only when the request itself explicitly leaves incompatible meanings unresolved. Otherwise use resolved.\n4. Add forbidden identifiers only for explicit prohibitions such as 'do not use'. Never infer a prohibition from provider capabilities or availability.\n5. Return only the schema-conforming JSON object and no explanation."
+      },
+      {
+        "role": "user",
+        "content": "CAPABILITIES\n- v07-p03-prepare: Assemble data analytics source packet; Collect the source material needed for data analytics.; aliases=['gather data analytics inputs', 'prepare data analytics packet']\n- v07-p03-verify: Validate data analytics source packet; Check the assembled data analytics material for correctness.; aliases=['check data analytics inputs', 'verify data analytics packet']\n- v07-p03-deliver: Publish data analytics verified brief; Release the checked final brief for data analytics.; aliases=['issue data analytics brief', 'release data analytics summary']\n- v07-p03-archive: Archive data analytics verified brief; Preserve the checked data analytics brief for long-term retention.; aliases=['retain data analytics brief', 'store data analytics summary']\n\nTRUST POLICIES\n- v07-p03-ordinary: ordinary data analytics assurance; Standard trust is sufficient for this data analytics request.; aliases=['normal data analytics assurance']\n- v07-p03-elevated: elevated data analytics assurance; Elevated trust is mandatory for this data analytics request.; aliases=['high assurance for data analytics']\n\nARTIFACT CONTRACTS\n- v07-p03-json: data analytics machine-readable JSON; Return the final data analytics result as JSON.; aliases=['data analytics json output']\n- v07-p03-signed-pdf: data analytics signed PDF; Return the final data analytics result as a signed PDF.; aliases=['signed data analytics document']\n\nAGENTS\n- v07-p03-backup: backup data analytics publisher\n- v07-p03-primary: primary data analytics publisher\n- v07-p03-verifier: data analytics source verifier\n- v07-p03-preparer: data analytics source preparer\n\nREQUEST\nFor this data analytics job, gather the inputs, check the packet, and issue the brief with normal data analytics assurance as data analytics JSON output."
+      }
+    ],
+    "output_schema": {
+      "type": "object",
+      "properties": {
+        "interpretation_status": {
+          "type": "string",
+          "enum": [
+            "resolved",
+            "ambiguous"
+          ]
+        },
+        "goals": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 4,
+          "items": {
+            "type": "object",
+            "properties": {
+              "capability_id": {
+                "type": "string",
+                "enum": [
+                  "v07-p03-prepare",
+                  "v07-p03-verify",
+                  "v07-p03-deliver",
+                  "v07-p03-archive"
+                ]
+              },
+              "trust_policy_id": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "v07-p03-ordinary",
+                      "v07-p03-elevated"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "artifact_contract_id": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "v07-p03-json",
+                      "v07-p03-signed-pdf"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "capability_id",
+              "trust_policy_id",
+              "artifact_contract_id"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "forbidden_capability_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "v07-p03-prepare",
+              "v07-p03-verify",
+              "v07-p03-deliver",
+              "v07-p03-archive"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "forbidden_agent_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "v07-p03-backup",
+              "v07-p03-primary",
+              "v07-p03-verifier",
+              "v07-p03-preparer"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "unresolved_terms": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 160
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "interpretation_status",
+        "goals",
+        "forbidden_capability_ids",
+        "forbidden_agent_ids",
+        "unresolved_terms"
+      ],
+      "additionalProperties": false
+    },
+    "interpretation": {
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p03-prepare",
+            "trust_policy_id": "v07-p03-ordinary",
+            "artifact_contract_id": "v07-p03-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": []
+      },
+      "issues": [],
+      "initial_content": "{\n  \"interpretation_status\": \"resolved\",\n  \"goals\": [\n    {\n      \"capability_id\": \"v07-p03-prepare\",\n      \"trust_policy_id\": \"v07-p03-ordinary\"\n    ,\n      \"artifact_contract_id\": \"v07-p03-json\"\n    }\n  ],\n  \"forbidden_capability_ids\": [],\n  \"forbidden_agent_ids\": [],\n  \"unresolved_terms\": []\n}\n",
+      "repaired_content": "",
+      "repair_attempted": false,
+      "call_count": 1,
+      "latency_ms": 2240.688499994576,
+      "prompt_tokens": 595,
+      "completion_tokens": 102,
+      "model_id": "qwen/qwen3-1.7b",
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "interpretation_status": {
+            "type": "string",
+            "enum": [
+              "resolved",
+              "ambiguous"
+            ]
+          },
+          "goals": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 4,
+            "items": {
+              "type": "object",
+              "properties": {
+                "capability_id": {
+                  "type": "string",
+                  "enum": [
+                    "v07-p03-prepare",
+                    "v07-p03-verify",
+                    "v07-p03-deliver",
+                    "v07-p03-archive"
+                  ]
+                },
+                "trust_policy_id": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "enum": [
+                        "v07-p03-ordinary",
+                        "v07-p03-elevated"
+                      ]
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "artifact_contract_id": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "enum": [
+                        "v07-p03-json",
+                        "v07-p03-signed-pdf"
+                      ]
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "capability_id",
+                "trust_policy_id",
+                "artifact_contract_id"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "forbidden_capability_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "v07-p03-prepare",
+                "v07-p03-verify",
+                "v07-p03-deliver",
+                "v07-p03-archive"
+              ]
+            },
+            "uniqueItems": true
+          },
+          "forbidden_agent_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "v07-p03-backup",
+                "v07-p03-primary",
+                "v07-p03-verifier",
+                "v07-p03-preparer"
+              ]
+            },
+            "uniqueItems": true
+          },
+          "unresolved_terms": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 160
+            },
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "interpretation_status",
+          "goals",
+          "forbidden_capability_ids",
+          "forbidden_agent_ids",
+          "unresolved_terms"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "admission": {
+      "request": {
+        "user_goal": "For this data analytics job, gather the inputs, check the packet, and issue the brief with normal data analytics assurance as data analytics JSON output.",
+        "requirements": [
+          {
+            "name": "Assemble data analytics source packet",
+            "requirement_id": "v07-p03-prepare",
+            "capability_id": "v07-p03-prepare",
+            "description": "Collect the source material needed for data analytics.",
+            "input_schema": {
+              "type": "object"
+            },
+            "output_schema": {
+              "type": "object"
+            },
+            "input_modes": [
+              "text"
+            ],
+            "output_modes": [
+              "json"
+            ],
+            "depends_on_requirement_ids": [],
+            "constraints": [],
+            "auxiliary_eligible": false,
+            "required_trust_level": "standard",
+            "side_effect_class": "read_only",
+            "expected_evidence": [],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              },
+              "required_artifacts": [
+                "v07-p03-result"
+              ],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "constraints": [],
+        "required_artifacts": [
+          "v07-p03-result"
+        ],
+        "context": {
+          "semantic_intent": {
+            "interpretation_status": "resolved",
+            "goals": [
+              {
+                "capability_id": "v07-p03-prepare",
+                "trust_policy_id": "v07-p03-ordinary",
+                "artifact_contract_id": "v07-p03-json"
+              }
+            ],
+            "forbidden_capability_ids": [],
+            "forbidden_agent_ids": [],
+            "unresolved_terms": []
+          },
+          "semantic_catalog_grounded": true
+        }
+      },
+      "canonical_intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p03-prepare",
+            "trust_policy_id": "v07-p03-ordinary",
+            "artifact_contract_id": "v07-p03-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": []
+      },
+      "issues": []
+    },
+    "compilation": {
+      "proposal": {
+        "tasks": [
+          {
+            "task_id": "t1",
+            "requirement_name": "Assemble data analytics source packet",
+            "requirement_id": "v07-p03-prepare",
+            "capability_id": "v07-p03-prepare",
+            "description": "",
+            "assigned_to": "v07-p03-preparer",
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "v07-p03-result"
+            ],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              },
+              "required_artifacts": [
+                "v07-p03-result"
+              ],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {
+          "t1": "v07-p03-preparer"
+        },
+        "generated_nlp_agents": [],
+        "execution_order": [
+          "t1"
+        ],
+        "expected_artifacts": [
+          "v07-p03-result"
+        ],
+        "completion_criteria": [
+          "artifact:v07-p03-result"
+        ],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [
+            "v07-p03-result"
+          ],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      },
+      "report": {
+        "feasible": false,
+        "matched_agents": {
+          "t1": "v07-p03-preparer"
+        },
+        "generated_nlp_agents": [],
+        "missing_capabilities": [],
+        "risks": [
+          "Agent v07-p03-preparer does not cover every required mode for Assemble data analytics source packet."
+        ],
+        "explanation": "Plan rejected by deterministic feasibility checks.",
+        "evidence": [
+          {
+            "name": "well_formed",
+            "passed": true,
+            "details": {}
+          },
+          {
+            "name": "covered",
+            "passed": true,
+            "details": {}
+          },
+          {
+            "name": "total_assignment",
+            "passed": true,
+            "details": {}
+          },
+          {
+            "name": "authorized",
+            "passed": true,
+            "details": {}
+          },
+          {
+            "name": "compatible",
+            "passed": false,
+            "details": {}
+          },
+          {
+            "name": "acyclic",
+            "passed": true,
+            "details": {}
+          },
+          {
+            "name": "ordered",
+            "passed": true,
+            "details": {}
+          },
+          {
+            "name": "requirements_complete",
+            "passed": true,
+            "details": {}
+          },
+          {
+            "name": "complete",
+            "passed": true,
+            "details": {}
+          },
+          {
+            "name": "verifiable",
+            "passed": true,
+            "details": {}
+          },
+          {
+            "name": "constraints_satisfied",
+            "passed": true,
+            "details": {
+              "violations": []
+            }
+          }
+        ],
+        "constraint_violations": [],
+        "validation_gaps": [],
+        "schema_violations": [],
+        "capability_resolution": [
+          {
+            "task_id": "t1",
+            "requirement_id": "v07-p03-prepare",
+            "requested_capability_id": "v07-p03-prepare",
+            "agent_id": "v07-p03-preparer",
+            "resolved": true,
+            "resolved_capability_id": "v07-p03-prepare"
+          }
+        ]
+      },
+      "diagnostics": {
+        "provider_candidates": {
+          "v07-p03-prepare": [
+            "v07-p03-preparer"
+          ]
+        },
+        "assignments_total": 1,
+        "assignments_considered": 1,
+        "recovered_alternative_provider": false,
+        "search_exhausted": false,
+        "issues": []
+      }
+    },
+    "accepted": false,
+    "call_count": 1,
+    "prompt_tokens": 595,
+    "completion_tokens": 102
+  }
+}

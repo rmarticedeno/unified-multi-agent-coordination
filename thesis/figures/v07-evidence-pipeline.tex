@@ -1,0 +1,36 @@
+\begin{tikzpicture}[
+  node distance=7mm and 8mm,
+  every node/.style={font=\scriptsize},
+  stage/.style={draw=black!75, rounded corners=2pt, align=center, minimum height=10mm, text width=29mm, inner sep=3pt},
+  development/.style={stage, fill=black!5},
+  frozen/.style={stage, fill=black!15},
+  evidence/.style={stage, fill=black!25},
+  flow/.style={-Latex, semithick},
+  evidenceflow/.style={-Latex, semithick, dashed}
+]
+\node[development] (dev) {48 development cases\\Qwen3-1.7B only\\prompt/code changes allowed};
+\node[development, right=of dev] (gates) {Qualification gates\\complete accounting\\fail closed; invariants};
+\node[frozen, right=of gates] (freeze) {v0.7 protocol lock\\source, corpus, prompts,\\schemas, parameters, analysis};
+\node[frozen, below=of freeze] (qwen) {Qwen3-1.7B\\256 observations};
+\node[frozen, left=of qwen] (gemma) {Gemma-4-E2B\\256 observations};
+\node[frozen, right=of qwen] (qwen8) {Qwen3-8B\\256 observations};
+\node[evidence, below=11mm of qwen] (analysis) {Confirmatory analysis\\primary seed 11\\stability seed 29};
+\node[evidence, left=of analysis] (det) {Deterministic controls\\oracle, exact alias,\\provider ablation};
+\node[evidence, right=of analysis] (runtime) {Runtime evidence\\eight A2A replays\\45-trial consensus v4};
+
+\draw[flow] (dev) -- (gates);
+\draw[flow] (gates) -- (freeze);
+\draw[flow] (freeze) -- (qwen);
+\draw[flow] (qwen) -- node[above,sloped]{integrity only} (gemma);
+\draw[flow] (qwen) -- node[above,sloped]{integrity only} (qwen8);
+\draw[evidenceflow] (qwen) -- (analysis);
+\draw[evidenceflow] (gemma) -- (analysis);
+\draw[evidenceflow] (qwen8) -- (analysis);
+\draw[evidenceflow] (det) -- (analysis);
+\draw[evidenceflow] (runtime) -- (analysis);
+
+\node[font=\scriptsize\itshape, align=center, below=4mm of dev, text width=43mm]
+  {Development methodology; accuracy excluded from confirmatory claims};
+\node[font=\scriptsize\itshape, align=center, below=4mm of gates, text width=39mm]
+  {Any behavioral change after freeze requires a new version and full rerun};
+\end{tikzpicture}

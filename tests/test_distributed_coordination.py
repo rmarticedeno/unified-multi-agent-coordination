@@ -1064,20 +1064,22 @@ class FakeEtcdClient:
             self.revision += 1
         for operation in success:
             request = operation.get("request_put")
-            if request is None:
-                continue
-            key = _decode(request["key"])
-            value = _decode(request.get("value") or "")
-            lease = int(request.get("lease") or 0)
-            existing = self.values.get(key)
-            self.values[key] = EtcdKeyValue(
-                key=key,
-                value=value,
-                create_revision=existing.create_revision if existing else self.revision,
-                mod_revision=self.revision,
-                version=existing.version + 1 if existing else 1,
-                lease=lease,
-            )
+            if request is not None:
+                key = _decode(request["key"])
+                value = _decode(request.get("value") or "")
+                lease = int(request.get("lease") or 0)
+                existing = self.values.get(key)
+                self.values[key] = EtcdKeyValue(
+                    key=key,
+                    value=value,
+                    create_revision=existing.create_revision if existing else self.revision,
+                    mod_revision=self.revision,
+                    version=existing.version + 1 if existing else 1,
+                    lease=lease,
+                )
+            delete = operation.get("request_delete_range")
+            if delete is not None:
+                self.values.pop(_decode(delete["key"]), None)
         return {"succeeded": True, "header": {"revision": str(self.revision)}}
 
     async def grant_lease(self, ttl_s: float) -> int:

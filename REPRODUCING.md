@@ -19,6 +19,54 @@ docker compose -f docker-compose.distributed.yml up --build --abort-on-container
 Every `EVIDENCE_RUN_DIR` must be new. Report and ledger writers use exclusive
 creation and refuse to overwrite existing evidence.
 
+## Frozen v0.7 Qwen-first study
+
+Version 0.7 is the production-path comparison. Version 0.5 is retained as the
+historical experiment that motivated the redesign, and the unexecuted
+study-specific v0.6 protocol is marked superseded. The 48-case Qwen3-1.7B
+development phase is qualification evidence only: prompt or implementation
+changes were permitted and its accuracy is not used to answer a research
+question.
+
+After the development gates pass, freeze and validate the 64-case held-out
+protocol before collecting any confirmatory result:
+
+```text
+uv run unified-generate-defense-corpus-v07 --output corpus/v0.7
+uv run unified-symbolic-benchmark-v07 --output demo_runs/v0.7/deterministic-benchmark.json
+uv run unified-defense-study-v07 --corpus corpus/v0.7 --phase developmental --model qwen/qwen3-1.7b
+uv run unified-defense-study-v07 --corpus corpus/v0.7 --freeze-protocol
+uv run unified-defense-study-v07 --corpus corpus/v0.7 --check
+```
+
+The frozen confirmatory sequence is deliberately model-serial. Load one model
+at a time in LM Studio and reuse the run directory printed by the first
+command:
+
+```text
+uv run unified-defense-study-v07 --corpus corpus/v0.7 --phase confirmatory --model qwen/qwen3-1.7b
+uv run unified-defense-study-v07 --corpus corpus/v0.7 --phase confirmatory --model google/gemma-4-e2b --resume demo_runs/v0.7/<run-id>
+uv run unified-defense-study-v07 --corpus corpus/v0.7 --phase confirmatory --model qwen/qwen3-8b --resume demo_runs/v0.7/<run-id>
+uv run unified-analyze-defense-study-v07 --run demo_runs/v0.7/<run-id> --corpus corpus/v0.7 --phase confirmatory --benchmark demo_runs/v0.7/deterministic-benchmark.json
+uv run python -m unified_multi_agent_coordination.a2a_replay_v07 --run demo_runs/v0.7/<run-id> --corpus corpus/v0.7 --analysis demo_runs/v0.7/<run-id>/analysis-confirmatory-v0.7.0.json --output demo_runs/v0.7/<run-id>/a2a-replay-v0.7.0.json
+uv run unified-consensus-matrix --output-dir demo_runs/consensus/<new-v4-run-id> --trials 3
+uv run python scripts/generate_v07_figures.py --analysis demo_runs/v0.7/<run-id>/analysis-confirmatory-v0.7.0.json --benchmark demo_runs/v0.7/deterministic-benchmark.json --consensus demo_runs/consensus/<new-v4-run-id>/campaign.json --output-dir thesis/figures/generated
+```
+
+Completion requires exactly 768 immutable observations: three models, two
+requested seeds, 64 held-out cases, and two LLM arms. The frozen settings are
+temperature 0.2, top-p 1, and an 800-token limit. Invalid schema is scored as a
+failed observation without semantic repair; transport/server failures are
+reported separately. Labels are author-only and are not independent
+adjudication. After freeze, a behavioral change requires a new protocol
+version and a complete three-model rerun.
+
+After the final pytest/coverage gates, generate `e/v7/evidence-manifest.json`
+with `scripts/generate_v07_evidence_manifest.py`, then merge its references
+into the historical top-level manifest with
+`scripts/merge_v07_evidence_manifest.py`. The merge preserves older evidence
+families and does not promote a dirty consensus campaign as accepted evidence.
+
 The 36-case local-model study is gated on hash-matched, frozen author provenance
 in `corpus/v0.3/label-provenance.json`. No independent adjudication is claimed.
 Reference labels are never placed in prompts and are loaded only after raw-output
@@ -113,6 +161,42 @@ read-then-upsert race. The atomic conditional-upsert correction is commit
 The third-party A2A test uses the vendored upstream-derived Hello World snapshot
 pinned in `vendor/a2a-samples/UPSTREAM.json` and `a2a-sdk==1.1.0`. It must pass
 from a clean checkout with no pre-existing vendor cache.
+
+## Versionless developmental strategy checks
+
+These checks exercise the later production architecture and do not alter,
+replace, or extend the accepted v0.5 evidence. For the fixed raw-language
+subset, load exactly one LM Studio model at a time with 16,384-token context and
+parallelism one:
+
+```text
+uv run unified-hybrid-strategy-validation collect --model qwen/qwen3-1.7b --case-set all
+uv run unified-hybrid-strategy-validation collect --model google/gemma-4-e2b --case-set sentinel --run <same-run>
+uv run unified-hybrid-strategy-validation collect --model qwen/qwen3-8b --case-set sentinel --run <same-run>
+uv run unified-hybrid-strategy-validation analyze --run <same-run>
+```
+
+Collection reads only `validation/hybrid_strategy/public_cases.json`; analysis
+opens `expected.json` afterward. The preserved final run is
+`demo_runs/hybrid_strategy_validation/20260717T031509Z-3a9e1f9123`.
+Preliminary negative runs in the same parent directory are retained.
+
+To replay the unchanged public corpus that produced the historical 1.39%
+hybrid recall through the typed-request production path:
+
+```text
+uv run unified-hybrid-strategy-validation replay-typed-corpus --corpus-root corpus/v0.5
+uv run unified-hybrid-strategy-validation analyze-typed-corpus --run <new-run>
+```
+
+The replay writes all 48 compiler decisions before the analyzer reads
+`corpus/v0.5/hidden/reference-labels.json`. The preserved run
+`demo_runs/hybrid_strategy_validation/20260717T035308Z-typed-corpus-f3d214432a`
+reports 48/48 correct, 100% feasible recall, and zero false acceptances or
+refusals. It makes zero model calls because typed `ProblemRequest` inputs
+explicitly bypass linguistic admission. These author-designed checks are
+developmental descriptive evidence only; do not use them to revise the frozen
+RQ4 analysis or claim superiority.
 
 The thesis is compiled with LuaLaTeX/BibTeX:
 

@@ -1,10 +1,10 @@
 """End-to-end thesis demonstration scenarios.
 
 The scenarios in this module are deliberately small, deterministic, and local.
-They exercise the thesis implementation as a coordination system: a natural
-language request is interpreted into a structured problem, a candidate plan is
-proposed, symbolic feasibility authorizes or refuses the plan, the SDK dispatches
-authorized tasks, and the final report preserves artifacts plus trace evidence.
+They exercise the thesis implementation as a coordination system: an
+authoritative typed request is compiled into a candidate plan, symbolic
+feasibility authorizes or refuses it, the SDK dispatches authorized tasks, and
+the final report preserves artifacts plus trace evidence.
 """
 
 from __future__ import annotations
@@ -121,17 +121,6 @@ class DeterministicScenarioCoordinator:
         )
 
 
-class ScenarioCoordinationAgent(CoordinationAgent):
-    """Demo agent that always asks the deterministic coordinator for a plan."""
-
-    def _direct_solution_plan(
-        self,
-        request: ProblemRequest,
-        registry: list[AgentRegistryEntry],
-    ) -> SolutionProposal | None:
-        return None
-
-
 async def run_scenarios(
     *,
     only: set[str] | None = None,
@@ -181,15 +170,18 @@ async def _run_scenario(scenario: ScenarioDefinition) -> JsonObject:
         scenario.request,
         scenario.proposal,
     )
-    agent = ScenarioCoordinationAgent(
+    agent = CoordinationAgent(
         sdk=sdk,
         linguistic_coordinator=coordinator,  # type: ignore[arg-type]
         ledger=ledger,
         retry_policy=RetryPolicy(registry_retries=0, task_retries=0, backoff_s=0),
     )
     session_id = f"demo-{scenario.scenario_id}"
+    request = _request_with_declared_dependencies(
+        scenario.request, scenario.proposal
+    )
     result = await agent.coordinate(
-        scenario.user_request,
+        request,
         payload=scenario.payload,
         timeout_s=scenario.timeout_s,
         session_id=session_id,
@@ -247,6 +239,32 @@ async def _run_scenario(scenario: ScenarioDefinition) -> JsonObject:
             [event.event_type for event in ledger_events]
         ),
     }
+
+
+def _request_with_declared_dependencies(
+    request: ProblemRequest,
+    proposal: SolutionProposal,
+) -> ProblemRequest:
+    """Migrate historical fixture DAGs into authoritative requirement data."""
+
+    requirement_by_name = {
+        item.name: item for item in request.requirements
+    }
+    task_by_id = {item.task_id: item for item in proposal.tasks}
+    dependencies_by_name = {
+        task.requirement_name: [
+            requirement_by_name[task_by_id[dependency].requirement_name].requirement_id
+            for dependency in task.depends_on
+        ]
+        for task in proposal.tasks
+    }
+    requirements = [
+        item.model_copy(update={
+            "depends_on_requirement_ids": dependencies_by_name.get(item.name, [])
+        })
+        for item in request.requirements
+    ]
+    return request.model_copy(update={"requirements": requirements})
 
 
 def _no_dispatch_before_authorization(event_types: list[str]) -> bool:

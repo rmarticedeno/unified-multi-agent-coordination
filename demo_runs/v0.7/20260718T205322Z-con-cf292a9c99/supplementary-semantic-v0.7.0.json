@@ -1,0 +1,98 @@
+{
+  "arms": {
+    "direct_llm_v07": {
+      "fields": {
+        "artifact_contracts": {
+          "exact_accuracy": 0.7760416666666666,
+          "micro_f1": 0.8941176470588236,
+          "micro_precision": 0.8154506437768241,
+          "micro_recall": 0.9895833333333334
+        },
+        "forbidden_agents": {
+          "exact_accuracy": 0.8958333333333334,
+          "micro_f1": 0.4383561643835616,
+          "micro_precision": 0.43243243243243246,
+          "micro_recall": 0.4444444444444444
+        },
+        "forbidden_capabilities": {
+          "exact_accuracy": 0.78125,
+          "micro_f1": 0.0,
+          "micro_precision": 0.0,
+          "micro_recall": 0.0
+        },
+        "goals": {
+          "exact_accuracy": 0.0,
+          "micro_f1": 0.4192634560906516,
+          "micro_precision": 0.2948207171314741,
+          "micro_recall": 0.7254901960784313
+        },
+        "trust_policies": {
+          "exact_accuracy": 0.9791666666666666,
+          "micro_f1": 0.9791666666666666,
+          "micro_precision": 0.9791666666666666,
+          "micro_recall": 0.9791666666666666
+        },
+        "unresolved_terms": {
+          "exact_accuracy": 0.7916666666666666,
+          "micro_f1": 0.0,
+          "micro_precision": 0.0,
+          "micro_recall": 0.0
+        }
+      },
+      "observations": 192,
+      "status_accuracy": 0.8177083333333334,
+      "status_macro_f1": 0.5594886922320551
+    },
+    "production_hybrid_v07": {
+      "fields": {
+        "artifact_contracts": {
+          "exact_accuracy": 0.9791666666666666,
+          "micro_f1": 0.9894736842105264,
+          "micro_precision": 1.0,
+          "micro_recall": 0.9791666666666666
+        },
+        "forbidden_agents": {
+          "exact_accuracy": 0.9427083333333334,
+          "micro_f1": 0.6588235294117646,
+          "micro_precision": 0.5714285714285714,
+          "micro_recall": 0.7777777777777778
+        },
+        "forbidden_capabilities": {
+          "exact_accuracy": 0.8697916666666666,
+          "micro_f1": 0.18181818181818182,
+          "micro_precision": 0.1,
+          "micro_recall": 1.0
+        },
+        "goals": {
+          "exact_accuracy": 0.921875,
+          "micro_f1": 0.914572864321608,
+          "micro_precision": 0.9381443298969072,
+          "micro_recall": 0.8921568627450981
+        },
+        "trust_policies": {
+          "exact_accuracy": 0.953125,
+          "micro_f1": 0.9631578947368422,
+          "micro_precision": 0.973404255319149,
+          "micro_recall": 0.953125
+        },
+        "unresolved_terms": {
+          "exact_accuracy": 0.8333333333333334,
+          "micro_f1": 0.3582089552238806,
+          "micro_precision": 0.27906976744186046,
+          "micro_recall": 0.5
+        }
+      },
+      "observations": 192,
+      "status_accuracy": 0.5260416666666666,
+      "status_macro_f1": 0.31571241830065355
+    }
+  },
+  "classification": "post_freeze_descriptive_scoring_of_preserved_fields",
+  "limitations": [
+    "This scorer was added after protocol freeze and is descriptive.",
+    "Set-valued F1 weights identifiers rather than matched pairs.",
+    "Author-only reference labels remain a construct-validity limitation."
+  ],
+  "schema_version": "supplementary-semantic-v0.7.0",
+  "seed": 11
+}

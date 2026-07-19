@@ -1,0 +1,138 @@
+{
+  "fixture": "hybrid-strategy-validation",
+  "expectations": {
+    "paraphrase-feasible": {
+      "feasible": true,
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "deliver",
+            "trust_policy_id": "ordinary",
+            "artifact_contract_id": "json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": []
+      }
+    },
+    "forbidden-dependency": {
+      "feasible": false,
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "deliver",
+            "trust_policy_id": "ordinary",
+            "artifact_contract_id": "json"
+          }
+        ],
+        "forbidden_capability_ids": ["prepare"],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": []
+      }
+    },
+    "trust-alternative-provider": {
+      "feasible": true,
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "deliver",
+            "trust_policy_id": "elevated",
+            "artifact_contract_id": "json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": []
+      }
+    },
+    "trust-no-provider": {
+      "feasible": false,
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "deliver",
+            "trust_policy_id": "elevated",
+            "artifact_contract_id": "json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": []
+      }
+    },
+    "artifact-alternative-provider": {
+      "feasible": true,
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "deliver",
+            "trust_policy_id": "ordinary",
+            "artifact_contract_id": "signed-pdf"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": []
+      }
+    },
+    "artifact-no-provider": {
+      "feasible": false,
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "deliver",
+            "trust_policy_id": "ordinary",
+            "artifact_contract_id": "signed-pdf"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": []
+      }
+    },
+    "forbidden-provider-with-backup": {
+      "feasible": true,
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "deliver",
+            "trust_policy_id": "ordinary",
+            "artifact_contract_id": "json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": ["primary-delivery"],
+        "unresolved_terms": []
+      }
+    },
+    "unresolved-ambiguity": {
+      "feasible": false,
+      "intent": {
+        "interpretation_status": "ambiguous",
+        "goals": [
+          {
+            "capability_id": "deliver",
+            "trust_policy_id": "ordinary",
+            "artifact_contract_id": "json"
+          },
+          {
+            "capability_id": "archive",
+            "trust_policy_id": "ordinary",
+            "artifact_contract_id": "json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": ["release or archival"]
+      }
+    }
+  }
+}

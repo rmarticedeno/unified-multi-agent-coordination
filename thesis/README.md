@@ -34,6 +34,9 @@ root's `demo_runs/` directory:
 - `v0.4/<run-id>/analysis-v0.4.1-*.json`: corrected immutable comparison
   analyses; deterministic controls have 36 case rows and model configurations
   have 540 repeated observations.
+- `v0.7/<run-id>/`: frozen production-path comparison with 768 confirmatory
+  observations across Qwen3-1.7B, Gemma-4-E2B, and Qwen3-8B. Developmental
+  Qwen qualification runs are retained separately and are not headline evidence.
 - `consensus/<run-id>/`: immutable 3/5/7 consensus campaign reports. No
   accepted campaign exists until a clean-source full run passes.
 - `local_llm/`: batched local LLM reference reports for `qwen/qwen3-1.7b`
@@ -45,13 +48,19 @@ root's `demo_runs/` directory:
 Regenerate the analysis from the repository root with:
 
 ```powershell
-uv run unified-analyze-defense-study-v04 --run demo_runs/v0.4/<run-id> `
-  --corpus corpus/v0.4 --output demo_runs/v0.4/<run-id>/<new-analysis>.json
-uv run unified-evidence-preflight --corpus corpus/v0.4 --repository .
+uv run unified-defense-study-v07 --corpus corpus/v0.7 --check
+uv run unified-analyze-defense-study-v07 --run demo_runs/v0.7/<run-id> `
+  --corpus corpus/v0.7 --phase confirmatory `
+  --benchmark demo_runs/v0.7/deterministic-benchmark.json
 ```
 
 ## Argument structure
 
-The thesis follows this research sequence: introduction and problem formulation; critical state of the art; research methodology; proposed protocol-independent theoretical framework; protocol-adaptable system design; evaluation and results; discussion; and conclusions. The evaluation has two core tracks: the frozen linguistic conformance studies and a consensus-backed crash-fault campaign. They remain statistically separate. The current manuscript reports the 3/5/7 campaign as an open evidence gate and does not claim Byzantine, multi-host, or production validation.
+The thesis follows this research sequence: introduction and problem formulation; critical state of the art; research methodology; proposed protocol-independent theoretical framework; protocol-adaptable system design; evaluation and results; discussion; and conclusions. The evaluation has two core tracks: the frozen linguistic conformance studies and a consensus-backed crash-fault campaign. They remain statistically separate. The current manuscript reports the complete consensus-v4 matrix as dirty-provenance descriptive evidence and does not claim Byzantine, multi-host, or production validation.
+
+The current consensus-v4 campaign completed 45 trials with 43 passes, two
+reconfiguration infrastructure timeouts, and no executed invariant violation.
+It remains descriptive rather than accepted release evidence because its
+provenance records the intentionally preserved dirty worktree.
 
 The cover follows the University of Havana and Faculty of Mathematics and Computer Science branding supplied in the curated template. Its QR code is generated at compile time from the repository URL declared with `\repositoryurl{...}` in `main.tex`; no separately generated QR image is required.

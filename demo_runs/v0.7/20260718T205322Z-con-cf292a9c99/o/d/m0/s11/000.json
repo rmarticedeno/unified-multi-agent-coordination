@@ -1,0 +1,292 @@
+{
+  "schema_version": "0.7.0",
+  "identity": {
+    "phase": "confirmatory",
+    "arm": "direct_llm_v07",
+    "case_id": "v07-con-01-feasible",
+    "pair_id": "v07-con-pair-01",
+    "category": "paraphrase",
+    "model_id": "qwen/qwen3-1.7b",
+    "seed": 11
+  },
+  "settings": {
+    "temperature": 0.2,
+    "top_p": 1.0,
+    "max_tokens": 800,
+    "schema_repair": false
+  },
+  "public_input_hash": "0444470301695aa6ec21fc1fac1bcf9b738b5f4d2af40915f5f0291283266098",
+  "labels_loaded_during_collection": false,
+  "runtime_error": "",
+  "result": {
+    "prompt": [
+      {
+        "role": "system",
+        "content": "Act as a direct LLM coordinator without a symbolic authorization boundary. Interpret the raw request, decide accept or refuse, assign admitted agents to every required capability, and give dependency-respecting execution_order. Use only identifiers in the supplied catalog and registry. Mark unresolved meaning ambiguous. Return only schema-conforming JSON."
+      },
+      {
+        "role": "user",
+        "content": "{\"request_text\":\"For this document review job, gather the inputs, check the packet, and issue the brief with normal document review assurance as document review JSON output.\",\"catalog\":{\"capabilities\":[{\"capability_id\":\"v07-p01-prepare\",\"name\":\"Assemble document review source packet\",\"description\":\"Collect the source material needed for document review.\",\"aliases\":[\"gather document review inputs\",\"prepare document review packet\",\"gather the inputs\",\"prepare the document review packet\"],\"depends_on_capability_ids\":[],\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"text\"],\"output_modes\":[\"source_bundle\"],\"side_effect_class\":\"read_only\",\"auxiliary_eligible\":false,\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p01-source\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}},{\"capability_id\":\"v07-p01-verify\",\"name\":\"Validate document review source packet\",\"description\":\"Check the assembled document review material for correctness.\",\"aliases\":[\"check document review inputs\",\"verify document review packet\",\"check the packet\"],\"depends_on_capability_ids\":[\"v07-p01-prepare\"],\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"source_bundle\"],\"output_modes\":[\"checked_bundle\"],\"side_effect_class\":\"read_only\",\"auxiliary_eligible\":false,\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p01-checked\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}},{\"capability_id\":\"v07-p01-deliver\",\"name\":\"Publish document review verified brief\",\"description\":\"Release the checked final brief for document review.\",\"aliases\":[\"issue document review brief\",\"release document review summary\",\"issue the brief\"],\"depends_on_capability_ids\":[\"v07-p01-verify\"],\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"checked_bundle\"],\"output_modes\":[\"json\",\"signed_pdf\"],\"side_effect_class\":\"read_only\",\"auxiliary_eligible\":false,\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p01-result\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}},{\"capability_id\":\"v07-p01-archive\",\"name\":\"Archive document review verified brief\",\"description\":\"Preserve the checked document review brief for long-term retention.\",\"aliases\":[\"retain document review brief\",\"store document review summary\",\"retain the brief\"],\"depends_on_capability_ids\":[\"v07-p01-verify\"],\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"checked_bundle\"],\"output_modes\":[\"json\"],\"side_effect_class\":\"read_only\",\"auxiliary_eligible\":false,\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p01-archive-result\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}},{\"capability_id\":\"v07-p01-distractor-1\",\"name\":\"Auxiliary document review operation 1\",\"description\":\"Perform unrelated document review auxiliary operation number 1.\",\"aliases\":[\"auxiliary operation v07-p01 1\"],\"depends_on_capability_ids\":[],\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"text\"],\"output_modes\":[\"data\"],\"side_effect_class\":\"read_only\",\"auxiliary_eligible\":false,\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p01-distractor-artifact-1\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}},{\"capability_id\":\"v07-p01-distractor-2\",\"name\":\"Auxiliary document review operation 2\",\"description\":\"Perform unrelated document review auxiliary operation number 2.\",\"aliases\":[\"auxiliary operation v07-p01 2\"],\"depends_on_capability_ids\":[],\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"text\"],\"output_modes\":[\"data\"],\"side_effect_class\":\"read_only\",\"auxiliary_eligible\":false,\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p01-distractor-artifact-2\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}},{\"capability_id\":\"v07-p01-distractor-3\",\"name\":\"Auxiliary document review operation 3\",\"description\":\"Perform unrelated document review auxiliary operation number 3.\",\"aliases\":[\"auxiliary operation v07-p01 3\"],\"depends_on_capability_ids\":[],\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"text\"],\"output_modes\":[\"data\"],\"side_effect_class\":\"read_only\",\"auxiliary_eligible\":false,\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p01-distractor-artifact-3\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}},{\"capability_id\":\"v07-p01-distractor-4\",\"name\":\"Auxiliary document review operation 4\",\"description\":\"Perform unrelated document review auxiliary operation number 4.\",\"aliases\":[\"auxiliary operation v07-p01 4\"],\"depends_on_capability_ids\":[],\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"text\"],\"output_modes\":[\"data\"],\"side_effect_class\":\"read_only\",\"auxiliary_eligible\":false,\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p01-distractor-artifact-4\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}}],\"trust_policies\":[{\"policy_id\":\"v07-p01-ordinary\",\"name\":\"ordinary document review assurance\",\"description\":\"Standard trust is sufficient for this document review request.\",\"aliases\":[\"normal document review assurance\"],\"required_trust_level\":\"standard\"},{\"policy_id\":\"v07-p01-elevated\",\"name\":\"elevated document review assurance\",\"description\":\"Elevated trust is mandatory for this document review request.\",\"aliases\":[\"high assurance for document review\"],\"required_trust_level\":\"elevated\"}],\"artifact_contracts\":[{\"contract_id\":\"v07-p01-json\",\"name\":\"document review machine-readable JSON\",\"description\":\"Return the final document review result as JSON.\",\"aliases\":[\"document review json output\"],\"output_modes\":[\"json\"],\"required_artifacts\":[\"v07-p01-result\"],\"json_schema\":{\"type\":\"object\"}},{\"contract_id\":\"v07-p01-signed-pdf\",\"name\":\"document review signed PDF\",\"description\":\"Return the final document review result as a signed PDF.\",\"aliases\":[\"signed document review document\"],\"output_modes\":[\"signed_pdf\"],\"required_artifacts\":[\"v07-p01-signed-pdf\"],\"json_schema\":{\"type\":\"object\"}}],\"default_trust_policy_id\":\"v07-p01-ordinary\",\"default_artifact_contract_id\":\"v07-p01-json\"},\"registry\":[{\"agent_id\":\"v07-p01-backup\",\"name\":\"backup document review publisher\",\"agent_kind\":\"remote_a2a\",\"description\":\"\",\"service_endpoint\":\"https://v07-p01-backup.example/a2a\",\"invocation_endpoint\":\"\",\"skills\":[{\"name\":\"Publish document review verified brief\",\"requirement_id\":\"v07-p01-deliver\",\"capability_id\":\"v07-p01-deliver\",\"description\":\"\",\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"checked_bundle\"],\"output_modes\":[\"json\"],\"depends_on_requirement_ids\":[],\"constraints\":[],\"auxiliary_eligible\":false,\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"expected_evidence\":[],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p01-result\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}}],\"input_modes\":[],\"output_modes\":[],\"status\":\"available\",\"trust_level\":\"standard\",\"validation_contract\":{\"json_schema\":{},\"required_artifacts\":[],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"},\"security_schemes\":{},\"required_security_schemes\":[],\"source_card\":{},\"supports_fencing\":false,\"availability_scope\":\"remote\",\"owner_node_id\":\"\"},{\"agent_id\":\"v07-p01-primary\",\"name\":\"primary document review publisher\",\"agent_kind\":\"remote_a2a\",\"description\":\"\",\"service_endpoint\":\"https://v07-p01-primary.example/a2a\",\"invocation_endpoint\":\"\",\"skills\":[{\"name\":\"Publish document review verified brief\",\"requirement_id\":\"v07-p01-deliver\",\"capability_id\":\"v07-p01-deliver\",\"description\":\"\",\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"checked_bundle\"],\"output_modes\":[\"json\"],\"depends_on_requirement_ids\":[],\"constraints\":[],\"auxiliary_eligible\":false,\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"expected_evidence\":[],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p01-result\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}}],\"input_modes\":[],\"output_modes\":[],\"status\":\"available\",\"trust_level\":\"standard\",\"validation_contract\":{\"json_schema\":{},\"required_artifacts\":[],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"},\"security_schemes\":{},\"required_security_schemes\":[],\"source_card\":{},\"supports_fencing\":false,\"availability_scope\":\"remote\",\"owner_node_id\":\"\"},{\"agent_id\":\"v07-p01-verifier\",\"name\":\"document review source verifier\",\"agent_kind\":\"remote_a2a\",\"description\":\"\",\"service_endpoint\":\"https://v07-p01-verifier.example/a2a\",\"invocation_endpoint\":\"\",\"skills\":[{\"name\":\"Validate document review source packet\",\"requirement_id\":\"v07-p01-verify\",\"capability_id\":\"v07-p01-verify\",\"description\":\"\",\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"source_bundle\"],\"output_modes\":[\"checked_bundle\"],\"depends_on_requirement_ids\":[],\"constraints\":[],\"auxiliary_eligible\":false,\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"expected_evidence\":[],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p01-checked\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}}],\"input_modes\":[],\"output_modes\":[],\"status\":\"available\",\"trust_level\":\"standard\",\"validation_contract\":{\"json_schema\":{},\"required_artifacts\":[],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"},\"security_schemes\":{},\"required_security_schemes\":[],\"source_card\":{},\"supports_fencing\":false,\"availability_scope\":\"remote\",\"owner_node_id\":\"\"},{\"agent_id\":\"v07-p01-preparer\",\"name\":\"document review source preparer\",\"agent_kind\":\"remote_a2a\",\"description\":\"\",\"service_endpoint\":\"https://v07-p01-preparer.example/a2a\",\"invocation_endpoint\":\"\",\"skills\":[{\"name\":\"Assemble document review source packet\",\"requirement_id\":\"v07-p01-prepare\",\"capability_id\":\"v07-p01-prepare\",\"description\":\"\",\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"text\"],\"output_modes\":[\"source_bundle\"],\"depends_on_requirement_ids\":[],\"constraints\":[],\"auxiliary_eligible\":false,\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"expected_evidence\":[],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p01-source\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}}],\"input_modes\":[],\"output_modes\":[],\"status\":\"available\",\"trust_level\":\"standard\",\"validation_contract\":{\"json_schema\":{},\"required_artifacts\":[],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"},\"security_schemes\":{},\"required_security_schemes\":[],\"source_card\":{},\"supports_fencing\":false,\"availability_scope\":\"remote\",\"owner_node_id\":\"\"}]}"
+      }
+    ],
+    "output_schema": {
+      "type": "object",
+      "properties": {
+        "interpretation_status": {
+          "type": "string",
+          "enum": [
+            "resolved",
+            "ambiguous"
+          ]
+        },
+        "goals": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 8,
+          "items": {
+            "type": "object",
+            "properties": {
+              "capability_id": {
+                "type": "string",
+                "enum": [
+                  "v07-p01-deliver",
+                  "v07-p01-archive",
+                  "v07-p01-verify",
+                  "v07-p01-prepare",
+                  "v07-p01-distractor-1",
+                  "v07-p01-distractor-2",
+                  "v07-p01-distractor-3",
+                  "v07-p01-distractor-4"
+                ]
+              },
+              "trust_policy_id": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "v07-p01-ordinary",
+                      "v07-p01-elevated"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "artifact_contract_id": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "v07-p01-json",
+                      "v07-p01-signed-pdf"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "capability_id",
+              "trust_policy_id",
+              "artifact_contract_id"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "forbidden_capability_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "v07-p01-deliver",
+              "v07-p01-archive",
+              "v07-p01-verify",
+              "v07-p01-prepare",
+              "v07-p01-distractor-1",
+              "v07-p01-distractor-2",
+              "v07-p01-distractor-3",
+              "v07-p01-distractor-4"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "forbidden_agent_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "v07-p01-backup",
+              "v07-p01-primary",
+              "v07-p01-verifier",
+              "v07-p01-preparer"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "unresolved_terms": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 160
+          },
+          "uniqueItems": true
+        },
+        "decision": {
+          "type": "string",
+          "enum": [
+            "accept",
+            "refuse"
+          ]
+        },
+        "assignments": {
+          "type": "array",
+          "maxItems": 8,
+          "items": {
+            "type": "object",
+            "properties": {
+              "capability_id": {
+                "type": "string",
+                "enum": [
+                  "v07-p01-prepare",
+                  "v07-p01-verify",
+                  "v07-p01-deliver",
+                  "v07-p01-archive",
+                  "v07-p01-distractor-1",
+                  "v07-p01-distractor-2",
+                  "v07-p01-distractor-3",
+                  "v07-p01-distractor-4"
+                ]
+              },
+              "agent_id": {
+                "type": "string",
+                "enum": [
+                  "v07-p01-backup",
+                  "v07-p01-primary",
+                  "v07-p01-verifier",
+                  "v07-p01-preparer"
+                ]
+              }
+            },
+            "required": [
+              "capability_id",
+              "agent_id"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "execution_order": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "v07-p01-prepare",
+              "v07-p01-verify",
+              "v07-p01-deliver",
+              "v07-p01-archive",
+              "v07-p01-distractor-1",
+              "v07-p01-distractor-2",
+              "v07-p01-distractor-3",
+              "v07-p01-distractor-4"
+            ]
+          }
+        }
+      },
+      "required": [
+        "interpretation_status",
+        "goals",
+        "forbidden_capability_ids",
+        "forbidden_agent_ids",
+        "unresolved_terms",
+        "decision",
+        "assignments",
+        "execution_order"
+      ],
+      "additionalProperties": false
+    },
+    "raw_response": {
+      "id": "chatcmpl-h91pxpmq5aok0342fq3hgl",
+      "object": "chat.completion",
+      "created": 1784408008,
+      "model": "qwen/qwen3-1.7b",
+      "choices": [
+        {
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\"interpretation_status\":\"resolved\",\"goals\":[{\"capability_id\":\"v07-p01-prepare\",\"trust_policy_id\":\"v07-p01-ordinary\",\"artifact_contract_id\":\"v07-p01-json\"},{\"capability_id\":\"v07-p01-verify\",\"trust_policy_id\":\"v07-p01-ordinary\",\"artifact_contract_id\":\"v07-p01-json\"},{\"capability_id\":\"v07-p01-deliver\",\"trust_policy_id\":\"v07-p01-ordinary\",\"artifact_contract_id\":\"v07-p01-json\"}],\"forbidden_capability_ids\":[\"v07-p01-distractor-1\",\"v07-p01-distractor-2\",\"v07-p01-distractor-3\",\"v07-p01-distractor-4\"],\"forbidden_agent_ids\":[],\"unresolved_terms\":[],\"decision\":\"accept\",\"assignments\":[{\"capability_id\":\"v07-p01-prepare\",\"agent_id\":\"v07-p01-preparer\"},{\"capability_id\":\"v07-p01-verify\",\"agent_id\":\"v07-p01-verifier\"},{\"capability_id\":\"v07-p01-deliver\",\"agent_id\":\"v07-p01-backup\"}],\"execution_order\":[\"v07-p01-prepare\",\"v07-p01-verify\",\"v07-p01-deliver\"]}\n",
+            "reasoning_content": "",
+            "tool_calls": []
+          },
+          "logprobs": null,
+          "finish_reason": "stop"
+        }
+      ],
+      "usage": {
+        "prompt_tokens": 2613,
+        "completion_tokens": 307,
+        "total_tokens": 2920,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "stats": {},
+      "system_fingerprint": "qwen/qwen3-1.7b"
+    },
+    "content": "{\"interpretation_status\":\"resolved\",\"goals\":[{\"capability_id\":\"v07-p01-prepare\",\"trust_policy_id\":\"v07-p01-ordinary\",\"artifact_contract_id\":\"v07-p01-json\"},{\"capability_id\":\"v07-p01-verify\",\"trust_policy_id\":\"v07-p01-ordinary\",\"artifact_contract_id\":\"v07-p01-json\"},{\"capability_id\":\"v07-p01-deliver\",\"trust_policy_id\":\"v07-p01-ordinary\",\"artifact_contract_id\":\"v07-p01-json\"}],\"forbidden_capability_ids\":[\"v07-p01-distractor-1\",\"v07-p01-distractor-2\",\"v07-p01-distractor-3\",\"v07-p01-distractor-4\"],\"forbidden_agent_ids\":[],\"unresolved_terms\":[],\"decision\":\"accept\",\"assignments\":[{\"capability_id\":\"v07-p01-prepare\",\"agent_id\":\"v07-p01-preparer\"},{\"capability_id\":\"v07-p01-verify\",\"agent_id\":\"v07-p01-verifier\"},{\"capability_id\":\"v07-p01-deliver\",\"agent_id\":\"v07-p01-backup\"}],\"execution_order\":[\"v07-p01-prepare\",\"v07-p01-verify\",\"v07-p01-deliver\"]}\n",
+    "parsed": {
+      "interpretation_status": "resolved",
+      "goals": [
+        {
+          "capability_id": "v07-p01-prepare",
+          "trust_policy_id": "v07-p01-ordinary",
+          "artifact_contract_id": "v07-p01-json"
+        },
+        {
+          "capability_id": "v07-p01-verify",
+          "trust_policy_id": "v07-p01-ordinary",
+          "artifact_contract_id": "v07-p01-json"
+        },
+        {
+          "capability_id": "v07-p01-deliver",
+          "trust_policy_id": "v07-p01-ordinary",
+          "artifact_contract_id": "v07-p01-json"
+        }
+      ],
+      "forbidden_capability_ids": [
+        "v07-p01-distractor-1",
+        "v07-p01-distractor-2",
+        "v07-p01-distractor-3",
+        "v07-p01-distractor-4"
+      ],
+      "forbidden_agent_ids": [],
+      "unresolved_terms": [],
+      "decision": "accept",
+      "assignments": [
+        {
+          "capability_id": "v07-p01-prepare",
+          "agent_id": "v07-p01-preparer"
+        },
+        {
+          "capability_id": "v07-p01-verify",
+          "agent_id": "v07-p01-verifier"
+        },
+        {
+          "capability_id": "v07-p01-deliver",
+          "agent_id": "v07-p01-backup"
+        }
+      ],
+      "execution_order": [
+        "v07-p01-prepare",
+        "v07-p01-verify",
+        "v07-p01-deliver"
+      ]
+    },
+    "schema_issues": [],
+    "call_count": 1,
+    "prompt_tokens": 2613,
+    "completion_tokens": 307
+  }
+}

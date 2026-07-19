@@ -1,0 +1,692 @@
+{
+  "identity": {
+    "case_id": "unresolved-ambiguity",
+    "model_id": "google/gemma-4-e2b",
+    "seed": 11
+  },
+  "temperature": 0,
+  "public_input": {
+    "case": {
+      "case_id": "unresolved-ambiguity",
+      "variant": "archive-available",
+      "sentinel": true,
+      "request_text": "Compile and verify the material, then complete the checked-summary output with ordinary assurance as machine-readable JSON; it is unclear whether release or archival is intended."
+    },
+    "catalog": {
+      "capabilities": [
+        {
+          "capability_id": "prepare",
+          "name": "Compile source bundle",
+          "description": "Assemble and prepare source material.",
+          "aliases": [
+            "compile",
+            "assemble",
+            "prepare"
+          ],
+          "depends_on_capability_ids": [],
+          "input_schema": {},
+          "output_schema": {},
+          "input_modes": [
+            "text"
+          ],
+          "output_modes": [
+            "source_bundle"
+          ],
+          "side_effect_class": "read_only",
+          "auxiliary_eligible": false,
+          "validation_contract": {
+            "json_schema": {
+              "type": "object"
+            },
+            "required_artifacts": [
+              "source-bundle"
+            ],
+            "artifact_kinds": [],
+            "required_fields": [],
+            "evidence_types": [],
+            "validator_id": ""
+          }
+        },
+        {
+          "capability_id": "verify",
+          "name": "Verify source bundle",
+          "description": "Check and validate the prepared material.",
+          "aliases": [
+            "verify",
+            "check",
+            "validate"
+          ],
+          "depends_on_capability_ids": [
+            "prepare"
+          ],
+          "input_schema": {},
+          "output_schema": {},
+          "input_modes": [
+            "source_bundle"
+          ],
+          "output_modes": [
+            "checked_bundle"
+          ],
+          "side_effect_class": "read_only",
+          "auxiliary_eligible": false,
+          "validation_contract": {
+            "json_schema": {
+              "type": "object"
+            },
+            "required_artifacts": [
+              "checked-bundle"
+            ],
+            "artifact_kinds": [],
+            "required_fields": [],
+            "evidence_types": [],
+            "validator_id": ""
+          }
+        },
+        {
+          "capability_id": "deliver",
+          "name": "Release verified summary",
+          "description": "Issue, publish, deliver, or release the checked summary.",
+          "aliases": [
+            "release",
+            "issue",
+            "publish",
+            "deliver"
+          ],
+          "depends_on_capability_ids": [
+            "verify"
+          ],
+          "input_schema": {},
+          "output_schema": {},
+          "input_modes": [
+            "checked_bundle"
+          ],
+          "output_modes": [
+            "json",
+            "signed_pdf"
+          ],
+          "side_effect_class": "read_only",
+          "auxiliary_eligible": false,
+          "validation_contract": {
+            "json_schema": {
+              "type": "object"
+            },
+            "required_artifacts": [
+              "result-json"
+            ],
+            "artifact_kinds": [],
+            "required_fields": [],
+            "evidence_types": [],
+            "validator_id": ""
+          }
+        },
+        {
+          "capability_id": "archive",
+          "name": "Archive verified summary",
+          "description": "Preserve the checked summary in a long-term archive.",
+          "aliases": [
+            "archive",
+            "preserve",
+            "long-term"
+          ],
+          "depends_on_capability_ids": [
+            "verify"
+          ],
+          "input_schema": {},
+          "output_schema": {},
+          "input_modes": [
+            "checked_bundle"
+          ],
+          "output_modes": [
+            "json"
+          ],
+          "side_effect_class": "read_only",
+          "auxiliary_eligible": false,
+          "validation_contract": {
+            "json_schema": {
+              "type": "object"
+            },
+            "required_artifacts": [
+              "archive-json"
+            ],
+            "artifact_kinds": [],
+            "required_fields": [],
+            "evidence_types": [],
+            "validator_id": ""
+          }
+        }
+      ],
+      "trust_policies": [
+        {
+          "policy_id": "ordinary",
+          "name": "ordinary assurance",
+          "description": "Standard admitted trust is sufficient.",
+          "aliases": [
+            "ordinary",
+            "standard"
+          ],
+          "required_trust_level": "standard"
+        },
+        {
+          "policy_id": "elevated",
+          "name": "elevated assurance",
+          "description": "Every selected provider must have elevated trust.",
+          "aliases": [
+            "elevated",
+            "high assurance"
+          ],
+          "required_trust_level": "elevated"
+        }
+      ],
+      "artifact_contracts": [
+        {
+          "contract_id": "json",
+          "name": "machine-readable JSON",
+          "description": "Return the final result as JSON.",
+          "aliases": [
+            "json",
+            "machine-readable"
+          ],
+          "output_modes": [
+            "json"
+          ],
+          "required_artifacts": [
+            "result-json"
+          ],
+          "json_schema": {
+            "type": "object"
+          }
+        },
+        {
+          "contract_id": "signed-pdf",
+          "name": "signed PDF",
+          "description": "Return the final result as a signed PDF.",
+          "aliases": [
+            "signed pdf",
+            "pdf"
+          ],
+          "output_modes": [
+            "signed_pdf"
+          ],
+          "required_artifacts": [
+            "signed-pdf"
+          ],
+          "json_schema": {
+            "type": "object"
+          }
+        }
+      ],
+      "default_trust_policy_id": "ordinary",
+      "default_artifact_contract_id": "json"
+    },
+    "registry": [
+      {
+        "agent_id": "source-preparer",
+        "name": "Source preparer",
+        "agent_kind": "remote_a2a",
+        "description": "",
+        "service_endpoint": "https://source-preparer.example/a2a",
+        "invocation_endpoint": "",
+        "skills": [
+          {
+            "name": "Compile source bundle",
+            "requirement_id": "prepare",
+            "capability_id": "prepare",
+            "description": "",
+            "input_schema": {},
+            "output_schema": {},
+            "input_modes": [
+              "text"
+            ],
+            "output_modes": [
+              "source_bundle"
+            ],
+            "depends_on_requirement_ids": [],
+            "constraints": [],
+            "auxiliary_eligible": false,
+            "required_trust_level": "standard",
+            "side_effect_class": "unknown",
+            "expected_evidence": [],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              },
+              "required_artifacts": [
+                "source-bundle"
+              ],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "input_modes": [],
+        "output_modes": [],
+        "status": "available",
+        "trust_level": "standard",
+        "validation_contract": {
+          "json_schema": {},
+          "required_artifacts": [],
+          "artifact_kinds": [],
+          "required_fields": [],
+          "evidence_types": [],
+          "validator_id": ""
+        },
+        "security_schemes": {},
+        "required_security_schemes": [],
+        "source_card": {},
+        "supports_fencing": false,
+        "availability_scope": "remote",
+        "owner_node_id": ""
+      },
+      {
+        "agent_id": "source-verifier",
+        "name": "Source verifier",
+        "agent_kind": "remote_a2a",
+        "description": "",
+        "service_endpoint": "https://source-verifier.example/a2a",
+        "invocation_endpoint": "",
+        "skills": [
+          {
+            "name": "Verify source bundle",
+            "requirement_id": "verify",
+            "capability_id": "verify",
+            "description": "",
+            "input_schema": {},
+            "output_schema": {},
+            "input_modes": [
+              "source_bundle"
+            ],
+            "output_modes": [
+              "checked_bundle"
+            ],
+            "depends_on_requirement_ids": [],
+            "constraints": [],
+            "auxiliary_eligible": false,
+            "required_trust_level": "standard",
+            "side_effect_class": "unknown",
+            "expected_evidence": [],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              },
+              "required_artifacts": [
+                "checked-bundle"
+              ],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "input_modes": [],
+        "output_modes": [],
+        "status": "available",
+        "trust_level": "standard",
+        "validation_contract": {
+          "json_schema": {},
+          "required_artifacts": [],
+          "artifact_kinds": [],
+          "required_fields": [],
+          "evidence_types": [],
+          "validator_id": ""
+        },
+        "security_schemes": {},
+        "required_security_schemes": [],
+        "source_card": {},
+        "supports_fencing": false,
+        "availability_scope": "remote",
+        "owner_node_id": ""
+      },
+      {
+        "agent_id": "primary-delivery",
+        "name": "Primary delivery",
+        "agent_kind": "remote_a2a",
+        "description": "",
+        "service_endpoint": "https://primary-delivery.example/a2a",
+        "invocation_endpoint": "",
+        "skills": [
+          {
+            "name": "Release verified summary",
+            "requirement_id": "deliver",
+            "capability_id": "deliver",
+            "description": "",
+            "input_schema": {},
+            "output_schema": {},
+            "input_modes": [
+              "checked_bundle"
+            ],
+            "output_modes": [
+              "json"
+            ],
+            "depends_on_requirement_ids": [],
+            "constraints": [],
+            "auxiliary_eligible": false,
+            "required_trust_level": "standard",
+            "side_effect_class": "unknown",
+            "expected_evidence": [],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              },
+              "required_artifacts": [
+                "result-json"
+              ],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "input_modes": [],
+        "output_modes": [],
+        "status": "available",
+        "trust_level": "standard",
+        "validation_contract": {
+          "json_schema": {},
+          "required_artifacts": [],
+          "artifact_kinds": [],
+          "required_fields": [],
+          "evidence_types": [],
+          "validator_id": ""
+        },
+        "security_schemes": {},
+        "required_security_schemes": [],
+        "source_card": {},
+        "supports_fencing": false,
+        "availability_scope": "remote",
+        "owner_node_id": ""
+      },
+      {
+        "agent_id": "backup-delivery",
+        "name": "Backup delivery",
+        "agent_kind": "remote_a2a",
+        "description": "",
+        "service_endpoint": "https://backup-delivery.example/a2a",
+        "invocation_endpoint": "",
+        "skills": [
+          {
+            "name": "Release verified summary",
+            "requirement_id": "deliver",
+            "capability_id": "deliver",
+            "description": "",
+            "input_schema": {},
+            "output_schema": {},
+            "input_modes": [
+              "checked_bundle"
+            ],
+            "output_modes": [
+              "json"
+            ],
+            "depends_on_requirement_ids": [],
+            "constraints": [],
+            "auxiliary_eligible": false,
+            "required_trust_level": "standard",
+            "side_effect_class": "unknown",
+            "expected_evidence": [],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              },
+              "required_artifacts": [
+                "result-json"
+              ],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "input_modes": [],
+        "output_modes": [],
+        "status": "available",
+        "trust_level": "standard",
+        "validation_contract": {
+          "json_schema": {},
+          "required_artifacts": [],
+          "artifact_kinds": [],
+          "required_fields": [],
+          "evidence_types": [],
+          "validator_id": ""
+        },
+        "security_schemes": {},
+        "required_security_schemes": [],
+        "source_card": {},
+        "supports_fencing": false,
+        "availability_scope": "remote",
+        "owner_node_id": ""
+      },
+      {
+        "agent_id": "archive-agent",
+        "name": "Archive agent",
+        "agent_kind": "remote_a2a",
+        "description": "",
+        "service_endpoint": "https://archive-agent.example/a2a",
+        "invocation_endpoint": "",
+        "skills": [
+          {
+            "name": "Archive verified summary",
+            "requirement_id": "archive",
+            "capability_id": "archive",
+            "description": "",
+            "input_schema": {},
+            "output_schema": {},
+            "input_modes": [
+              "checked_bundle"
+            ],
+            "output_modes": [
+              "json"
+            ],
+            "depends_on_requirement_ids": [],
+            "constraints": [],
+            "auxiliary_eligible": false,
+            "required_trust_level": "standard",
+            "side_effect_class": "unknown",
+            "expected_evidence": [],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              },
+              "required_artifacts": [
+                "archive-json"
+              ],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "input_modes": [],
+        "output_modes": [],
+        "status": "available",
+        "trust_level": "standard",
+        "validation_contract": {
+          "json_schema": {},
+          "required_artifacts": [],
+          "artifact_kinds": [],
+          "required_fields": [],
+          "evidence_types": [],
+          "validator_id": ""
+        },
+        "security_schemes": {},
+        "required_security_schemes": [],
+        "source_card": {},
+        "supports_fencing": false,
+        "availability_scope": "remote",
+        "owner_node_id": ""
+      }
+    ]
+  },
+  "public_input_hash": "dd1ca2ac989980603421a58547f2db5595bf9b9543d07ed072831a2fe86c5bcf",
+  "prompt_hash": "f4af9b6ea581616394ce19d7ba6da8ab7a13d109551e53ff8270be625500141c",
+  "schema_hash": "cad6b626d604f9213286eedc8ac494d02d87e6d98558d4d7e1da488d76c0ac63",
+  "interpretation": {
+    "intent": {
+      "interpretation_status": "ambiguous",
+      "goals": [
+        {
+          "capability_id": "prepare",
+          "trust_policy_id": "ordinary",
+          "artifact_contract_id": "json"
+        },
+        {
+          "capability_id": "verify",
+          "trust_policy_id": "ordinary",
+          "artifact_contract_id": "json"
+        }
+      ],
+      "forbidden_capability_ids": [],
+      "forbidden_agent_ids": [],
+      "unresolved_terms": [
+        "release",
+        "archive"
+      ]
+    },
+    "issues": [],
+    "initial_content": "{\"interpretation_status\": \"ambiguous\", \"goals\": [\n  {\"capability_id\": \"prepare\", \"trust_policy_id\": \"ordinary\", \"artifact_contract_id\": \"json\"},\n  {\"capability_id\": \"verify\", \"trust_policy_id\": \"ordinary\", \"artifact_contract_id\": \"json\"}\n], \"forbidden_capability_ids\": [], \"forbidden_agent_ids\": [], \"unresolved_terms\": [\n  \"release\",\n  \"archive\"\n]}",
+    "repaired_content": "",
+    "repair_attempted": false,
+    "call_count": 1,
+    "latency_ms": 3366.7230000000927,
+    "prompt_tokens": 512,
+    "completion_tokens": 121,
+    "model_id": "google/gemma-4-e2b",
+    "output_schema": {
+      "type": "object",
+      "properties": {
+        "interpretation_status": {
+          "type": "string",
+          "enum": [
+            "resolved",
+            "ambiguous"
+          ]
+        },
+        "goals": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 4,
+          "items": {
+            "type": "object",
+            "properties": {
+              "capability_id": {
+                "type": "string",
+                "enum": [
+                  "prepare",
+                  "verify",
+                  "deliver",
+                  "archive"
+                ]
+              },
+              "trust_policy_id": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "ordinary",
+                      "elevated"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "artifact_contract_id": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "json",
+                      "signed-pdf"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "capability_id",
+              "trust_policy_id",
+              "artifact_contract_id"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "forbidden_capability_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "prepare",
+              "verify",
+              "deliver",
+              "archive"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "forbidden_agent_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "source-preparer",
+              "source-verifier",
+              "primary-delivery",
+              "backup-delivery",
+              "archive-agent"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "unresolved_terms": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 160
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "interpretation_status",
+        "goals",
+        "forbidden_capability_ids",
+        "forbidden_agent_ids",
+        "unresolved_terms"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "admission": {
+    "request": null,
+    "canonical_intent": {
+      "interpretation_status": "ambiguous",
+      "goals": [
+        {
+          "capability_id": "deliver",
+          "trust_policy_id": "ordinary",
+          "artifact_contract_id": "json"
+        }
+      ],
+      "forbidden_capability_ids": [],
+      "forbidden_agent_ids": [],
+      "unresolved_terms": []
+    },
+    "issues": [
+      {
+        "code": "ambiguous_interpretation",
+        "message": "The linguistic interpretation remains ambiguous."
+      }
+    ]
+  },
+  "compilation": null,
+  "accepted": false,
+  "expected_data_loaded_during_collection": false
+}

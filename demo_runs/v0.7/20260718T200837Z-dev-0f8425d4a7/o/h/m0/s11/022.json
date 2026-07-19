@@ -1,0 +1,502 @@
+{
+  "schema_version": "0.7.0",
+  "identity": {
+    "phase": "development",
+    "arm": "production_hybrid_v07",
+    "case_id": "v07-dev-12-feasible",
+    "pair_id": "v07-dev-pair-12",
+    "category": "trust",
+    "model_id": "qwen/qwen3-1.7b",
+    "seed": 11
+  },
+  "settings": {
+    "temperature": 0.2,
+    "top_p": 1.0,
+    "max_tokens": 800,
+    "schema_repair": false
+  },
+  "public_input_hash": "d303ad0ef627d9ad593dd4833a77d6d52b05d14cbb22919319c5138efa3e2023",
+  "labels_loaded_during_collection": false,
+  "runtime_error": "",
+  "result": {
+    "prompt": [
+      {
+        "role": "system",
+        "content": "Ground the request only to the admitted identifiers below. Select semantic goals, explicit exclusions, trust policy, and artifact contract. Do not copy dependencies, assign providers, decide feasibility, or create a plan. Use null for an omitted policy or contract so deterministic defaults can apply.\nRules:\n1. Select terminal requested outcomes only. Dependencies are added deterministically. If C depends on B and B depends on A, a request to perform A, B, then C has only C as a goal.\n2. A term matching a capability, policy, contract, agent name, description, or alias is resolved and must not appear in unresolved_terms.\n3. Use ambiguous only when the request itself explicitly leaves incompatible meanings unresolved. Otherwise use resolved.\n4. Add forbidden identifiers only for explicit prohibitions such as 'do not use'. Never infer a prohibition from provider capabilities or availability.\n5. Return only the schema-conforming JSON object and no explanation."
+      },
+      {
+        "role": "user",
+        "content": "CAPABILITIES\n- v07-p12-prepare: Assemble inventory control source packet; Collect the source material needed for inventory control.; aliases=['gather inventory control inputs', 'prepare inventory control packet']\n- v07-p12-verify: Validate inventory control source packet; Check the assembled inventory control material for correctness.; aliases=['check inventory control inputs', 'verify inventory control packet']\n- v07-p12-deliver: Publish inventory control verified brief; Release the checked final brief for inventory control.; aliases=['issue inventory control brief', 'release inventory control summary']\n- v07-p12-archive: Archive inventory control verified brief; Preserve the checked inventory control brief for long-term retention.; aliases=['retain inventory control brief', 'store inventory control summary']\n\nTRUST POLICIES\n- v07-p12-ordinary: ordinary inventory control assurance; Standard trust is sufficient for this inventory control request.; aliases=['normal inventory control assurance']\n- v07-p12-elevated: elevated inventory control assurance; Elevated trust is mandatory for this inventory control request.; aliases=['high assurance for inventory control']\n\nARTIFACT CONTRACTS\n- v07-p12-json: inventory control machine-readable JSON; Return the final inventory control result as JSON.; aliases=['inventory control json output']\n- v07-p12-signed-pdf: inventory control signed PDF; Return the final inventory control result as a signed PDF.; aliases=['signed inventory control document']\n\nAGENTS\n- v07-p12-preparer: inventory control source preparer\n- v07-p12-verifier: inventory control source verifier\n- v07-p12-primary: primary inventory control publisher\n- v07-p12-backup: backup inventory control publisher\n\nREQUEST\nFor this inventory control job, gather the inputs, check the packet, and issue the brief with normal inventory control assurance as inventory control JSON output."
+      }
+    ],
+    "output_schema": {
+      "type": "object",
+      "properties": {
+        "interpretation_status": {
+          "type": "string",
+          "enum": [
+            "resolved",
+            "ambiguous"
+          ]
+        },
+        "goals": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 4,
+          "items": {
+            "type": "object",
+            "properties": {
+              "capability_id": {
+                "type": "string",
+                "enum": [
+                  "v07-p12-prepare",
+                  "v07-p12-verify",
+                  "v07-p12-deliver",
+                  "v07-p12-archive"
+                ]
+              },
+              "trust_policy_id": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "v07-p12-ordinary",
+                      "v07-p12-elevated"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "artifact_contract_id": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "v07-p12-json",
+                      "v07-p12-signed-pdf"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "capability_id",
+              "trust_policy_id",
+              "artifact_contract_id"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "forbidden_capability_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "v07-p12-prepare",
+              "v07-p12-verify",
+              "v07-p12-deliver",
+              "v07-p12-archive"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "forbidden_agent_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "v07-p12-preparer",
+              "v07-p12-verifier",
+              "v07-p12-primary",
+              "v07-p12-backup"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "unresolved_terms": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 160
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "interpretation_status",
+        "goals",
+        "forbidden_capability_ids",
+        "forbidden_agent_ids",
+        "unresolved_terms"
+      ],
+      "additionalProperties": false
+    },
+    "interpretation": {
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p12-prepare",
+            "trust_policy_id": "v07-p12-ordinary",
+            "artifact_contract_id": "v07-p12-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": []
+      },
+      "issues": [],
+      "initial_content": "{\n  \"interpretation_status\": \"resolved\",\n  \"goals\": [\n    {\n      \"capability_id\": \"v07-p12-prepare\",\n      \"trust_policy_id\": \"v07-p12-ordinary\"\n    ,\n      \"artifact_contract_id\": \"v07-p12-json\"\n    }\n  ],\n  \"forbidden_capability_ids\": [],\n  \"forbidden_agent_ids\": [],\n  \"unresolved_terms\": []\n}\n",
+      "repaired_content": "",
+      "repair_attempted": false,
+      "call_count": 1,
+      "latency_ms": 2142.3421000072267,
+      "prompt_tokens": 595,
+      "completion_tokens": 102,
+      "model_id": "qwen/qwen3-1.7b",
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "interpretation_status": {
+            "type": "string",
+            "enum": [
+              "resolved",
+              "ambiguous"
+            ]
+          },
+          "goals": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 4,
+            "items": {
+              "type": "object",
+              "properties": {
+                "capability_id": {
+                  "type": "string",
+                  "enum": [
+                    "v07-p12-prepare",
+                    "v07-p12-verify",
+                    "v07-p12-deliver",
+                    "v07-p12-archive"
+                  ]
+                },
+                "trust_policy_id": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "enum": [
+                        "v07-p12-ordinary",
+                        "v07-p12-elevated"
+                      ]
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "artifact_contract_id": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "enum": [
+                        "v07-p12-json",
+                        "v07-p12-signed-pdf"
+                      ]
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "capability_id",
+                "trust_policy_id",
+                "artifact_contract_id"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "forbidden_capability_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "v07-p12-prepare",
+                "v07-p12-verify",
+                "v07-p12-deliver",
+                "v07-p12-archive"
+              ]
+            },
+            "uniqueItems": true
+          },
+          "forbidden_agent_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "v07-p12-preparer",
+                "v07-p12-verifier",
+                "v07-p12-primary",
+                "v07-p12-backup"
+              ]
+            },
+            "uniqueItems": true
+          },
+          "unresolved_terms": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 160
+            },
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "interpretation_status",
+          "goals",
+          "forbidden_capability_ids",
+          "forbidden_agent_ids",
+          "unresolved_terms"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "admission": {
+      "request": {
+        "user_goal": "For this inventory control job, gather the inputs, check the packet, and issue the brief with normal inventory control assurance as inventory control JSON output.",
+        "requirements": [
+          {
+            "name": "Assemble inventory control source packet",
+            "requirement_id": "v07-p12-prepare",
+            "capability_id": "v07-p12-prepare",
+            "description": "Collect the source material needed for inventory control.",
+            "input_schema": {
+              "type": "object"
+            },
+            "output_schema": {
+              "type": "object"
+            },
+            "input_modes": [
+              "text"
+            ],
+            "output_modes": [
+              "json"
+            ],
+            "depends_on_requirement_ids": [],
+            "constraints": [],
+            "auxiliary_eligible": false,
+            "required_trust_level": "standard",
+            "side_effect_class": "read_only",
+            "expected_evidence": [],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              },
+              "required_artifacts": [
+                "v07-p12-result"
+              ],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "constraints": [],
+        "required_artifacts": [
+          "v07-p12-result"
+        ],
+        "context": {
+          "semantic_intent": {
+            "interpretation_status": "resolved",
+            "goals": [
+              {
+                "capability_id": "v07-p12-prepare",
+                "trust_policy_id": "v07-p12-ordinary",
+                "artifact_contract_id": "v07-p12-json"
+              }
+            ],
+            "forbidden_capability_ids": [],
+            "forbidden_agent_ids": [],
+            "unresolved_terms": []
+          },
+          "semantic_catalog_grounded": true
+        }
+      },
+      "canonical_intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p12-prepare",
+            "trust_policy_id": "v07-p12-ordinary",
+            "artifact_contract_id": "v07-p12-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": []
+      },
+      "issues": []
+    },
+    "compilation": {
+      "proposal": {
+        "tasks": [
+          {
+            "task_id": "t1",
+            "requirement_name": "Assemble inventory control source packet",
+            "requirement_id": "v07-p12-prepare",
+            "capability_id": "v07-p12-prepare",
+            "description": "",
+            "assigned_to": "v07-p12-preparer",
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "v07-p12-result"
+            ],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              },
+              "required_artifacts": [
+                "v07-p12-result"
+              ],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {
+          "t1": "v07-p12-preparer"
+        },
+        "generated_nlp_agents": [],
+        "execution_order": [
+          "t1"
+        ],
+        "expected_artifacts": [
+          "v07-p12-result"
+        ],
+        "completion_criteria": [
+          "artifact:v07-p12-result"
+        ],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [
+            "v07-p12-result"
+          ],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      },
+      "report": {
+        "feasible": false,
+        "matched_agents": {
+          "t1": "v07-p12-preparer"
+        },
+        "generated_nlp_agents": [],
+        "missing_capabilities": [],
+        "risks": [
+          "Agent v07-p12-preparer does not cover every required mode for Assemble inventory control source packet."
+        ],
+        "explanation": "Plan rejected by deterministic feasibility checks.",
+        "evidence": [
+          {
+            "name": "well_formed",
+            "passed": true,
+            "details": {}
+          },
+          {
+            "name": "covered",
+            "passed": true,
+            "details": {}
+          },
+          {
+            "name": "total_assignment",
+            "passed": true,
+            "details": {}
+          },
+          {
+            "name": "authorized",
+            "passed": true,
+            "details": {}
+          },
+          {
+            "name": "compatible",
+            "passed": false,
+            "details": {}
+          },
+          {
+            "name": "acyclic",
+            "passed": true,
+            "details": {}
+          },
+          {
+            "name": "ordered",
+            "passed": true,
+            "details": {}
+          },
+          {
+            "name": "requirements_complete",
+            "passed": true,
+            "details": {}
+          },
+          {
+            "name": "complete",
+            "passed": true,
+            "details": {}
+          },
+          {
+            "name": "verifiable",
+            "passed": true,
+            "details": {}
+          },
+          {
+            "name": "constraints_satisfied",
+            "passed": true,
+            "details": {
+              "violations": []
+            }
+          }
+        ],
+        "constraint_violations": [],
+        "validation_gaps": [],
+        "schema_violations": [],
+        "capability_resolution": [
+          {
+            "task_id": "t1",
+            "requirement_id": "v07-p12-prepare",
+            "requested_capability_id": "v07-p12-prepare",
+            "agent_id": "v07-p12-preparer",
+            "resolved": true,
+            "resolved_capability_id": "v07-p12-prepare"
+          }
+        ]
+      },
+      "diagnostics": {
+        "provider_candidates": {
+          "v07-p12-prepare": [
+            "v07-p12-preparer"
+          ]
+        },
+        "assignments_total": 1,
+        "assignments_considered": 1,
+        "recovered_alternative_provider": false,
+        "search_exhausted": false,
+        "issues": []
+      }
+    },
+    "accepted": false,
+    "call_count": 1,
+    "prompt_tokens": 595,
+    "completion_tokens": 102
+  }
+}

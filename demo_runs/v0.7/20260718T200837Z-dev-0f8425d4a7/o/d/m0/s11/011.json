@@ -1,0 +1,281 @@
+{
+  "schema_version": "0.7.0",
+  "identity": {
+    "phase": "development",
+    "arm": "direct_llm_v07",
+    "case_id": "v07-dev-06-infeasible",
+    "pair_id": "v07-dev-pair-06",
+    "category": "ambiguity",
+    "model_id": "qwen/qwen3-1.7b",
+    "seed": 11
+  },
+  "settings": {
+    "temperature": 0.2,
+    "top_p": 1.0,
+    "max_tokens": 800,
+    "schema_repair": false
+  },
+  "public_input_hash": "822e8af93fd47117bcaf317ed5d328c35d23e28bcdba25ce7e87134bc66196ca",
+  "labels_loaded_during_collection": false,
+  "runtime_error": "",
+  "result": {
+    "prompt": [
+      {
+        "role": "system",
+        "content": "Act as a direct LLM coordinator without a symbolic authorization boundary. Interpret the raw request, decide accept or refuse, assign admitted agents to every required capability, and give dependency-respecting execution_order. Use only identifiers in the supplied catalog and registry. Mark unresolved meaning ambiguous. Return only schema-conforming JSON."
+      },
+      {
+        "role": "user",
+        "content": "{\"request_text\":\"For this software maintenance job, gather and check the packet, then either issue or retain the final brief with normal software maintenance assurance as software maintenance JSON output; the intended final action is not specified.\",\"catalog\":{\"capabilities\":[{\"capability_id\":\"v07-p06-prepare\",\"name\":\"Assemble software maintenance source packet\",\"description\":\"Collect the source material needed for software maintenance.\",\"aliases\":[\"gather software maintenance inputs\",\"prepare software maintenance packet\"],\"depends_on_capability_ids\":[],\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"text\"],\"output_modes\":[\"source_bundle\"],\"side_effect_class\":\"read_only\",\"auxiliary_eligible\":false,\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p06-source\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}},{\"capability_id\":\"v07-p06-verify\",\"name\":\"Validate software maintenance source packet\",\"description\":\"Check the assembled software maintenance material for correctness.\",\"aliases\":[\"check software maintenance inputs\",\"verify software maintenance packet\"],\"depends_on_capability_ids\":[\"v07-p06-prepare\"],\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"source_bundle\"],\"output_modes\":[\"checked_bundle\"],\"side_effect_class\":\"read_only\",\"auxiliary_eligible\":false,\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p06-checked\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}},{\"capability_id\":\"v07-p06-deliver\",\"name\":\"Publish software maintenance verified brief\",\"description\":\"Release the checked final brief for software maintenance.\",\"aliases\":[\"issue software maintenance brief\",\"release software maintenance summary\"],\"depends_on_capability_ids\":[\"v07-p06-verify\"],\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"checked_bundle\"],\"output_modes\":[\"json\",\"signed_pdf\"],\"side_effect_class\":\"read_only\",\"auxiliary_eligible\":false,\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p06-result\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}},{\"capability_id\":\"v07-p06-archive\",\"name\":\"Archive software maintenance verified brief\",\"description\":\"Preserve the checked software maintenance brief for long-term retention.\",\"aliases\":[\"retain software maintenance brief\",\"store software maintenance summary\"],\"depends_on_capability_ids\":[\"v07-p06-verify\"],\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"checked_bundle\"],\"output_modes\":[\"json\"],\"side_effect_class\":\"read_only\",\"auxiliary_eligible\":false,\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p06-archive-result\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}}],\"trust_policies\":[{\"policy_id\":\"v07-p06-ordinary\",\"name\":\"ordinary software maintenance assurance\",\"description\":\"Standard trust is sufficient for this software maintenance request.\",\"aliases\":[\"normal software maintenance assurance\"],\"required_trust_level\":\"standard\"},{\"policy_id\":\"v07-p06-elevated\",\"name\":\"elevated software maintenance assurance\",\"description\":\"Elevated trust is mandatory for this software maintenance request.\",\"aliases\":[\"high assurance for software maintenance\"],\"required_trust_level\":\"elevated\"}],\"artifact_contracts\":[{\"contract_id\":\"v07-p06-json\",\"name\":\"software maintenance machine-readable JSON\",\"description\":\"Return the final software maintenance result as JSON.\",\"aliases\":[\"software maintenance json output\"],\"output_modes\":[\"json\"],\"required_artifacts\":[\"v07-p06-result\"],\"json_schema\":{\"type\":\"object\"}},{\"contract_id\":\"v07-p06-signed-pdf\",\"name\":\"software maintenance signed PDF\",\"description\":\"Return the final software maintenance result as a signed PDF.\",\"aliases\":[\"signed software maintenance document\"],\"output_modes\":[\"signed_pdf\"],\"required_artifacts\":[\"v07-p06-signed-pdf\"],\"json_schema\":{\"type\":\"object\"}}],\"default_trust_policy_id\":\"v07-p06-ordinary\",\"default_artifact_contract_id\":\"v07-p06-json\"},\"registry\":[{\"agent_id\":\"v07-p06-backup\",\"name\":\"backup software maintenance publisher\",\"agent_kind\":\"remote_a2a\",\"description\":\"\",\"service_endpoint\":\"https://v07-p06-backup.example/a2a\",\"invocation_endpoint\":\"\",\"skills\":[{\"name\":\"Publish software maintenance verified brief\",\"requirement_id\":\"v07-p06-deliver\",\"capability_id\":\"v07-p06-deliver\",\"description\":\"\",\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"checked_bundle\"],\"output_modes\":[\"json\"],\"depends_on_requirement_ids\":[],\"constraints\":[],\"auxiliary_eligible\":false,\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"expected_evidence\":[],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p06-result\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}}],\"input_modes\":[],\"output_modes\":[],\"status\":\"available\",\"trust_level\":\"standard\",\"validation_contract\":{\"json_schema\":{},\"required_artifacts\":[],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"},\"security_schemes\":{},\"required_security_schemes\":[],\"source_card\":{},\"supports_fencing\":false,\"availability_scope\":\"remote\",\"owner_node_id\":\"\"},{\"agent_id\":\"v07-p06-primary\",\"name\":\"primary software maintenance publisher\",\"agent_kind\":\"remote_a2a\",\"description\":\"\",\"service_endpoint\":\"https://v07-p06-primary.example/a2a\",\"invocation_endpoint\":\"\",\"skills\":[{\"name\":\"Publish software maintenance verified brief\",\"requirement_id\":\"v07-p06-deliver\",\"capability_id\":\"v07-p06-deliver\",\"description\":\"\",\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"checked_bundle\"],\"output_modes\":[\"json\"],\"depends_on_requirement_ids\":[],\"constraints\":[],\"auxiliary_eligible\":false,\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"expected_evidence\":[],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p06-result\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}}],\"input_modes\":[],\"output_modes\":[],\"status\":\"available\",\"trust_level\":\"standard\",\"validation_contract\":{\"json_schema\":{},\"required_artifacts\":[],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"},\"security_schemes\":{},\"required_security_schemes\":[],\"source_card\":{},\"supports_fencing\":false,\"availability_scope\":\"remote\",\"owner_node_id\":\"\"},{\"agent_id\":\"v07-p06-verifier\",\"name\":\"software maintenance source verifier\",\"agent_kind\":\"remote_a2a\",\"description\":\"\",\"service_endpoint\":\"https://v07-p06-verifier.example/a2a\",\"invocation_endpoint\":\"\",\"skills\":[{\"name\":\"Validate software maintenance source packet\",\"requirement_id\":\"v07-p06-verify\",\"capability_id\":\"v07-p06-verify\",\"description\":\"\",\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"source_bundle\"],\"output_modes\":[\"checked_bundle\"],\"depends_on_requirement_ids\":[],\"constraints\":[],\"auxiliary_eligible\":false,\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"expected_evidence\":[],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p06-checked\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}}],\"input_modes\":[],\"output_modes\":[],\"status\":\"available\",\"trust_level\":\"standard\",\"validation_contract\":{\"json_schema\":{},\"required_artifacts\":[],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"},\"security_schemes\":{},\"required_security_schemes\":[],\"source_card\":{},\"supports_fencing\":false,\"availability_scope\":\"remote\",\"owner_node_id\":\"\"},{\"agent_id\":\"v07-p06-preparer\",\"name\":\"software maintenance source preparer\",\"agent_kind\":\"remote_a2a\",\"description\":\"\",\"service_endpoint\":\"https://v07-p06-preparer.example/a2a\",\"invocation_endpoint\":\"\",\"skills\":[{\"name\":\"Assemble software maintenance source packet\",\"requirement_id\":\"v07-p06-prepare\",\"capability_id\":\"v07-p06-prepare\",\"description\":\"\",\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"text\"],\"output_modes\":[\"source_bundle\"],\"depends_on_requirement_ids\":[],\"constraints\":[],\"auxiliary_eligible\":false,\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"expected_evidence\":[],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p06-source\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}}],\"input_modes\":[],\"output_modes\":[],\"status\":\"available\",\"trust_level\":\"standard\",\"validation_contract\":{\"json_schema\":{},\"required_artifacts\":[],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"},\"security_schemes\":{},\"required_security_schemes\":[],\"source_card\":{},\"supports_fencing\":false,\"availability_scope\":\"remote\",\"owner_node_id\":\"\"}]}"
+      }
+    ],
+    "output_schema": {
+      "type": "object",
+      "properties": {
+        "interpretation_status": {
+          "type": "string",
+          "enum": [
+            "resolved",
+            "ambiguous"
+          ]
+        },
+        "goals": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 4,
+          "items": {
+            "type": "object",
+            "properties": {
+              "capability_id": {
+                "type": "string",
+                "enum": [
+                  "v07-p06-prepare",
+                  "v07-p06-verify",
+                  "v07-p06-deliver",
+                  "v07-p06-archive"
+                ]
+              },
+              "trust_policy_id": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "v07-p06-ordinary",
+                      "v07-p06-elevated"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "artifact_contract_id": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "v07-p06-json",
+                      "v07-p06-signed-pdf"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "capability_id",
+              "trust_policy_id",
+              "artifact_contract_id"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "forbidden_capability_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "v07-p06-prepare",
+              "v07-p06-verify",
+              "v07-p06-deliver",
+              "v07-p06-archive"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "forbidden_agent_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "v07-p06-backup",
+              "v07-p06-primary",
+              "v07-p06-verifier",
+              "v07-p06-preparer"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "unresolved_terms": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 160
+          },
+          "uniqueItems": true
+        },
+        "decision": {
+          "type": "string",
+          "enum": [
+            "accept",
+            "refuse"
+          ]
+        },
+        "assignments": {
+          "type": "array",
+          "maxItems": 4,
+          "items": {
+            "type": "object",
+            "properties": {
+              "capability_id": {
+                "type": "string",
+                "enum": [
+                  "v07-p06-prepare",
+                  "v07-p06-verify",
+                  "v07-p06-deliver",
+                  "v07-p06-archive"
+                ]
+              },
+              "agent_id": {
+                "type": "string",
+                "enum": [
+                  "v07-p06-backup",
+                  "v07-p06-primary",
+                  "v07-p06-verifier",
+                  "v07-p06-preparer"
+                ]
+              }
+            },
+            "required": [
+              "capability_id",
+              "agent_id"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "execution_order": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "v07-p06-prepare",
+              "v07-p06-verify",
+              "v07-p06-deliver",
+              "v07-p06-archive"
+            ]
+          }
+        }
+      },
+      "required": [
+        "interpretation_status",
+        "goals",
+        "forbidden_capability_ids",
+        "forbidden_agent_ids",
+        "unresolved_terms",
+        "decision",
+        "assignments",
+        "execution_order"
+      ],
+      "additionalProperties": false
+    },
+    "raw_response": {
+      "id": "chatcmpl-7zj1zokq538owcg2c9mru",
+      "object": "chat.completion",
+      "created": 1784405400,
+      "model": "qwen/qwen3-1.7b",
+      "choices": [
+        {
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\"interpretation_status\":\"resolved\",\"goals\":[{\"capability_id\":\"v07-p06-prepare\",\"trust_policy_id\":\"v07-p06-ordinary\",\"artifact_contract_id\":\"v07-p06-json\"},{\"capability_id\":\"v07-p06-verify\",\"trust_policy_id\":\"v07-p06-ordinary\",\"artifact_contract_id\":\"v07-p06-json\"},{\"capability_id\":\"v07-p06-deliver\",\"trust_policy_id\":\"v07-p06-ordinary\",\"artifact_contract_id\":\"v07-p06-json\"},{\"capability_id\":\"v07-p06-archive\",\"trust_policy_id\":\"v07-p06-ordinary\",\"artifact_contract_id\":\"v07-p06-json\"}],\"forbidden_capability_ids\":[],\"forbidden_agent_ids\":[],\"unresolved_terms\":[],\"decision\":\"accept\",\"assignments\":[{\"capability_id\":\"v07-p06-prepare\",\"agent_id\":\"v07-p06-preparer\"},{\"capability_id\":\"v07-p06-verify\",\"agent_id\":\"v07-p06-verifier\"},{\"capability_id\":\"v07-p06-deliver\",\"agent_id\":\"v07-p06-primary\"},{\"capability_id\":\"v07-p06-archive\",\"agent_id\":\"v07-p06-backup\"}],\"execution_order\":[\"v07-p06-prepare\",\"v07-p06-verify\",\"v07-p06-deliver\",\"v07-p06-archive\"]}\n",
+            "reasoning_content": "",
+            "tool_calls": []
+          },
+          "logprobs": null,
+          "finish_reason": "stop"
+        }
+      ],
+      "usage": {
+        "prompt_tokens": 2029,
+        "completion_tokens": 328,
+        "total_tokens": 2357,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "stats": {},
+      "system_fingerprint": "qwen/qwen3-1.7b"
+    },
+    "content": "{\"interpretation_status\":\"resolved\",\"goals\":[{\"capability_id\":\"v07-p06-prepare\",\"trust_policy_id\":\"v07-p06-ordinary\",\"artifact_contract_id\":\"v07-p06-json\"},{\"capability_id\":\"v07-p06-verify\",\"trust_policy_id\":\"v07-p06-ordinary\",\"artifact_contract_id\":\"v07-p06-json\"},{\"capability_id\":\"v07-p06-deliver\",\"trust_policy_id\":\"v07-p06-ordinary\",\"artifact_contract_id\":\"v07-p06-json\"},{\"capability_id\":\"v07-p06-archive\",\"trust_policy_id\":\"v07-p06-ordinary\",\"artifact_contract_id\":\"v07-p06-json\"}],\"forbidden_capability_ids\":[],\"forbidden_agent_ids\":[],\"unresolved_terms\":[],\"decision\":\"accept\",\"assignments\":[{\"capability_id\":\"v07-p06-prepare\",\"agent_id\":\"v07-p06-preparer\"},{\"capability_id\":\"v07-p06-verify\",\"agent_id\":\"v07-p06-verifier\"},{\"capability_id\":\"v07-p06-deliver\",\"agent_id\":\"v07-p06-primary\"},{\"capability_id\":\"v07-p06-archive\",\"agent_id\":\"v07-p06-backup\"}],\"execution_order\":[\"v07-p06-prepare\",\"v07-p06-verify\",\"v07-p06-deliver\",\"v07-p06-archive\"]}\n",
+    "parsed": {
+      "interpretation_status": "resolved",
+      "goals": [
+        {
+          "capability_id": "v07-p06-prepare",
+          "trust_policy_id": "v07-p06-ordinary",
+          "artifact_contract_id": "v07-p06-json"
+        },
+        {
+          "capability_id": "v07-p06-verify",
+          "trust_policy_id": "v07-p06-ordinary",
+          "artifact_contract_id": "v07-p06-json"
+        },
+        {
+          "capability_id": "v07-p06-deliver",
+          "trust_policy_id": "v07-p06-ordinary",
+          "artifact_contract_id": "v07-p06-json"
+        },
+        {
+          "capability_id": "v07-p06-archive",
+          "trust_policy_id": "v07-p06-ordinary",
+          "artifact_contract_id": "v07-p06-json"
+        }
+      ],
+      "forbidden_capability_ids": [],
+      "forbidden_agent_ids": [],
+      "unresolved_terms": [],
+      "decision": "accept",
+      "assignments": [
+        {
+          "capability_id": "v07-p06-prepare",
+          "agent_id": "v07-p06-preparer"
+        },
+        {
+          "capability_id": "v07-p06-verify",
+          "agent_id": "v07-p06-verifier"
+        },
+        {
+          "capability_id": "v07-p06-deliver",
+          "agent_id": "v07-p06-primary"
+        },
+        {
+          "capability_id": "v07-p06-archive",
+          "agent_id": "v07-p06-backup"
+        }
+      ],
+      "execution_order": [
+        "v07-p06-prepare",
+        "v07-p06-verify",
+        "v07-p06-deliver",
+        "v07-p06-archive"
+      ]
+    },
+    "schema_issues": [],
+    "call_count": 1,
+    "prompt_tokens": 2029,
+    "completion_tokens": 328
+  }
+}

@@ -19,7 +19,11 @@ def render(manifest_path: Path, repository_root: Path) -> str:
     manifest = _load(manifest_path)
     validation = manifest.get("current_local_validation") or {}
     v05 = manifest.get("v05_study_evidence")
-    consensus = manifest.get("consensus_campaign_evidence")
+    v07 = manifest.get("v07_study_evidence")
+    consensus = (
+        manifest.get("consensus_campaign_v4_evidence")
+        or manifest.get("consensus_campaign_evidence")
+    )
     values: dict[str, str] = {
         "EvidenceTestCount": str(validation.get("test_count", "pending")),
         "ProductionBranchCoverage": str(
@@ -28,6 +32,16 @@ def render(manifest_path: Path, repository_root: Path) -> str:
         "VFiveOutputCount": "0",
         "VFiveOutcome": "pending",
         "VFiveClaimStatus": "pending",
+        "VSevenOutputCount": "0",
+        "VSevenHybridRecall": "pending",
+        "VSevenHybridUnsafe": "pending",
+        "VSevenDirectUnsafe": "pending",
+        "VSevenAliasBalancedAccuracy": "pending",
+        "VSevenCriteriaPassed": "0",
+        "VSevenCriteriaTotal": "0",
+        "VSevenQwenSmallRecall": "pending",
+        "VSevenGemmaRecall": "pending",
+        "VSevenQwenLargeRecall": "pending",
         "ConsensusTrialCount": "0",
         "ConsensusOutcome": "pending",
         "ConsensusChecksExecuted": "0",
@@ -42,6 +56,38 @@ def render(manifest_path: Path, repository_root: Path) -> str:
                 "VFiveOutputCount": str(completion["observed_outputs"]),
                 "VFiveOutcome": str(analysis["outcome"]),
                 "VFiveClaimStatus": str(analysis["claim_status"]),
+            }
+        )
+    if v07:
+        run_root = repository_root / v07["run_root"]
+        analysis = _load(run_root / v07["analysis_file"])
+        metrics = analysis["metrics_primary_seed"]
+        by_model = analysis["metrics_by_model_primary_seed"]
+        criteria = analysis["predeclared_criteria"]
+
+        def percent(value: Any) -> str:
+            return f"{100 * float(value):.2f}"
+
+        values.update(
+            {
+                "VSevenOutputCount": str(v07["case_outputs"]),
+                "VSevenHybridRecall": percent(metrics["hybrid"]["feasible_recall"]),
+                "VSevenHybridUnsafe": str(metrics["hybrid"]["unsafe_acceptances"]),
+                "VSevenDirectUnsafe": str(metrics["direct"]["unsafe_acceptances"]),
+                "VSevenAliasBalancedAccuracy": percent(
+                    metrics["alias"]["balanced_accuracy"]
+                ),
+                "VSevenCriteriaPassed": str(sum(bool(value) for value in criteria.values())),
+                "VSevenCriteriaTotal": str(len(criteria)),
+                "VSevenQwenSmallRecall": percent(
+                    by_model["qwen/qwen3-1.7b"]["hybrid"]["feasible_recall"]
+                ),
+                "VSevenGemmaRecall": percent(
+                    by_model["google/gemma-4-e2b"]["hybrid"]["feasible_recall"]
+                ),
+                "VSevenQwenLargeRecall": percent(
+                    by_model["qwen/qwen3-8b"]["hybrid"]["feasible_recall"]
+                ),
             }
         )
     if consensus:

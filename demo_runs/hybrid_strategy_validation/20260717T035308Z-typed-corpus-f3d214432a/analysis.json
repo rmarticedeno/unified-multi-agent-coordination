@@ -1,0 +1,555 @@
+{
+  "classification": "developmental_typed_request_architecture_replay",
+  "claim_boundary": "The same frozen author-designed corpus is reused descriptively. This is not a new study, independent adjudication, or evidence of general model or pipeline superiority.",
+  "source_corpus_hash": "d3fe4e458554f174ae2040c5758e985116edd42443c8b5d6a49e501477935418",
+  "typed_request_llm_bypass": true,
+  "model_calls": 0,
+  "metrics": {
+    "cases": 48,
+    "correct": 48,
+    "accuracy": 1.0,
+    "feasible_cases": 24,
+    "feasible_recall": 1.0,
+    "false_acceptances": 0,
+    "false_refusals": 0,
+    "compilation_latency_ms": 16.035699998610653
+  },
+  "accepted_historical_hybrid_repaired": {
+    "observations": 720,
+    "feasible_recall": 0.013888888888888888,
+    "false_acceptances": 0,
+    "false_refusals": 355
+  },
+  "by_invalidity_category": {
+    "auxiliary_overreach": {
+      "cases": 6,
+      "correct": 6,
+      "false_acceptances": 0,
+      "false_refusals": 0
+    },
+    "dependency_order_error": {
+      "cases": 6,
+      "correct": 6,
+      "false_acceptances": 0,
+      "false_refusals": 0
+    },
+    "incompatible_modality": {
+      "cases": 6,
+      "correct": 6,
+      "false_acceptances": 0,
+      "false_refusals": 0
+    },
+    "insufficient_trust": {
+      "cases": 6,
+      "correct": 6,
+      "false_acceptances": 0,
+      "false_refusals": 0
+    },
+    "invalid_artifact_contract": {
+      "cases": 6,
+      "correct": 6,
+      "false_acceptances": 0,
+      "false_refusals": 0
+    },
+    "missing_capability": {
+      "cases": 6,
+      "correct": 6,
+      "false_acceptances": 0,
+      "false_refusals": 0
+    },
+    "typed_constraint_violation": {
+      "cases": 6,
+      "correct": 6,
+      "false_acceptances": 0,
+      "false_refusals": 0
+    },
+    "unavailable_agent": {
+      "cases": 6,
+      "correct": 6,
+      "false_acceptances": 0,
+      "false_refusals": 0
+    }
+  },
+  "rows": [
+    {
+      "case_id": "v05-pair-01-feasible",
+      "invalidity_category": "missing_capability",
+      "accepted": true,
+      "reference_feasible": true,
+      "correct": true,
+      "false_acceptance": false,
+      "false_refusal": false,
+      "compilation_latency_ms": 0.8369999995920807
+    },
+    {
+      "case_id": "v05-pair-01-infeasible",
+      "invalidity_category": "missing_capability",
+      "accepted": false,
+      "reference_feasible": false,
+      "correct": true,
+      "false_acceptance": false,
+      "false_refusal": false,
+      "compilation_latency_ms": 0.3299999998489511
+    },
+    {
+      "case_id": "v05-pair-02-feasible",
+      "invalidity_category": "incompatible_modality",
+      "accepted": true,
+      "reference_feasible": true,
+      "correct": true,
+      "false_acceptance": false,
+      "false_refusal": false,
+      "compilation_latency_ms": 0.6223999998837826
+    },
+    {
+      "case_id": "v05-pair-02-infeasible",
+      "invalidity_category": "incompatible_modality",
+      "accepted": false,
+      "reference_feasible": false,
+      "correct": true,
+      "false_acceptance": false,
+      "false_refusal": false,
+      "compilation_latency_ms": 0.3077000001212582
+    },
+    {
+      "case_id": "v05-pair-03-feasible",
+      "invalidity_category": "invalid_artifact_contract",
+      "accepted": true,
+      "reference_feasible": true,
+      "correct": true,
+      "false_acceptance": false,
+      "false_refusal": false,
+      "compilation_latency_ms": 0.40919999992183875
+    },
+    {
+      "case_id": "v05-pair-03-infeasible",
+      "invalidity_category": "invalid_artifact_contract",
+      "accepted": false,
+      "reference_feasible": false,
+      "correct": true,
+      "false_acceptance": false,
+      "false_refusal": false,
+      "compilation_latency_ms": 0.21090000063850312
+    },
+    {
+      "case_id": "v05-pair-04-feasible",
+      "invalidity_category": "unavailable_agent",
+      "accepted": true,
+      "reference_feasible": true,
+      "correct": true,
+      "false_acceptance": false,
+      "false_refusal": false,
+      "compilation_latency_ms": 0.3529999994498212
+    },
+    {
+      "case_id": "v05-pair-04-infeasible",
+      "invalidity_category": "unavailable_agent",
+      "accepted": false,
+      "reference_feasible": false,
+      "correct": true,
+      "false_acceptance": false,
+      "false_refusal": false,
+      "compilation_latency_ms": 0.20510000013018725
+    },
+    {
+      "case_id": "v05-pair-05-feasible",
+      "invalidity_category": "typed_constraint_violation",
+      "accepted": true,
+      "reference_feasible": true,
+      "correct": true,
+      "false_acceptance": false,
+      "false_refusal": false,
+      "compilation_latency_ms": 0.3372999999555759
+    },
+    {
+      "case_id": "v05-pair-05-infeasible",
+      "invalidity_category": "typed_constraint_violation",
+      "accepted": false,
+      "reference_feasible": false,
+      "correct": true,
+      "false_acceptance": false,
+      "false_refusal": false,
+      "compilation_latency_ms": 0.20949999998265412
+    },
+    {
+      "case_id": "v05-pair-06-feasible",
+      "invalidity_category": "dependency_order_error",
+      "accepted": true,
+      "reference_feasible": true,
+      "correct": true,
+      "false_acceptance": false,
+      "false_refusal": false,
+      "compilation_latency_ms": 0.35649999972520163
+    },
+    {
+      "case_id": "v05-pair-06-infeasible",
+      "invalidity_category": "dependency_order_error",
+      "accepted": false,
+      "reference_feasible": false,
+      "correct": true,
+      "false_acceptance": false,
+      "false_refusal": false,
+      "compilation_latency_ms": 0.11129999984405003
+    },
+    {
+      "case_id": "v05-pair-07-feasible",
+      "invalidity_category": "insufficient_trust",
+      "accepted": true,
+      "reference_feasible": true,
+      "correct": true,
+      "false_acceptance": false,
+      "false_refusal": false,
+      "compilation_latency_ms": 0.3582999997888692
+    },
+    {
+      "case_id": "v05-pair-07-infeasible",
+      "invalidity_category": "insufficient_trust",
+      "accepted": false,
+      "reference_feasible": false,
+      "correct": true,
+      "false_acceptance": false,
+      "false_refusal": false,
+      "compilation_latency_ms": 0.21999999989930075
+    },
+    {
+      "case_id": "v05-pair-08-feasible",
+      "invalidity_category": "invalid_artifact_contract",
+      "accepted": true,
+      "reference_feasible": true,
+      "correct": true,
+      "false_acceptance": false,
+      "false_refusal": false,
+      "compilation_latency_ms": 0.3559000006134738
+    },
+    {
+      "case_id": "v05-pair-08-infeasible",
+      "invalidity_category": "invalid_artifact_contract",
+      "accepted": false,
+      "reference_feasible": false,
+      "correct": true,
+      "false_acceptance": false,
+      "false_refusal": false,
+      "compilation_latency_ms": 0.20419999964360613
+    },
+    {
+      "case_id": "v05-pair-09-feasible",
+      "invalidity_category": "auxiliary_overreach",
+      "accepted": true,
+      "reference_feasible": true,
+      "correct": true,
+      "false_acceptance": false,
+      "false_refusal": false,
+      "compilation_latency_ms": 0.6151999996291124
+    },
+    {
+      "case_id": "v05-pair-09-infeasible",
+      "invalidity_category": "auxiliary_overreach",
+      "accepted": false,
+      "reference_feasible": false,
+      "correct": true,
+      "false_acceptance": false,
+      "false_refusal": false,
+      "compilation_latency_ms": 0.242400000388443
+    },
+    {
+      "case_id": "v05-pair-10-feasible",
+      "invalidity_category": "incompatible_modality",
+      "accepted": true,
+      "reference_feasible": true,
+      "correct": true,
+      "false_acceptance": false,
+      "false_refusal": false,
+      "compilation_latency_ms": 0.44640000032813987
+    },
+    {
+      "case_id": "v05-pair-10-infeasible",
+      "invalidity_category": "incompatible_modality",
+      "accepted": false,
+      "reference_feasible": false,
+      "correct": true,
+      "false_acceptance": false,
+      "false_refusal": false,
+      "compilation_latency_ms": 0.20499999936873792
+    },
+    {
+      "case_id": "v05-pair-11-feasible",
+      "invalidity_category": "dependency_order_error",
+      "accepted": true,
+      "reference_feasible": true,
+      "correct": true,
+      "false_acceptance": false,
+      "false_refusal": false,
+      "compilation_latency_ms": 0.3693999997267383
+    },
+    {
+      "case_id": "v05-pair-11-infeasible",
+      "invalidity_category": "dependency_order_error",
+      "accepted": false,
+      "reference_feasible": false,
+      "correct": true,
+      "false_acceptance": false,
+      "false_refusal": false,
+      "compilation_latency_ms": 0.0957000002017594
+    },
+    {
+      "case_id": "v05-pair-12-feasible",
+      "invalidity_category": "missing_capability",
+      "accepted": true,
+      "reference_feasible": true,
+      "correct": true,
+      "false_acceptance": false,
+      "false_refusal": false,
+      "compilation_latency_ms": 0.3438000003370689
+    },
+    {
+      "case_id": "v05-pair-12-infeasible",
+      "invalidity_category": "missing_capability",
+      "accepted": false,
+      "reference_feasible": false,
+      "correct": true,
+      "false_acceptance": false,
+      "false_refusal": false,
+      "compilation_latency_ms": 0.18599999930302147
+    },
+    {
+      "case_id": "v05-pair-13-feasible",
+      "invalidity_category": "typed_constraint_violation",
+      "accepted": true,
+      "reference_feasible": true,
+      "correct": true,
+      "false_acceptance": false,
+      "false_refusal": false,
+      "compilation_latency_ms": 0.38749999930587364
+    },
+    {
+      "case_id": "v05-pair-13-infeasible",
+      "invalidity_category": "typed_constraint_violation",
+      "accepted": false,
+      "reference_feasible": false,
+      "correct": true,
+      "false_acceptance": false,
+      "false_refusal": false,
+      "compilation_latency_ms": 0.29400000039458973
+    },
+    {
+      "case_id": "v05-pair-14-feasible",
+      "invalidity_category": "auxiliary_overreach",
+      "accepted": true,
+      "reference_feasible": true,
+      "correct": true,
+      "false_acceptance": false,
+      "false_refusal": false,
+      "compilation_latency_ms": 0.6126999996922677
+    },
+    {
+      "case_id": "v05-pair-14-infeasible",
+      "invalidity_category": "auxiliary_overreach",
+      "accepted": false,
+      "reference_feasible": false,
+      "correct": true,
+      "false_acceptance": false,
+      "false_refusal": false,
+      "compilation_latency_ms": 0.33490000078018056
+    },
+    {
+      "case_id": "v05-pair-15-feasible",
+      "invalidity_category": "unavailable_agent",
+      "accepted": true,
+      "reference_feasible": true,
+      "correct": true,
+      "false_acceptance": false,
+      "false_refusal": false,
+      "compilation_latency_ms": 0.4904000006717979
+    },
+    {
+      "case_id": "v05-pair-15-infeasible",
+      "invalidity_category": "unavailable_agent",
+      "accepted": false,
+      "reference_feasible": false,
+      "correct": true,
+      "false_acceptance": false,
+      "false_refusal": false,
+      "compilation_latency_ms": 0.29910000012023374
+    },
+    {
+      "case_id": "v05-pair-16-feasible",
+      "invalidity_category": "invalid_artifact_contract",
+      "accepted": true,
+      "reference_feasible": true,
+      "correct": true,
+      "false_acceptance": false,
+      "false_refusal": false,
+      "compilation_latency_ms": 0.6621999991693883
+    },
+    {
+      "case_id": "v05-pair-16-infeasible",
+      "invalidity_category": "invalid_artifact_contract",
+      "accepted": false,
+      "reference_feasible": false,
+      "correct": true,
+      "false_acceptance": false,
+      "false_refusal": false,
+      "compilation_latency_ms": 0.24620000021968735
+    },
+    {
+      "case_id": "v05-pair-17-feasible",
+      "invalidity_category": "missing_capability",
+      "accepted": true,
+      "reference_feasible": true,
+      "correct": true,
+      "false_acceptance": false,
+      "false_refusal": false,
+      "compilation_latency_ms": 0.3828999997494975
+    },
+    {
+      "case_id": "v05-pair-17-infeasible",
+      "invalidity_category": "missing_capability",
+      "accepted": false,
+      "reference_feasible": false,
+      "correct": true,
+      "false_acceptance": false,
+      "false_refusal": false,
+      "compilation_latency_ms": 0.19840000004478497
+    },
+    {
+      "case_id": "v05-pair-18-feasible",
+      "invalidity_category": "insufficient_trust",
+      "accepted": true,
+      "reference_feasible": true,
+      "correct": true,
+      "false_acceptance": false,
+      "false_refusal": false,
+      "compilation_latency_ms": 0.35959999968326883
+    },
+    {
+      "case_id": "v05-pair-18-infeasible",
+      "invalidity_category": "insufficient_trust",
+      "accepted": false,
+      "reference_feasible": false,
+      "correct": true,
+      "false_acceptance": false,
+      "false_refusal": false,
+      "compilation_latency_ms": 0.21980000019539148
+    },
+    {
+      "case_id": "v05-pair-19-feasible",
+      "invalidity_category": "dependency_order_error",
+      "accepted": true,
+      "reference_feasible": true,
+      "correct": true,
+      "false_acceptance": false,
+      "false_refusal": false,
+      "compilation_latency_ms": 0.3740999991350691
+    },
+    {
+      "case_id": "v05-pair-19-infeasible",
+      "invalidity_category": "dependency_order_error",
+      "accepted": false,
+      "reference_feasible": false,
+      "correct": true,
+      "false_acceptance": false,
+      "false_refusal": false,
+      "compilation_latency_ms": 0.10150000071007526
+    },
+    {
+      "case_id": "v05-pair-20-feasible",
+      "invalidity_category": "unavailable_agent",
+      "accepted": true,
+      "reference_feasible": true,
+      "correct": true,
+      "false_acceptance": false,
+      "false_refusal": false,
+      "compilation_latency_ms": 0.3483000000414904
+    },
+    {
+      "case_id": "v05-pair-20-infeasible",
+      "invalidity_category": "unavailable_agent",
+      "accepted": false,
+      "reference_feasible": false,
+      "correct": true,
+      "false_acceptance": false,
+      "false_refusal": false,
+      "compilation_latency_ms": 0.18120000004273606
+    },
+    {
+      "case_id": "v05-pair-21-feasible",
+      "invalidity_category": "incompatible_modality",
+      "accepted": true,
+      "reference_feasible": true,
+      "correct": true,
+      "false_acceptance": false,
+      "false_refusal": false,
+      "compilation_latency_ms": 0.3650999997262261
+    },
+    {
+      "case_id": "v05-pair-21-infeasible",
+      "invalidity_category": "incompatible_modality",
+      "accepted": false,
+      "reference_feasible": false,
+      "correct": true,
+      "false_acceptance": false,
+      "false_refusal": false,
+      "compilation_latency_ms": 0.22429999989981297
+    },
+    {
+      "case_id": "v05-pair-22-feasible",
+      "invalidity_category": "auxiliary_overreach",
+      "accepted": true,
+      "reference_feasible": true,
+      "correct": true,
+      "false_acceptance": false,
+      "false_refusal": false,
+      "compilation_latency_ms": 0.342100000125356
+    },
+    {
+      "case_id": "v05-pair-22-infeasible",
+      "invalidity_category": "auxiliary_overreach",
+      "accepted": false,
+      "reference_feasible": false,
+      "correct": true,
+      "false_acceptance": false,
+      "false_refusal": false,
+      "compilation_latency_ms": 0.352500000190048
+    },
+    {
+      "case_id": "v05-pair-23-feasible",
+      "invalidity_category": "insufficient_trust",
+      "accepted": true,
+      "reference_feasible": true,
+      "correct": true,
+      "false_acceptance": false,
+      "false_refusal": false,
+      "compilation_latency_ms": 0.38690000019414583
+    },
+    {
+      "case_id": "v05-pair-23-infeasible",
+      "invalidity_category": "insufficient_trust",
+      "accepted": false,
+      "reference_feasible": false,
+      "correct": true,
+      "false_acceptance": false,
+      "false_refusal": false,
+      "compilation_latency_ms": 0.3583000006983639
+    },
+    {
+      "case_id": "v05-pair-24-feasible",
+      "invalidity_category": "typed_constraint_violation",
+      "accepted": true,
+      "reference_feasible": true,
+      "correct": true,
+      "false_acceptance": false,
+      "false_refusal": false,
+      "compilation_latency_ms": 0.3920999997717445
+    },
+    {
+      "case_id": "v05-pair-24-infeasible",
+      "invalidity_category": "typed_constraint_violation",
+      "accepted": false,
+      "reference_feasible": false,
+      "correct": true,
+      "false_acceptance": false,
+      "false_refusal": false,
+      "compilation_latency_ms": 0.18939999972644728
+    }
+  ]
+}

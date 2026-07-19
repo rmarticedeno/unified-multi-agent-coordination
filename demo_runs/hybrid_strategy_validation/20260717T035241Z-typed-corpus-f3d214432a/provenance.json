@@ -1,0 +1,12 @@
+{
+  "classification": "developmental_replay_of_frozen_typed_public_inputs",
+  "source_corpus_version": "0.5",
+  "source_corpus_hash": "d3fe4e458554f174ae2040c5758e985116edd42443c8b5d6a49e501477935418",
+  "public_input_hash": "f3d214432ad3dbf8f5954755b8ef32e2530d773c7ae0b6a7f15703e4278f3ba4",
+  "source_hash": "240578d0cd87e595b8d483361b91115115b4b1734586eed5551971a0d7da0d96",
+  "compiler_source_hash": "96ff898a0249ce7aa1629b37d1aa3cc6180ede7f5076d6c7a8153de8734c603a",
+  "expected_data_loaded_during_collection": false,
+  "typed_request_llm_bypass": true,
+  "model_calls": 0,
+  "created_at": "2026-07-17T03:52:41.617329+00:00"
+}

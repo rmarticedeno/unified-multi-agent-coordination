@@ -1,0 +1,128 @@
+{
+  "identity": {
+    "case_id": "v05-pair-19-infeasible"
+  },
+  "source_corpus_hash": "d3fe4e458554f174ae2040c5758e985116edd42443c8b5d6a49e501477935418",
+  "public_input_hash": "6861e6c64dc9b8eebd9f1eaa885474fa3f2aa5e79652ac91a27660e6904fc613",
+  "typed_request_llm_bypass": true,
+  "semantic_call_count": 0,
+  "compilation_latency_ms": 0.10150000071007526,
+  "compilation": {
+    "proposal": {
+      "tasks": [
+        {
+          "task_id": "t1",
+          "requirement_name": "Prepare customer support",
+          "requirement_id": "v05-pair-19-prepare",
+          "capability_id": "v05-pair-19-prepare",
+          "description": "",
+          "assigned_to": null,
+          "auxiliary_spec_id": null,
+          "depends_on": [
+            "t2"
+          ],
+          "expected_artifacts": [
+            "v05-pair-19-intermediate"
+          ],
+          "validation_contract": {
+            "json_schema": {
+              "type": "object"
+            },
+            "required_artifacts": [
+              "v05-pair-19-intermediate"
+            ],
+            "artifact_kinds": [],
+            "required_fields": [],
+            "evidence_types": [],
+            "validator_id": ""
+          }
+        },
+        {
+          "task_id": "t2",
+          "requirement_name": "Finalize customer support",
+          "requirement_id": "v05-pair-19-finalize",
+          "capability_id": "v05-pair-19-finalize",
+          "description": "",
+          "assigned_to": null,
+          "auxiliary_spec_id": null,
+          "depends_on": [
+            "t1"
+          ],
+          "expected_artifacts": [
+            "v05-pair-19-result"
+          ],
+          "validation_contract": {
+            "json_schema": {
+              "type": "object"
+            },
+            "required_artifacts": [
+              "v05-pair-19-result"
+            ],
+            "artifact_kinds": [],
+            "required_fields": [],
+            "evidence_types": [],
+            "validator_id": ""
+          }
+        }
+      ],
+      "selected_agents": {},
+      "generated_nlp_agents": [],
+      "execution_order": [
+        "t1",
+        "t2"
+      ],
+      "expected_artifacts": [
+        "v05-pair-19-result"
+      ],
+      "completion_criteria": [
+        "artifact:v05-pair-19-result"
+      ],
+      "completion_contract": {
+        "required_task_states": [
+          "completed"
+        ],
+        "required_artifacts": [
+          "v05-pair-19-result"
+        ],
+        "require_all_task_validators": true
+      },
+      "constraint_evidence": {}
+    },
+    "report": {
+      "feasible": false,
+      "matched_agents": {},
+      "generated_nlp_agents": [],
+      "missing_capabilities": [],
+      "risks": [
+        "The admitted request dependency graph contains a cycle."
+      ],
+      "explanation": "The authoritative request could not be compiled.",
+      "evidence": [
+        {
+          "name": "request_compilable",
+          "passed": false,
+          "details": {}
+        }
+      ],
+      "constraint_violations": [],
+      "validation_gaps": [],
+      "schema_violations": [],
+      "capability_resolution": []
+    },
+    "diagnostics": {
+      "provider_candidates": {},
+      "assignments_total": 0,
+      "assignments_considered": 0,
+      "recovered_alternative_provider": false,
+      "search_exhausted": false,
+      "issues": [
+        {
+          "code": "dependency_cycle",
+          "message": "The admitted request dependency graph contains a cycle."
+        }
+      ]
+    }
+  },
+  "accepted": false,
+  "expected_data_loaded_during_collection": false
+}

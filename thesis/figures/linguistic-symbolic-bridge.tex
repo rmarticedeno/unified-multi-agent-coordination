@@ -10,12 +10,11 @@
   lane/.style={draw=black!50, dashed, rounded corners=2pt, inner sep=5pt}
 ]
 \node[linguistic] (utterance) {User expression $u$};
-\node[linguistic, right=of utterance] (problem) {Candidate problem $\widehat{P}$};
-\node[symbolic, below=15mm of problem] (problemcheck) {Problem-contract\\validation};
-\node[symbolic, right=of problemcheck] (boundary) {Operational boundary\\$\mathcal{B}(\mathcal{R})$};
-\node[symbolic, right=of boundary] (authorize) {Feasibility and\\authorization};
+\node[linguistic, right=of utterance] (intent) {Strict semantic\\intent $\widehat{S}$};
+\node[symbolic, below=15mm of intent] (grounding) {Catalog grounding and\\request admission};
+\node[symbolic, right=of grounding] (compile) {Plan compilation and\\provider search};
+\node[symbolic, right=of compile] (authorize) {Feasibility and\\authorization};
 \node[symbolic, right=of authorize] (decision) {$\Pi$ or\\infeasibility $I$};
-\node[linguistic, above=15mm of authorize] (candidate) {Candidate plan $\widehat{\Pi}$};
 \node[linguistic, above=15mm of decision] (explanation) {Human-readable\\decision};
 
 \node[execution, below=15mm of decision] (commitments) {Commitments};
@@ -23,22 +22,21 @@
 \node[execution, left=of participants] (observations) {Artifacts and\\observations};
 \node[execution, left=of observations] (structured) {Structured feedback};
 
-\draw[flow] (utterance) -- node[above]{T1} (problem);
-\draw[flow] (problem) -- (problemcheck);
-\draw[flow] (problemcheck) -- (boundary);
-\draw[flow] (boundary) -- node[right]{T2} (candidate);
-\draw[flow] (candidate) -- (authorize);
+\draw[flow] (utterance) -- node[above]{T1} (intent);
+\draw[flow] (intent) -- (grounding);
+\draw[flow] (grounding) -- node[above]{T2} (compile);
+\draw[flow] (compile) -- (authorize);
 \draw[flow] (authorize) -- node[above]{T3} (decision);
 \draw[flow] (decision) -- (explanation);
 \draw[flow] (decision) -- (commitments);
 \draw[flow] (commitments) -- (participants);
 \draw[flow] (participants) -- (observations);
 \draw[flow] (observations) -- (structured);
-\draw[feedback] (structured.north) -- node[left]{T4} (problemcheck.south);
+\draw[feedback] (structured.north) -- node[left]{T4} (grounding.south);
 
 \begin{scope}[on background layer]
-  \node[lane, fit=(utterance)(problem)(candidate)(explanation), label=above left:{\scriptsize Linguistic lane}] {};
-  \node[lane, fit=(problemcheck)(boundary)(authorize)(decision), label=above left:{\scriptsize Symbolic lane}] {};
+  \node[lane, fit=(utterance)(intent)(explanation), label=above left:{\scriptsize Linguistic lane}] {};
+  \node[lane, fit=(grounding)(compile)(authorize)(decision), label=above left:{\scriptsize Symbolic lane}] {};
   \node[lane, fit=(structured)(observations)(participants)(commitments), label=below left:{\scriptsize Distributed execution and feedback}] {};
 \end{scope}
 \end{tikzpicture}
