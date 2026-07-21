@@ -1,0 +1,7 @@
+{
+  "version": "0.8",
+  "status": "pending_human_author_passes",
+  "required_passes": 2,
+  "output_blind": true,
+  "note": "Generated labels are an AI-assisted draft and are not represented as completed human review."
+}

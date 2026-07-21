@@ -1,0 +1,1025 @@
+{
+  "schema_version": "0.8.0",
+  "generated_at": "2026-07-21T17:26:53.997646+00:00",
+  "rows": [
+    {
+      "task_count": 1,
+      "provider_count": 1,
+      "assignment_space": 1,
+      "repetitions": 30,
+      "latency_ms_p50": 0.1521500016679056,
+      "latency_ms_p95": 0.37039999733678997
+    },
+    {
+      "task_count": 1,
+      "provider_count": 2,
+      "assignment_space": 2,
+      "repetitions": 30,
+      "latency_ms_p50": 0.1396000079694204,
+      "latency_ms_p95": 0.22620000527240336
+    },
+    {
+      "task_count": 1,
+      "provider_count": 4,
+      "assignment_space": 4,
+      "repetitions": 30,
+      "latency_ms_p50": 0.16604999836999923,
+      "latency_ms_p95": 0.30059998971410096
+    },
+    {
+      "task_count": 1,
+      "provider_count": 8,
+      "assignment_space": 8,
+      "repetitions": 30,
+      "latency_ms_p50": 0.1603499986231327,
+      "latency_ms_p95": 0.28449999808799475
+    },
+    {
+      "task_count": 2,
+      "provider_count": 1,
+      "assignment_space": 1,
+      "repetitions": 30,
+      "latency_ms_p50": 0.21674999879905954,
+      "latency_ms_p95": 0.3485000052023679
+    },
+    {
+      "task_count": 2,
+      "provider_count": 2,
+      "assignment_space": 4,
+      "repetitions": 30,
+      "latency_ms_p50": 0.21510000806301832,
+      "latency_ms_p95": 0.3193000011378899
+    },
+    {
+      "task_count": 2,
+      "provider_count": 4,
+      "assignment_space": 16,
+      "repetitions": 30,
+      "latency_ms_p50": 0.2286000017193146,
+      "latency_ms_p95": 0.4039999912492931
+    },
+    {
+      "task_count": 2,
+      "provider_count": 8,
+      "assignment_space": 64,
+      "repetitions": 30,
+      "latency_ms_p50": 0.26079999952344224,
+      "latency_ms_p95": 0.39429999014828354
+    },
+    {
+      "task_count": 4,
+      "provider_count": 1,
+      "assignment_space": 1,
+      "repetitions": 30,
+      "latency_ms_p50": 0.34484999923733994,
+      "latency_ms_p95": 0.5250999965937808
+    },
+    {
+      "task_count": 4,
+      "provider_count": 2,
+      "assignment_space": 16,
+      "repetitions": 30,
+      "latency_ms_p50": 0.3661500013549812,
+      "latency_ms_p95": 0.5332000000635162
+    },
+    {
+      "task_count": 4,
+      "provider_count": 4,
+      "assignment_space": 256,
+      "repetitions": 30,
+      "latency_ms_p50": 0.3875999973388389,
+      "latency_ms_p95": 0.6127000087872148
+    },
+    {
+      "task_count": 4,
+      "provider_count": 8,
+      "assignment_space": 4096,
+      "repetitions": 30,
+      "latency_ms_p50": 0.45604999468196183,
+      "latency_ms_p95": 0.7033000001683831
+    },
+    {
+      "task_count": 6,
+      "provider_count": 1,
+      "assignment_space": 1,
+      "repetitions": 30,
+      "latency_ms_p50": 0.5016499999328516,
+      "latency_ms_p95": 0.7238000107463449
+    },
+    {
+      "task_count": 6,
+      "provider_count": 2,
+      "assignment_space": 64,
+      "repetitions": 30,
+      "latency_ms_p50": 0.5384499963838607,
+      "latency_ms_p95": 0.814300001366064
+    },
+    {
+      "task_count": 6,
+      "provider_count": 4,
+      "assignment_space": 4096,
+      "repetitions": 30,
+      "latency_ms_p50": 0.5690499965567142,
+      "latency_ms_p95": 0.7936000038171187
+    },
+    {
+      "task_count": 6,
+      "provider_count": 8,
+      "assignment_space": 262144,
+      "repetitions": 30,
+      "latency_ms_p50": 0.7504000022890978,
+      "latency_ms_p95": 1.617599991732277
+    }
+  ],
+  "invariants": {
+    "oracle_compilation": true,
+    "registry_permutation_invariance": true,
+    "invalid_provider_prefiltering": true,
+    "bounded_search_refusal": true,
+    "conflict_diagnostics": true
+  },
+  "all_invariants_passed": true,
+  "invariant_failures": [],
+  "recovery_diagnostics": {
+    "provider_candidates": {
+      "cap-1": [
+        "z-cap-1-provider-4"
+      ],
+      "cap-2": [
+        "z-cap-2-provider-4"
+      ]
+    },
+    "provider_rejections": {
+      "cap-1": {
+        "a-cap-1-provider-1": [
+          "modes"
+        ],
+        "a-cap-1-provider-2": [
+          "modes"
+        ],
+        "a-cap-1-provider-3": [
+          "modes"
+        ],
+        "a-cap-2-provider-1": [
+          "capability"
+        ],
+        "a-cap-2-provider-2": [
+          "capability"
+        ],
+        "a-cap-2-provider-3": [
+          "capability"
+        ],
+        "z-cap-2-provider-4": [
+          "capability"
+        ]
+      },
+      "cap-2": {
+        "a-cap-1-provider-1": [
+          "capability"
+        ],
+        "a-cap-1-provider-2": [
+          "capability"
+        ],
+        "a-cap-1-provider-3": [
+          "capability"
+        ],
+        "z-cap-1-provider-4": [
+          "capability"
+        ],
+        "a-cap-2-provider-1": [
+          "modes"
+        ],
+        "a-cap-2-provider-2": [
+          "modes"
+        ],
+        "a-cap-2-provider-3": [
+          "modes"
+        ]
+      }
+    },
+    "assignments_total": 1,
+    "assignments_considered": 1,
+    "branches_explored": 2,
+    "branches_pruned": 0,
+    "recovered_alternative_provider": true,
+    "search_exhausted": false,
+    "failed_predicates": [],
+    "conflict_requirements": [],
+    "issues": []
+  },
+  "exhaustion_diagnostics": {
+    "provider_candidates": {
+      "cap-1": [
+        "a-cap-1-provider-1",
+        "a-cap-1-provider-2",
+        "a-cap-1-provider-3",
+        "a-cap-1-provider-4",
+        "a-cap-1-provider-5",
+        "a-cap-1-provider-6",
+        "a-cap-1-provider-7",
+        "z-cap-1-provider-8"
+      ],
+      "cap-2": [
+        "a-cap-2-provider-1",
+        "a-cap-2-provider-2",
+        "a-cap-2-provider-3",
+        "a-cap-2-provider-4",
+        "a-cap-2-provider-5",
+        "a-cap-2-provider-6",
+        "a-cap-2-provider-7",
+        "z-cap-2-provider-8"
+      ],
+      "cap-3": [
+        "a-cap-3-provider-1",
+        "a-cap-3-provider-2",
+        "a-cap-3-provider-3",
+        "a-cap-3-provider-4",
+        "a-cap-3-provider-5",
+        "a-cap-3-provider-6",
+        "a-cap-3-provider-7",
+        "z-cap-3-provider-8"
+      ],
+      "cap-4": [
+        "a-cap-4-provider-1",
+        "a-cap-4-provider-2",
+        "a-cap-4-provider-3",
+        "a-cap-4-provider-4",
+        "a-cap-4-provider-5",
+        "a-cap-4-provider-6",
+        "a-cap-4-provider-7",
+        "z-cap-4-provider-8"
+      ],
+      "cap-5": [
+        "a-cap-5-provider-1",
+        "a-cap-5-provider-2",
+        "a-cap-5-provider-3",
+        "a-cap-5-provider-4",
+        "a-cap-5-provider-5",
+        "a-cap-5-provider-6",
+        "a-cap-5-provider-7",
+        "z-cap-5-provider-8"
+      ],
+      "cap-6": [
+        "a-cap-6-provider-1",
+        "a-cap-6-provider-2",
+        "a-cap-6-provider-3",
+        "a-cap-6-provider-4",
+        "a-cap-6-provider-5",
+        "a-cap-6-provider-6",
+        "a-cap-6-provider-7",
+        "z-cap-6-provider-8"
+      ]
+    },
+    "provider_rejections": {
+      "cap-1": {
+        "a-cap-2-provider-1": [
+          "capability"
+        ],
+        "a-cap-2-provider-2": [
+          "capability"
+        ],
+        "a-cap-2-provider-3": [
+          "capability"
+        ],
+        "a-cap-2-provider-4": [
+          "capability"
+        ],
+        "a-cap-2-provider-5": [
+          "capability"
+        ],
+        "a-cap-2-provider-6": [
+          "capability"
+        ],
+        "a-cap-2-provider-7": [
+          "capability"
+        ],
+        "z-cap-2-provider-8": [
+          "capability"
+        ],
+        "a-cap-3-provider-1": [
+          "capability"
+        ],
+        "a-cap-3-provider-2": [
+          "capability"
+        ],
+        "a-cap-3-provider-3": [
+          "capability"
+        ],
+        "a-cap-3-provider-4": [
+          "capability"
+        ],
+        "a-cap-3-provider-5": [
+          "capability"
+        ],
+        "a-cap-3-provider-6": [
+          "capability"
+        ],
+        "a-cap-3-provider-7": [
+          "capability"
+        ],
+        "z-cap-3-provider-8": [
+          "capability"
+        ],
+        "a-cap-4-provider-1": [
+          "capability"
+        ],
+        "a-cap-4-provider-2": [
+          "capability"
+        ],
+        "a-cap-4-provider-3": [
+          "capability"
+        ],
+        "a-cap-4-provider-4": [
+          "capability"
+        ],
+        "a-cap-4-provider-5": [
+          "capability"
+        ],
+        "a-cap-4-provider-6": [
+          "capability"
+        ],
+        "a-cap-4-provider-7": [
+          "capability"
+        ],
+        "z-cap-4-provider-8": [
+          "capability"
+        ],
+        "a-cap-5-provider-1": [
+          "capability"
+        ],
+        "a-cap-5-provider-2": [
+          "capability"
+        ],
+        "a-cap-5-provider-3": [
+          "capability"
+        ],
+        "a-cap-5-provider-4": [
+          "capability"
+        ],
+        "a-cap-5-provider-5": [
+          "capability"
+        ],
+        "a-cap-5-provider-6": [
+          "capability"
+        ],
+        "a-cap-5-provider-7": [
+          "capability"
+        ],
+        "z-cap-5-provider-8": [
+          "capability"
+        ],
+        "a-cap-6-provider-1": [
+          "capability"
+        ],
+        "a-cap-6-provider-2": [
+          "capability"
+        ],
+        "a-cap-6-provider-3": [
+          "capability"
+        ],
+        "a-cap-6-provider-4": [
+          "capability"
+        ],
+        "a-cap-6-provider-5": [
+          "capability"
+        ],
+        "a-cap-6-provider-6": [
+          "capability"
+        ],
+        "a-cap-6-provider-7": [
+          "capability"
+        ],
+        "z-cap-6-provider-8": [
+          "capability"
+        ]
+      },
+      "cap-2": {
+        "a-cap-1-provider-1": [
+          "capability"
+        ],
+        "a-cap-1-provider-2": [
+          "capability"
+        ],
+        "a-cap-1-provider-3": [
+          "capability"
+        ],
+        "a-cap-1-provider-4": [
+          "capability"
+        ],
+        "a-cap-1-provider-5": [
+          "capability"
+        ],
+        "a-cap-1-provider-6": [
+          "capability"
+        ],
+        "a-cap-1-provider-7": [
+          "capability"
+        ],
+        "z-cap-1-provider-8": [
+          "capability"
+        ],
+        "a-cap-3-provider-1": [
+          "capability"
+        ],
+        "a-cap-3-provider-2": [
+          "capability"
+        ],
+        "a-cap-3-provider-3": [
+          "capability"
+        ],
+        "a-cap-3-provider-4": [
+          "capability"
+        ],
+        "a-cap-3-provider-5": [
+          "capability"
+        ],
+        "a-cap-3-provider-6": [
+          "capability"
+        ],
+        "a-cap-3-provider-7": [
+          "capability"
+        ],
+        "z-cap-3-provider-8": [
+          "capability"
+        ],
+        "a-cap-4-provider-1": [
+          "capability"
+        ],
+        "a-cap-4-provider-2": [
+          "capability"
+        ],
+        "a-cap-4-provider-3": [
+          "capability"
+        ],
+        "a-cap-4-provider-4": [
+          "capability"
+        ],
+        "a-cap-4-provider-5": [
+          "capability"
+        ],
+        "a-cap-4-provider-6": [
+          "capability"
+        ],
+        "a-cap-4-provider-7": [
+          "capability"
+        ],
+        "z-cap-4-provider-8": [
+          "capability"
+        ],
+        "a-cap-5-provider-1": [
+          "capability"
+        ],
+        "a-cap-5-provider-2": [
+          "capability"
+        ],
+        "a-cap-5-provider-3": [
+          "capability"
+        ],
+        "a-cap-5-provider-4": [
+          "capability"
+        ],
+        "a-cap-5-provider-5": [
+          "capability"
+        ],
+        "a-cap-5-provider-6": [
+          "capability"
+        ],
+        "a-cap-5-provider-7": [
+          "capability"
+        ],
+        "z-cap-5-provider-8": [
+          "capability"
+        ],
+        "a-cap-6-provider-1": [
+          "capability"
+        ],
+        "a-cap-6-provider-2": [
+          "capability"
+        ],
+        "a-cap-6-provider-3": [
+          "capability"
+        ],
+        "a-cap-6-provider-4": [
+          "capability"
+        ],
+        "a-cap-6-provider-5": [
+          "capability"
+        ],
+        "a-cap-6-provider-6": [
+          "capability"
+        ],
+        "a-cap-6-provider-7": [
+          "capability"
+        ],
+        "z-cap-6-provider-8": [
+          "capability"
+        ]
+      },
+      "cap-3": {
+        "a-cap-1-provider-1": [
+          "capability"
+        ],
+        "a-cap-1-provider-2": [
+          "capability"
+        ],
+        "a-cap-1-provider-3": [
+          "capability"
+        ],
+        "a-cap-1-provider-4": [
+          "capability"
+        ],
+        "a-cap-1-provider-5": [
+          "capability"
+        ],
+        "a-cap-1-provider-6": [
+          "capability"
+        ],
+        "a-cap-1-provider-7": [
+          "capability"
+        ],
+        "z-cap-1-provider-8": [
+          "capability"
+        ],
+        "a-cap-2-provider-1": [
+          "capability"
+        ],
+        "a-cap-2-provider-2": [
+          "capability"
+        ],
+        "a-cap-2-provider-3": [
+          "capability"
+        ],
+        "a-cap-2-provider-4": [
+          "capability"
+        ],
+        "a-cap-2-provider-5": [
+          "capability"
+        ],
+        "a-cap-2-provider-6": [
+          "capability"
+        ],
+        "a-cap-2-provider-7": [
+          "capability"
+        ],
+        "z-cap-2-provider-8": [
+          "capability"
+        ],
+        "a-cap-4-provider-1": [
+          "capability"
+        ],
+        "a-cap-4-provider-2": [
+          "capability"
+        ],
+        "a-cap-4-provider-3": [
+          "capability"
+        ],
+        "a-cap-4-provider-4": [
+          "capability"
+        ],
+        "a-cap-4-provider-5": [
+          "capability"
+        ],
+        "a-cap-4-provider-6": [
+          "capability"
+        ],
+        "a-cap-4-provider-7": [
+          "capability"
+        ],
+        "z-cap-4-provider-8": [
+          "capability"
+        ],
+        "a-cap-5-provider-1": [
+          "capability"
+        ],
+        "a-cap-5-provider-2": [
+          "capability"
+        ],
+        "a-cap-5-provider-3": [
+          "capability"
+        ],
+        "a-cap-5-provider-4": [
+          "capability"
+        ],
+        "a-cap-5-provider-5": [
+          "capability"
+        ],
+        "a-cap-5-provider-6": [
+          "capability"
+        ],
+        "a-cap-5-provider-7": [
+          "capability"
+        ],
+        "z-cap-5-provider-8": [
+          "capability"
+        ],
+        "a-cap-6-provider-1": [
+          "capability"
+        ],
+        "a-cap-6-provider-2": [
+          "capability"
+        ],
+        "a-cap-6-provider-3": [
+          "capability"
+        ],
+        "a-cap-6-provider-4": [
+          "capability"
+        ],
+        "a-cap-6-provider-5": [
+          "capability"
+        ],
+        "a-cap-6-provider-6": [
+          "capability"
+        ],
+        "a-cap-6-provider-7": [
+          "capability"
+        ],
+        "z-cap-6-provider-8": [
+          "capability"
+        ]
+      },
+      "cap-4": {
+        "a-cap-1-provider-1": [
+          "capability"
+        ],
+        "a-cap-1-provider-2": [
+          "capability"
+        ],
+        "a-cap-1-provider-3": [
+          "capability"
+        ],
+        "a-cap-1-provider-4": [
+          "capability"
+        ],
+        "a-cap-1-provider-5": [
+          "capability"
+        ],
+        "a-cap-1-provider-6": [
+          "capability"
+        ],
+        "a-cap-1-provider-7": [
+          "capability"
+        ],
+        "z-cap-1-provider-8": [
+          "capability"
+        ],
+        "a-cap-2-provider-1": [
+          "capability"
+        ],
+        "a-cap-2-provider-2": [
+          "capability"
+        ],
+        "a-cap-2-provider-3": [
+          "capability"
+        ],
+        "a-cap-2-provider-4": [
+          "capability"
+        ],
+        "a-cap-2-provider-5": [
+          "capability"
+        ],
+        "a-cap-2-provider-6": [
+          "capability"
+        ],
+        "a-cap-2-provider-7": [
+          "capability"
+        ],
+        "z-cap-2-provider-8": [
+          "capability"
+        ],
+        "a-cap-3-provider-1": [
+          "capability"
+        ],
+        "a-cap-3-provider-2": [
+          "capability"
+        ],
+        "a-cap-3-provider-3": [
+          "capability"
+        ],
+        "a-cap-3-provider-4": [
+          "capability"
+        ],
+        "a-cap-3-provider-5": [
+          "capability"
+        ],
+        "a-cap-3-provider-6": [
+          "capability"
+        ],
+        "a-cap-3-provider-7": [
+          "capability"
+        ],
+        "z-cap-3-provider-8": [
+          "capability"
+        ],
+        "a-cap-5-provider-1": [
+          "capability"
+        ],
+        "a-cap-5-provider-2": [
+          "capability"
+        ],
+        "a-cap-5-provider-3": [
+          "capability"
+        ],
+        "a-cap-5-provider-4": [
+          "capability"
+        ],
+        "a-cap-5-provider-5": [
+          "capability"
+        ],
+        "a-cap-5-provider-6": [
+          "capability"
+        ],
+        "a-cap-5-provider-7": [
+          "capability"
+        ],
+        "z-cap-5-provider-8": [
+          "capability"
+        ],
+        "a-cap-6-provider-1": [
+          "capability"
+        ],
+        "a-cap-6-provider-2": [
+          "capability"
+        ],
+        "a-cap-6-provider-3": [
+          "capability"
+        ],
+        "a-cap-6-provider-4": [
+          "capability"
+        ],
+        "a-cap-6-provider-5": [
+          "capability"
+        ],
+        "a-cap-6-provider-6": [
+          "capability"
+        ],
+        "a-cap-6-provider-7": [
+          "capability"
+        ],
+        "z-cap-6-provider-8": [
+          "capability"
+        ]
+      },
+      "cap-5": {
+        "a-cap-1-provider-1": [
+          "capability"
+        ],
+        "a-cap-1-provider-2": [
+          "capability"
+        ],
+        "a-cap-1-provider-3": [
+          "capability"
+        ],
+        "a-cap-1-provider-4": [
+          "capability"
+        ],
+        "a-cap-1-provider-5": [
+          "capability"
+        ],
+        "a-cap-1-provider-6": [
+          "capability"
+        ],
+        "a-cap-1-provider-7": [
+          "capability"
+        ],
+        "z-cap-1-provider-8": [
+          "capability"
+        ],
+        "a-cap-2-provider-1": [
+          "capability"
+        ],
+        "a-cap-2-provider-2": [
+          "capability"
+        ],
+        "a-cap-2-provider-3": [
+          "capability"
+        ],
+        "a-cap-2-provider-4": [
+          "capability"
+        ],
+        "a-cap-2-provider-5": [
+          "capability"
+        ],
+        "a-cap-2-provider-6": [
+          "capability"
+        ],
+        "a-cap-2-provider-7": [
+          "capability"
+        ],
+        "z-cap-2-provider-8": [
+          "capability"
+        ],
+        "a-cap-3-provider-1": [
+          "capability"
+        ],
+        "a-cap-3-provider-2": [
+          "capability"
+        ],
+        "a-cap-3-provider-3": [
+          "capability"
+        ],
+        "a-cap-3-provider-4": [
+          "capability"
+        ],
+        "a-cap-3-provider-5": [
+          "capability"
+        ],
+        "a-cap-3-provider-6": [
+          "capability"
+        ],
+        "a-cap-3-provider-7": [
+          "capability"
+        ],
+        "z-cap-3-provider-8": [
+          "capability"
+        ],
+        "a-cap-4-provider-1": [
+          "capability"
+        ],
+        "a-cap-4-provider-2": [
+          "capability"
+        ],
+        "a-cap-4-provider-3": [
+          "capability"
+        ],
+        "a-cap-4-provider-4": [
+          "capability"
+        ],
+        "a-cap-4-provider-5": [
+          "capability"
+        ],
+        "a-cap-4-provider-6": [
+          "capability"
+        ],
+        "a-cap-4-provider-7": [
+          "capability"
+        ],
+        "z-cap-4-provider-8": [
+          "capability"
+        ],
+        "a-cap-6-provider-1": [
+          "capability"
+        ],
+        "a-cap-6-provider-2": [
+          "capability"
+        ],
+        "a-cap-6-provider-3": [
+          "capability"
+        ],
+        "a-cap-6-provider-4": [
+          "capability"
+        ],
+        "a-cap-6-provider-5": [
+          "capability"
+        ],
+        "a-cap-6-provider-6": [
+          "capability"
+        ],
+        "a-cap-6-provider-7": [
+          "capability"
+        ],
+        "z-cap-6-provider-8": [
+          "capability"
+        ]
+      },
+      "cap-6": {
+        "a-cap-1-provider-1": [
+          "capability"
+        ],
+        "a-cap-1-provider-2": [
+          "capability"
+        ],
+        "a-cap-1-provider-3": [
+          "capability"
+        ],
+        "a-cap-1-provider-4": [
+          "capability"
+        ],
+        "a-cap-1-provider-5": [
+          "capability"
+        ],
+        "a-cap-1-provider-6": [
+          "capability"
+        ],
+        "a-cap-1-provider-7": [
+          "capability"
+        ],
+        "z-cap-1-provider-8": [
+          "capability"
+        ],
+        "a-cap-2-provider-1": [
+          "capability"
+        ],
+        "a-cap-2-provider-2": [
+          "capability"
+        ],
+        "a-cap-2-provider-3": [
+          "capability"
+        ],
+        "a-cap-2-provider-4": [
+          "capability"
+        ],
+        "a-cap-2-provider-5": [
+          "capability"
+        ],
+        "a-cap-2-provider-6": [
+          "capability"
+        ],
+        "a-cap-2-provider-7": [
+          "capability"
+        ],
+        "z-cap-2-provider-8": [
+          "capability"
+        ],
+        "a-cap-3-provider-1": [
+          "capability"
+        ],
+        "a-cap-3-provider-2": [
+          "capability"
+        ],
+        "a-cap-3-provider-3": [
+          "capability"
+        ],
+        "a-cap-3-provider-4": [
+          "capability"
+        ],
+        "a-cap-3-provider-5": [
+          "capability"
+        ],
+        "a-cap-3-provider-6": [
+          "capability"
+        ],
+        "a-cap-3-provider-7": [
+          "capability"
+        ],
+        "z-cap-3-provider-8": [
+          "capability"
+        ],
+        "a-cap-4-provider-1": [
+          "capability"
+        ],
+        "a-cap-4-provider-2": [
+          "capability"
+        ],
+        "a-cap-4-provider-3": [
+          "capability"
+        ],
+        "a-cap-4-provider-4": [
+          "capability"
+        ],
+        "a-cap-4-provider-5": [
+          "capability"
+        ],
+        "a-cap-4-provider-6": [
+          "capability"
+        ],
+        "a-cap-4-provider-7": [
+          "capability"
+        ],
+        "z-cap-4-provider-8": [
+          "capability"
+        ],
+        "a-cap-5-provider-1": [
+          "capability"
+        ],
+        "a-cap-5-provider-2": [
+          "capability"
+        ],
+        "a-cap-5-provider-3": [
+          "capability"
+        ],
+        "a-cap-5-provider-4": [
+          "capability"
+        ],
+        "a-cap-5-provider-5": [
+          "capability"
+        ],
+        "a-cap-5-provider-6": [
+          "capability"
+        ],
+        "a-cap-5-provider-7": [
+          "capability"
+        ],
+        "z-cap-5-provider-8": [
+          "capability"
+        ]
+      }
+    },
+    "assignments_total": 262144,
+    "assignments_considered": 4096,
+    "branches_explored": 4682,
+    "branches_pruned": 0,
+    "recovered_alternative_provider": false,
+    "search_exhausted": true,
+    "failed_predicates": [
+      "assignment_search_complete",
+      "constraints_satisfied"
+    ],
+    "conflict_requirements": [],
+    "issues": [
+      {
+        "code": "assignment_search_exhausted",
+        "message": "Provider search reached 4096 assignments without authorization."
+      }
+    ]
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "git_sha": "9224f4d29337a88f14e066879c9e3781406c98a4",
+  "dirty_state": true,
+  "corpus_hash": "0f8425d4a70d6d46bd99765c08df7b8530dec9dc9a77876459a274a874006765",
+  "prompt_version": "defense-v0.3.0",
+  "dependency_lock_hash": "00616a22ac6915d0b4bc58f9bada90e19a1fbc466d20435d32843f4925ee67ca",
+  "docker_image_digest": "unavailable",
+  "python": "3.13.6",
+  "a2a_version": "1.1.0",
+  "postgresql_version": "16-alpine (distributed fixture)",
+  "lm_studio_cli": "CLI commit: 0b2a176",
+  "os": "Windows-11-10.0.26200-SP0",
+  "cpu": "Intel64 Family 6 Model 154 Stepping 3, GenuineIntel",
+  "ram_bytes": 16891109376,
+  "accelerator": "recorded by LM Studio load/runtime logs",
+  "schema_version": "0.7.0",
+  "phase": "development",
+  "protocol_hash": "development-unfrozen",
+  "labels_loaded_during_collection": false,
+  "qwen_qualification_precedes_larger_models": true
+}

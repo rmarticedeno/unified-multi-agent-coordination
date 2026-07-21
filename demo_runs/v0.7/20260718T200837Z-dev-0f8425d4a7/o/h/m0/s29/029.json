@@ -1,0 +1,590 @@
+{
+  "schema_version": "0.7.0",
+  "identity": {
+    "phase": "development",
+    "arm": "production_hybrid_v07",
+    "case_id": "v07-dev-15-infeasible",
+    "pair_id": "v07-dev-pair-15",
+    "category": "artifact",
+    "model_id": "qwen/qwen3-1.7b",
+    "seed": 29
+  },
+  "settings": {
+    "temperature": 0.2,
+    "top_p": 1.0,
+    "max_tokens": 800,
+    "schema_repair": false
+  },
+  "public_input_hash": "fad2ccb3f4e34a57edbb28dc678311bcb41b73a7bd35ea9d9d8c68e923d4b322",
+  "labels_loaded_during_collection": false,
+  "runtime_error": "",
+  "result": {
+    "prompt": [
+      {
+        "role": "system",
+        "content": "Ground the request only to the admitted identifiers below. Select semantic goals, explicit exclusions, trust policy, and artifact contract. Do not copy dependencies, assign providers, decide feasibility, or create a plan. Use null for an omitted policy or contract so deterministic defaults can apply.\nRules:\n1. Select terminal requested outcomes only. Dependencies are added deterministically. If C depends on B and B depends on A, a request to perform A, B, then C has only C as a goal.\n2. A term matching a capability, policy, contract, agent name, description, or alias is resolved and must not appear in unresolved_terms.\n3. Use ambiguous only when the request itself explicitly leaves incompatible meanings unresolved. Otherwise use resolved.\n4. Add forbidden identifiers only for explicit prohibitions such as 'do not use'. Never infer a prohibition from provider capabilities or availability.\n5. Return only the schema-conforming JSON object and no explanation."
+      },
+      {
+        "role": "user",
+        "content": "CAPABILITIES\n- v07-p15-prepare: Assemble customer support source packet; Collect the source material needed for customer support.; aliases=['gather customer support inputs', 'prepare customer support packet']\n- v07-p15-verify: Validate customer support source packet; Check the assembled customer support material for correctness.; aliases=['check customer support inputs', 'verify customer support packet']\n- v07-p15-deliver: Publish customer support verified brief; Release the checked final brief for customer support.; aliases=['issue customer support brief', 'release customer support summary']\n- v07-p15-archive: Archive customer support verified brief; Preserve the checked customer support brief for long-term retention.; aliases=['retain customer support brief', 'store customer support summary']\n\nTRUST POLICIES\n- v07-p15-ordinary: ordinary customer support assurance; Standard trust is sufficient for this customer support request.; aliases=['normal customer support assurance']\n- v07-p15-elevated: elevated customer support assurance; Elevated trust is mandatory for this customer support request.; aliases=['high assurance for customer support']\n\nARTIFACT CONTRACTS\n- v07-p15-json: customer support machine-readable JSON; Return the final customer support result as JSON.; aliases=['customer support json output']\n- v07-p15-signed-pdf: customer support signed PDF; Return the final customer support result as a signed PDF.; aliases=['signed customer support document']\n\nAGENTS\n- v07-p15-preparer: customer support source preparer\n- v07-p15-verifier: customer support source verifier\n- v07-p15-primary: primary customer support publisher\n- v07-p15-backup: backup customer support publisher\n\nREQUEST\nFor this customer support job, gather the inputs, check the packet, and issue the brief with normal customer support assurance as signed customer support document."
+      }
+    ],
+    "output_schema": {
+      "type": "object",
+      "properties": {
+        "interpretation_status": {
+          "type": "string",
+          "enum": [
+            "resolved",
+            "ambiguous"
+          ]
+        },
+        "goals": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 4,
+          "items": {
+            "type": "object",
+            "properties": {
+              "capability_id": {
+                "type": "string",
+                "enum": [
+                  "v07-p15-prepare",
+                  "v07-p15-verify",
+                  "v07-p15-deliver",
+                  "v07-p15-archive"
+                ]
+              },
+              "trust_policy_id": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "v07-p15-ordinary",
+                      "v07-p15-elevated"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "artifact_contract_id": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "v07-p15-json",
+                      "v07-p15-signed-pdf"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "capability_id",
+              "trust_policy_id",
+              "artifact_contract_id"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "forbidden_capability_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "v07-p15-prepare",
+              "v07-p15-verify",
+              "v07-p15-deliver",
+              "v07-p15-archive"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "forbidden_agent_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "v07-p15-preparer",
+              "v07-p15-verifier",
+              "v07-p15-primary",
+              "v07-p15-backup"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "unresolved_terms": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 160
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "interpretation_status",
+        "goals",
+        "forbidden_capability_ids",
+        "forbidden_agent_ids",
+        "unresolved_terms"
+      ],
+      "additionalProperties": false
+    },
+    "interpretation": {
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p15-prepare",
+            "trust_policy_id": "v07-p15-ordinary",
+            "artifact_contract_id": "v07-p15-signed-pdf"
+          },
+          {
+            "capability_id": "v07-p15-verify",
+            "trust_policy_id": "v07-p15-ordinary",
+            "artifact_contract_id": "v07-p15-signed-pdf"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": []
+      },
+      "issues": [],
+      "initial_content": "{\"interpretation_status\": \"resolved\", \"goals\": [{\"capability_id\": \"v07-p15-prepare\", \"trust_policy_id\": \"v07-p15-ordinary\", \"artifact_contract_id\": \"v07-p15-signed-pdf\"}, {\"capability_id\": \"v07-p15-verify\", \"trust_policy_id\": \"v07-p15-ordinary\", \"artifact_contract_id\": \"v07-p15-signed-pdf\"}], \"forbidden_capability_ids\": [], \"forbidden_agent_ids\": [],\"unresolved_terms\": []}\n",
+      "repaired_content": "",
+      "repair_attempted": false,
+      "call_count": 1,
+      "latency_ms": 2330.7688999921083,
+      "prompt_tokens": 595,
+      "completion_tokens": 129,
+      "model_id": "qwen/qwen3-1.7b",
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "interpretation_status": {
+            "type": "string",
+            "enum": [
+              "resolved",
+              "ambiguous"
+            ]
+          },
+          "goals": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 4,
+            "items": {
+              "type": "object",
+              "properties": {
+                "capability_id": {
+                  "type": "string",
+                  "enum": [
+                    "v07-p15-prepare",
+                    "v07-p15-verify",
+                    "v07-p15-deliver",
+                    "v07-p15-archive"
+                  ]
+                },
+                "trust_policy_id": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "enum": [
+                        "v07-p15-ordinary",
+                        "v07-p15-elevated"
+                      ]
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "artifact_contract_id": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "enum": [
+                        "v07-p15-json",
+                        "v07-p15-signed-pdf"
+                      ]
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "capability_id",
+                "trust_policy_id",
+                "artifact_contract_id"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "forbidden_capability_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "v07-p15-prepare",
+                "v07-p15-verify",
+                "v07-p15-deliver",
+                "v07-p15-archive"
+              ]
+            },
+            "uniqueItems": true
+          },
+          "forbidden_agent_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "v07-p15-preparer",
+                "v07-p15-verifier",
+                "v07-p15-primary",
+                "v07-p15-backup"
+              ]
+            },
+            "uniqueItems": true
+          },
+          "unresolved_terms": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 160
+            },
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "interpretation_status",
+          "goals",
+          "forbidden_capability_ids",
+          "forbidden_agent_ids",
+          "unresolved_terms"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "admission": {
+      "request": {
+        "user_goal": "For this customer support job, gather the inputs, check the packet, and issue the brief with normal customer support assurance as signed customer support document.",
+        "requirements": [
+          {
+            "name": "Assemble customer support source packet",
+            "requirement_id": "v07-p15-prepare",
+            "capability_id": "v07-p15-prepare",
+            "description": "Collect the source material needed for customer support.",
+            "input_schema": {
+              "type": "object"
+            },
+            "output_schema": {
+              "type": "object"
+            },
+            "input_modes": [
+              "text"
+            ],
+            "output_modes": [
+              "source_bundle"
+            ],
+            "depends_on_requirement_ids": [],
+            "constraints": [],
+            "auxiliary_eligible": false,
+            "required_trust_level": "standard",
+            "side_effect_class": "read_only",
+            "expected_evidence": [],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              },
+              "required_artifacts": [
+                "v07-p15-source"
+              ],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          },
+          {
+            "name": "Validate customer support source packet",
+            "requirement_id": "v07-p15-verify",
+            "capability_id": "v07-p15-verify",
+            "description": "Check the assembled customer support material for correctness.",
+            "input_schema": {
+              "type": "object"
+            },
+            "output_schema": {
+              "type": "object"
+            },
+            "input_modes": [
+              "source_bundle"
+            ],
+            "output_modes": [
+              "signed_pdf"
+            ],
+            "depends_on_requirement_ids": [
+              "v07-p15-prepare"
+            ],
+            "constraints": [],
+            "auxiliary_eligible": false,
+            "required_trust_level": "standard",
+            "side_effect_class": "read_only",
+            "expected_evidence": [],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              },
+              "required_artifacts": [
+                "v07-p15-signed-pdf"
+              ],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "constraints": [],
+        "required_artifacts": [
+          "v07-p15-source",
+          "v07-p15-signed-pdf"
+        ],
+        "context": {
+          "semantic_intent": {
+            "interpretation_status": "resolved",
+            "goals": [
+              {
+                "capability_id": "v07-p15-verify",
+                "trust_policy_id": "v07-p15-ordinary",
+                "artifact_contract_id": "v07-p15-signed-pdf"
+              }
+            ],
+            "forbidden_capability_ids": [],
+            "forbidden_agent_ids": [],
+            "unresolved_terms": []
+          },
+          "semantic_catalog_grounded": true
+        }
+      },
+      "canonical_intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p15-verify",
+            "trust_policy_id": "v07-p15-ordinary",
+            "artifact_contract_id": "v07-p15-signed-pdf"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": []
+      },
+      "issues": []
+    },
+    "compilation": {
+      "proposal": {
+        "tasks": [
+          {
+            "task_id": "t1",
+            "requirement_name": "Assemble customer support source packet",
+            "requirement_id": "v07-p15-prepare",
+            "capability_id": "v07-p15-prepare",
+            "description": "",
+            "assigned_to": "v07-p15-preparer",
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "v07-p15-source"
+            ],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              },
+              "required_artifacts": [
+                "v07-p15-source"
+              ],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          },
+          {
+            "task_id": "t2",
+            "requirement_name": "Validate customer support source packet",
+            "requirement_id": "v07-p15-verify",
+            "capability_id": "v07-p15-verify",
+            "description": "",
+            "assigned_to": "v07-p15-verifier",
+            "auxiliary_spec_id": null,
+            "depends_on": [
+              "t1"
+            ],
+            "expected_artifacts": [
+              "v07-p15-signed-pdf"
+            ],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              },
+              "required_artifacts": [
+                "v07-p15-signed-pdf"
+              ],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {
+          "t1": "v07-p15-preparer",
+          "t2": "v07-p15-verifier"
+        },
+        "generated_nlp_agents": [],
+        "execution_order": [
+          "t1",
+          "t2"
+        ],
+        "expected_artifacts": [
+          "v07-p15-source",
+          "v07-p15-signed-pdf"
+        ],
+        "completion_criteria": [
+          "artifact:v07-p15-source",
+          "artifact:v07-p15-signed-pdf"
+        ],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [
+            "v07-p15-source",
+            "v07-p15-signed-pdf"
+          ],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      },
+      "report": {
+        "feasible": false,
+        "matched_agents": {
+          "t1": "v07-p15-preparer",
+          "t2": "v07-p15-verifier"
+        },
+        "generated_nlp_agents": [],
+        "missing_capabilities": [],
+        "risks": [
+          "Agent v07-p15-verifier does not cover every required mode for Validate customer support source packet."
+        ],
+        "explanation": "Plan rejected by deterministic feasibility checks.",
+        "evidence": [
+          {
+            "name": "well_formed",
+            "passed": true,
+            "details": {}
+          },
+          {
+            "name": "covered",
+            "passed": true,
+            "details": {}
+          },
+          {
+            "name": "total_assignment",
+            "passed": true,
+            "details": {}
+          },
+          {
+            "name": "authorized",
+            "passed": true,
+            "details": {}
+          },
+          {
+            "name": "compatible",
+            "passed": false,
+            "details": {}
+          },
+          {
+            "name": "acyclic",
+            "passed": true,
+            "details": {}
+          },
+          {
+            "name": "ordered",
+            "passed": true,
+            "details": {}
+          },
+          {
+            "name": "requirements_complete",
+            "passed": true,
+            "details": {}
+          },
+          {
+            "name": "complete",
+            "passed": true,
+            "details": {}
+          },
+          {
+            "name": "verifiable",
+            "passed": true,
+            "details": {}
+          },
+          {
+            "name": "constraints_satisfied",
+            "passed": true,
+            "details": {
+              "violations": []
+            }
+          }
+        ],
+        "constraint_violations": [],
+        "validation_gaps": [],
+        "schema_violations": [],
+        "capability_resolution": [
+          {
+            "task_id": "t1",
+            "requirement_id": "v07-p15-prepare",
+            "requested_capability_id": "v07-p15-prepare",
+            "agent_id": "v07-p15-preparer",
+            "resolved": true,
+            "resolved_capability_id": "v07-p15-prepare"
+          },
+          {
+            "task_id": "t2",
+            "requirement_id": "v07-p15-verify",
+            "requested_capability_id": "v07-p15-verify",
+            "agent_id": "v07-p15-verifier",
+            "resolved": true,
+            "resolved_capability_id": "v07-p15-verify"
+          }
+        ]
+      },
+      "diagnostics": {
+        "provider_candidates": {
+          "v07-p15-prepare": [
+            "v07-p15-preparer"
+          ],
+          "v07-p15-verify": [
+            "v07-p15-verifier"
+          ]
+        },
+        "assignments_total": 1,
+        "assignments_considered": 1,
+        "recovered_alternative_provider": false,
+        "search_exhausted": false,
+        "issues": []
+      }
+    },
+    "accepted": false,
+    "call_count": 1,
+    "prompt_tokens": 595,
+    "completion_tokens": 129
+  }
+}

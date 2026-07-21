@@ -1,0 +1,237 @@
+{
+  "schema_version": "0.7.0",
+  "generated_at": "2026-07-18T20:05:52.010702+00:00",
+  "rows": [
+    {
+      "task_count": 1,
+      "provider_count": 1,
+      "assignment_space": 1,
+      "repetitions": 30,
+      "latency_ms_p50": 0.17869999282993376,
+      "latency_ms_p95": 0.28819998260587454
+    },
+    {
+      "task_count": 1,
+      "provider_count": 2,
+      "assignment_space": 2,
+      "repetitions": 30,
+      "latency_ms_p50": 0.18029999046120793,
+      "latency_ms_p95": 0.2319000195711851
+    },
+    {
+      "task_count": 1,
+      "provider_count": 4,
+      "assignment_space": 4,
+      "repetitions": 30,
+      "latency_ms_p50": 0.18484998145140707,
+      "latency_ms_p95": 0.42260001646354795
+    },
+    {
+      "task_count": 1,
+      "provider_count": 8,
+      "assignment_space": 8,
+      "repetitions": 30,
+      "latency_ms_p50": 0.18045000615529716,
+      "latency_ms_p95": 0.1998000079765916
+    },
+    {
+      "task_count": 2,
+      "provider_count": 1,
+      "assignment_space": 1,
+      "repetitions": 30,
+      "latency_ms_p50": 0.29740000900346786,
+      "latency_ms_p95": 0.6690000009257346
+    },
+    {
+      "task_count": 2,
+      "provider_count": 2,
+      "assignment_space": 4,
+      "repetitions": 30,
+      "latency_ms_p50": 0.2766000106930733,
+      "latency_ms_p95": 0.49520001630298793
+    },
+    {
+      "task_count": 2,
+      "provider_count": 4,
+      "assignment_space": 16,
+      "repetitions": 30,
+      "latency_ms_p50": 0.2567999908933416,
+      "latency_ms_p95": 0.3176000027451664
+    },
+    {
+      "task_count": 2,
+      "provider_count": 8,
+      "assignment_space": 64,
+      "repetitions": 30,
+      "latency_ms_p50": 0.2741999924182892,
+      "latency_ms_p95": 0.3556000010576099
+    },
+    {
+      "task_count": 4,
+      "provider_count": 1,
+      "assignment_space": 1,
+      "repetitions": 30,
+      "latency_ms_p50": 0.3914500121027231,
+      "latency_ms_p95": 0.4364000051282346
+    },
+    {
+      "task_count": 4,
+      "provider_count": 2,
+      "assignment_space": 16,
+      "repetitions": 30,
+      "latency_ms_p50": 0.3567500098142773,
+      "latency_ms_p95": 0.4459999909158796
+    },
+    {
+      "task_count": 4,
+      "provider_count": 4,
+      "assignment_space": 256,
+      "repetitions": 30,
+      "latency_ms_p50": 0.4287500196369365,
+      "latency_ms_p95": 0.49169998965226114
+    },
+    {
+      "task_count": 4,
+      "provider_count": 8,
+      "assignment_space": 4096,
+      "repetitions": 30,
+      "latency_ms_p50": 0.454699998954311,
+      "latency_ms_p95": 0.5227999936323613
+    },
+    {
+      "task_count": 6,
+      "provider_count": 1,
+      "assignment_space": 1,
+      "repetitions": 30,
+      "latency_ms_p50": 0.5473500059451908,
+      "latency_ms_p95": 0.6468000065069646
+    },
+    {
+      "task_count": 6,
+      "provider_count": 2,
+      "assignment_space": 64,
+      "repetitions": 30,
+      "latency_ms_p50": 0.6734999915352091,
+      "latency_ms_p95": 1.1421999952290207
+    },
+    {
+      "task_count": 6,
+      "provider_count": 4,
+      "assignment_space": 4096,
+      "repetitions": 30,
+      "latency_ms_p50": 0.6192000000737607,
+      "latency_ms_p95": 1.0982999810948968
+    },
+    {
+      "task_count": 6,
+      "provider_count": 8,
+      "assignment_space": 262144,
+      "repetitions": 30,
+      "latency_ms_p50": 0.610999995842576,
+      "latency_ms_p95": 0.7697000110056251
+    }
+  ],
+  "invariants": {
+    "oracle_compilation": true,
+    "registry_permutation_invariance": true,
+    "alternative_provider_recovery": true,
+    "bounded_search_refusal": true
+  },
+  "all_invariants_passed": true,
+  "invariant_failures": [],
+  "recovery_diagnostics": {
+    "provider_candidates": {
+      "cap-1": [
+        "a-cap-1-provider-1",
+        "a-cap-1-provider-2",
+        "a-cap-1-provider-3",
+        "z-cap-1-provider-4"
+      ],
+      "cap-2": [
+        "a-cap-2-provider-1",
+        "a-cap-2-provider-2",
+        "a-cap-2-provider-3",
+        "z-cap-2-provider-4"
+      ]
+    },
+    "assignments_total": 16,
+    "assignments_considered": 16,
+    "recovered_alternative_provider": true,
+    "search_exhausted": false,
+    "issues": []
+  },
+  "exhaustion_diagnostics": {
+    "provider_candidates": {
+      "cap-1": [
+        "a-cap-1-provider-1",
+        "a-cap-1-provider-2",
+        "a-cap-1-provider-3",
+        "a-cap-1-provider-4",
+        "a-cap-1-provider-5",
+        "a-cap-1-provider-6",
+        "a-cap-1-provider-7",
+        "z-cap-1-provider-8"
+      ],
+      "cap-2": [
+        "a-cap-2-provider-1",
+        "a-cap-2-provider-2",
+        "a-cap-2-provider-3",
+        "a-cap-2-provider-4",
+        "a-cap-2-provider-5",
+        "a-cap-2-provider-6",
+        "a-cap-2-provider-7",
+        "z-cap-2-provider-8"
+      ],
+      "cap-3": [
+        "a-cap-3-provider-1",
+        "a-cap-3-provider-2",
+        "a-cap-3-provider-3",
+        "a-cap-3-provider-4",
+        "a-cap-3-provider-5",
+        "a-cap-3-provider-6",
+        "a-cap-3-provider-7",
+        "z-cap-3-provider-8"
+      ],
+      "cap-4": [
+        "a-cap-4-provider-1",
+        "a-cap-4-provider-2",
+        "a-cap-4-provider-3",
+        "a-cap-4-provider-4",
+        "a-cap-4-provider-5",
+        "a-cap-4-provider-6",
+        "a-cap-4-provider-7",
+        "z-cap-4-provider-8"
+      ],
+      "cap-5": [
+        "a-cap-5-provider-1",
+        "a-cap-5-provider-2",
+        "a-cap-5-provider-3",
+        "a-cap-5-provider-4",
+        "a-cap-5-provider-5",
+        "a-cap-5-provider-6",
+        "a-cap-5-provider-7",
+        "z-cap-5-provider-8"
+      ],
+      "cap-6": [
+        "a-cap-6-provider-1",
+        "a-cap-6-provider-2",
+        "a-cap-6-provider-3",
+        "a-cap-6-provider-4",
+        "a-cap-6-provider-5",
+        "a-cap-6-provider-6",
+        "a-cap-6-provider-7",
+        "z-cap-6-provider-8"
+      ]
+    },
+    "assignments_total": 262144,
+    "assignments_considered": 4096,
+    "recovered_alternative_provider": false,
+    "search_exhausted": true,
+    "issues": [
+      {
+        "code": "assignment_search_exhausted",
+        "message": "Provider search reached 4096 assignments without authorization."
+      }
+    ]
+  }
+}

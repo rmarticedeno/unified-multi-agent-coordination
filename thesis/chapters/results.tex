@@ -1,175 +1,152 @@
 \chapter{Evaluation and Results}
 \label{chap:results}
 
-This chapter reports the empirical and implementation evidence used to answer the research questions. Its goal is not to turn reproducibility into a positive result: it distinguishes evidence validity from claim support and therefore reports failed criteria, unsafe ablations, infrastructure failures, and unexecuted checks alongside successful tests.
+This chapter leads with the frozen version~0.7 production-path experiment. Developmental qualification, historical studies, and distributed evidence are reported separately so that reproducibility is not confused with a favorable outcome. Failed gates, unsafe acceptances, model-server errors, infrastructure timeouts, and unexecuted checks remain visible.
 
-The chapter first establishes the status and provenance of every evidence family. It then reports the fail-closed boundary, dependency and recovery behavior, end-to-end harnesses, and consensus campaign. Runtime-only ablations are kept separate from the comparative planning study. The final three sections preserve the historical v0.3 and v0.4 findings before presenting v0.5 as the primary comparison, including the direct-LLM control, repair behavior, statistical uncertainty, and the negative outcome for the proposed comparative advantage.
+\section{Evidence Status and Accounting}
 
-\section{Evidence Status}
+Version~0.7 contains 64 author-labelled, label-hidden cases arranged as 32 feasible/infeasible matched pairs. Three local models, seeds 11 and 29, and independently prompted hybrid and direct-LLM arms produce 768 expected observations. All 768 identities are present. One Qwen3-1.7B direct-arm observation at seed 29 ended in a model-server error and is scored as a failed observation rather than semantically retried. Gemma-4-E2B and Qwen3-8B completed without server errors.
 
-The evidence base distinguishes historical version 0.2--0.4 artifacts from the accepted version~0.5 primary comparison and two clean 33-trial consensus campaigns. Earlier reports remain development artifacts and are excluded from the final RQ4 comparison. The v0.5 corpus is author-labelled, pre-specified, frozen, and label-hidden during inference; no independent adjudicator was available. Evidence validity is separated from outcome: the v0.5 result is valid but mixed, and both complete consensus campaigns are valid but failed.
+The production source, corpus, prompts, schemas, model parameters, analysis code, gates, and runtime identities were frozen before confirmatory collection. The corpus SHA-256 is \texttt{f7ae3ba90a88ddd4\allowbreak 1af46c8c062da8c4\allowbreak 6864563ef792574b\allowbreak 650aa6a755e6215a}; the protocol hash is \texttt{cecd9fc0ca08f56c\allowbreak c35193d06bec134d\allowbreak e9e280ca28efa812\allowbreak cbbbc7896f2ddc81}. Raw provenance retains a legacy prompt-version metadata string, but the protocol lock, complete prompt payloads, and source hashes identify the executed prompt. This is disclosed as a metadata defect rather than silently rewritten.
 
 \begin{table}[htbp]
 \centering
-\caption{Repository evidence status after the distributed implementation update.}
+\caption{Final evidence accounting.}
 \label{tab:evidence-status}
-\begin{tabular}{>{\raggedright\arraybackslash}p{0.44\textwidth}>{\raggedright\arraybackslash}p{0.18\textwidth}>{\raggedright\arraybackslash}p{0.27\textwidth}}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.47\textwidth}>{\raggedright\arraybackslash}p{0.20\textwidth}>{\raggedright\arraybackslash}p{0.22\textwidth}}
 \toprule
-\textbf{Gate} & \textbf{Observed} & \textbf{Required} \\
+\textbf{Evidence family} & \textbf{Observed} & \textbf{Status} \\
 \midrule
-Python tests & \EvidenceTestCount{} passing & all passing \\
-Overall production branch coverage & \ProductionBranchCoverage\% & at least 85\% \\
-Deterministic scenarios & 7/7 & 7/7 \\
-Docker A2A checks & 11/11 & 11/11 \\
-PostgreSQL distributed checks & 5/5 & 5/5 \\
-Historical etcd three-voter smoke checks & 7/7 & historical only \\
-Full 3/5/7 consensus campaign & \ConsensusTrialCount/33; \ConsensusOutcome & 33 accounted trials; criteria reported \\
-Upstream-derived A2A interoperability & 1/1 & passing \\
-Ruff and mypy & passing & passing \\
-Frozen author-label provenance & complete & complete \\
-Historical v0.4 outputs & 540/540 & historical only \\
-Primary v0.5 outputs & \VFiveOutputCount/1,440 & 1,440/1,440 \\
-Deterministic schema 0.5.0 analysis & reproducible & hash-reproducible \\
+Frozen v0.7 confirmatory outputs & 768/768 & complete \\
+Primary-seed hybrid observations & 192 & analysed \\
+Deterministic compiler invariants & 4/4 & pass \\
+Fixture A2A accepted-case replays & 8/8 & pass \\
+Consensus-v4 campaign & 45/45 trials & complete, dirty provenance \\
+Python tests & \EvidenceTestCount{} passing & pass \\
+Production branch coverage & \ProductionBranchCoverage\% & gate pass \\
+Ruff and mypy & passing & pass \\
+Historical v0.5 outputs & 1,440/1,440 & immutable motivation \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Branch-aware production coverage is \ProductionBranchCoverage\%, above the 85\% aggregate gate. Every independently enforced critical-module threshold passes, including at least 85\% for cluster discovery, at least 80\% for the consensus campaign driver, and at least 90\% for evidence preflight. All \EvidenceTestCount{} tests, Ruff, mypy, the production aggregate, and the module-specific gates pass on the recorded Windows run. The generated thesis macros are derived from the manifest and reproduce without a diff.
+\section{Frozen Version 0.7 Production-Path Comparison}
 
-\section{Fail-Closed Symbolic Boundary}
-
-Regression tests show that a promised artifact does not make a validatorless task verifiable; legacy textual constraints become unresolved typed constraints and force refusal; missing JSON-pointer paths, false predicates, canonical capability-ID mismatch, incomplete mode coverage, and nested JSON Schema type violations are rejected. Effective trust is assigned by local admission policy rather than copied from a remote Agent Card. Cards requiring an unavailable credential scheme are refused, and plain HTTP requires an explicit development exception.
-
-Candidate plans remain non-authoritative. Direct delegation is selected only if it is feasible; otherwise bounded candidates are checked and ranked deterministically by task count, auxiliary count, DAG depth, and stable task identifiers. These tests support prototype correctness of the implemented predicates, not mathematical proof of arbitrary plan correctness.
-
-\section{Dependency, Recovery, and Trace Behavior}
-
-Execution tests confirm that a task is dispatched only after every declared prerequisite completes. Failure, timeout, refusal, or unknown outcome skips descendants while independent branches continue. Consumers receive artifacts only from declared dependencies. On takeover, unsafe unknown work is recorded as \texttt{unknown} and is not blindly redispatched. Completion additionally requires the typed completion contract.
-
-Concurrent-session tests show that returned traces contain only persisted events for their session. Authorization precedes attempt start, SDK transport observations are persisted with session, plan, task, and attempt identity, and a trace validator checks ordering and terminal observations. Registration diagnostics remain outside operational session traces.
-
-\section{Corrected End-to-End Harnesses}
-
-The seven deterministic statuses match their references: three successful completions, one authorized runtime failure, and three pre-dispatch infeasibility decisions. The privacy case now derives email and phone values from transcript text; the answers are no longer supplied as separate fixture fields. The task-local auxiliary lifecycle expires after use.
-
-The corrected Docker harness passes eleven checks covering health, registry discovery, direct and decomposed A2A execution, missing capability, insufficient authority, incompatible modes, invalid artifacts, timeout, registry outage, and session replay. The decomposed case originally exposed a stale assumption that every prior artifact should be forwarded. The corrected planner declares dependencies from canonical mode flow, and the harness now verifies that the final consumer receives only its declared predecessor artifact.
-
-The first clean PostgreSQL harness failed because lease acquisition used a read-then-upsert sequence that allowed a competing coordinator to reach a duplicate terminal insertion. That report is preserved. Commit \texttt{3f8093af1ecc7c49312ac34856bba825bd81f381} replaced acquisition with one conditional PostgreSQL upsert that refuses a live foreign holder and increments fencing atomically for an expired or same-holder lease. The subsequent clean harness passes all five checks: live lease conflict, takeover after an abandoned read-only attempt, process exit after external dispatch of unknown-side-effect work, stale-fence rejection, and database invariant rejection. It records zero duplicate dispatches and repeated receiver-side effects, one lease conflict, one stale-write rejection, and terminal correctness. These observations do not establish consensus or cover all crash windows.
-
-An additional test launches the vendored, upstream-derived A2A Hello World sample as an independent server, ingests its Agent Card, preserves its \texttt{echo\_bot} skill identifier, authorizes the matching task, and receives its remote artifact. Its provenance records the upstream URL, commit, blob identifiers, copied-file hashes, license, and local comment-only adaptation. This establishes one reproducible interoperability path; it is not evidence of universal A2A compatibility.
-
-\section{Consensus-Backed Distributed Evidence}
-
-The primary clean campaign was built once from correction commit \texttt{3f8093af1ecc7c49\allowbreak 312ac34856bba825\allowbreak bd81f381} as image \texttt{sha256:573293cdc992ce04\allowbreak 94986e70c25dd8cf\allowbreak 3ba59e1ae52c9ce2\allowbreak 6a4dc16e54eca410}; every isolated trial then used \texttt{--no-build}. It completed the exact 33-trial matrix with complete check accounting. Evidence validity is true although the outcome is failed and the claim status is unsupported. Of 33 trials, 20 passed, seven violated invariants, and six ended in infrastructure errors. Only \ConsensusChecksExecuted{} of \ConsensusChecksExpected{} expected checks executed; 19 executed checks violated their invariant and 40 remained unexecuted. It would therefore be false to summarize the campaign as ``zero safety violations.''
+Seed 11 is primary; seed 29 is a stability replication. Table~\ref{tab:v07-arms} reports the pooled primary-seed decision results across the three models. The hybrid sharply reduces unsafe acceptance but does so with substantial feasible refusal.
 
 \begin{table}[htbp]
 \centering
-\caption{Primary clean consensus campaign outcomes across three repetitions.}
-\label{tab:consensus-campaign}
-\begin{tabular}{>{\raggedright\arraybackslash}p{0.47\textwidth}rrr}
+\caption{Version 0.7 primary-seed results over 192 observations per arm.}
+\label{tab:v07-arms}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.34\textwidth}rrrrrr}
 \toprule
-\textbf{Scenario} & \textbf{Pass} & \textbf{Invariant fail} & \textbf{Infra. error} \\
+\textbf{Arm} & \textbf{BA} & \textbf{Recall} & \textbf{Spec.} & \textbf{Unsafe} & \textbf{Plan valid} & \textbf{Semantic exact} \\
 \midrule
-Formation at 3, 5, and 7 voters (combined) & 9 & 0 & 0 \\
-$3\rightarrow5\rightarrow3$ reconfiguration & 3 & 0 & 0 \\
-$5\rightarrow7\rightarrow5$ reconfiguration & 1 & 0 & 2 \\
-Leader/partition/quorum/concurrency & 0 & 0 & 3 \\
-Audit sink unavailable & 3 & 0 & 0 \\
-Failed-voter replacement & 1 & 1 & 1 \\
-Crash after attempt start & 0 & 3 & 0 \\
-Crash after external dispatch & 0 & 3 & 0 \\
-Crash during aggregation & 3 & 0 & 0 \\
+Production hybrid & 71.88\% & 44.79\% & 98.96\% & 1 & 22.92\% & 37.50\% \\
+Direct LLM & 53.13\% & 98.96\% & 7.29\% & 89 & 45.31\% & 30.21\% \\
+Exact-name/alias baseline ($n=64$) & 100\% & 100\% & 100\% & 0 & 50.00\% & --- \\
 \bottomrule
 \end{tabular}
+}
 \end{table}
 
-A prior complete clean campaign from commit \texttt{7a31b42069104c3a\allowbreak 4d7f10d8441d8235\allowbreak 7a35fd8b} is also preserved: 19 trials passed, eight violated invariants, and six had infrastructure errors, with 102/144 checks executed and 20 violations. The similar but non-identical distributions demonstrate both reproducible fault classes and run-to-run instability. Formation, audit failure, and aggregation-crash cases were consistently successful. Reconfiguration could leave a pending membership change, the combined scenario repeatedly failed before executing its checks, and the attempt-start and post-dispatch crash windows repeatedly violated duplicate-effect or recovery invariants. Consequently, RQ5 receives a negative empirical answer for this implementation and single-host campaign. The mechanism exists, but the measured system does not preserve all stated safety and conditional-liveness properties.
+The matched-pair clustered 95\% interval for hybrid-minus-direct unsafe-acceptance rate is $[-48.44,-42.71]$ percentage points, supporting safety superiority. The corresponding feasible-recall difference is $[-63.54,-45.83]$ points, which rejects the declared 10-point non-inferiority margin. Hybrid-minus-exact-alias balanced accuracy is $[-32.81,-23.44]$ points. Thus the exact lexical control outperforms the hybrid on this designed corpus and exposes substantial construct circularity: these cases do not establish that an LLM is necessary.
 
-\section{Separate Runtime-Only Ablations}
+\begin{figure}[htbp]
+\centering
+\input{figures/generated/v07-safety-utility.tex}
+\caption{Primary-seed safety--utility trade-off. Lower unsafe acceptance and higher feasible recall are preferable.}
+\label{fig:v07-safety-utility}
+\end{figure}
 
-The runtime bundle contains 350 deterministic observations: 100 dependency-dispatch observations, 150 auxiliary-admission observations, and 100 trace-evidence observations. The secure defaults produced zero safety violations across their 150 applicable observations. Removing dependency gating produced 40 unsafe dispatch decisions in the 40 predecessor-missing, failed, timed-out, or unknown observations. Removing auxiliary bounds admitted 40 of 40 deliberately ineligible, persistent, unscoped, or write-authorized specifications; disabling auxiliary behavior admitted none, including ten otherwise valid bounded cases. Suppressing durable diagnostic trace evidence removed the required observation in all 50 trace cases while leaving state-critical persistence unchanged. The observation-file SHA-256 is \texttt{7617bb8da5308b9a\allowbreak 22a7ed7fe12c93d7\allowbreak e0b80484b2a18de2\allowbreak ee44ea3d2e3b7bbf}.
+The single unsafe hybrid acceptance is Qwen3-8B on the infeasible ambiguity case \texttt{v07-con-08-infeasible}. The request states that either issuing or retaining is possible while leaving the final action unspecified. The model selected one outcome instead of preserving the ambiguity. This is a real semantic-boundary failure, not a schema or compiler failure.
 
-These controls isolate mechanism consequences rather than planning quality. Repetition confirms deterministic behavior of the implemented policy surfaces but does not create 350 independent scenarios: the scenario types, not repeated executions, bound external validity. In particular, the trace result concerns availability of auditable returned evidence, not deletion of leases, fencing tokens, attempts, or terminal results.
-
-\section{Comparative Conformance Study}
-
-The public corpus contains 36 cases and has hash \texttt{b9fd8b6f8398eaf3\allowbreak 3b8676e14288f0d3\allowbreak c4956cca5a9b915c\allowbreak a7b68990167c9c1d}. Its provenance declares author annotation, corpus freeze, and the absence of independent adjudication. The collector verified this exact hash and never included reference labels in prompts. The scorer verified all 540 unique model--seed--case identities before loading labels. Two analysis reruns produced the same SHA-256 digest, \texttt{b70a169d8527b2f4\allowbreak b95a5ef1a7ac083e\allowbreak 0eb81874c896f504\allowbreak 12352b37b14b03a3}. These are leakage, completeness, and reproducibility controls, not evidence that the labels are independently correct.
+\subsection{Results by Model}
 
 \begin{table}[htbp]
 \centering
-\caption{Decision results on 540 repeated observations; intervals are clustered by the 36 cases.}
-\label{tab:v03-comparison}
-\begin{tabular}{p{0.35\textwidth}rrrr}
+\caption{Production-hybrid primary-seed results by model, 64 observations each.}
+\label{tab:v07-models}
+\begin{tabular}{lrrrr}
 \toprule
-\textbf{Configuration} & \textbf{Accuracy} & \textbf{95\% CI} & \textbf{FA} & \textbf{FR} \\
+\textbf{Model} & \textbf{BA} & \textbf{Recall} & \textbf{Unsafe} & \textbf{Semantic exact} \\
 \midrule
-Hybrid & 58.3\% & 41.7--75.0\% & 0 & 225 \\
-Natural-language rule-only & 58.3\% & 41.7--75.0\% & 0 & 225 \\
-Structured oracle upper bound & 100.0\% & 100.0--100.0\% & 0 & 0 \\
-LLM-only without symbolic gate & 43.9\% & 28.5--59.3\% & 303 & 0 \\
-Each planning ablation & 58.3\% & 41.7--75.0\% & 0 & 225 \\
+Qwen3-1.7B & 78.13\% & 56.25\% & 0 & 42.19\% \\
+Gemma-4-E2B & 50.00\% & 0.00\% & 0 & 3.13\% \\
+Qwen3-8B & 87.50\% & 78.13\% & 1 & 67.19\% \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-The hybrid refused every feasible observation: precision, recall, and F1 for feasible acceptance were all zero. Its 58.3\% accuracy therefore reflects correct refusal of infeasible cases rather than useful end-to-end acceptance. On feasible observations, failed predicates most often concerned coverage (225), total assignment (191), completion (185), verifiability (147), and ordering (86). The recurring risks show that local-model proposals omitted accountable executors, canonical requirement identities, promised artifacts, completion contracts, or deterministic validation evidence. The symbolic gate behaved fail-closed, but the linguistic-to-typed-plan bridge did not produce executable plans reliably.
+Model separation is essential. Qwen3-8B provides the highest recall and balanced accuracy but causes the only unsafe hybrid acceptance. Gemma refuses every feasible primary-seed case. Qwen3-1.7B is intermediate and fail-closed at the primary seed. Direct-LLM unsafe acceptances are 31, 26, and 32 respectively for Qwen3-1.7B, Gemma, and Qwen3-8B. Requested-seed decision agreement is 98.44\% for the hybrid and 96.88\% for the direct arm; agreement does not repair poor calibration.
 
-The LLM-only configuration achieved 100\% recall but admitted 303 infeasible repeated observations; its feasible-class precision was 42.6\% and F1 was 59.8\%. The structured oracle achieved 100\% on the author-declared criteria, showing that the symbolic evaluator can accept and refuse correctly when supplied the intended structured request and proposal. At the primary 36-case unit, the oracle differed from the hybrid with Holm-adjusted exact McNemar $p=0.000366$; the LLM-only difference was not significant after correction ($p_{\mathrm{Holm}}=1.0$). Rule-only and the three planning ablations had no discordant decisions relative to the hybrid. This floor effect makes those ablations uninformative rather than evidence that their mechanisms do not matter.
-
-Median collected linguistic latency was 4.84~s overall: 3.61~s for Qwen3 1.7B, 4.66~s for Gemma 4 E2B, and 27.39~s for Qwen3 8B. Configurations share these raw outputs, so this latency is not a between-configuration performance comparison. Symbolic-validation and execution latency belong to the separate controlled runtime evidence.
-
-RQ1--RQ3 receive implementation-level support from the corrected boundary and harnesses. The version 0.3 evaluation answers RQ4 negatively for that protocol: symbolic refusal prevented unsafe acceptance, but model-generated plans made the hybrid unusably conservative. This frozen result supports the authorization boundary while falsifying any claim that the original linguistic integration provided effective accepted coordination. It remains limited to the author's declared criteria on 36 designed cases and does not establish general superiority.
-
-\section{Version 0.4 Linguistic-Bridge Redesign}
-
-Version 0.4 preserves version 0.3 as negative evidence and evaluates a new corpus/protocol hash, \texttt{a0ecd2bf0ebc6740\allowbreak a205108e45385eb1\allowbreak e2e7d7ae00dacab3\allowbreak 8bc123c8ca49aa2d}. The model generated only canonical requirement/capability selections and requirement-level dependencies; deterministic hydration supplied executable fields from the admitted request and registry. One bounded structural repair was attempted in 424 of 540 primary outputs. Analysis schema 0.4.1 scores deterministic controls once per case, uses the initial response for LLM-only scoring, and attributes latency to the work performed by each configuration. Two reruns using the calibrated timing bundle produced the same SHA-256 digest, \texttt{16a1faf6b3fff50a\allowbreak ffb8c2a07b9351f3\allowbreak 7dc90d06a8e76640\allowbreak 3b8defbdad96c527}. The raw run records a dirty source tree and is consequently retained only as historical development evidence; v0.5 supersedes it as the primary comparison.
-
-\begin{table}[htbp]
+\begin{figure}[htbp]
 \centering
-\caption{Version 0.4.1 bridge results; LLM configurations have 540 repeated observations, while deterministic controls have 36 case observations.}
-\label{tab:v04-comparison}
-\begin{tabular}{p{0.37\textwidth}rrrr}
-\toprule
-\textbf{Configuration} & \textbf{Accuracy} & \textbf{Recall} & \textbf{FA} & \textbf{FR} \\
-\midrule
-Hybrid constrained bridge & 90.0\% & 76.0\% & 0 & 54 \\
-Natural-language rule-only ($n=36$) & 58.3\% & 0.0\% & 0 & 15 \\
-Structured oracle upper bound & 100.0\% & 100.0\% & 0 & 0 \\
-LLM-only without symbolic gate & 55.4\% & 22.2\% & 66 & 175 \\
-Typed-constraint ablation & 89.8\% & 76.0\% & 1 & 54 \\
-Authority ablation & 89.8\% & 76.0\% & 1 & 54 \\
-Contract-validation ablation & 90.0\% & 76.0\% & 0 & 54 \\
-\bottomrule
-\end{tabular}
-\end{table}
+\input{figures/generated/v07-model-category-heatmap.tex}
+\caption{Hybrid primary-seed outcomes by model and experimental stratum.}
+\label{fig:v07-heatmap}
+\end{figure}
 
-The hybrid's 95\% case-clustered accuracy interval is 85.0--94.6\%. At the case-unit level, all 15 feasible cases had majority acceptance. Nevertheless, only two of three pre-registered success criteria passed. Qwen3 1.7B achieved 28.0\% feasible recall and 70.0\% accuracy; Gemma E2B and Qwen3 8B each achieved 100\% recall and accuracy. Consequently the required 60\% per-model recall floor failed, and version 0.4 is a substantial improvement rather than a fully successful pre-registered validation. The changed corpus wording and bridge protocol also prevent treating the difference from version 0.3 as a direct paired causal estimate.
+\subsection{Semantic Fields and Predeclared Gates}
 
-The corrected latency accounting reports median total latency of approximately 1.91~s for the hybrid and 1.07~s for the initial-response LLM-only configuration; the deterministic lexical and oracle controls require only their local matching or symbolic work. Requested-seed outputs are reported as stability repetitions because the backend response does not confirm seed compliance. Across the five requested seeds, many model--case outputs are identical, so repetition is not interpreted as an increase beyond 36 primary case units.
+The supplementary descriptive scorer was added after the behavioral freeze to aggregate field-level booleans already present in the frozen analysis. It does not change decisions. Hybrid primary-seed exact accuracy is 92.19\% for goals, 95.31\% for trust policy, 97.92\% for artifact contracts, 86.98\% for forbidden capabilities, 94.27\% for forbidden agents, and 83.33\% for unresolved terms. The corresponding F1 values are 91.46\%, 96.32\%, 98.95\%, 18.18\%, 65.88\%, and 35.82\%. Status accuracy is 52.60\% with macro-F1 31.57\%. High exact accuracy on sparse exclusion fields therefore coexists with weak positive-class F1 and should not be read as reliable ambiguity handling.
 
-\section{Version 0.5 Primary Comparison}
+Only two of six declared gates pass:
+\begin{enumerate}
+  \item zero primary-seed unsafe hybrid acceptances: \textbf{fail} (one);
+  \item at least 75\% feasible recall overall and 60\% per model: \textbf{fail};
+  \item safety superiority over direct LLM: \textbf{pass};
+  \item feasible-recall non-inferiority within 10 points: \textbf{fail};
+  \item superiority over exact-name/alias matching: \textbf{fail};
+  \item 100\% oracle/compiler invariants: \textbf{pass}.
+\end{enumerate}
+RQ4 is therefore supported only for relative safety and deterministic invariants, not for the proposed utility, zero-unsafe, non-inferiority, or lexical-superiority claims.
 
-The clean v0.5 run contains all 1,440 independently prompted arm--model--seed--case outputs. Labels remained inaccessible until both arms completed, each arm received the same public inputs and at most one structural repair, and two analyzer runs produced the same functional digest, \texttt{5bead15a76a84f66671b9bc14dd7ac6ead9c9a5ce4b434757d94a5e86c093f82}. Wall-clock timings are stored separately. Requested seeds measure stability and are not treated as independent case samples.
+\section{Qwen-First Development Method}
 
-\begin{table}[htbp]
+Before freezing, 48 development-only cases covered paraphrase, ambiguity, negation, trust, artifact contracts, dependencies, provider recovery, and adversarial wording. Qwen3-1.7B was run first on both arms at seeds 11 and 29, producing 192 outputs per qualification run. The initial run exposed universal refusal. Later runs reached hybrid balanced accuracy of 81.25\% and 75.00\%, but still produced one unsafe acceptance and feasible recall of 66.67\% and 54.17\%. These values motivated prompt and implementation corrections and are excluded from confirmatory claims.
+
+Qualification also exercised registry permutations, missing providers, malformed intent, alias collisions, explicit negation, prompt injection, and bounded-search exhaustion. The phase ended only after complete output accounting, no unhandled exception, fail-closed invalid inputs, and deterministic compiler invariants. The larger models were not used to tune the frozen protocol.
+
+\section{Version 0.8 Development Qualification}
+
+The v0.8 development matrix is complete at \VEightDevelopmentOutputCount{} observations: 72 cases, two permitted models, two arms, and two requested seeds. Qwen3-8B was not loaded and has no v0.8 observation. Both Qwen3-1.7B and Gemma-4-E2B passed every predeclared qualification gate. At primary seed 11, the pooled hybrid achieved \VEightDevelopmentHybridBalancedAccuracy\% balanced accuracy, \VEightDevelopmentHybridRecall\% feasible recall, \VEightDevelopmentHybridUnsafe{} unsafe acceptances, 100\% specificity, and 100\% schema validity. Every model/category feasible-recall cell was 100\%, and derived-status macro-F1 was \VEightDevelopmentStatusMacroFOne\%.
+
+The direct arm retained complete feasible recall but achieved \VEightDevelopmentDirectBalancedAccuracy\% pooled balanced accuracy and made \VEightDevelopmentDirectUnsafe{} unsafe acceptances at the primary seed. Direct proposals were translated to the shared proposal type and checked with the same feasibility analyzer; this validation does not change the model's accept/refuse decision, but identifies whether an accepted proposal satisfies the common symbolic predicates.
+
+These figures are qualification history, not held-out evidence. Earlier v0.8 development iterations are retained, including an initial universal-refusal run and a later run that failed category recall floors. The final values therefore demonstrate that the implementation reached its entry criteria on the data used for revision; they cannot estimate generalization. The 96-case confirmatory labels remain unopened because the required two temporally separated human author passes have not yet been certified. Consequently, no v0.8 confirmatory result or v0.7--v0.8 performance claim is made here.
+
+\section{Deterministic Compiler and A2A Evidence}
+
+The compiler benchmark covers one through six tasks and one, two, four, and eight providers with 30 repetitions per cell. Provider choice and topological order remain invariant under registry permutations, alternative-provider recovery succeeds, and a six-task/eight-provider space of 262,144 assignments refuses reproducibly after the 4,096-assignment limit. All four declared invariants pass.
+
+\begin{figure}[htbp]
 \centering
-\caption{Primary v0.5 planning results over 720 repeated observations per arm.}
-\label{tab:v05-comparison}
-\begin{tabular}{p{0.38\textwidth}rrrr}
-\toprule
-\textbf{Configuration} & \textbf{Accuracy} & \textbf{Recall} & \textbf{FA} & \textbf{FR} \\
-\midrule
-Hybrid, initial & 50.00\% & 0.00\% & 0 & 360 \\
-Hybrid, repaired & 50.69\% & 1.39\% & 0 & 355 \\
-Direct LLM, initial & 52.08\% & 100.00\% & 345 & 0 \\
-Direct LLM, repaired & 52.08\% & 100.00\% & 345 & 0 \\
-Greedy symbolic baseline ($n=48$) & 100.00\% & 100.00\% & 0 & 0 \\
-Lexical diagnostic ($n=48$) & 50.00\% & 0.00\% & 0 & 24 \\
-Structured oracle ($n=48$) & 100.00\% & 100.00\% & 0 & 0 \\
-\bottomrule
-\end{tabular}
-\end{table}
+\input{figures/generated/v07-compiler-scaling.tex}
+\caption{Deterministic compiler scaling and bounded-search behavior.}
+\label{fig:v07-compiler-scaling}
+\end{figure}
 
-Repair was invoked for every output in both arms. It changed the direct arm's decision in 455 responses, but those changes were ignored by the frozen decision contract; it recovered only five hybrid feasible observations. By model, repaired hybrid recall was 0\% for Qwen3 1.7B, 4.17\% for Gemma E2B, and 0\% for Qwen3 8B. Thus the zero-false-acceptance criterion passed, but the 60\% per-model feasible-recall criterion failed for every model.
+Eight observed primary-seed hybrid acceptances were replayed through fixture A2A execution. All eight completed with three dependent tasks and three validated artifacts; none required oracle substitution. The replay covers seven of eight strata because no adversarial case was accepted. It demonstrates executable consistency for selected accepted plans, not general execution success.
 
-The repaired hybrid was 1.39 percentage points less accurate than the repaired direct coordinator. The matched-pair clustered bootstrap 95\% interval was $[-3.47,0.00]$ percentage points, and within-model exact McNemar comparisons remained non-significant after Holm correction. Case-majority accuracy was 50\% for both arms. The direct arm achieved acceptance utility only by accepting nearly every case, including 345 unsafe repeated observations; the hybrid achieved fail-closed behavior only by refusing nearly every feasible case. Therefore v0.5 supports the safety behavior of the authorization boundary but not useful hybrid coordination or comparative superiority. RQ4 is partially supported in this narrow sense and otherwise answered negatively.
+\section{Consensus-v4 Distributed Evidence}
+
+The complete campaign contains 45 trials: 42 primary trials over 14 conditions plus three supplementary combined-fault trials. Forty-three trials passed. One $3\rightarrow5\rightarrow3$ and one $5\rightarrow7\rightarrow5$ trial timed out before their five checks executed; the other two repetitions of each reconfiguration passed. No executed primary safety check failed: 140 of 150 executed, with ten unexecuted because of those infrastructure timeouts. All 27 supplementary checks executed and passed. The complete total is therefore 167/177 executed checks with zero observed violations.
+
+\begin{figure}[htbp]
+\centering
+\input{figures/generated/v07-consensus-matrix.tex}
+\caption{Consensus-v4 condition matrix across three repetitions.}
+\label{fig:v07-consensus-matrix}
+\end{figure}
+
+The campaign records a complete matrix and a partially supported claim, but its evidence-valid flag is false. That last field is decisive for provenance: the authorized rebuild preserved a dirty worktree, so this run is not promoted as accepted clean evidence. It supports the implemented behavior descriptively, including recovery across all three crash windows and zero repeated receiver effects in executed checks, but the two reconfiguration conditions remain incompletely observed. A clean-source rerun is required before using it as release evidence.
+
+Historical clean consensus campaigns are retained unchanged. Their 33-trial matrices showed invariant failures in crash windows and incomplete combined-fault execution. Consensus-v4 is materially improved after fixture-readiness and serialized, resumable membership-operation corrections, but the dirty provenance and two timeouts prevent replacing those historical artifacts with an unqualified success claim. RQ5 is partially supported for the conditions whose three repetitions completed and remains indeterminate for complete reconfiguration reliability.
+
+\section{Historical Motivation and Synthesis}
+
+Versions~0.3 and~0.4 remain developmental evidence. Version~0.3 exposed universal feasible refusal by the hybrid; version~0.4 improved the constrained bridge but failed its per-model recall floor. The frozen v0.5 comparison then produced 1,440 outputs: the repaired hybrid achieved 50.69\% accuracy, 1.39\% feasible recall, and zero unsafe acceptances, while the direct coordinator achieved 52.08\% accuracy, complete feasible recall, and 345 unsafe acceptances. That valid negative result motivated the production semantic-admission redesign. The unexecuted study-specific v0.6 protocol is marked superseded rather than presented as evidence.
+
+Version~0.7 demonstrates a substantial increase in hybrid utility relative to v0.5 while retaining far stronger safety than direct prompting. It nevertheless fails four of six predeclared gates, includes one unsafe ambiguity acceptance, and loses to an exact-alias control tailored to the corpus. The correct conclusion is consequently narrower than ``hybrid superiority'': deterministic admission and compilation make model proposals auditable and much safer, but useful, general semantic admission remains model-sensitive and unproven.

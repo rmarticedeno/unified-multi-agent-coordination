@@ -419,6 +419,7 @@ async def _coordinate(url: str, session_id: str) -> httpx.Response:
 
 async def _coordinate_observed(url: str, session_id: str) -> tuple[httpx.Response | None, str]:
     """Convert a bounded coordination failure into experiment evidence, not harness failure."""
+    await _wait_registered_agent(url, "summarizer")
     try:
         return await _coordinate(url, session_id), ""
     except httpx.HTTPError as exc:
@@ -903,6 +904,7 @@ async def _crash_window_trial(root: Path, trial: int, fault_point: str, image: s
     ) -> tuple[JsonObject, JsonObject]:
         await _wait_steady(names, target)
         await _wait_ready_status("http://127.0.0.1:8010", 200, timeout_s=60)
+        await _wait_registered_agent(COORDINATORS[names[0]], "summarizer")
         session_id = f"{fault_point}-{trial}-{uuid.uuid4().hex}"
         initial_error = ""
         try:
@@ -1180,7 +1182,7 @@ async def run_campaign(
         provenance = _provenance(image_metadata)
         _write_exclusive(output_dir / "provenance.json", provenance)
         report = {
-            "schema_version": "consensus-campaign-v3",
+            "schema_version": "consensus-campaign-v4",
             "generated_at": datetime.now(timezone.utc).isoformat(),
             "provenance": provenance,
             "trial_count": 0,
@@ -1295,7 +1297,7 @@ async def run_campaign(
         and str(image_metadata.get("image_id", "")).startswith("sha256:")
     )
     report = {
-        "schema_version": "consensus-campaign-v3",
+        "schema_version": "consensus-campaign-v4",
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "provenance": provenance,
         "trial_count": len(results),

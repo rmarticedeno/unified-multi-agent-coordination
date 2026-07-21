@@ -1,0 +1,518 @@
+{
+  "schema_version": "0.7.0",
+  "identity": {
+    "phase": "development",
+    "arm": "production_hybrid_v07",
+    "case_id": "v07-dev-04-feasible",
+    "pair_id": "v07-dev-pair-04",
+    "category": "ambiguity",
+    "model_id": "qwen/qwen3-1.7b",
+    "seed": 29
+  },
+  "settings": {
+    "temperature": 0.2,
+    "top_p": 1.0,
+    "max_tokens": 800,
+    "schema_repair": false
+  },
+  "public_input_hash": "a7802a01e4ef3d51439d072f9a24223b2e20b51ed549ee626523d36eaf194bb4",
+  "labels_loaded_during_collection": false,
+  "runtime_error": "",
+  "result": {
+    "prompt": [
+      {
+        "role": "system",
+        "content": "Ground the request only to the admitted identifiers below. Select semantic goals, explicit exclusions, trust policy, and artifact contract. Do not copy dependencies, assign providers, decide feasibility, or create a plan. Use null for an omitted policy or contract so deterministic defaults can apply.\nRules:\n1. Select terminal requested outcomes only. Dependencies are added deterministically. If C depends on B and B depends on A, a request to perform A, B, then C has only C as a goal.\n2. A term matching a capability, policy, contract, agent name, description, or alias is resolved and must not appear in unresolved_terms.\n3. Use ambiguous only when the request itself explicitly leaves incompatible meanings unresolved. Otherwise use resolved.\n4. Add forbidden identifiers only for explicit prohibitions such as 'do not use'. Never infer a prohibition from provider capabilities or availability.\n5. Return only the schema-conforming JSON object and no explanation."
+      },
+      {
+        "role": "user",
+        "content": "CAPABILITIES\n- v07-p04-prepare: Assemble travel logistics source packet; Collect the source material needed for travel logistics.; aliases=['gather travel logistics inputs', 'prepare travel logistics packet']\n- v07-p04-verify: Validate travel logistics source packet; Check the assembled travel logistics material for correctness.; aliases=['check travel logistics inputs', 'verify travel logistics packet']\n- v07-p04-deliver: Publish travel logistics verified brief; Release the checked final brief for travel logistics.; aliases=['issue travel logistics brief', 'release travel logistics summary']\n- v07-p04-archive: Archive travel logistics verified brief; Preserve the checked travel logistics brief for long-term retention.; aliases=['retain travel logistics brief', 'store travel logistics summary']\n- v07-p04-distractor-1: Auxiliary travel logistics operation 1; Perform unrelated travel logistics auxiliary operation number 1.; aliases=['auxiliary operation v07-p04 1']\n- v07-p04-distractor-2: Auxiliary travel logistics operation 2; Perform unrelated travel logistics auxiliary operation number 2.; aliases=['auxiliary operation v07-p04 2']\n- v07-p04-distractor-3: Auxiliary travel logistics operation 3; Perform unrelated travel logistics auxiliary operation number 3.; aliases=['auxiliary operation v07-p04 3']\n- v07-p04-distractor-4: Auxiliary travel logistics operation 4; Perform unrelated travel logistics auxiliary operation number 4.; aliases=['auxiliary operation v07-p04 4']\n\nTRUST POLICIES\n- v07-p04-ordinary: ordinary travel logistics assurance; Standard trust is sufficient for this travel logistics request.; aliases=['normal travel logistics assurance']\n- v07-p04-elevated: elevated travel logistics assurance; Elevated trust is mandatory for this travel logistics request.; aliases=['high assurance for travel logistics']\n\nARTIFACT CONTRACTS\n- v07-p04-json: travel logistics machine-readable JSON; Return the final travel logistics result as JSON.; aliases=['travel logistics json output']\n- v07-p04-signed-pdf: travel logistics signed PDF; Return the final travel logistics result as a signed PDF.; aliases=['signed travel logistics document']\n\nAGENTS\n- v07-p04-preparer: travel logistics source preparer\n- v07-p04-verifier: travel logistics source verifier\n- v07-p04-primary: primary travel logistics publisher\n- v07-p04-backup: backup travel logistics publisher\n\nREQUEST\nFor this travel logistics job, gather the inputs, check the packet, and issue the brief with normal travel logistics assurance as travel logistics JSON output."
+      }
+    ],
+    "output_schema": {
+      "type": "object",
+      "properties": {
+        "interpretation_status": {
+          "type": "string",
+          "enum": [
+            "resolved",
+            "ambiguous"
+          ]
+        },
+        "goals": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 8,
+          "items": {
+            "type": "object",
+            "properties": {
+              "capability_id": {
+                "type": "string",
+                "enum": [
+                  "v07-p04-prepare",
+                  "v07-p04-verify",
+                  "v07-p04-deliver",
+                  "v07-p04-archive",
+                  "v07-p04-distractor-1",
+                  "v07-p04-distractor-2",
+                  "v07-p04-distractor-3",
+                  "v07-p04-distractor-4"
+                ]
+              },
+              "trust_policy_id": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "v07-p04-ordinary",
+                      "v07-p04-elevated"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "artifact_contract_id": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "v07-p04-json",
+                      "v07-p04-signed-pdf"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "capability_id",
+              "trust_policy_id",
+              "artifact_contract_id"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "forbidden_capability_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "v07-p04-prepare",
+              "v07-p04-verify",
+              "v07-p04-deliver",
+              "v07-p04-archive",
+              "v07-p04-distractor-1",
+              "v07-p04-distractor-2",
+              "v07-p04-distractor-3",
+              "v07-p04-distractor-4"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "forbidden_agent_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "v07-p04-preparer",
+              "v07-p04-verifier",
+              "v07-p04-primary",
+              "v07-p04-backup"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "unresolved_terms": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 160
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "interpretation_status",
+        "goals",
+        "forbidden_capability_ids",
+        "forbidden_agent_ids",
+        "unresolved_terms"
+      ],
+      "additionalProperties": false
+    },
+    "interpretation": {
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p04-prepare",
+            "trust_policy_id": "v07-p04-ordinary",
+            "artifact_contract_id": "v07-p04-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": []
+      },
+      "issues": [],
+      "initial_content": "{\"interpretation_status\": \"resolved\", \"goals\": [{\"capability_id\": \"v07-p04-prepare\", \"trust_policy_id\": \"v07-p04-ordinary\", \"artifact_contract_id\": \"v07-p04-json\"}] , \"forbidden_capability_ids\": [], \"forbidden_agent_ids\": [] , \"unresolved_terms\": []}\n",
+      "repaired_content": "",
+      "repair_attempted": false,
+      "call_count": 1,
+      "latency_ms": 2162.4850000080187,
+      "prompt_tokens": 771,
+      "completion_tokens": 86,
+      "model_id": "qwen/qwen3-1.7b",
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "interpretation_status": {
+            "type": "string",
+            "enum": [
+              "resolved",
+              "ambiguous"
+            ]
+          },
+          "goals": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 8,
+            "items": {
+              "type": "object",
+              "properties": {
+                "capability_id": {
+                  "type": "string",
+                  "enum": [
+                    "v07-p04-prepare",
+                    "v07-p04-verify",
+                    "v07-p04-deliver",
+                    "v07-p04-archive",
+                    "v07-p04-distractor-1",
+                    "v07-p04-distractor-2",
+                    "v07-p04-distractor-3",
+                    "v07-p04-distractor-4"
+                  ]
+                },
+                "trust_policy_id": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "enum": [
+                        "v07-p04-ordinary",
+                        "v07-p04-elevated"
+                      ]
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "artifact_contract_id": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "enum": [
+                        "v07-p04-json",
+                        "v07-p04-signed-pdf"
+                      ]
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "capability_id",
+                "trust_policy_id",
+                "artifact_contract_id"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "forbidden_capability_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "v07-p04-prepare",
+                "v07-p04-verify",
+                "v07-p04-deliver",
+                "v07-p04-archive",
+                "v07-p04-distractor-1",
+                "v07-p04-distractor-2",
+                "v07-p04-distractor-3",
+                "v07-p04-distractor-4"
+              ]
+            },
+            "uniqueItems": true
+          },
+          "forbidden_agent_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "v07-p04-preparer",
+                "v07-p04-verifier",
+                "v07-p04-primary",
+                "v07-p04-backup"
+              ]
+            },
+            "uniqueItems": true
+          },
+          "unresolved_terms": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 160
+            },
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "interpretation_status",
+          "goals",
+          "forbidden_capability_ids",
+          "forbidden_agent_ids",
+          "unresolved_terms"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "admission": {
+      "request": {
+        "user_goal": "For this travel logistics job, gather the inputs, check the packet, and issue the brief with normal travel logistics assurance as travel logistics JSON output.",
+        "requirements": [
+          {
+            "name": "Assemble travel logistics source packet",
+            "requirement_id": "v07-p04-prepare",
+            "capability_id": "v07-p04-prepare",
+            "description": "Collect the source material needed for travel logistics.",
+            "input_schema": {
+              "type": "object"
+            },
+            "output_schema": {
+              "type": "object"
+            },
+            "input_modes": [
+              "text"
+            ],
+            "output_modes": [
+              "json"
+            ],
+            "depends_on_requirement_ids": [],
+            "constraints": [],
+            "auxiliary_eligible": false,
+            "required_trust_level": "standard",
+            "side_effect_class": "read_only",
+            "expected_evidence": [],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              },
+              "required_artifacts": [
+                "v07-p04-result"
+              ],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "constraints": [],
+        "required_artifacts": [
+          "v07-p04-result"
+        ],
+        "context": {
+          "semantic_intent": {
+            "interpretation_status": "resolved",
+            "goals": [
+              {
+                "capability_id": "v07-p04-prepare",
+                "trust_policy_id": "v07-p04-ordinary",
+                "artifact_contract_id": "v07-p04-json"
+              }
+            ],
+            "forbidden_capability_ids": [],
+            "forbidden_agent_ids": [],
+            "unresolved_terms": []
+          },
+          "semantic_catalog_grounded": true
+        }
+      },
+      "canonical_intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p04-prepare",
+            "trust_policy_id": "v07-p04-ordinary",
+            "artifact_contract_id": "v07-p04-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": []
+      },
+      "issues": []
+    },
+    "compilation": {
+      "proposal": {
+        "tasks": [
+          {
+            "task_id": "t1",
+            "requirement_name": "Assemble travel logistics source packet",
+            "requirement_id": "v07-p04-prepare",
+            "capability_id": "v07-p04-prepare",
+            "description": "",
+            "assigned_to": "v07-p04-preparer",
+            "auxiliary_spec_id": null,
+            "depends_on": [],
+            "expected_artifacts": [
+              "v07-p04-result"
+            ],
+            "validation_contract": {
+              "json_schema": {
+                "type": "object"
+              },
+              "required_artifacts": [
+                "v07-p04-result"
+              ],
+              "artifact_kinds": [],
+              "required_fields": [],
+              "evidence_types": [],
+              "validator_id": ""
+            }
+          }
+        ],
+        "selected_agents": {
+          "t1": "v07-p04-preparer"
+        },
+        "generated_nlp_agents": [],
+        "execution_order": [
+          "t1"
+        ],
+        "expected_artifacts": [
+          "v07-p04-result"
+        ],
+        "completion_criteria": [
+          "artifact:v07-p04-result"
+        ],
+        "completion_contract": {
+          "required_task_states": [
+            "completed"
+          ],
+          "required_artifacts": [
+            "v07-p04-result"
+          ],
+          "require_all_task_validators": true
+        },
+        "constraint_evidence": {}
+      },
+      "report": {
+        "feasible": false,
+        "matched_agents": {
+          "t1": "v07-p04-preparer"
+        },
+        "generated_nlp_agents": [],
+        "missing_capabilities": [],
+        "risks": [
+          "Agent v07-p04-preparer does not cover every required mode for Assemble travel logistics source packet."
+        ],
+        "explanation": "Plan rejected by deterministic feasibility checks.",
+        "evidence": [
+          {
+            "name": "well_formed",
+            "passed": true,
+            "details": {}
+          },
+          {
+            "name": "covered",
+            "passed": true,
+            "details": {}
+          },
+          {
+            "name": "total_assignment",
+            "passed": true,
+            "details": {}
+          },
+          {
+            "name": "authorized",
+            "passed": true,
+            "details": {}
+          },
+          {
+            "name": "compatible",
+            "passed": false,
+            "details": {}
+          },
+          {
+            "name": "acyclic",
+            "passed": true,
+            "details": {}
+          },
+          {
+            "name": "ordered",
+            "passed": true,
+            "details": {}
+          },
+          {
+            "name": "requirements_complete",
+            "passed": true,
+            "details": {}
+          },
+          {
+            "name": "complete",
+            "passed": true,
+            "details": {}
+          },
+          {
+            "name": "verifiable",
+            "passed": true,
+            "details": {}
+          },
+          {
+            "name": "constraints_satisfied",
+            "passed": true,
+            "details": {
+              "violations": []
+            }
+          }
+        ],
+        "constraint_violations": [],
+        "validation_gaps": [],
+        "schema_violations": [],
+        "capability_resolution": [
+          {
+            "task_id": "t1",
+            "requirement_id": "v07-p04-prepare",
+            "requested_capability_id": "v07-p04-prepare",
+            "agent_id": "v07-p04-preparer",
+            "resolved": true,
+            "resolved_capability_id": "v07-p04-prepare"
+          }
+        ]
+      },
+      "diagnostics": {
+        "provider_candidates": {
+          "v07-p04-prepare": [
+            "v07-p04-preparer"
+          ]
+        },
+        "assignments_total": 1,
+        "assignments_considered": 1,
+        "recovered_alternative_provider": false,
+        "search_exhausted": false,
+        "issues": []
+      }
+    },
+    "accepted": false,
+    "call_count": 1,
+    "prompt_tokens": 771,
+    "completion_tokens": 86
+  }
+}

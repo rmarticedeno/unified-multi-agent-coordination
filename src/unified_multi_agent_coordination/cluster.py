@@ -19,6 +19,7 @@ from .etcd_client import (
     EtcdError,
     compare_mod_revision,
     compare_version,
+    request_delete,
     request_put,
 )
 
@@ -840,10 +841,17 @@ class MembershipManager:
         )
 
     async def _membership_operation(self) -> MembershipOperation | None:
+        operation, _ = await self._membership_operation_snapshot()
+        return operation
+
+    async def _membership_operation_snapshot(
+        self,
+    ) -> tuple[MembershipOperation | None, int]:
         result = await self.client.range(self._key("membership/operation"))
         if not result.values:
-            return None
-        return MembershipOperation.model_validate_json(result.values[0].value)
+            return None, 0
+        value = result.values[0]
+        return MembershipOperation.model_validate_json(value.value), value.mod_revision
 
     async def _begin_membership_operation(
         self, operation: MembershipOperation
@@ -857,35 +865,72 @@ class MembershipManager:
             current = await self._membership_operation()
             if current is None:
                 raise EtcdError("Membership operation serialization did not converge.")
-            return current
+            raise EtcdError(
+                "Another membership operation is already pending: "
+                f"{current.operation_id} ({current.action} {current.node_id})."
+            )
         revision = int((created.get("header") or {}).get("revision") or 0)
+        if not revision:
+            _, revision = await self._membership_operation_snapshot()
         started = operation.model_copy(
             update={"started_revision": revision, "latest_revision": revision}
         )
-        await self.client.put(key, started.model_dump_json().encode())
-        return started
+        return await self._replace_membership_operation(
+            started,
+            expected_revision=revision,
+        )
 
     async def _advance_membership_operation(
         self,
         operation: MembershipOperation,
         phase: Literal["intent_recorded", "backend_applied", "assignment_applied"],
     ) -> MembershipOperation:
+        current, revision = await self._membership_operation_snapshot()
+        if current is None or current.operation_id != operation.operation_id:
+            raise EtcdError("Membership operation changed before its phase could advance.")
         changed = operation.model_copy(update={"phase": phase})
-        revision = await self.client.put(
-            self._key("membership/operation"), changed.model_dump_json().encode()
+        return await self._replace_membership_operation(
+            changed,
+            expected_revision=revision,
         )
-        changed = changed.model_copy(update={"latest_revision": revision})
-        await self.client.put(self._key("membership/operation"), changed.model_dump_json().encode())
-        return changed
 
     async def _complete_membership_operation(self, operation: MembershipOperation) -> None:
+        current, revision = await self._membership_operation_snapshot()
+        if current is None or current.operation_id != operation.operation_id:
+            raise EtcdError("Membership operation changed before completion.")
         completed = operation.model_copy(
             update={"phase": "assignment_applied", "status": "completed"}
         )
         key = self._key("membership/operation")
-        await self.client.put(key, completed.model_dump_json().encode())
+        await self._replace_membership_operation(
+            completed,
+            expected_revision=revision,
+        )
         await self._record_history(f"membership_{operation.action}_completed", self.current_node)
-        await self.client.delete(key)
+        _, completed_revision = await self._membership_operation_snapshot()
+        deleted = await self.client.transaction(
+            compare=[compare_mod_revision(key, "EQUAL", completed_revision)],
+            success=[request_delete(key)],
+        )
+        if not deleted.get("succeeded"):
+            raise EtcdError("Membership operation changed before its completion marker cleared.")
+
+    async def _replace_membership_operation(
+        self,
+        operation: MembershipOperation,
+        *,
+        expected_revision: int,
+    ) -> MembershipOperation:
+        key = self._key("membership/operation")
+        changed = operation.model_copy(update={"latest_revision": expected_revision})
+        result = await self.client.transaction(
+            compare=[compare_mod_revision(key, "EQUAL", expected_revision)],
+            success=[request_put(key, changed.model_dump_json().encode())],
+        )
+        if not result.get("succeeded"):
+            raise EtcdError("Membership operation compare-and-swap was rejected.")
+        revision = int((result.get("header") or {}).get("revision") or 0)
+        return changed.model_copy(update={"latest_revision": revision or expected_revision})
 
     async def _recover_membership_operation(self, members: list[JsonObject]) -> bool:
         operation = await self._membership_operation()

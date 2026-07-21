@@ -22,6 +22,18 @@ def _digest(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def test_missing_primary_evidence_sections_fail_closed_without_file_reads(tmp_path):
+    assert _validate_v05(tmp_path, {}) == {
+        "present": False,
+        "evidence_valid": False,
+        "outcome": "not_collected",
+    }
+    assert _validate_consensus(tmp_path, {}) == {
+        "present": False,
+        "accepted": False,
+    }
+
+
 def test_v05_preflight_accepts_complete_clean_matrix_independent_of_outcome(tmp_path):
     run = tmp_path / "run"
     (run / "outputs").mkdir(parents=True)
@@ -158,7 +170,13 @@ def test_consensus_preflight_accepts_valid_failed_outcome_and_rejects_wrong_imag
         _validate_consensus(tmp_path, manifest)
 
 
-def test_consensus_preflight_validates_v3_condition_summaries(tmp_path):
+@pytest.mark.parametrize(
+    "schema_version",
+    ("consensus-campaign-v3", "consensus-campaign-v4"),
+)
+def test_consensus_preflight_validates_v3_and_v4_condition_summaries(
+    tmp_path, schema_version
+):
     results = []
     conditions = {}
     supplementary_name = "leader-partition-quorum-concurrency"
@@ -198,7 +216,7 @@ def test_consensus_preflight_validates_v3_condition_summaries(tmp_path):
             summary["checks_executed"] += len(checks)
     campaign_path = tmp_path / "campaign-v3.json"
     campaign = {
-        "schema_version": "consensus-campaign-v3",
+        "schema_version": schema_version,
         "provenance": {
             "dirty_state": False,
             "image": {"image_id": "sha256:image"},

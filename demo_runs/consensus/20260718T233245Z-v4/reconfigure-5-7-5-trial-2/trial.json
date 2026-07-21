@@ -1,0 +1,28 @@
+{
+  "checks": {},
+  "duration_s": 130.96096729999408,
+  "error": "RuntimeError: Cluster condition did not converge in 120s: {'coordination-a': {'http_status': 200, 'cluster_id': 'thesis-coordination', 'node_id': 'coordination-a', 'member_id': 18292091069950412911, 'role': 'voter', 'state': 'ready', 'steady_state': True, 'configuration_generation': 0, 'configured_voter_target': 5, 'authoritative_voters': 5, 'active_voters': 5, 'live_voters': 5, 'learners': 0, 'coordinator_nodes': 6, 'coordinator_only_nodes': 1, 'quorum': 3, 'quorum_available': True, 'leader': 18292091069950412911, 'revision': 1188, 'discovery_method': 'none', 'pending_membership_changes': 0, 'pending_membership_operation': None, 'role_agreement': {'coordination-a': True, 'coordination-b': True, 'coordination-c': True, 'coordination-e': True, 'coordination-f': True, 'coordination-g': True}, 'degraded': False, 'degraded_reason': ''}, 'coordination-b': {'http_status': 200, 'cluster_id': 'thesis-coordination', 'node_id': 'coordination-b', 'member_id': 948940847006371834, 'role': 'voter', 'state': 'ready', 'steady_state': True, 'configuration_generation': 0, 'configured_voter_target': 5, 'authoritative_voters': 5, 'active_voters': 5, 'live_voters': 5, 'learners': 0, 'coordinator_nodes': 6, 'coordinator_only_nodes': 1, 'quorum': 3, 'quorum_available': True, 'leader': 18292091069950412911, 'revision': 1188, 'discovery_method': 'multicast', 'pending_membership_changes': 0, 'pending_membership_operation': None, 'role_agreement': {'coordination-a': True, 'coordination-b': True, 'coordination-c': True, 'coordination-e': True, 'coordination-f': True, 'coordination-g': True}, 'degraded': False, 'degraded_reason': ''}, 'coordination-c': {'http_status': 200, 'cluster_id': 'thesis-coordination', 'node_id': 'coordination-c', 'member_id': 10415446493699377635, 'role': 'voter', 'state': 'ready', 'steady_state': True, 'configuration_generation': 0, 'configured_voter_target': 5, 'authoritative_voters': 5, 'active_voters': 5, 'live_voters': 5, 'learners': 0, 'coordinator_nodes': 6, 'coordinator_only_nodes': 1, 'quorum': 3, 'quorum_available': True, 'leader': 18292091069950412911, 'revision': 1188, 'discovery_method': 'multicast', 'pending_membership_changes': 0, 'pending_membership_operation': None, 'role_agreement': {'coordination-a': True, 'coordination-b': True, 'coordination-c': True, 'coordination-e': True, 'coordination-f': True, 'coordination-g': True}, 'degraded': False, 'degraded_reason': ''}, 'coordination-d': {'http_status': 0, 'error': 'All connection attempts failed'}, 'coordination-e': {'http_status': 200, 'cluster_id': 'thesis-coordination', 'node_id': 'coordination-e', 'member_id': 8711484536596178192, 'role': 'voter', 'state': 'ready', 'steady_state': True, 'configuration_generation': 0, 'configured_voter_target': 5, 'authoritative_voters': 5, 'active_voters': 5, 'live_voters': 5, 'learners': 0, 'coordinator_nodes': 6, 'coordinator_only_nodes': 1, 'quorum': 3, 'quorum_available': True, 'leader': 18292091069950412911, 'revision': 1188, 'discovery_method': 'multicast', 'pending_membership_changes': 0, 'pending_membership_operation': None, 'role_agreement': {'coordination-a': True, 'coordination-b': True, 'coordination-c': True, 'coordination-e': True, 'coordination-f': True, 'coordination-g': True}, 'degraded': False, 'degraded_reason': ''}, 'coordination-f': {'http_status': 200, 'cluster_id': 'thesis-coordination', 'node_id': 'coordination-f', 'member_id': 5358559055909782063, 'role': 'voter', 'state': 'ready', 'steady_state': True, 'configuration_generation': 0, 'configured_voter_target': 5, 'authoritative_voters': 5, 'active_voters': 5, 'live_voters': 5, 'learners': 0, 'coordinator_nodes': 6, 'coordinator_only_nodes': 1, 'quorum': 3, 'quorum_available': True, 'leader': 18292091069950412911, 'revision': 1188, 'discovery_method': 'multicast', 'pending_membership_changes': 0, 'pending_membership_operation': None, 'role_agreement': {'coordination-a': True, 'coordination-b': True, 'coordination-c': True, 'coordination-e': True, 'coordination-f': True, 'coordination-g': True}, 'degraded': False, 'degraded_reason': ''}, 'coordination-g': {'http_status': 200, 'cluster_id': 'thesis-coordination', 'node_id': 'coordination-g', 'member_id': 0, 'role': 'client', 'state': 'ready', 'steady_state': True, 'configuration_generation': 0, 'configured_voter_target': 5, 'authoritative_voters': 5, 'active_voters': 5, 'live_voters': 5, 'learners': 0, 'coordinator_nodes': 6, 'coordinator_only_nodes': 1, 'quorum': 3, 'quorum_available': True, 'leader': 18292091069950412911, 'revision': 1188, 'discovery_method': 'multicast', 'pending_membership_changes': 0, 'pending_membership_operation': None, 'role_agreement': {'coordination-a': True, 'coordination-b': True, 'coordination-c': True, 'coordination-e': True, 'coordination-f': True, 'coordination-g': True}, 'degraded': False, 'degraded_reason': ''}}",
+  "executed_checks": [],
+  "expected_checks": [
+    "expand_accepted",
+    "expanded_steady",
+    "shrink_accepted",
+    "shrunk_steady",
+    "zero_pending_changes"
+  ],
+  "observations": {},
+  "passed": false,
+  "primary": true,
+  "scenario": "reconfigure-5-7-5",
+  "status": "infrastructure_error",
+  "topology": 7,
+  "trial": 2,
+  "unexecuted_checks": [
+    "expand_accepted",
+    "expanded_steady",
+    "shrink_accepted",
+    "shrunk_steady",
+    "zero_pending_changes"
+  ],
+  "violated_checks": []
+}

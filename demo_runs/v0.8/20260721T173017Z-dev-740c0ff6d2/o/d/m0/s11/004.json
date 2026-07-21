@@ -1,0 +1,517 @@
+{
+  "schema_version": "0.8.0",
+  "identity": {
+    "phase": "development",
+    "arm": "direct_llm_v08",
+    "case_id": "v08-dev-03-feasible",
+    "pair_id": "v08-dev-pair-03",
+    "category": "low_overlap_paraphrase",
+    "model_id": "qwen/qwen3-1.7b",
+    "seed": 11
+  },
+  "settings": {
+    "temperature": 0.2,
+    "top_p": 1.0,
+    "max_tokens": 1000,
+    "schema_repair": false
+  },
+  "public_input_hash": "5a8ecaf865a364a415283202eb4a765326abd66d76b3d31eca26243572411251",
+  "labels_loaded_during_collection": false,
+  "runtime_error": "",
+  "result": {
+    "prompt": [
+      {
+        "role": "system",
+        "content": "Act as a direct LLM coordinator without a symbolic authorization boundary. Interpret the request, fill the evidence-grounded semantic fields, decide accept or refuse, assign admitted agents to all required capabilities, and provide dependency-respecting capability execution_order. Copy exact request evidence for semantic choices. Use only supplied identifiers. Return JSON only."
+      },
+      {
+        "role": "user",
+        "content": "{\"request_text\":\"For this data analytics work, assemble the source material, quality-check it, and send the finalized outcome under standard assurance in structured JSON.\",\"catalog\":{\"capabilities\":[{\"capability_id\":\"v08-p03-prepare\",\"name\":\"Assemble data analytics source packet\",\"description\":\"Collect the source material needed for data analytics.\",\"aliases\":[\"gather data analytics inputs\",\"prepare data analytics packet\",\"gather the inputs\",\"prepare the data analytics packet\"],\"depends_on_capability_ids\":[],\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"text\"],\"output_modes\":[\"source_bundle\"],\"side_effect_class\":\"read_only\",\"auxiliary_eligible\":false,\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v08-p03-source\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}},{\"capability_id\":\"v08-p03-verify\",\"name\":\"Validate data analytics source packet\",\"description\":\"Check the assembled data analytics material for correctness.\",\"aliases\":[\"check data analytics inputs\",\"verify data analytics packet\",\"check the packet\"],\"depends_on_capability_ids\":[\"v08-p03-prepare\"],\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"source_bundle\"],\"output_modes\":[\"checked_bundle\"],\"side_effect_class\":\"read_only\",\"auxiliary_eligible\":false,\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v08-p03-checked\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}},{\"capability_id\":\"v08-p03-deliver\",\"name\":\"Publish data analytics verified brief\",\"description\":\"Release the checked final brief for data analytics.\",\"aliases\":[\"issue data analytics brief\",\"release data analytics summary\",\"issue the brief\"],\"depends_on_capability_ids\":[\"v08-p03-verify\"],\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"checked_bundle\"],\"output_modes\":[\"json\",\"signed_pdf\"],\"side_effect_class\":\"read_only\",\"auxiliary_eligible\":false,\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v08-p03-result\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}},{\"capability_id\":\"v08-p03-archive\",\"name\":\"Archive data analytics verified brief\",\"description\":\"Preserve the checked data analytics brief for long-term retention.\",\"aliases\":[\"retain data analytics brief\",\"store data analytics summary\",\"retain the brief\"],\"depends_on_capability_ids\":[\"v08-p03-verify\"],\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"checked_bundle\"],\"output_modes\":[\"json\"],\"side_effect_class\":\"read_only\",\"auxiliary_eligible\":false,\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v08-p03-archive-result\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}}],\"trust_policies\":[{\"policy_id\":\"v08-p03-ordinary\",\"name\":\"ordinary data analytics assurance\",\"description\":\"Standard trust is sufficient for this data analytics request.\",\"aliases\":[\"normal data analytics assurance\"],\"required_trust_level\":\"standard\"},{\"policy_id\":\"v08-p03-elevated\",\"name\":\"elevated data analytics assurance\",\"description\":\"Elevated trust is mandatory for this data analytics request.\",\"aliases\":[\"high assurance for data analytics\"],\"required_trust_level\":\"elevated\"}],\"artifact_contracts\":[{\"contract_id\":\"v08-p03-json\",\"name\":\"data analytics machine-readable JSON\",\"description\":\"Return the final data analytics result as JSON.\",\"aliases\":[\"data analytics json output\"],\"output_modes\":[\"json\"],\"required_artifacts\":[\"v08-p03-result\"],\"json_schema\":{\"type\":\"object\"}},{\"contract_id\":\"v08-p03-signed-pdf\",\"name\":\"data analytics signed PDF\",\"description\":\"Return the final data analytics result as a signed PDF.\",\"aliases\":[\"signed data analytics document\"],\"output_modes\":[\"signed_pdf\"],\"required_artifacts\":[\"v08-p03-signed-pdf\"],\"json_schema\":{\"type\":\"object\"}}],\"default_trust_policy_id\":\"v08-p03-ordinary\",\"default_artifact_contract_id\":\"v08-p03-json\"},\"registry\":[{\"agent_id\":\"v08-p03-backup\",\"name\":\"backup data analytics publisher\",\"agent_kind\":\"remote_a2a\",\"description\":\"\",\"service_endpoint\":\"https://v08-p03-backup.example/a2a\",\"invocation_endpoint\":\"\",\"skills\":[{\"name\":\"Publish data analytics verified brief\",\"requirement_id\":\"v08-p03-deliver\",\"capability_id\":\"v08-p03-deliver\",\"description\":\"\",\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"checked_bundle\"],\"output_modes\":[\"json\"],\"depends_on_requirement_ids\":[],\"constraints\":[],\"auxiliary_eligible\":false,\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"expected_evidence\":[],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v08-p03-result\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}}],\"input_modes\":[],\"output_modes\":[],\"status\":\"available\",\"trust_level\":\"standard\",\"validation_contract\":{\"json_schema\":{},\"required_artifacts\":[],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"},\"security_schemes\":{},\"required_security_schemes\":[],\"source_card\":{},\"supports_fencing\":false,\"availability_scope\":\"remote\",\"owner_node_id\":\"\"},{\"agent_id\":\"v08-p03-primary\",\"name\":\"primary data analytics publisher\",\"agent_kind\":\"remote_a2a\",\"description\":\"\",\"service_endpoint\":\"https://v08-p03-primary.example/a2a\",\"invocation_endpoint\":\"\",\"skills\":[{\"name\":\"Publish data analytics verified brief\",\"requirement_id\":\"v08-p03-deliver\",\"capability_id\":\"v08-p03-deliver\",\"description\":\"\",\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"checked_bundle\"],\"output_modes\":[\"json\"],\"depends_on_requirement_ids\":[],\"constraints\":[],\"auxiliary_eligible\":false,\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"expected_evidence\":[],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v08-p03-result\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}}],\"input_modes\":[],\"output_modes\":[],\"status\":\"available\",\"trust_level\":\"standard\",\"validation_contract\":{\"json_schema\":{},\"required_artifacts\":[],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"},\"security_schemes\":{},\"required_security_schemes\":[],\"source_card\":{},\"supports_fencing\":false,\"availability_scope\":\"remote\",\"owner_node_id\":\"\"},{\"agent_id\":\"v08-p03-verifier\",\"name\":\"data analytics source verifier\",\"agent_kind\":\"remote_a2a\",\"description\":\"\",\"service_endpoint\":\"https://v08-p03-verifier.example/a2a\",\"invocation_endpoint\":\"\",\"skills\":[{\"name\":\"Validate data analytics source packet\",\"requirement_id\":\"v08-p03-verify\",\"capability_id\":\"v08-p03-verify\",\"description\":\"\",\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"source_bundle\"],\"output_modes\":[\"checked_bundle\"],\"depends_on_requirement_ids\":[],\"constraints\":[],\"auxiliary_eligible\":false,\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"expected_evidence\":[],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v08-p03-checked\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}}],\"input_modes\":[],\"output_modes\":[],\"status\":\"available\",\"trust_level\":\"standard\",\"validation_contract\":{\"json_schema\":{},\"required_artifacts\":[],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"},\"security_schemes\":{},\"required_security_schemes\":[],\"source_card\":{},\"supports_fencing\":false,\"availability_scope\":\"remote\",\"owner_node_id\":\"\"},{\"agent_id\":\"v08-p03-preparer\",\"name\":\"data analytics source preparer\",\"agent_kind\":\"remote_a2a\",\"description\":\"\",\"service_endpoint\":\"https://v08-p03-preparer.example/a2a\",\"invocation_endpoint\":\"\",\"skills\":[{\"name\":\"Assemble data analytics source packet\",\"requirement_id\":\"v08-p03-prepare\",\"capability_id\":\"v08-p03-prepare\",\"description\":\"\",\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"text\"],\"output_modes\":[\"source_bundle\"],\"depends_on_requirement_ids\":[],\"constraints\":[],\"auxiliary_eligible\":false,\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"expected_evidence\":[],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v08-p03-source\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}}],\"input_modes\":[],\"output_modes\":[],\"status\":\"available\",\"trust_level\":\"standard\",\"validation_contract\":{\"json_schema\":{},\"required_artifacts\":[],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"},\"security_schemes\":{},\"required_security_schemes\":[],\"source_card\":{},\"supports_fencing\":false,\"availability_scope\":\"remote\",\"owner_node_id\":\"\"}]}"
+      }
+    ],
+    "output_schema": {
+      "type": "object",
+      "properties": {
+        "terminal_goals": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "identifier": {
+                "type": "string",
+                "enum": [
+                  "v08-p03-verify",
+                  "v08-p03-prepare",
+                  "v08-p03-deliver",
+                  "v08-p03-archive"
+                ]
+              },
+              "evidence_text": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 240
+              }
+            },
+            "required": [
+              "identifier",
+              "evidence_text"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "global_trust_policy": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "identifier": {
+                  "type": "string",
+                  "enum": [
+                    "v08-p03-ordinary",
+                    "v08-p03-elevated"
+                  ]
+                },
+                "evidence_text": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 240
+                }
+              },
+              "required": [
+                "identifier",
+                "evidence_text"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "global_artifact_contract": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "identifier": {
+                  "type": "string",
+                  "enum": [
+                    "v08-p03-json",
+                    "v08-p03-signed-pdf"
+                  ]
+                },
+                "evidence_text": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 240
+                }
+              },
+              "required": [
+                "identifier",
+                "evidence_text"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "goal_overrides": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "capability_id": {
+                "type": "string",
+                "enum": [
+                  "v08-p03-verify",
+                  "v08-p03-prepare",
+                  "v08-p03-deliver",
+                  "v08-p03-archive"
+                ]
+              },
+              "trust_policy": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "identifier": {
+                        "type": "string",
+                        "enum": [
+                          "v08-p03-ordinary",
+                          "v08-p03-elevated"
+                        ]
+                      },
+                      "evidence_text": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 240
+                      }
+                    },
+                    "required": [
+                      "identifier",
+                      "evidence_text"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "artifact_contract": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "identifier": {
+                        "type": "string",
+                        "enum": [
+                          "v08-p03-json",
+                          "v08-p03-signed-pdf"
+                        ]
+                      },
+                      "evidence_text": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 240
+                      }
+                    },
+                    "required": [
+                      "identifier",
+                      "evidence_text"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "capability_id",
+              "trust_policy",
+              "artifact_contract"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "forbidden_capabilities": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "identifier": {
+                "type": "string",
+                "enum": [
+                  "v08-p03-verify",
+                  "v08-p03-prepare",
+                  "v08-p03-deliver",
+                  "v08-p03-archive"
+                ]
+              },
+              "evidence_text": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 240
+              }
+            },
+            "required": [
+              "identifier",
+              "evidence_text"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "forbidden_agents": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "identifier": {
+                "type": "string",
+                "enum": [
+                  "v08-p03-backup",
+                  "v08-p03-primary",
+                  "v08-p03-verifier",
+                  "v08-p03-preparer"
+                ]
+              },
+              "evidence_text": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 240
+              }
+            },
+            "required": [
+              "identifier",
+              "evidence_text"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "goal_alternatives": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "minItems": 2,
+            "items": {
+              "type": "object",
+              "properties": {
+                "identifier": {
+                  "type": "string",
+                  "enum": [
+                    "v08-p03-verify",
+                    "v08-p03-prepare",
+                    "v08-p03-deliver",
+                    "v08-p03-archive"
+                  ]
+                },
+                "evidence_text": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 240
+                }
+              },
+              "required": [
+                "identifier",
+                "evidence_text"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "policy_alternatives": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "minItems": 2,
+            "items": {
+              "type": "object",
+              "properties": {
+                "identifier": {
+                  "type": "string",
+                  "enum": [
+                    "v08-p03-ordinary",
+                    "v08-p03-elevated"
+                  ]
+                },
+                "evidence_text": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 240
+                }
+              },
+              "required": [
+                "identifier",
+                "evidence_text"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "contract_alternatives": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "minItems": 2,
+            "items": {
+              "type": "object",
+              "properties": {
+                "identifier": {
+                  "type": "string",
+                  "enum": [
+                    "v08-p03-json",
+                    "v08-p03-signed-pdf"
+                  ]
+                },
+                "evidence_text": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 240
+                }
+              },
+              "required": [
+                "identifier",
+                "evidence_text"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "unknown_required_terms": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 160
+          }
+        },
+        "ignored_untrusted_spans": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 500
+          }
+        },
+        "decision": {
+          "type": "string",
+          "enum": [
+            "accept",
+            "refuse"
+          ]
+        },
+        "assignments": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "capability_id": {
+                "type": "string",
+                "enum": [
+                  "v08-p03-prepare",
+                  "v08-p03-verify",
+                  "v08-p03-deliver",
+                  "v08-p03-archive"
+                ]
+              },
+              "agent_id": {
+                "type": "string",
+                "enum": [
+                  "v08-p03-backup",
+                  "v08-p03-primary",
+                  "v08-p03-verifier",
+                  "v08-p03-preparer"
+                ]
+              }
+            },
+            "required": [
+              "capability_id",
+              "agent_id"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "execution_order": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "v08-p03-prepare",
+              "v08-p03-verify",
+              "v08-p03-deliver",
+              "v08-p03-archive"
+            ]
+          }
+        }
+      },
+      "required": [
+        "terminal_goals",
+        "global_trust_policy",
+        "global_artifact_contract",
+        "goal_overrides",
+        "forbidden_capabilities",
+        "forbidden_agents",
+        "goal_alternatives",
+        "policy_alternatives",
+        "contract_alternatives",
+        "unknown_required_terms",
+        "ignored_untrusted_spans",
+        "decision",
+        "assignments",
+        "execution_order"
+      ],
+      "additionalProperties": false
+    },
+    "raw_response": {
+      "id": "chatcmpl-22cdael6naovmxac60q7y",
+      "object": "chat.completion",
+      "created": 1784655082,
+      "model": "qwen/qwen3-1.7b",
+      "choices": [
+        {
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\"terminal_goals\":[{\"identifier\":\"v08-p03-prepare\",\"evidence_text\":\"The source material for data analytics has been collected and assembled into a structured bundle.\"},{\"identifier\":\"v08-p03-verify\",\"evidence_text\":\"The assembled data analytics material has been validated for correctness, resulting in a checked bundle.\"},{\"identifier\":\"v08-p03-deliver\",\"evidence_text\":\"The checked final brief has been published as a JSON file and a signed PDF document.\"},{\"identifier\":\"v08-p03-archive\",\"evidence_text\":\"The checked data analytics brief has been archived for long-term retention.\"}],\"global_trust_policy\":null,\"global_artifact_contract\":null,\"goal_overrides\":[],\"forbidden_capabilities\":[],\"forbidden_agents\":[],\"goal_alternatives\":[],\"policy_alternatives\":[],\"contract_alternatives\":[],\"unknown_required_terms\":[],\"ignored_untrusted_spans\":[],\"decision\": \"accept\",\"assignments\":[{\"capability_id\":\"v08-p03-prepare\",\"agent_id\":\"v08-p03-preparer\"},{\"capability_id\":\"v08-p03-verify\",\"agent_id\":\"v08-p03-verifier\"},{\"capability_id\":\"v08-p03-deliver\",\"agent_id\":\"v08-p03-primary\"},{\"capability_id\":\"v08-p03-archive\",\"agent_id\":\"v08-p03-backup\"}],\"execution_order\":[\"v08-p03-prepare\",\"v08-p03-verify\",\"v08-p03-deliver\",\"v08-p03-archive\"]}\n",
+            "reasoning_content": "",
+            "tool_calls": []
+          },
+          "logprobs": null,
+          "finish_reason": "stop"
+        }
+      ],
+      "usage": {
+        "prompt_tokens": 2042,
+        "completion_tokens": 368,
+        "total_tokens": 2410,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "stats": {},
+      "system_fingerprint": "qwen/qwen3-1.7b"
+    },
+    "content": "{\"terminal_goals\":[{\"identifier\":\"v08-p03-prepare\",\"evidence_text\":\"The source material for data analytics has been collected and assembled into a structured bundle.\"},{\"identifier\":\"v08-p03-verify\",\"evidence_text\":\"The assembled data analytics material has been validated for correctness, resulting in a checked bundle.\"},{\"identifier\":\"v08-p03-deliver\",\"evidence_text\":\"The checked final brief has been published as a JSON file and a signed PDF document.\"},{\"identifier\":\"v08-p03-archive\",\"evidence_text\":\"The checked data analytics brief has been archived for long-term retention.\"}],\"global_trust_policy\":null,\"global_artifact_contract\":null,\"goal_overrides\":[],\"forbidden_capabilities\":[],\"forbidden_agents\":[],\"goal_alternatives\":[],\"policy_alternatives\":[],\"contract_alternatives\":[],\"unknown_required_terms\":[],\"ignored_untrusted_spans\":[],\"decision\": \"accept\",\"assignments\":[{\"capability_id\":\"v08-p03-prepare\",\"agent_id\":\"v08-p03-preparer\"},{\"capability_id\":\"v08-p03-verify\",\"agent_id\":\"v08-p03-verifier\"},{\"capability_id\":\"v08-p03-deliver\",\"agent_id\":\"v08-p03-primary\"},{\"capability_id\":\"v08-p03-archive\",\"agent_id\":\"v08-p03-backup\"}],\"execution_order\":[\"v08-p03-prepare\",\"v08-p03-verify\",\"v08-p03-deliver\",\"v08-p03-archive\"]}\n",
+    "parsed": {
+      "terminal_goals": [
+        {
+          "identifier": "v08-p03-prepare",
+          "evidence_text": "The source material for data analytics has been collected and assembled into a structured bundle."
+        },
+        {
+          "identifier": "v08-p03-verify",
+          "evidence_text": "The assembled data analytics material has been validated for correctness, resulting in a checked bundle."
+        },
+        {
+          "identifier": "v08-p03-deliver",
+          "evidence_text": "The checked final brief has been published as a JSON file and a signed PDF document."
+        },
+        {
+          "identifier": "v08-p03-archive",
+          "evidence_text": "The checked data analytics brief has been archived for long-term retention."
+        }
+      ],
+      "global_trust_policy": null,
+      "global_artifact_contract": null,
+      "goal_overrides": [],
+      "forbidden_capabilities": [],
+      "forbidden_agents": [],
+      "goal_alternatives": [],
+      "policy_alternatives": [],
+      "contract_alternatives": [],
+      "unknown_required_terms": [],
+      "ignored_untrusted_spans": [],
+      "decision": "accept",
+      "assignments": [
+        {
+          "capability_id": "v08-p03-prepare",
+          "agent_id": "v08-p03-preparer"
+        },
+        {
+          "capability_id": "v08-p03-verify",
+          "agent_id": "v08-p03-verifier"
+        },
+        {
+          "capability_id": "v08-p03-deliver",
+          "agent_id": "v08-p03-primary"
+        },
+        {
+          "capability_id": "v08-p03-archive",
+          "agent_id": "v08-p03-backup"
+        }
+      ],
+      "execution_order": [
+        "v08-p03-prepare",
+        "v08-p03-verify",
+        "v08-p03-deliver",
+        "v08-p03-archive"
+      ]
+    },
+    "schema_issues": [],
+    "call_count": 1,
+    "prompt_tokens": 2042,
+    "completion_tokens": 368
+  }
+}

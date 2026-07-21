@@ -1,0 +1,8 @@
+{
+  "version": "0.6",
+  "status": "superseded_before_collection",
+  "replacement": "0.7",
+  "reason": "The v0.6 prompt, selection schema, and symbolic authorization routine were study-specific approximations rather than the production semantic-admission and symbolic-compilation path.",
+  "historical_files_immutable": true,
+  "confirmatory_outputs_collected": false
+}

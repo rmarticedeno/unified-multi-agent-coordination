@@ -1,0 +1,9 @@
+{
+  "version": "0.8.0",
+  "phase": "development",
+  "analysis": "demo_runs\\v0.8\\20260721T183053Z-dev-0b862d68dd\\analysis.json",
+  "analysis_sha256": "8b740be0d3baf012de1b1fb1684b0325cd42bfc9fd8abf471f11579a0bf55582",
+  "observation_count": 576,
+  "macros": "thesis\\generated\\v08_development_macros.tex",
+  "figure": "thesis\\generated\\v08-development-safety-utility.tex"
+}

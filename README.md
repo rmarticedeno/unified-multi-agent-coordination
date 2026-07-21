@@ -2,7 +2,7 @@
 
 Prototype implementation for the thesis _Unified Multi-Agent Coordination Bridging Large Language Models and Symbolic AI for Autonomous Systems_.
 
-The package separates linguistic proposal from symbolic authorization. `CoordinationAgent` owns planning, feasibility, authorization, and aggregation. `CoordinationSdk` owns registry discovery, remote A2A admission, local and linguistic runtime wrappers, dispatch, artifact normalization, and traces.
+The package separates linguistic semantic selection from symbolic authorization. Raw language is grounded against an authoritative `SemanticCatalog`; typed `ProblemRequest` inputs bypass the LLM. `SymbolicPlanCompiler` owns dependencies, plan construction, bounded provider search, and deterministic ranking. `CoordinationAgent` owns admission, feasibility, authorization, and aggregation. `CoordinationSdk` owns registry discovery, remote A2A admission, local and linguistic runtime wrappers, dispatch, artifact normalization, and traces.
 
 ## Local Development
 
@@ -96,9 +96,60 @@ Runtime-only dependency, auxiliary-admission, and trace-evidence controls are
 reported separately from planning comparisons. Unsafe controls are explicit
 experimental classes; production constructors retain secure defaults.
 
-## Version 0.5 Primary Comparison
+## Version 0.7 Production-Path Comparison
 
-The defense comparison is the frozen v0.5 dual-arm study. It contains 48
+The primary comparison is the frozen v0.7 production-path study. Qwen3-1.7B
+first receives 48 development-only cases across paraphrase, ambiguity,
+negation, trust, artifact contracts, dependencies, provider recovery, and
+adversarial wording. These runs may motivate corrections and are never used as
+confirmatory accuracy evidence. After the production hashes and protocol are
+locked, Qwen3-1.7B, Gemma-4-E2B, and Qwen3-8B run in that order on 64 held-out
+cases (32 feasible/infeasible pairs), two seeds, and two arms. The complete
+confirmatory matrix contains 768 immutable observations.
+
+```powershell
+uv run unified-generate-defense-corpus-v07 --output corpus/v0.7
+uv run unified-symbolic-benchmark-v07 --output demo_runs/v0.7/deterministic-benchmark.json
+uv run unified-defense-study-v07 --corpus corpus/v0.7 --freeze-protocol
+uv run unified-defense-study-v07 --corpus corpus/v0.7 --check
+uv run unified-defense-study-v07 --corpus corpus/v0.7 --phase confirmatory --model qwen/qwen3-1.7b
+uv run unified-defense-study-v07 --corpus corpus/v0.7 --phase confirmatory --model google/gemma-4-e2b --resume demo_runs/v0.7/<run-id>
+uv run unified-defense-study-v07 --corpus corpus/v0.7 --phase confirmatory --model qwen/qwen3-8b --resume demo_runs/v0.7/<run-id>
+uv run unified-analyze-defense-study-v07 --run demo_runs/v0.7/<run-id> --corpus corpus/v0.7 --phase confirmatory --benchmark demo_runs/v0.7/deterministic-benchmark.json
+```
+
+Confirmatory inference uses temperature 0.2, top-p 1, an 800-token limit, seed
+11 as primary, and seed 29 as a stability replication. Invalid schema is a
+failed observation without repair. Version 0.5 remains the experiment that
+motivated this redesign, and the unexecuted study-specific v0.6 protocol is
+preserved as superseded.
+
+## Version 0.8 Follow-up
+
+The versioned v0.8 path adds evidence-grounded semantic admission,
+deterministically derived ambiguity, Unicode-aware lexical retrieval, and
+constraint-directed provider search while preserving v0.7. Its development
+study uses 72 cases, two arms, seeds 11 and 29, and only Qwen3-1.7B and
+Gemma-4-E2B (576 observations). Confirmatory collection is intentionally
+blocked until the two output-blind human author-review worksheets under
+`corpus/v0.8/review/` are completed and reconciled.
+
+The completed primary-seed hybrid has 71.88% balanced accuracy, 44.79%
+feasible recall, and one unsafe acceptance, compared with 53.13%, 98.96%, and
+89 unsafe acceptances for the direct arm. Only safety superiority and the
+deterministic symbolic invariants pass; four of six declared gates fail. The
+exact-name/alias control solves all 64 designed cases, so the result does not
+establish that an LLM is necessary or generally superior.
+
+The associated consensus-v4 campaign completed all 45 trials. Forty-three
+passed, two reconfiguration trials ended in infrastructure timeouts, and no
+executed primary invariant failed (140/150 checks executed). Its provenance
+records the intentionally preserved dirty worktree, so it is descriptive
+complete evidence and is not promoted as accepted clean release evidence.
+
+## Version 0.5 Historical Comparison
+
+The historical defense comparison is the frozen v0.5 dual-arm study. It contains 48
 held-out cases (24 feasible/infeasible matched pairs), eight unscored
 development examples, and 12 separately scored runtime cases. The hybrid and
 direct-LLM arms receive identical public request, registry, payload, and schema
@@ -130,6 +181,38 @@ and six had infrastructure errors. The earlier complete failed campaign is also
 preserved. Current deterministic, Docker A2A, PostgreSQL, and upstream-derived
 A2A checks pass 7/7, 11/11, 5/5, and 1/1 respectively.
 
+## Versionless Hybrid Strategy Validation
+
+The production redesign is checked separately from the immutable versioned
+studies. The fixed eight-case raw-language subset uses the strict production
+semantic schema and shared compiler. Qwen3 1.7B runs all eight cases; after the
+implementation gate passes, Gemma E2B and Qwen3 8B run the same four sentinels.
+The final developmental run is
+`demo_runs/hybrid_strategy_validation/20260717T031509Z-3a9e1f9123`: all 16
+outputs were schema-valid without repair, all feasibility decisions were
+correct, and no false acceptance or refusal occurred. This tiny,
+author-designed result is not evidence of model or pipeline superiority.
+
+```powershell
+uv run unified-hybrid-strategy-validation collect --model qwen/qwen3-1.7b --case-set all
+uv run unified-hybrid-strategy-validation collect --model google/gemma-4-e2b --case-set sentinel --run <run>
+uv run unified-hybrid-strategy-validation collect --model qwen/qwen3-8b --case-set sentinel --run <run>
+uv run unified-hybrid-strategy-validation analyze --run <run>
+```
+
+The unchanged 48-case corpus behind the accepted 1.39% hybrid recall was also
+replayed through the new typed-request production path. Because every public
+case already contains an authoritative `ProblemRequest`, this path deliberately
+makes zero model calls. The label-hidden replay at
+`demo_runs/hybrid_strategy_validation/20260717T035308Z-typed-corpus-f3d214432a`
+was 48/48 correct with 100% feasible recall and zero false acceptances or
+refusals. It is a descriptive architecture comparison, not a new v0.x study.
+
+```powershell
+uv run unified-hybrid-strategy-validation replay-typed-corpus --corpus-root corpus/v0.5
+uv run unified-hybrid-strategy-validation analyze-typed-corpus --run <run>
+```
+
 ## Service
 
 Start the FastAPI service locally:
@@ -152,6 +235,10 @@ Useful environment variables:
 - `COORDINATION_LEASE_RENEW_INTERVAL_S`: in-flight dispatch renewal interval in seconds, default half the lease TTL.
 - `COORDINATION_REGISTRY_RETRIES`: registry refresh retries, default `2`.
 - `COORDINATION_TASK_RETRIES`: task dispatch retries, default `1`.
+- `COORDINATION_SEMANTIC_CATALOG_PATH`: optional default authoritative catalog for raw-language planning.
+- `COORDINATION_SEMANTIC_MODEL`: exact model identifier used by strict semantic admission.
+- `COORDINATION_SEMANTIC_ENDPOINT`: OpenAI-compatible semantic endpoint, default `http://127.0.0.1:1234/v1`.
+- `COORDINATION_SEMANTIC_SEED`: semantic-selection seed, default `11`.
 - `COORDINATION_ALLOW_INSECURE_A2A`: explicit development/test exception for HTTP Agent Cards; production admission requires HTTPS by default.
 - `COORDINATION_RETRY_BACKOFF_S`: retry backoff in seconds, default `0.05`.
 - `COORDINATION_SERVICE_HOST`: service bind host, default `0.0.0.0`.

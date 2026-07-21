@@ -11,6 +11,8 @@ THRESHOLDS = {
     "feasibility.py": 90.0,
     "trace_validation.py": 90.0,
     "plan_hydration.py": 90.0,
+    "semantic_admission.py": 90.0,
+    "symbolic_plan_compiler.py": 90.0,
     "cluster.py": 85.0,
     "coordinator_node.py": 85.0,
     "etcd_client.py": 85.0,
@@ -46,7 +48,9 @@ PRODUCTION_MODULES = {
     "models.py",
     "plan_hydration.py",
     "runtime_policies.py",
+    "semantic_admission.py",
     "service.py",
+    "symbolic_plan_compiler.py",
     "trace_validation.py",
 }
 

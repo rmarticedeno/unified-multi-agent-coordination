@@ -1,0 +1,203 @@
+{
+  "identity": {
+    "case_id": "v05-pair-23-infeasible"
+  },
+  "source_corpus_hash": "d3fe4e458554f174ae2040c5758e985116edd42443c8b5d6a49e501477935418",
+  "public_input_hash": "6068f419b4ca4563a5a1e2f2548c7d68c16f8f51a770e33a8f2795361e7c81d8",
+  "typed_request_llm_bypass": true,
+  "semantic_call_count": 0,
+  "compilation_latency_ms": 0.3583000006983639,
+  "compilation": {
+    "proposal": {
+      "tasks": [
+        {
+          "task_id": "t1",
+          "requirement_name": "Prepare iot inspection",
+          "requirement_id": "v05-pair-23-prepare",
+          "capability_id": "v05-pair-23-prepare",
+          "description": "",
+          "assigned_to": "v05-pair-23-preparer",
+          "auxiliary_spec_id": null,
+          "depends_on": [],
+          "expected_artifacts": [
+            "v05-pair-23-intermediate"
+          ],
+          "validation_contract": {
+            "json_schema": {
+              "type": "object"
+            },
+            "required_artifacts": [
+              "v05-pair-23-intermediate"
+            ],
+            "artifact_kinds": [],
+            "required_fields": [],
+            "evidence_types": [],
+            "validator_id": ""
+          }
+        },
+        {
+          "task_id": "t2",
+          "requirement_name": "Finalize iot inspection",
+          "requirement_id": "v05-pair-23-finalize",
+          "capability_id": "v05-pair-23-finalize",
+          "description": "",
+          "assigned_to": "v05-pair-23-finisher",
+          "auxiliary_spec_id": null,
+          "depends_on": [
+            "t1"
+          ],
+          "expected_artifacts": [
+            "v05-pair-23-result"
+          ],
+          "validation_contract": {
+            "json_schema": {
+              "type": "object"
+            },
+            "required_artifacts": [
+              "v05-pair-23-result"
+            ],
+            "artifact_kinds": [],
+            "required_fields": [],
+            "evidence_types": [],
+            "validator_id": ""
+          }
+        }
+      ],
+      "selected_agents": {
+        "t1": "v05-pair-23-preparer",
+        "t2": "v05-pair-23-finisher"
+      },
+      "generated_nlp_agents": [],
+      "execution_order": [
+        "t1",
+        "t2"
+      ],
+      "expected_artifacts": [
+        "v05-pair-23-result"
+      ],
+      "completion_criteria": [
+        "artifact:v05-pair-23-result"
+      ],
+      "completion_contract": {
+        "required_task_states": [
+          "completed"
+        ],
+        "required_artifacts": [
+          "v05-pair-23-result"
+        ],
+        "require_all_task_validators": true
+      },
+      "constraint_evidence": {}
+    },
+    "report": {
+      "feasible": false,
+      "matched_agents": {
+        "t1": "v05-pair-23-preparer",
+        "t2": "v05-pair-23-finisher"
+      },
+      "generated_nlp_agents": [],
+      "missing_capabilities": [],
+      "risks": [
+        "Agent v05-pair-23-finisher has trust standard, but high is required."
+      ],
+      "explanation": "Plan rejected by deterministic feasibility checks.",
+      "evidence": [
+        {
+          "name": "well_formed",
+          "passed": true,
+          "details": {}
+        },
+        {
+          "name": "covered",
+          "passed": true,
+          "details": {}
+        },
+        {
+          "name": "total_assignment",
+          "passed": true,
+          "details": {}
+        },
+        {
+          "name": "authorized",
+          "passed": false,
+          "details": {}
+        },
+        {
+          "name": "compatible",
+          "passed": true,
+          "details": {}
+        },
+        {
+          "name": "acyclic",
+          "passed": true,
+          "details": {}
+        },
+        {
+          "name": "ordered",
+          "passed": true,
+          "details": {}
+        },
+        {
+          "name": "requirements_complete",
+          "passed": true,
+          "details": {}
+        },
+        {
+          "name": "complete",
+          "passed": true,
+          "details": {}
+        },
+        {
+          "name": "verifiable",
+          "passed": true,
+          "details": {}
+        },
+        {
+          "name": "constraints_satisfied",
+          "passed": true,
+          "details": {
+            "violations": []
+          }
+        }
+      ],
+      "constraint_violations": [],
+      "validation_gaps": [],
+      "schema_violations": [],
+      "capability_resolution": [
+        {
+          "task_id": "t1",
+          "requirement_id": "v05-pair-23-prepare",
+          "requested_capability_id": "v05-pair-23-prepare",
+          "agent_id": "v05-pair-23-preparer",
+          "resolved": true,
+          "resolved_capability_id": "v05-pair-23-prepare"
+        },
+        {
+          "task_id": "t2",
+          "requirement_id": "v05-pair-23-finalize",
+          "requested_capability_id": "v05-pair-23-finalize",
+          "agent_id": "v05-pair-23-finisher",
+          "resolved": true,
+          "resolved_capability_id": "v05-pair-23-finalize"
+        }
+      ]
+    },
+    "diagnostics": {
+      "provider_candidates": {
+        "v05-pair-23-prepare": [
+          "v05-pair-23-preparer"
+        ],
+        "v05-pair-23-finalize": [
+          "v05-pair-23-finisher"
+        ]
+      },
+      "assignments_total": 1,
+      "assignments_considered": 1,
+      "recovered_alternative_provider": false,
+      "search_exhausted": false,
+      "issues": []
+    }
+  },
+  "accepted": false,
+  "expected_data_loaded_during_collection": false
+}

@@ -21,6 +21,48 @@ docker compose -f docker-compose.distributed.yml up --build \
 uv run unified-consensus-matrix \
   --output-dir demo_runs/consensus/<new-run-id> --trials 3 \
   --promotion-candidate
+uv run unified-generate-defense-corpus-v07 --output corpus/v0.7
+uv run unified-symbolic-benchmark-v07 \
+  --output demo_runs/v0.7/deterministic-benchmark.json
+uv run unified-defense-study-v07 --corpus corpus/v0.7 \
+  --freeze-protocol
+uv run unified-defense-study-v07 --corpus corpus/v0.7 --check
+uv run unified-defense-study-v07 --corpus corpus/v0.7 \
+  --phase confirmatory --model qwen/qwen3-1.7b
+uv run unified-defense-study-v07 --corpus corpus/v0.7 \
+  --phase confirmatory --model google/gemma-4-e2b \
+  --resume demo_runs/v0.7/<run-id>
+uv run unified-defense-study-v07 --corpus corpus/v0.7 \
+  --phase confirmatory --model qwen/qwen3-8b \
+  --resume demo_runs/v0.7/<run-id>
+uv run unified-analyze-defense-study-v07 \
+  --run demo_runs/v0.7/<run-id> --corpus corpus/v0.7 \
+  --phase confirmatory \
+  --benchmark demo_runs/v0.7/deterministic-benchmark.json
+uv run unified-generate-defense-corpus-v08 --output corpus/v0.8
+uv run unified-generate-defense-corpus-v08 \
+  --output corpus/v0.8 --prepare-review
+uv run unified-symbolic-benchmark-v08 \
+  --output demo_runs/v0.8/deterministic-benchmark.json
+uv run unified-defense-study-v08 --corpus corpus/v0.8 \
+  --phase development --model qwen/qwen3-1.7b
+uv run unified-defense-study-v08 --corpus corpus/v0.8 \
+  --phase development --model google/gemma-4-e2b \
+  --resume demo_runs/v0.8/<development-run-id>
+uv run unified-analyze-defense-study-v08 \
+  --run demo_runs/v0.8/<development-run-id> \
+  --corpus corpus/v0.8 --phase development
+# Complete and reconcile both output-blind author review worksheets.
+uv run unified-defense-study-v08 --corpus corpus/v0.8 \
+  --freeze-protocol
+uv run unified-defense-study-v08 --corpus corpus/v0.8 \
+  --phase confirmatory --model qwen/qwen3-1.7b
+uv run unified-defense-study-v08 --corpus corpus/v0.8 \
+  --phase confirmatory --model google/gemma-4-e2b \
+  --resume demo_runs/v0.8/<confirmatory-run-id>
+uv run unified-analyze-defense-study-v08 \
+  --run demo_runs/v0.8/<confirmatory-run-id> \
+  --corpus corpus/v0.8 --phase confirmatory
 uv run unified-defense-study --check
 uv run unified-analyze-defense-study \
   demo_runs/v0.3/20260713T013624Z-b9fd8b6f83 \
@@ -51,7 +93,7 @@ Dependency safety & Completed prerequisites and declared artifacts only & Failur
 Traceability & Persisted session, plan, task and attempt events & Ordering, restart and isolation tests \\
 Recovery & Lease, fencing, idempotency and unknown-side-effect policy & PostgreSQL crash-fault harness \\
 Distributed authority & etcd/Raft state, learner-first membership, generation CAS, resumable phases, and quorum fail-closed behavior & Historical three-voter report plus required clean 3/5/7 campaign \\
-RQ4 comparison & Fresh author-labelled, label-hidden v0.5 matched-pair study & Exact 1,440-output dual-arm matrix, deterministic analysis, and reproducible digest \\
+RQ4 comparison & Frozen production-path, author-labelled, label-hidden v0.7 matched-pair study & Exact 768-output dual-arm matrix, per-model analysis, deterministic controls, clustered intervals, and reproducible digest \\
 Runtime mechanisms & Secure-default policy surfaces and explicit negative controls & Separate 350-observation runtime-only bundle \\
 \bottomrule
 \end{longtable}
@@ -67,8 +109,8 @@ Runtime mechanisms & Secure-default policy surfaces and explicit negative contro
 RQ1 & Executability requires explicit identity, coverage, authority, dependencies, artifacts, validation, and completion. & Typed models, feasibility predicates, hydration, artifact and trace tests. & Prototype predicates; no proof for arbitrary domains. \\
 RQ2 & Linguistic proposal can be separated from deterministic authorization. & Non-authoritative drafts, symbolic gate, authorization-before-dispatch tests, and four v0.5 analysis views. & Implemented separation; author-labelled cases and small local models. \\
 RQ3 & Temporary language capabilities can be bounded and auditable. & Task-local auxiliary specification, admission and expiry tests, separate runtime ablation. & Read-only fixture scope; no hostile generated code. \\
-RQ4 & The constrained bridge is compared fairly with a direct LLM coordinator. & Complete 1,440-output v0.5 matrix, equal public inputs and call budgets, McNemar tests, and pair-cluster bootstrap. & Safe refusal supported; useful acceptance and superiority unsupported; no independent labels. \\
-RQ5 & A replicated coordinator should preserve one authorization state under measured crash and reconfiguration faults while a majority survives. & etcd store, monotonic fences, durable membership state machine, quorum error contract, complete 33-trial campaign. & Unsupported: 20 passed, seven invariant failures, and six infrastructure errors on one host. \\
+RQ4 & The constrained bridge is compared fairly with a direct LLM coordinator. & Complete 768-output v0.7 matrix, equal public inputs and call budgets, exact-alias and oracle controls, seed stability, and pair-cluster bootstrap. & Conclusions are limited to the observed frozen gates and author-only labels. \\
+RQ5 & A replicated coordinator should preserve one authorization state under measured crash and reconfiguration faults while a majority survives. & etcd store, monotonic fences, durable serialized membership state, quorum error contract, and complete 45-trial consensus-v4 campaign. & Single-host crash-fault evidence; no Byzantine or independent-failure-domain claim. \\
 \bottomrule
 \end{longtable}
 \endgroup
@@ -86,7 +128,7 @@ RQ5 & A replicated coordinator should preserve one authorization state under mea
   \item[How broad is A2A interoperability?] Controlled fixtures plus one vendored, upstream-derived sample pinned to an upstream commit. This is evidence of concrete compatibility, not universal conformance.
   \item[Did the hybrid work empirically?] Only as a fail-closed boundary. It made zero unsafe acceptances but accepted five of 360 feasible repeated observations after repair. It was neither useful nor more accurate than the direct arm on this corpus.
   \item[Why trust the comparison?] The corpus and author labels were frozen before collection, labels were hidden until both arms completed, all 1,440 identities and equal call budgets were verified, and independent analysis runs reproduced the same digest. Labels were not independently adjudicated, so claims remain limited to framework conformance on this designed corpus.
-  \item[Is RQ5 answered?] Yes, negatively. The clean campaign was complete and valid, but only 20 of 33 trials passed; seven violated invariants and six had infrastructure errors. The measured implementation does not support the full RQ5 claim.
+  \item[Is RQ5 answered?] Partially. Consensus-v4 completed 45 trials: 43 passed, two reconfiguration trials had infrastructure timeouts, and no executed primary invariant failed. Because the preserved worktree was dirty, the campaign is not accepted clean release evidence; a clean-source rerun is still required.
 \end{description}
 
 \chapter{Disclosure of Artificial Intelligence Use}
@@ -109,8 +151,8 @@ Artificial-intelligence systems were used in two distinct roles during this thes
 \midrule
 \endhead
 OpenAI Codex (GPT-5-based project sessions) & Interactive research, writing, and software-development assistant & Used to critique chapter structure and claims; assist with literature discovery and source triage; draft or revise prose, documentation, and the bilingual abstract; propose code, refactorings, tests, evaluation scripts, CI checks, and reproducibility instructions; inspect claim--evidence consistency; and assist with LaTeX/PDF quality review. Suggested citations were not accepted as evidence without inspection of the underlying source. All changes remained visible in the repository and were reviewed against tests, static checks, evidence files, or the compiled manuscript. \\
-LM Studio & Local model-serving environment & Used to load and serve the pinned local models through an OpenAI-compatible HTTP interface for the v0.3--v0.5 collection protocols. It provided the execution environment for study inference; it was not treated as an author, adjudicator, or source of scientific claims. \\
-Qwen3 1.7B, Gemma 4 E2B, and Qwen3 8B & Experimental language models & Used as study subjects to produce non-authoritative linguistic drafts or direct coordination decisions under frozen prompts, schemas, cases, arms, and requested seeds. Raw and repaired responses were preserved and scored only after collection completion. These models did not receive hidden labels and were not used as independent validators of those labels. \\
+LM Studio & Local model-serving environment & Used to load and serve the pinned local models through an OpenAI-compatible HTTP interface for the v0.3--v0.5 historical protocols and the v0.7 Qwen-first production-path protocol. It provided the execution environment for study inference; it was not treated as an author, adjudicator, or source of scientific claims. \\
+Qwen3 1.7B, Gemma 4 E2B, and Qwen3 8B & Experimental language models & Used as study subjects to produce non-authoritative semantic selections or direct coordination decisions under frozen prompts, schemas, cases, arms, and requested seeds. The v0.7 confirmatory protocol preserves each raw response and treats invalid schema as failure without semantic repair. These models did not receive hidden labels and were not used as independent validators of those labels. \\
 Lingo & Typed linguistic-application framework & Used inside the prototype to expose bounded interpretation, extraction, classification, and candidate-planning capabilities through explicit state and schemas. Lingo is implementation middleware rather than the source of the evaluated model weights or an authority over coordination decisions. \\
 OpenAI-compatible client interfaces & Model-transport interface & Used to send local requests to LM Studio and record responses, metadata, latency, and errors. Use of the interface does not imply that hosted OpenAI models generated the experimental observations. \\
 \bottomrule

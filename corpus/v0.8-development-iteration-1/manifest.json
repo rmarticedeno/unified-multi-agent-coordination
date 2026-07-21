@@ -1,0 +1,34 @@
+{
+  "version": "0.8",
+  "protocol": "evidence-grounded-two-model-v1",
+  "generated_at": "2026-07-21T17:19:54.749592+00:00",
+  "author": "Roberto Marti Cedeno",
+  "corpus_hash": "4519a58cf346732850491221277717f483ac88d1daefa1d722a221d14a41e957",
+  "development_case_count": 72,
+  "confirmatory_case_count": 96,
+  "confirmatory_matched_pair_count": 48,
+  "category_case_counts": {
+    "artifact": 8,
+    "dependencies": 8,
+    "disjunction": 8,
+    "low_overlap_paraphrase": 8,
+    "multi_goal_options": 8,
+    "negation": 8,
+    "provider_recovery": 8,
+    "quoted_adversarial": 8,
+    "spanish_paraphrase": 8,
+    "trust": 8,
+    "unicode_accents": 8,
+    "unknown_required_entity": 8
+  },
+  "lexical_overlap_audit": {
+    "version": "0.8",
+    "confirmatory_cases": 96,
+    "exact_goal_overlap_cases": 0,
+    "exact_goal_overlap_rate": 0.0,
+    "low_overlap_rate": 1.0,
+    "minimum_low_overlap_rate": 0.75,
+    "passed": true
+  },
+  "human_review_status": "pending_human_author_passes"
+}

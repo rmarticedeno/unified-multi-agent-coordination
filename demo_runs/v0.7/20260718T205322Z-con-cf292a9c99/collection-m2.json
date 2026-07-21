@@ -1,0 +1,7 @@
+{
+  "model": "qwen/qwen3-8b",
+  "expected_outputs": 256,
+  "observed_outputs": 256,
+  "runtime_errors": 0,
+  "complete": true
+}

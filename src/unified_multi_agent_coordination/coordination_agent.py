@@ -44,6 +44,17 @@ from .runtime_policies import (
     StrictDependencyDispatchPolicy,
     TraceEvidencePolicy,
 )
+from .semantic_admission import (
+    OpenAICompatibleSemanticInterpreter,
+    SemanticAdmissionIssue,
+    SemanticCatalog,
+    SemanticRequestAdmitter,
+)
+from .semantic_admission_v08 import (
+    SemanticInterpretationResultV08,
+    SemanticRequestAdmitterV08,
+)
+from .symbolic_plan_compiler import SymbolicPlanCompiler
 
 
 class CoordinationAgent:
@@ -64,6 +75,9 @@ class CoordinationAgent:
         lease_ttl_s: float = 30.0,
         lease_renew_interval_s: float | None = None,
         plan_hydrator: PlanHydrator | None = None,
+        semantic_catalog: SemanticCatalog | None = None,
+        semantic_interpreter: OpenAICompatibleSemanticInterpreter | Any | None = None,
+        symbolic_plan_compiler: SymbolicPlanCompiler | None = None,
         dependency_dispatch_policy: DependencyDispatchPolicy | None = None,
         trace_evidence_policy: TraceEvidencePolicy | None = None,
         max_concurrent_dispatches: int = 16,
@@ -83,7 +97,20 @@ class CoordinationAgent:
             0.1,
         )
         self._abandon_current_lease = False
+        # Retained for historical v0.4/v0.5 compatibility; production planning
+        # now uses semantic admission followed by SymbolicPlanCompiler.
         self.plan_hydrator = plan_hydrator or PlanHydrator()
+        self.semantic_catalog = semantic_catalog
+        self.semantic_interpreter = semantic_interpreter
+        self.symbolic_plan_compiler = symbolic_plan_compiler or SymbolicPlanCompiler(
+            self.feasibility_analyzer
+        )
+        self.semantic_request_admitter = SemanticRequestAdmitter(
+            self.feasibility_analyzer.trust_order
+        )
+        self.semantic_request_admitter_v08 = SemanticRequestAdmitterV08(
+            self.feasibility_analyzer.trust_order
+        )
         self.dependency_dispatch_policy = (
             dependency_dispatch_policy or StrictDependencyDispatchPolicy()
         )
@@ -99,6 +126,7 @@ class CoordinationAgent:
         *,
         session_id: str = "",
         plan_id: str = "",
+        semantic_catalog: SemanticCatalog | None = None,
     ) -> CoordinationPlanResult:
         """Build and check a candidate solution plan against the live registry."""
         try:
@@ -109,64 +137,34 @@ class CoordinationAgent:
             )
 
         registry = self._without_self(registry)
-        request = await self._admit_request(user_request, registry, context)
-        candidates: list[tuple[SolutionProposal, FeasibilityReport]] = []
-        direct = self._direct_solution_plan(request, registry)
-        if direct is not None:
-            direct_report = self.feasibility_analyzer.check(request, registry, direct)
-            if direct_report.feasible:
-                proposal, report = direct, direct_report
-                candidates.append((proposal, report))
-            else:
-                candidates.append((direct, direct_report))
+        request, interpretation, admission_issues = await self._admit_request(
+            user_request,
+            registry,
+            context,
+            semantic_catalog or self.semantic_catalog,
+        )
+        if request is None:
+            return self._semantic_failure_result(
+                user_request,
+                context,
+                registry,
+                interpretation,
+                admission_issues,
+                session_id=session_id,
+                plan_id=plan_id,
+            )
 
-        if not candidates or not candidates[0][1].feasible:
-            if isinstance(user_request, ProblemRequest) and self._linguistic_coordinator is None:
-                linguistic_candidates = [self._unassigned_solution_plan(request)]
-            else:
-                linguistic = self._linguistic()
-                if hasattr(linguistic, "propose_draft"):
-                    draft = await linguistic.propose_draft(request, registry)
-                    hydration = self.plan_hydrator.hydrate(request, registry, draft)
-                    if not hydration.complete and hasattr(linguistic, "repair_draft"):
-                        repaired = await linguistic.repair_draft(
-                            request, registry, draft, hydration.issues
-                        )
-                        hydration = self.plan_hydrator.hydrate(request, registry, repaired)
-                    linguistic_candidates = (
-                        [hydration.proposal]
-                        if hydration.proposal is not None
-                        else [self._unassigned_solution_plan(request)]
-                    )
-                elif hasattr(linguistic, "propose_solutions"):
-                    linguistic_candidates = await linguistic.propose_solutions(
-                        request, registry
-                    )
-                else:
-                    linguistic_candidates = [
-                        await linguistic.propose_solution(request, registry)
-                    ]
-            for candidate in linguistic_candidates:
+        compilation = self.symbolic_plan_compiler.compile(request, registry)
+        proposal, report = compilation.proposal, compilation.report
+        if not report.feasible:
+            candidate = self._with_auxiliary_specs(
+                request, proposal, report, lifecycle_scope=plan_id
+            )
+            if candidate != proposal:
                 candidate_report = self.feasibility_analyzer.check(
                     request, registry, candidate
                 )
-                if not candidate_report.feasible:
-                    candidate = self._with_auxiliary_specs(
-                        request, candidate, candidate_report, lifecycle_scope=plan_id
-                    )
-                    candidate_report = self.feasibility_analyzer.check(
-                        request, registry, candidate
-                    )
-                candidates.append((candidate, candidate_report))
-
-        feasible_candidates = [item for item in candidates if item[1].feasible]
-        if feasible_candidates:
-            proposal, report = min(
-                feasible_candidates,
-                key=lambda item: self._candidate_rank(item[0]),
-            )
-        else:
-            proposal, report = min(candidates, key=lambda item: self._candidate_rank(item[0]))
+                proposal, report = candidate, candidate_report
         if self._linguistic_coordinator is not None:
             self._linguistic_coordinator.record_feasibility(report)
         return CoordinationPlanResult(
@@ -178,34 +176,27 @@ class CoordinationAgent:
             registry_snapshot=registry,
             registry_revision=self.sdk.registry_revision,
             registry_snapshot_hash=registry_snapshot_hash(registry),
-        )
-
-    @staticmethod
-    def _candidate_rank(proposal: SolutionProposal) -> tuple[int, int, int, str]:
-        """Deterministic ranking applied only after feasibility is established."""
-        depths: dict[str, int] = {}
-        by_id = {task.task_id: task for task in proposal.tasks}
-
-        def depth(task_id: str, visiting: set[str] | None = None) -> int:
-            if task_id in depths:
-                return depths[task_id]
-            visiting = set(visiting or ())
-            if task_id in visiting:
-                return len(proposal.tasks) + 1
-            visiting.add(task_id)
-            task = by_id.get(task_id)
-            value = 1 if not task or not task.depends_on else 1 + max(
-                depth(item, visiting) for item in task.depends_on
-            )
-            depths[task_id] = value
-            return value
-
-        plan_key = "|".join(task.task_id for task in proposal.tasks)
-        return (
-            len(proposal.tasks),
-            len(proposal.generated_nlp_agents),
-            max((depth(task.task_id) for task in proposal.tasks), default=0),
-            plan_key,
+            semantic_intent=(
+                interpretation.intent.model_dump(mode="json")
+                if interpretation is not None and interpretation.intent is not None
+                else {}
+            ),
+            admission_issues=[item.model_dump(mode="json") for item in admission_issues],
+            planning_diagnostics={
+                **compilation.diagnostics.model_dump(mode="json"),
+                "semantic_interpretation": (
+                    {
+                        "model_id": interpretation.model_id,
+                        "call_count": interpretation.call_count,
+                        "repair_attempted": interpretation.repair_attempted,
+                        "latency_ms": interpretation.latency_ms,
+                        "prompt_tokens": interpretation.prompt_tokens,
+                        "completion_tokens": interpretation.completion_tokens,
+                    }
+                    if interpretation is not None
+                    else {"bypassed_for_typed_request": True}
+                ),
+            },
         )
 
     async def coordinate(
@@ -215,6 +206,7 @@ class CoordinationAgent:
         payload: dict[str, Any] | None = None,
         timeout_s: float = 30.0,
         session_id: str | None = None,
+        semantic_catalog: SemanticCatalog | None = None,
     ) -> CoordinationRunResult:
         """Plan, authorize, dispatch, and aggregate one coordination attempt."""
         session_id = session_id or self._new_id("session")
@@ -251,11 +243,53 @@ class CoordinationAgent:
                     },
                     lease=lease,
                 )
+                plan_kwargs: dict[str, Any] = {
+                    "context": context,
+                    "session_id": session_id,
+                    "plan_id": plan_id,
+                }
+                if semantic_catalog is not None:
+                    plan_kwargs["semantic_catalog"] = semantic_catalog
                 plan_result = await self.build_solution_plan(
                     user_request,
-                    context=context,
+                    **plan_kwargs,
+                )
+                semantic = plan_result.planning_diagnostics.get(
+                    "semantic_interpretation", {}
+                )
+                await self._append(
+                    "semantic_admission_completed",
                     session_id=session_id,
                     plan_id=plan_id,
+                    payload={
+                        "admitted": not plan_result.admission_issues,
+                        "issues": plan_result.admission_issues,
+                        "metrics": semantic,
+                    },
+                    lease=lease,
+                )
+                await self._append(
+                    "symbolic_plan_compiled",
+                    session_id=session_id,
+                    plan_id=plan_id,
+                    payload={
+                        "task_count": len(plan_result.proposal.tasks),
+                        "diagnostics": plan_result.planning_diagnostics,
+                    },
+                    lease=lease,
+                )
+                await self._append(
+                    "symbolic_authorization_completed",
+                    session_id=session_id,
+                    plan_id=plan_id,
+                    payload={
+                        "authorized": plan_result.feasibility_report.feasible,
+                        "evidence": [
+                            item.model_dump(mode="json")
+                            for item in plan_result.feasibility_report.evidence
+                        ],
+                    },
+                    lease=lease,
                 )
                 await self._append(
                     "registry_snapshot_recorded",
@@ -968,89 +1002,129 @@ class CoordinationAgent:
         user_request: str | ProblemRequest,
         registry: list[AgentRegistryEntry],
         context: dict[str, Any] | None,
-    ) -> ProblemRequest:
+        semantic_catalog: SemanticCatalog | None,
+    ) -> tuple[
+        ProblemRequest | None,
+        Any | None,
+        list[Any],
+    ]:
         if isinstance(user_request, ProblemRequest):
             request = user_request
         else:
-            request = await self._linguistic().interpret_request(
-                user_request, registry
-            )
+            if semantic_catalog is None:
+                issue = SemanticAdmissionIssue(
+                    code="missing_catalog",
+                    message="Raw-language coordination requires an admitted semantic catalog.",
+                )
+                return None, None, [issue]
+            if self.semantic_interpreter is None:
+                issue = SemanticAdmissionIssue(
+                    code="missing_interpreter",
+                    message="No strict semantic interpreter is configured.",
+                )
+                return None, None, [issue]
+            try:
+                interpretation = await self.semantic_interpreter.interpret(
+                    user_request, semantic_catalog, registry
+                )
+            except Exception as exc:
+                issue = SemanticAdmissionIssue(
+                    code="schema_invalid",
+                    message=f"Semantic interpretation failed closed: {exc}",
+                )
+                return None, None, [issue]
+            if interpretation.intent is None:
+                issue = SemanticAdmissionIssue(
+                    code="schema_invalid",
+                    message=(
+                        "Semantic output remained invalid after the bounded repair: "
+                        + "; ".join(interpretation.issues)
+                    ),
+                )
+                return None, interpretation, [issue]
+            admission: Any
+            if isinstance(interpretation, SemanticInterpretationResultV08):
+                admission = self.semantic_request_admitter_v08.admit(
+                    user_request,
+                    semantic_catalog,
+                    interpretation.intent,
+                    registry,
+                    interpretation.retrieval,
+                )
+            else:
+                admission = self.semantic_request_admitter.admit(
+                    user_request, semantic_catalog, interpretation.intent, registry
+                )
+            if not admission.admitted:
+                return None, interpretation, admission.issues
+            assert admission.request is not None
+            request = admission.request
+            if context:
+                request = request.model_copy(
+                    update={"context": {**request.context, **context}}
+                )
+            return request, interpretation, []
         if not context:
-            return request
+            return request, None, []
         merged_context = {**request.context, **context}
-        return request.model_copy(update={"context": merged_context})
+        return request.model_copy(update={"context": merged_context}), None, []
 
-    def _direct_solution_plan(
+    def _semantic_failure_result(
         self,
-        request: ProblemRequest,
+        user_request: str | ProblemRequest,
+        context: dict[str, Any] | None,
         registry: list[AgentRegistryEntry],
-    ) -> SolutionProposal | None:
-        if not request.requirements:
-            return None
-
-        tasks: list[TaskSpec] = []
-        selected_agents: dict[str, str] = {}
-        for index, requirement in enumerate(request.requirements, start=1):
-            agent = self._first_exact_skill_agent(requirement.name, registry)
-            if agent is None:
-                return None
-            task_id = f"t{index}"
-            dependencies = [
-                prior_task.task_id
-                for prior_task, prior_requirement in zip(
-                    tasks, request.requirements[: index - 1], strict=True
-                )
-                if set(prior_requirement.output_modes) & set(requirement.input_modes)
-            ]
-            tasks.append(
-                TaskSpec(
-                    task_id=task_id,
-                    requirement_name=requirement.name,
-                    assigned_to=agent.agent_id,
-                    depends_on=dependencies,
-                    expected_artifacts=self._task_expected_artifacts(requirement, request),
-                    validation_contract=requirement.validation_contract,
-                )
+        interpretation: Any | None,
+        issues: list[Any],
+        *,
+        session_id: str,
+        plan_id: str,
+    ) -> CoordinationPlanResult:
+        request = (
+            user_request
+            if isinstance(user_request, ProblemRequest)
+            else ProblemRequest(
+                user_goal=user_request,
+                context=dict(context or {}),
             )
-            selected_agents[task_id] = agent.agent_id
-
-        return SolutionProposal(
-            tasks=tasks,
-            selected_agents=selected_agents,
-            execution_order=[task.task_id for task in tasks],
-            expected_artifacts=list(request.required_artifacts),
-            completion_criteria=self._completion_criteria(request),
         )
-
-    def _unassigned_solution_plan(self, request: ProblemRequest) -> SolutionProposal:
-        tasks = [
-            TaskSpec(
-                task_id=f"t{index}",
-                requirement_name=requirement.name,
-                expected_artifacts=self._task_expected_artifacts(requirement, request),
-                validation_contract=requirement.validation_contract,
-            )
-            for index, requirement in enumerate(request.requirements, start=1)
-        ]
-        return SolutionProposal(
-            tasks=tasks,
-            execution_order=[task.task_id for task in tasks],
-            expected_artifacts=list(request.required_artifacts),
-            completion_criteria=self._completion_criteria(request),
+        report = FeasibilityReport(
+            feasible=False,
+            risks=[item.message for item in issues],
+            explanation="Raw-language semantic admission failed closed.",
+            evidence=[
+                PredicateEvidence(
+                    name="semantic_admission",
+                    passed=False,
+                    details={
+                        "issues": [item.model_dump(mode="json") for item in issues]
+                    },
+                )
+            ],
         )
-
-    def _first_exact_skill_agent(
-        self,
-        requirement_name: str,
-        registry: list[AgentRegistryEntry],
-    ) -> AgentRegistryEntry | None:
-        wanted = self._norm(requirement_name)
-        for agent in registry:
-            if agent.status != "available":
-                continue
-            if any(self._norm(skill.name) == wanted for skill in agent.skills):
-                return agent
-        return None
+        return CoordinationPlanResult(
+            session_id=session_id,
+            plan_id=plan_id,
+            request=request,
+            proposal=SolutionProposal(),
+            feasibility_report=report,
+            registry_snapshot=registry,
+            registry_revision=self.sdk.registry_revision,
+            registry_snapshot_hash=registry_snapshot_hash(registry),
+            semantic_intent=(
+                request.context.get("semantic_intent", {})
+                if interpretation is not None
+                else {}
+            ),
+            admission_issues=[item.model_dump(mode="json") for item in issues],
+            planning_diagnostics={
+                "semantic_interpretation": (
+                    interpretation.model_dump(mode="json")
+                    if interpretation is not None
+                    else {}
+                )
+            },
+        )
 
     def _without_self(
         self, registry: list[AgentRegistryEntry]
@@ -1103,11 +1177,6 @@ class CoordinationAgent:
                 "generated_nlp_agents": generated,
             }
         )
-
-    def _linguistic(self) -> LingoLinguisticCoordinator:
-        if self._linguistic_coordinator is None:
-            self._linguistic_coordinator = LingoLinguisticCoordinator()
-        return self._linguistic_coordinator
 
     def _registry_failure_result(
         self,
@@ -1168,26 +1237,6 @@ class CoordinationAgent:
                 result["_coordination"] = payload["_coordination"]
             return result
         return dict(payload)
-
-    @staticmethod
-    def _completion_criteria(request: ProblemRequest) -> list[str]:
-        if request.required_artifacts:
-            return [
-                f"{artifact} artifact exists"
-                for artifact in request.required_artifacts
-            ]
-        return ["all task validators pass"]
-
-    @staticmethod
-    def _task_expected_artifacts(
-        requirement,
-        request: ProblemRequest,
-    ) -> list[str]:
-        if len(request.requirements) == 1:
-            return list(request.required_artifacts)
-        if requirement.name in request.required_artifacts:
-            return [requirement.name]
-        return []
 
     @staticmethod
     def _norm(value: str) -> str:

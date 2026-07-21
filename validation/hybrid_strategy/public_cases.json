@@ -1,0 +1,53 @@
+{
+  "fixture": "hybrid-strategy-validation",
+  "cases": [
+    {
+      "case_id": "paraphrase-feasible",
+      "variant": "standard",
+      "sentinel": true,
+      "request_text": "Assemble the source material, check it carefully, then issue the checked summary with ordinary assurance as machine-readable JSON."
+    },
+    {
+      "case_id": "forbidden-dependency",
+      "variant": "standard",
+      "sentinel": true,
+      "request_text": "Release the verified summary with ordinary assurance as machine-readable JSON, but do not assemble or prepare the source bundle."
+    },
+    {
+      "case_id": "trust-alternative-provider",
+      "variant": "trust-alternative",
+      "sentinel": false,
+      "request_text": "Compile, verify, and release the summary as machine-readable JSON using elevated assurance."
+    },
+    {
+      "case_id": "trust-no-provider",
+      "variant": "standard",
+      "sentinel": false,
+      "request_text": "Compile, verify, and release the summary as machine-readable JSON using elevated assurance."
+    },
+    {
+      "case_id": "artifact-alternative-provider",
+      "variant": "artifact-alternative",
+      "sentinel": true,
+      "request_text": "Compile and verify the material, then release the checked summary with ordinary assurance as a signed PDF."
+    },
+    {
+      "case_id": "artifact-no-provider",
+      "variant": "standard",
+      "sentinel": false,
+      "request_text": "Compile and verify the material, then release the checked summary with ordinary assurance as a signed PDF."
+    },
+    {
+      "case_id": "forbidden-provider-with-backup",
+      "variant": "standard",
+      "sentinel": false,
+      "request_text": "Compile, verify, and release the summary with ordinary assurance as machine-readable JSON. Do not use the primary delivery agent."
+    },
+    {
+      "case_id": "unresolved-ambiguity",
+      "variant": "archive-available",
+      "sentinel": true,
+      "request_text": "Compile and verify the material, then complete the checked-summary output with ordinary assurance as machine-readable JSON; it is unclear whether release or archival is intended."
+    }
+  ]
+}

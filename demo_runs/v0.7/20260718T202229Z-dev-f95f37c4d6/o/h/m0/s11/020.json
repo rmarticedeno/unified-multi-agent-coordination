@@ -1,0 +1,350 @@
+{
+  "schema_version": "0.7.0",
+  "identity": {
+    "phase": "development",
+    "arm": "production_hybrid_v07",
+    "case_id": "v07-dev-11-feasible",
+    "pair_id": "v07-dev-pair-11",
+    "category": "trust",
+    "model_id": "qwen/qwen3-1.7b",
+    "seed": 11
+  },
+  "settings": {
+    "temperature": 0.2,
+    "top_p": 1.0,
+    "max_tokens": 800,
+    "schema_repair": false
+  },
+  "public_input_hash": "e232f577a05121b83db7ea2c029807b748fdeb1d95f4f0b06bba183b92ba58a6",
+  "labels_loaded_during_collection": false,
+  "runtime_error": "",
+  "result": {
+    "prompt": [
+      {
+        "role": "system",
+        "content": "Ground the request only to the admitted identifiers below. Select semantic goals, explicit exclusions, trust policy, and artifact contract. Do not copy dependencies, assign providers, decide feasibility, or create a plan. Use null for an omitted policy or contract so deterministic defaults can apply.\nRules:\n1. Read depends_on before choosing goals. Select terminal requested outcomes only; prerequisites are added deterministically. If C depends on B and B depends on A, a request to perform A, B, then C has only C as a goal.\n2. A term matching a capability, policy, contract, agent name, description, or alias is resolved and must not appear in unresolved_terms.\n3. Use ambiguous when the request says either, unspecified, unclear, not specified, or otherwise leaves incompatible meanings unresolved. Put only the unresolved phrase from the request in unresolved_terms. Never put unused catalog identifiers or distractors in unresolved_terms.\n4. Add forbidden identifiers only for explicit prohibitions such as 'do not use'. Never infer a prohibition from provider capabilities or availability.\n5. Return only the schema-conforming JSON object and no explanation."
+      },
+      {
+        "role": "user",
+        "content": "CAPABILITIES\n- v07-p11-deliver: Publish research administration verified brief; Release the checked final brief for research administration.; aliases=['issue research administration brief', 'release research administration summary', 'issue the brief']; depends_on=['v07-p11-verify']\n- v07-p11-archive: Archive research administration verified brief; Preserve the checked research administration brief for long-term retention.; aliases=['retain research administration brief', 'store research administration summary', 'retain the brief']; depends_on=['v07-p11-verify']\n- v07-p11-verify: Validate research administration source packet; Check the assembled research administration material for correctness.; aliases=['check research administration inputs', 'verify research administration packet', 'check the packet']; depends_on=['v07-p11-prepare']\n- v07-p11-prepare: Assemble research administration source packet; Collect the source material needed for research administration.; aliases=['gather research administration inputs', 'prepare research administration packet', 'gather the inputs', 'prepare the research administration packet']; depends_on=[]\n- v07-p11-distractor-1: Auxiliary research administration operation 1; Perform unrelated research administration auxiliary operation number 1.; aliases=['auxiliary operation v07-p11 1']; depends_on=[]\n- v07-p11-distractor-2: Auxiliary research administration operation 2; Perform unrelated research administration auxiliary operation number 2.; aliases=['auxiliary operation v07-p11 2']; depends_on=[]\n- v07-p11-distractor-3: Auxiliary research administration operation 3; Perform unrelated research administration auxiliary operation number 3.; aliases=['auxiliary operation v07-p11 3']; depends_on=[]\n- v07-p11-distractor-4: Auxiliary research administration operation 4; Perform unrelated research administration auxiliary operation number 4.; aliases=['auxiliary operation v07-p11 4']; depends_on=[]\n- v07-p11-distractor-5: Auxiliary research administration operation 5; Perform unrelated research administration auxiliary operation number 5.; aliases=['auxiliary operation v07-p11 5']; depends_on=[]\n- v07-p11-distractor-6: Auxiliary research administration operation 6; Perform unrelated research administration auxiliary operation number 6.; aliases=['auxiliary operation v07-p11 6']; depends_on=[]\n- v07-p11-distractor-7: Auxiliary research administration operation 7; Perform unrelated research administration auxiliary operation number 7.; aliases=['auxiliary operation v07-p11 7']; depends_on=[]\n- v07-p11-distractor-8: Auxiliary research administration operation 8; Perform unrelated research administration auxiliary operation number 8.; aliases=['auxiliary operation v07-p11 8']; depends_on=[]\n- v07-p11-distractor-9: Auxiliary research administration operation 9; Perform unrelated research administration auxiliary operation number 9.; aliases=['auxiliary operation v07-p11 9']; depends_on=[]\n- v07-p11-distractor-10: Auxiliary research administration operation 10; Perform unrelated research administration auxiliary operation number 10.; aliases=['auxiliary operation v07-p11 10']; depends_on=[]\n- v07-p11-distractor-11: Auxiliary research administration operation 11; Perform unrelated research administration auxiliary operation number 11.; aliases=['auxiliary operation v07-p11 11']; depends_on=[]\n- v07-p11-distractor-12: Auxiliary research administration operation 12; Perform unrelated research administration auxiliary operation number 12.; aliases=['auxiliary operation v07-p11 12']; depends_on=[]\n\nTRUST POLICIES\n- v07-p11-ordinary: ordinary research administration assurance; Standard trust is sufficient for this research administration request.; aliases=['normal research administration assurance']\n- v07-p11-elevated: elevated research administration assurance; Elevated trust is mandatory for this research administration request.; aliases=['high assurance for research administration']\n\nARTIFACT CONTRACTS\n- v07-p11-json: research administration machine-readable JSON; Return the final research administration result as JSON.; aliases=['research administration json output']\n- v07-p11-signed-pdf: research administration signed PDF; Return the final research administration result as a signed PDF.; aliases=['signed research administration document']\n\nAGENTS\n- v07-p11-backup: backup research administration publisher\n- v07-p11-primary: primary research administration publisher\n- v07-p11-verifier: research administration source verifier\n- v07-p11-preparer: research administration source preparer\n\nREQUEST\nUsing the admitted research administration services, gather the inputs, check the packet, and issue the brief with normal research administration assurance as research administration JSON output."
+      }
+    ],
+    "output_schema": {
+      "type": "object",
+      "properties": {
+        "interpretation_status": {
+          "type": "string",
+          "enum": [
+            "resolved",
+            "ambiguous"
+          ]
+        },
+        "goals": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 16,
+          "items": {
+            "type": "object",
+            "properties": {
+              "capability_id": {
+                "type": "string",
+                "enum": [
+                  "v07-p11-deliver",
+                  "v07-p11-archive",
+                  "v07-p11-verify",
+                  "v07-p11-prepare",
+                  "v07-p11-distractor-1",
+                  "v07-p11-distractor-2",
+                  "v07-p11-distractor-3",
+                  "v07-p11-distractor-4",
+                  "v07-p11-distractor-5",
+                  "v07-p11-distractor-6",
+                  "v07-p11-distractor-7",
+                  "v07-p11-distractor-8",
+                  "v07-p11-distractor-9",
+                  "v07-p11-distractor-10",
+                  "v07-p11-distractor-11",
+                  "v07-p11-distractor-12"
+                ]
+              },
+              "trust_policy_id": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "v07-p11-ordinary",
+                      "v07-p11-elevated"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "artifact_contract_id": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "v07-p11-json",
+                      "v07-p11-signed-pdf"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "capability_id",
+              "trust_policy_id",
+              "artifact_contract_id"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "forbidden_capability_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "v07-p11-deliver",
+              "v07-p11-archive",
+              "v07-p11-verify",
+              "v07-p11-prepare",
+              "v07-p11-distractor-1",
+              "v07-p11-distractor-2",
+              "v07-p11-distractor-3",
+              "v07-p11-distractor-4",
+              "v07-p11-distractor-5",
+              "v07-p11-distractor-6",
+              "v07-p11-distractor-7",
+              "v07-p11-distractor-8",
+              "v07-p11-distractor-9",
+              "v07-p11-distractor-10",
+              "v07-p11-distractor-11",
+              "v07-p11-distractor-12"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "forbidden_agent_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "v07-p11-backup",
+              "v07-p11-primary",
+              "v07-p11-verifier",
+              "v07-p11-preparer"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "unresolved_terms": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 160
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "interpretation_status",
+        "goals",
+        "forbidden_capability_ids",
+        "forbidden_agent_ids",
+        "unresolved_terms"
+      ],
+      "additionalProperties": false
+    },
+    "interpretation": {
+      "intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p11-prepare",
+            "trust_policy_id": "v07-p11-ordinary",
+            "artifact_contract_id": "v07-p11-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": [
+          "issue research administration brief"
+        ]
+      },
+      "issues": [],
+      "initial_content": "{\"interpretation_status\": \"resolved\", \"goals\": [{\"capability_id\": \"v07-p11-prepare\", \"trust_policy_id\": \"v07-p11-ordinary\", \"artifact_contract_id\": \"v07-p11-json\"}], \"forbidden_capability_ids\": [], \"forbidden_agent_ids\": [], \"unresolved_terms\": [\"issue research administration brief\"]}\n",
+      "repaired_content": "",
+      "repair_attempted": false,
+      "call_count": 1,
+      "latency_ms": 2236.9835000135936,
+      "prompt_tokens": 1275,
+      "completion_tokens": 88,
+      "model_id": "qwen/qwen3-1.7b",
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "interpretation_status": {
+            "type": "string",
+            "enum": [
+              "resolved",
+              "ambiguous"
+            ]
+          },
+          "goals": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 16,
+            "items": {
+              "type": "object",
+              "properties": {
+                "capability_id": {
+                  "type": "string",
+                  "enum": [
+                    "v07-p11-deliver",
+                    "v07-p11-archive",
+                    "v07-p11-verify",
+                    "v07-p11-prepare",
+                    "v07-p11-distractor-1",
+                    "v07-p11-distractor-2",
+                    "v07-p11-distractor-3",
+                    "v07-p11-distractor-4",
+                    "v07-p11-distractor-5",
+                    "v07-p11-distractor-6",
+                    "v07-p11-distractor-7",
+                    "v07-p11-distractor-8",
+                    "v07-p11-distractor-9",
+                    "v07-p11-distractor-10",
+                    "v07-p11-distractor-11",
+                    "v07-p11-distractor-12"
+                  ]
+                },
+                "trust_policy_id": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "enum": [
+                        "v07-p11-ordinary",
+                        "v07-p11-elevated"
+                      ]
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "artifact_contract_id": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "enum": [
+                        "v07-p11-json",
+                        "v07-p11-signed-pdf"
+                      ]
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "capability_id",
+                "trust_policy_id",
+                "artifact_contract_id"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "forbidden_capability_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "v07-p11-deliver",
+                "v07-p11-archive",
+                "v07-p11-verify",
+                "v07-p11-prepare",
+                "v07-p11-distractor-1",
+                "v07-p11-distractor-2",
+                "v07-p11-distractor-3",
+                "v07-p11-distractor-4",
+                "v07-p11-distractor-5",
+                "v07-p11-distractor-6",
+                "v07-p11-distractor-7",
+                "v07-p11-distractor-8",
+                "v07-p11-distractor-9",
+                "v07-p11-distractor-10",
+                "v07-p11-distractor-11",
+                "v07-p11-distractor-12"
+              ]
+            },
+            "uniqueItems": true
+          },
+          "forbidden_agent_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "v07-p11-backup",
+                "v07-p11-primary",
+                "v07-p11-verifier",
+                "v07-p11-preparer"
+              ]
+            },
+            "uniqueItems": true
+          },
+          "unresolved_terms": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 160
+            },
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "interpretation_status",
+          "goals",
+          "forbidden_capability_ids",
+          "forbidden_agent_ids",
+          "unresolved_terms"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "admission": {
+      "request": null,
+      "canonical_intent": {
+        "interpretation_status": "resolved",
+        "goals": [
+          {
+            "capability_id": "v07-p11-deliver",
+            "trust_policy_id": "v07-p11-ordinary",
+            "artifact_contract_id": "v07-p11-json"
+          }
+        ],
+        "forbidden_capability_ids": [],
+        "forbidden_agent_ids": [],
+        "unresolved_terms": [
+          "issue research administration brief"
+        ]
+      },
+      "issues": [
+        {
+          "code": "unresolved_term",
+          "message": "Unresolved linguistic term: issue research administration brief"
+        }
+      ]
+    },
+    "compilation": null,
+    "accepted": false,
+    "call_count": 1,
+    "prompt_tokens": 1275,
+    "completion_tokens": 88
+  }
+}

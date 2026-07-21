@@ -1,0 +1,1332 @@
+{
+  "analysis": "demo_runs/v0.7/20260718T205322Z-con-cf292a9c99/analysis-confirmatory-v0.7.0.json",
+  "case_count": 8,
+  "generated_at": "2026-07-18T23:32:25.054359+00:00",
+  "hybrid_selected": 8,
+  "oracle_fallback_selected": 0,
+  "passed": true,
+  "results": [
+    {
+      "artifact_count": 3,
+      "case_id": "v07-con-05-feasible",
+      "category": "ambiguity",
+      "compiler_feasible": true,
+      "dispatches": [
+        {
+          "agent_id": "v07-p05-preparer",
+          "input_dependency_count": 0,
+          "operation_key": "v07-a2a-v07-con-05-feasible:1:t1",
+          "task_id": "t1"
+        },
+        {
+          "agent_id": "v07-p05-verifier",
+          "input_dependency_count": 1,
+          "operation_key": "v07-a2a-v07-con-05-feasible:1:t2",
+          "task_id": "t2"
+        },
+        {
+          "agent_id": "v07-p05-backup",
+          "input_dependency_count": 1,
+          "operation_key": "v07-a2a-v07-con-05-feasible:1:t3",
+          "task_id": "t3"
+        }
+      ],
+      "execution_order": [
+        "t1",
+        "t2",
+        "t3"
+      ],
+      "passed": true,
+      "selection_source": "hybrid_primary:qwen/qwen3-1.7b",
+      "status": "completed",
+      "task_results": [
+        {
+          "agent_id": "v07-p05-preparer",
+          "agent_kind": "remote_a2a",
+          "artifacts": [
+            {
+              "data": {
+                "fixture": true,
+                "task_id": "t1"
+              },
+              "kind": "data",
+              "name": "v07-p05-source"
+            }
+          ],
+          "attempt_id": "t1-attempt-1",
+          "error": "",
+          "metadata": {
+            "attempt_key": "v07-a2a-v07-con-05-feasible:plan-f7cdc87492344710ac38dce56dd2febb:t1:t1-attempt-1",
+            "coordinator_id": "coordinator-a04d024aef774e76ab04cdb8abbdc493",
+            "fencing_token": 1,
+            "idempotency_key": "v07-a2a-v07-con-05-feasible:plan-f7cdc87492344710ac38dce56dd2febb:t1:t1-attempt-1",
+            "invocation_endpoint": "http://fixture.invalid/v07-p05-preparer",
+            "operation_key": "v07-a2a-v07-con-05-feasible:1:t1",
+            "plan_generation": 1,
+            "registry_revision": 0
+          },
+          "output": {
+            "artifacts": [
+              {
+                "data": {
+                  "fixture": true,
+                  "task_id": "t1"
+                },
+                "kind": "data",
+                "name": "v07-p05-source"
+              }
+            ],
+            "fixture_a2a": true
+          },
+          "plan_id": "plan-f7cdc87492344710ac38dce56dd2febb",
+          "session_id": "v07-a2a-v07-con-05-feasible",
+          "status": "completed",
+          "task_id": "t1"
+        },
+        {
+          "agent_id": "v07-p05-verifier",
+          "agent_kind": "remote_a2a",
+          "artifacts": [
+            {
+              "data": {
+                "fixture": true,
+                "task_id": "t2"
+              },
+              "kind": "data",
+              "name": "v07-p05-checked"
+            }
+          ],
+          "attempt_id": "t2-attempt-1",
+          "error": "",
+          "metadata": {
+            "attempt_key": "v07-a2a-v07-con-05-feasible:plan-f7cdc87492344710ac38dce56dd2febb:t2:t2-attempt-1",
+            "coordinator_id": "coordinator-a04d024aef774e76ab04cdb8abbdc493",
+            "fencing_token": 1,
+            "idempotency_key": "v07-a2a-v07-con-05-feasible:plan-f7cdc87492344710ac38dce56dd2febb:t2:t2-attempt-1",
+            "invocation_endpoint": "http://fixture.invalid/v07-p05-verifier",
+            "operation_key": "v07-a2a-v07-con-05-feasible:1:t2",
+            "plan_generation": 1,
+            "registry_revision": 0
+          },
+          "output": {
+            "artifacts": [
+              {
+                "data": {
+                  "fixture": true,
+                  "task_id": "t2"
+                },
+                "kind": "data",
+                "name": "v07-p05-checked"
+              }
+            ],
+            "fixture_a2a": true
+          },
+          "plan_id": "plan-f7cdc87492344710ac38dce56dd2febb",
+          "session_id": "v07-a2a-v07-con-05-feasible",
+          "status": "completed",
+          "task_id": "t2"
+        },
+        {
+          "agent_id": "v07-p05-backup",
+          "agent_kind": "remote_a2a",
+          "artifacts": [
+            {
+              "data": {
+                "fixture": true,
+                "task_id": "t3"
+              },
+              "kind": "data",
+              "name": "v07-p05-result"
+            }
+          ],
+          "attempt_id": "t3-attempt-1",
+          "error": "",
+          "metadata": {
+            "attempt_key": "v07-a2a-v07-con-05-feasible:plan-f7cdc87492344710ac38dce56dd2febb:t3:t3-attempt-1",
+            "coordinator_id": "coordinator-a04d024aef774e76ab04cdb8abbdc493",
+            "fencing_token": 1,
+            "idempotency_key": "v07-a2a-v07-con-05-feasible:plan-f7cdc87492344710ac38dce56dd2febb:t3:t3-attempt-1",
+            "invocation_endpoint": "http://fixture.invalid/v07-p05-backup",
+            "operation_key": "v07-a2a-v07-con-05-feasible:1:t3",
+            "plan_generation": 1,
+            "registry_revision": 0
+          },
+          "output": {
+            "artifacts": [
+              {
+                "data": {
+                  "fixture": true,
+                  "task_id": "t3"
+                },
+                "kind": "data",
+                "name": "v07-p05-result"
+              }
+            ],
+            "fixture_a2a": true
+          },
+          "plan_id": "plan-f7cdc87492344710ac38dce56dd2febb",
+          "session_id": "v07-a2a-v07-con-05-feasible",
+          "status": "completed",
+          "task_id": "t3"
+        }
+      ]
+    },
+    {
+      "artifact_count": 3,
+      "case_id": "v07-con-17-feasible",
+      "category": "artifact",
+      "compiler_feasible": true,
+      "dispatches": [
+        {
+          "agent_id": "v07-p17-preparer",
+          "input_dependency_count": 0,
+          "operation_key": "v07-a2a-v07-con-17-feasible:1:t1",
+          "task_id": "t1"
+        },
+        {
+          "agent_id": "v07-p17-verifier",
+          "input_dependency_count": 1,
+          "operation_key": "v07-a2a-v07-con-17-feasible:1:t2",
+          "task_id": "t2"
+        },
+        {
+          "agent_id": "v07-p17-backup",
+          "input_dependency_count": 1,
+          "operation_key": "v07-a2a-v07-con-17-feasible:1:t3",
+          "task_id": "t3"
+        }
+      ],
+      "execution_order": [
+        "t1",
+        "t2",
+        "t3"
+      ],
+      "passed": true,
+      "selection_source": "hybrid_primary:qwen/qwen3-1.7b",
+      "status": "completed",
+      "task_results": [
+        {
+          "agent_id": "v07-p17-preparer",
+          "agent_kind": "remote_a2a",
+          "artifacts": [
+            {
+              "data": {
+                "fixture": true,
+                "task_id": "t1"
+              },
+              "kind": "data",
+              "name": "v07-p17-source"
+            }
+          ],
+          "attempt_id": "t1-attempt-1",
+          "error": "",
+          "metadata": {
+            "attempt_key": "v07-a2a-v07-con-17-feasible:plan-119160beb81741208518ab3c38f6ce3e:t1:t1-attempt-1",
+            "coordinator_id": "coordinator-5f451f56c4c448a5b6d65a219fe40321",
+            "fencing_token": 1,
+            "idempotency_key": "v07-a2a-v07-con-17-feasible:plan-119160beb81741208518ab3c38f6ce3e:t1:t1-attempt-1",
+            "invocation_endpoint": "http://fixture.invalid/v07-p17-preparer",
+            "operation_key": "v07-a2a-v07-con-17-feasible:1:t1",
+            "plan_generation": 1,
+            "registry_revision": 0
+          },
+          "output": {
+            "artifacts": [
+              {
+                "data": {
+                  "fixture": true,
+                  "task_id": "t1"
+                },
+                "kind": "data",
+                "name": "v07-p17-source"
+              }
+            ],
+            "fixture_a2a": true
+          },
+          "plan_id": "plan-119160beb81741208518ab3c38f6ce3e",
+          "session_id": "v07-a2a-v07-con-17-feasible",
+          "status": "completed",
+          "task_id": "t1"
+        },
+        {
+          "agent_id": "v07-p17-verifier",
+          "agent_kind": "remote_a2a",
+          "artifacts": [
+            {
+              "data": {
+                "fixture": true,
+                "task_id": "t2"
+              },
+              "kind": "data",
+              "name": "v07-p17-checked"
+            }
+          ],
+          "attempt_id": "t2-attempt-1",
+          "error": "",
+          "metadata": {
+            "attempt_key": "v07-a2a-v07-con-17-feasible:plan-119160beb81741208518ab3c38f6ce3e:t2:t2-attempt-1",
+            "coordinator_id": "coordinator-5f451f56c4c448a5b6d65a219fe40321",
+            "fencing_token": 1,
+            "idempotency_key": "v07-a2a-v07-con-17-feasible:plan-119160beb81741208518ab3c38f6ce3e:t2:t2-attempt-1",
+            "invocation_endpoint": "http://fixture.invalid/v07-p17-verifier",
+            "operation_key": "v07-a2a-v07-con-17-feasible:1:t2",
+            "plan_generation": 1,
+            "registry_revision": 0
+          },
+          "output": {
+            "artifacts": [
+              {
+                "data": {
+                  "fixture": true,
+                  "task_id": "t2"
+                },
+                "kind": "data",
+                "name": "v07-p17-checked"
+              }
+            ],
+            "fixture_a2a": true
+          },
+          "plan_id": "plan-119160beb81741208518ab3c38f6ce3e",
+          "session_id": "v07-a2a-v07-con-17-feasible",
+          "status": "completed",
+          "task_id": "t2"
+        },
+        {
+          "agent_id": "v07-p17-backup",
+          "agent_kind": "remote_a2a",
+          "artifacts": [
+            {
+              "data": {
+                "fixture": true,
+                "task_id": "t3"
+              },
+              "kind": "data",
+              "name": "v07-p17-result"
+            }
+          ],
+          "attempt_id": "t3-attempt-1",
+          "error": "",
+          "metadata": {
+            "attempt_key": "v07-a2a-v07-con-17-feasible:plan-119160beb81741208518ab3c38f6ce3e:t3:t3-attempt-1",
+            "coordinator_id": "coordinator-5f451f56c4c448a5b6d65a219fe40321",
+            "fencing_token": 1,
+            "idempotency_key": "v07-a2a-v07-con-17-feasible:plan-119160beb81741208518ab3c38f6ce3e:t3:t3-attempt-1",
+            "invocation_endpoint": "http://fixture.invalid/v07-p17-backup",
+            "operation_key": "v07-a2a-v07-con-17-feasible:1:t3",
+            "plan_generation": 1,
+            "registry_revision": 0
+          },
+          "output": {
+            "artifacts": [
+              {
+                "data": {
+                  "fixture": true,
+                  "task_id": "t3"
+                },
+                "kind": "data",
+                "name": "v07-p17-result"
+              }
+            ],
+            "fixture_a2a": true
+          },
+          "plan_id": "plan-119160beb81741208518ab3c38f6ce3e",
+          "session_id": "v07-a2a-v07-con-17-feasible",
+          "status": "completed",
+          "task_id": "t3"
+        }
+      ]
+    },
+    {
+      "artifact_count": 3,
+      "case_id": "v07-con-22-feasible",
+      "category": "dependencies",
+      "compiler_feasible": true,
+      "dispatches": [
+        {
+          "agent_id": "v07-p22-preparer",
+          "input_dependency_count": 0,
+          "operation_key": "v07-a2a-v07-con-22-feasible:1:t1",
+          "task_id": "t1"
+        },
+        {
+          "agent_id": "v07-p22-verifier",
+          "input_dependency_count": 1,
+          "operation_key": "v07-a2a-v07-con-22-feasible:1:t2",
+          "task_id": "t2"
+        },
+        {
+          "agent_id": "v07-p22-backup",
+          "input_dependency_count": 1,
+          "operation_key": "v07-a2a-v07-con-22-feasible:1:t3",
+          "task_id": "t3"
+        }
+      ],
+      "execution_order": [
+        "t1",
+        "t2",
+        "t3"
+      ],
+      "passed": true,
+      "selection_source": "hybrid_primary:qwen/qwen3-1.7b",
+      "status": "completed",
+      "task_results": [
+        {
+          "agent_id": "v07-p22-preparer",
+          "agent_kind": "remote_a2a",
+          "artifacts": [
+            {
+              "data": {
+                "fixture": true,
+                "task_id": "t1"
+              },
+              "kind": "data",
+              "name": "v07-p22-source"
+            }
+          ],
+          "attempt_id": "t1-attempt-1",
+          "error": "",
+          "metadata": {
+            "attempt_key": "v07-a2a-v07-con-22-feasible:plan-ffe2f64f871f4981a66a76c123a6e167:t1:t1-attempt-1",
+            "coordinator_id": "coordinator-4bde83c7882842499ece69aab5d41245",
+            "fencing_token": 1,
+            "idempotency_key": "v07-a2a-v07-con-22-feasible:plan-ffe2f64f871f4981a66a76c123a6e167:t1:t1-attempt-1",
+            "invocation_endpoint": "http://fixture.invalid/v07-p22-preparer",
+            "operation_key": "v07-a2a-v07-con-22-feasible:1:t1",
+            "plan_generation": 1,
+            "registry_revision": 0
+          },
+          "output": {
+            "artifacts": [
+              {
+                "data": {
+                  "fixture": true,
+                  "task_id": "t1"
+                },
+                "kind": "data",
+                "name": "v07-p22-source"
+              }
+            ],
+            "fixture_a2a": true
+          },
+          "plan_id": "plan-ffe2f64f871f4981a66a76c123a6e167",
+          "session_id": "v07-a2a-v07-con-22-feasible",
+          "status": "completed",
+          "task_id": "t1"
+        },
+        {
+          "agent_id": "v07-p22-verifier",
+          "agent_kind": "remote_a2a",
+          "artifacts": [
+            {
+              "data": {
+                "fixture": true,
+                "task_id": "t2"
+              },
+              "kind": "data",
+              "name": "v07-p22-checked"
+            }
+          ],
+          "attempt_id": "t2-attempt-1",
+          "error": "",
+          "metadata": {
+            "attempt_key": "v07-a2a-v07-con-22-feasible:plan-ffe2f64f871f4981a66a76c123a6e167:t2:t2-attempt-1",
+            "coordinator_id": "coordinator-4bde83c7882842499ece69aab5d41245",
+            "fencing_token": 1,
+            "idempotency_key": "v07-a2a-v07-con-22-feasible:plan-ffe2f64f871f4981a66a76c123a6e167:t2:t2-attempt-1",
+            "invocation_endpoint": "http://fixture.invalid/v07-p22-verifier",
+            "operation_key": "v07-a2a-v07-con-22-feasible:1:t2",
+            "plan_generation": 1,
+            "registry_revision": 0
+          },
+          "output": {
+            "artifacts": [
+              {
+                "data": {
+                  "fixture": true,
+                  "task_id": "t2"
+                },
+                "kind": "data",
+                "name": "v07-p22-checked"
+              }
+            ],
+            "fixture_a2a": true
+          },
+          "plan_id": "plan-ffe2f64f871f4981a66a76c123a6e167",
+          "session_id": "v07-a2a-v07-con-22-feasible",
+          "status": "completed",
+          "task_id": "t2"
+        },
+        {
+          "agent_id": "v07-p22-backup",
+          "agent_kind": "remote_a2a",
+          "artifacts": [
+            {
+              "data": {
+                "fixture": true,
+                "task_id": "t3"
+              },
+              "kind": "data",
+              "name": "v07-p22-result"
+            }
+          ],
+          "attempt_id": "t3-attempt-1",
+          "error": "",
+          "metadata": {
+            "attempt_key": "v07-a2a-v07-con-22-feasible:plan-ffe2f64f871f4981a66a76c123a6e167:t3:t3-attempt-1",
+            "coordinator_id": "coordinator-4bde83c7882842499ece69aab5d41245",
+            "fencing_token": 1,
+            "idempotency_key": "v07-a2a-v07-con-22-feasible:plan-ffe2f64f871f4981a66a76c123a6e167:t3:t3-attempt-1",
+            "invocation_endpoint": "http://fixture.invalid/v07-p22-backup",
+            "operation_key": "v07-a2a-v07-con-22-feasible:1:t3",
+            "plan_generation": 1,
+            "registry_revision": 0
+          },
+          "output": {
+            "artifacts": [
+              {
+                "data": {
+                  "fixture": true,
+                  "task_id": "t3"
+                },
+                "kind": "data",
+                "name": "v07-p22-result"
+              }
+            ],
+            "fixture_a2a": true
+          },
+          "plan_id": "plan-ffe2f64f871f4981a66a76c123a6e167",
+          "session_id": "v07-a2a-v07-con-22-feasible",
+          "status": "completed",
+          "task_id": "t3"
+        }
+      ]
+    },
+    {
+      "artifact_count": 3,
+      "case_id": "v07-con-11-feasible",
+      "category": "negation",
+      "compiler_feasible": true,
+      "dispatches": [
+        {
+          "agent_id": "v07-p11-preparer",
+          "input_dependency_count": 0,
+          "operation_key": "v07-a2a-v07-con-11-feasible:1:t1",
+          "task_id": "t1"
+        },
+        {
+          "agent_id": "v07-p11-verifier",
+          "input_dependency_count": 1,
+          "operation_key": "v07-a2a-v07-con-11-feasible:1:t2",
+          "task_id": "t2"
+        },
+        {
+          "agent_id": "v07-p11-primary",
+          "input_dependency_count": 1,
+          "operation_key": "v07-a2a-v07-con-11-feasible:1:t3",
+          "task_id": "t3"
+        }
+      ],
+      "execution_order": [
+        "t1",
+        "t2",
+        "t3"
+      ],
+      "passed": true,
+      "selection_source": "hybrid_primary:qwen/qwen3-1.7b",
+      "status": "completed",
+      "task_results": [
+        {
+          "agent_id": "v07-p11-preparer",
+          "agent_kind": "remote_a2a",
+          "artifacts": [
+            {
+              "data": {
+                "fixture": true,
+                "task_id": "t1"
+              },
+              "kind": "data",
+              "name": "v07-p11-source"
+            }
+          ],
+          "attempt_id": "t1-attempt-1",
+          "error": "",
+          "metadata": {
+            "attempt_key": "v07-a2a-v07-con-11-feasible:plan-daa0bbfa15f14be6b759384528e43a61:t1:t1-attempt-1",
+            "coordinator_id": "coordinator-ba658b2ca367424ab5a872222b921502",
+            "fencing_token": 1,
+            "idempotency_key": "v07-a2a-v07-con-11-feasible:plan-daa0bbfa15f14be6b759384528e43a61:t1:t1-attempt-1",
+            "invocation_endpoint": "http://fixture.invalid/v07-p11-preparer",
+            "operation_key": "v07-a2a-v07-con-11-feasible:1:t1",
+            "plan_generation": 1,
+            "registry_revision": 0
+          },
+          "output": {
+            "artifacts": [
+              {
+                "data": {
+                  "fixture": true,
+                  "task_id": "t1"
+                },
+                "kind": "data",
+                "name": "v07-p11-source"
+              }
+            ],
+            "fixture_a2a": true
+          },
+          "plan_id": "plan-daa0bbfa15f14be6b759384528e43a61",
+          "session_id": "v07-a2a-v07-con-11-feasible",
+          "status": "completed",
+          "task_id": "t1"
+        },
+        {
+          "agent_id": "v07-p11-verifier",
+          "agent_kind": "remote_a2a",
+          "artifacts": [
+            {
+              "data": {
+                "fixture": true,
+                "task_id": "t2"
+              },
+              "kind": "data",
+              "name": "v07-p11-checked"
+            }
+          ],
+          "attempt_id": "t2-attempt-1",
+          "error": "",
+          "metadata": {
+            "attempt_key": "v07-a2a-v07-con-11-feasible:plan-daa0bbfa15f14be6b759384528e43a61:t2:t2-attempt-1",
+            "coordinator_id": "coordinator-ba658b2ca367424ab5a872222b921502",
+            "fencing_token": 1,
+            "idempotency_key": "v07-a2a-v07-con-11-feasible:plan-daa0bbfa15f14be6b759384528e43a61:t2:t2-attempt-1",
+            "invocation_endpoint": "http://fixture.invalid/v07-p11-verifier",
+            "operation_key": "v07-a2a-v07-con-11-feasible:1:t2",
+            "plan_generation": 1,
+            "registry_revision": 0
+          },
+          "output": {
+            "artifacts": [
+              {
+                "data": {
+                  "fixture": true,
+                  "task_id": "t2"
+                },
+                "kind": "data",
+                "name": "v07-p11-checked"
+              }
+            ],
+            "fixture_a2a": true
+          },
+          "plan_id": "plan-daa0bbfa15f14be6b759384528e43a61",
+          "session_id": "v07-a2a-v07-con-11-feasible",
+          "status": "completed",
+          "task_id": "t2"
+        },
+        {
+          "agent_id": "v07-p11-primary",
+          "agent_kind": "remote_a2a",
+          "artifacts": [
+            {
+              "data": {
+                "fixture": true,
+                "task_id": "t3"
+              },
+              "kind": "data",
+              "name": "v07-p11-result"
+            }
+          ],
+          "attempt_id": "t3-attempt-1",
+          "error": "",
+          "metadata": {
+            "attempt_key": "v07-a2a-v07-con-11-feasible:plan-daa0bbfa15f14be6b759384528e43a61:t3:t3-attempt-1",
+            "coordinator_id": "coordinator-ba658b2ca367424ab5a872222b921502",
+            "fencing_token": 1,
+            "idempotency_key": "v07-a2a-v07-con-11-feasible:plan-daa0bbfa15f14be6b759384528e43a61:t3:t3-attempt-1",
+            "invocation_endpoint": "http://fixture.invalid/v07-p11-primary",
+            "operation_key": "v07-a2a-v07-con-11-feasible:1:t3",
+            "plan_generation": 1,
+            "registry_revision": 0
+          },
+          "output": {
+            "artifacts": [
+              {
+                "data": {
+                  "fixture": true,
+                  "task_id": "t3"
+                },
+                "kind": "data",
+                "name": "v07-p11-result"
+              }
+            ],
+            "fixture_a2a": true
+          },
+          "plan_id": "plan-daa0bbfa15f14be6b759384528e43a61",
+          "session_id": "v07-a2a-v07-con-11-feasible",
+          "status": "completed",
+          "task_id": "t3"
+        }
+      ]
+    },
+    {
+      "artifact_count": 3,
+      "case_id": "v07-con-01-feasible",
+      "category": "paraphrase",
+      "compiler_feasible": true,
+      "dispatches": [
+        {
+          "agent_id": "v07-p01-preparer",
+          "input_dependency_count": 0,
+          "operation_key": "v07-a2a-v07-con-01-feasible:1:t1",
+          "task_id": "t1"
+        },
+        {
+          "agent_id": "v07-p01-verifier",
+          "input_dependency_count": 1,
+          "operation_key": "v07-a2a-v07-con-01-feasible:1:t2",
+          "task_id": "t2"
+        },
+        {
+          "agent_id": "v07-p01-backup",
+          "input_dependency_count": 1,
+          "operation_key": "v07-a2a-v07-con-01-feasible:1:t3",
+          "task_id": "t3"
+        }
+      ],
+      "execution_order": [
+        "t1",
+        "t2",
+        "t3"
+      ],
+      "passed": true,
+      "selection_source": "hybrid_primary:qwen/qwen3-1.7b",
+      "status": "completed",
+      "task_results": [
+        {
+          "agent_id": "v07-p01-preparer",
+          "agent_kind": "remote_a2a",
+          "artifacts": [
+            {
+              "data": {
+                "fixture": true,
+                "task_id": "t1"
+              },
+              "kind": "data",
+              "name": "v07-p01-source"
+            }
+          ],
+          "attempt_id": "t1-attempt-1",
+          "error": "",
+          "metadata": {
+            "attempt_key": "v07-a2a-v07-con-01-feasible:plan-fcc2d80ff5804fe4a39f8cde69eb5ca1:t1:t1-attempt-1",
+            "coordinator_id": "coordinator-d89f2217ab87440f8cc46cf71f11db1f",
+            "fencing_token": 1,
+            "idempotency_key": "v07-a2a-v07-con-01-feasible:plan-fcc2d80ff5804fe4a39f8cde69eb5ca1:t1:t1-attempt-1",
+            "invocation_endpoint": "http://fixture.invalid/v07-p01-preparer",
+            "operation_key": "v07-a2a-v07-con-01-feasible:1:t1",
+            "plan_generation": 1,
+            "registry_revision": 0
+          },
+          "output": {
+            "artifacts": [
+              {
+                "data": {
+                  "fixture": true,
+                  "task_id": "t1"
+                },
+                "kind": "data",
+                "name": "v07-p01-source"
+              }
+            ],
+            "fixture_a2a": true
+          },
+          "plan_id": "plan-fcc2d80ff5804fe4a39f8cde69eb5ca1",
+          "session_id": "v07-a2a-v07-con-01-feasible",
+          "status": "completed",
+          "task_id": "t1"
+        },
+        {
+          "agent_id": "v07-p01-verifier",
+          "agent_kind": "remote_a2a",
+          "artifacts": [
+            {
+              "data": {
+                "fixture": true,
+                "task_id": "t2"
+              },
+              "kind": "data",
+              "name": "v07-p01-checked"
+            }
+          ],
+          "attempt_id": "t2-attempt-1",
+          "error": "",
+          "metadata": {
+            "attempt_key": "v07-a2a-v07-con-01-feasible:plan-fcc2d80ff5804fe4a39f8cde69eb5ca1:t2:t2-attempt-1",
+            "coordinator_id": "coordinator-d89f2217ab87440f8cc46cf71f11db1f",
+            "fencing_token": 1,
+            "idempotency_key": "v07-a2a-v07-con-01-feasible:plan-fcc2d80ff5804fe4a39f8cde69eb5ca1:t2:t2-attempt-1",
+            "invocation_endpoint": "http://fixture.invalid/v07-p01-verifier",
+            "operation_key": "v07-a2a-v07-con-01-feasible:1:t2",
+            "plan_generation": 1,
+            "registry_revision": 0
+          },
+          "output": {
+            "artifacts": [
+              {
+                "data": {
+                  "fixture": true,
+                  "task_id": "t2"
+                },
+                "kind": "data",
+                "name": "v07-p01-checked"
+              }
+            ],
+            "fixture_a2a": true
+          },
+          "plan_id": "plan-fcc2d80ff5804fe4a39f8cde69eb5ca1",
+          "session_id": "v07-a2a-v07-con-01-feasible",
+          "status": "completed",
+          "task_id": "t2"
+        },
+        {
+          "agent_id": "v07-p01-backup",
+          "agent_kind": "remote_a2a",
+          "artifacts": [
+            {
+              "data": {
+                "fixture": true,
+                "task_id": "t3"
+              },
+              "kind": "data",
+              "name": "v07-p01-result"
+            }
+          ],
+          "attempt_id": "t3-attempt-1",
+          "error": "",
+          "metadata": {
+            "attempt_key": "v07-a2a-v07-con-01-feasible:plan-fcc2d80ff5804fe4a39f8cde69eb5ca1:t3:t3-attempt-1",
+            "coordinator_id": "coordinator-d89f2217ab87440f8cc46cf71f11db1f",
+            "fencing_token": 1,
+            "idempotency_key": "v07-a2a-v07-con-01-feasible:plan-fcc2d80ff5804fe4a39f8cde69eb5ca1:t3:t3-attempt-1",
+            "invocation_endpoint": "http://fixture.invalid/v07-p01-backup",
+            "operation_key": "v07-a2a-v07-con-01-feasible:1:t3",
+            "plan_generation": 1,
+            "registry_revision": 0
+          },
+          "output": {
+            "artifacts": [
+              {
+                "data": {
+                  "fixture": true,
+                  "task_id": "t3"
+                },
+                "kind": "data",
+                "name": "v07-p01-result"
+              }
+            ],
+            "fixture_a2a": true
+          },
+          "plan_id": "plan-fcc2d80ff5804fe4a39f8cde69eb5ca1",
+          "session_id": "v07-a2a-v07-con-01-feasible",
+          "status": "completed",
+          "task_id": "t3"
+        }
+      ]
+    },
+    {
+      "artifact_count": 3,
+      "case_id": "v07-con-25-feasible",
+      "category": "provider_recovery",
+      "compiler_feasible": true,
+      "dispatches": [
+        {
+          "agent_id": "v07-p25-preparer",
+          "input_dependency_count": 0,
+          "operation_key": "v07-a2a-v07-con-25-feasible:1:t1",
+          "task_id": "t1"
+        },
+        {
+          "agent_id": "v07-p25-verifier",
+          "input_dependency_count": 1,
+          "operation_key": "v07-a2a-v07-con-25-feasible:1:t2",
+          "task_id": "t2"
+        },
+        {
+          "agent_id": "v07-p25-backup",
+          "input_dependency_count": 1,
+          "operation_key": "v07-a2a-v07-con-25-feasible:1:t3",
+          "task_id": "t3"
+        }
+      ],
+      "execution_order": [
+        "t1",
+        "t2",
+        "t3"
+      ],
+      "passed": true,
+      "selection_source": "hybrid_primary:qwen/qwen3-1.7b",
+      "status": "completed",
+      "task_results": [
+        {
+          "agent_id": "v07-p25-preparer",
+          "agent_kind": "remote_a2a",
+          "artifacts": [
+            {
+              "data": {
+                "fixture": true,
+                "task_id": "t1"
+              },
+              "kind": "data",
+              "name": "v07-p25-source"
+            }
+          ],
+          "attempt_id": "t1-attempt-1",
+          "error": "",
+          "metadata": {
+            "attempt_key": "v07-a2a-v07-con-25-feasible:plan-0d92165d197f44d4be4b07e00918db0a:t1:t1-attempt-1",
+            "coordinator_id": "coordinator-a75837bda0904f3d8f76e7b293249f1a",
+            "fencing_token": 1,
+            "idempotency_key": "v07-a2a-v07-con-25-feasible:plan-0d92165d197f44d4be4b07e00918db0a:t1:t1-attempt-1",
+            "invocation_endpoint": "http://fixture.invalid/v07-p25-preparer",
+            "operation_key": "v07-a2a-v07-con-25-feasible:1:t1",
+            "plan_generation": 1,
+            "registry_revision": 0
+          },
+          "output": {
+            "artifacts": [
+              {
+                "data": {
+                  "fixture": true,
+                  "task_id": "t1"
+                },
+                "kind": "data",
+                "name": "v07-p25-source"
+              }
+            ],
+            "fixture_a2a": true
+          },
+          "plan_id": "plan-0d92165d197f44d4be4b07e00918db0a",
+          "session_id": "v07-a2a-v07-con-25-feasible",
+          "status": "completed",
+          "task_id": "t1"
+        },
+        {
+          "agent_id": "v07-p25-verifier",
+          "agent_kind": "remote_a2a",
+          "artifacts": [
+            {
+              "data": {
+                "fixture": true,
+                "task_id": "t2"
+              },
+              "kind": "data",
+              "name": "v07-p25-checked"
+            }
+          ],
+          "attempt_id": "t2-attempt-1",
+          "error": "",
+          "metadata": {
+            "attempt_key": "v07-a2a-v07-con-25-feasible:plan-0d92165d197f44d4be4b07e00918db0a:t2:t2-attempt-1",
+            "coordinator_id": "coordinator-a75837bda0904f3d8f76e7b293249f1a",
+            "fencing_token": 1,
+            "idempotency_key": "v07-a2a-v07-con-25-feasible:plan-0d92165d197f44d4be4b07e00918db0a:t2:t2-attempt-1",
+            "invocation_endpoint": "http://fixture.invalid/v07-p25-verifier",
+            "operation_key": "v07-a2a-v07-con-25-feasible:1:t2",
+            "plan_generation": 1,
+            "registry_revision": 0
+          },
+          "output": {
+            "artifacts": [
+              {
+                "data": {
+                  "fixture": true,
+                  "task_id": "t2"
+                },
+                "kind": "data",
+                "name": "v07-p25-checked"
+              }
+            ],
+            "fixture_a2a": true
+          },
+          "plan_id": "plan-0d92165d197f44d4be4b07e00918db0a",
+          "session_id": "v07-a2a-v07-con-25-feasible",
+          "status": "completed",
+          "task_id": "t2"
+        },
+        {
+          "agent_id": "v07-p25-backup",
+          "agent_kind": "remote_a2a",
+          "artifacts": [
+            {
+              "data": {
+                "fixture": true,
+                "task_id": "t3"
+              },
+              "kind": "data",
+              "name": "v07-p25-result"
+            }
+          ],
+          "attempt_id": "t3-attempt-1",
+          "error": "",
+          "metadata": {
+            "attempt_key": "v07-a2a-v07-con-25-feasible:plan-0d92165d197f44d4be4b07e00918db0a:t3:t3-attempt-1",
+            "coordinator_id": "coordinator-a75837bda0904f3d8f76e7b293249f1a",
+            "fencing_token": 1,
+            "idempotency_key": "v07-a2a-v07-con-25-feasible:plan-0d92165d197f44d4be4b07e00918db0a:t3:t3-attempt-1",
+            "invocation_endpoint": "http://fixture.invalid/v07-p25-backup",
+            "operation_key": "v07-a2a-v07-con-25-feasible:1:t3",
+            "plan_generation": 1,
+            "registry_revision": 0
+          },
+          "output": {
+            "artifacts": [
+              {
+                "data": {
+                  "fixture": true,
+                  "task_id": "t3"
+                },
+                "kind": "data",
+                "name": "v07-p25-result"
+              }
+            ],
+            "fixture_a2a": true
+          },
+          "plan_id": "plan-0d92165d197f44d4be4b07e00918db0a",
+          "session_id": "v07-a2a-v07-con-25-feasible",
+          "status": "completed",
+          "task_id": "t3"
+        }
+      ]
+    },
+    {
+      "artifact_count": 3,
+      "case_id": "v07-con-13-feasible",
+      "category": "trust",
+      "compiler_feasible": true,
+      "dispatches": [
+        {
+          "agent_id": "v07-p13-preparer",
+          "input_dependency_count": 0,
+          "operation_key": "v07-a2a-v07-con-13-feasible:1:t1",
+          "task_id": "t1"
+        },
+        {
+          "agent_id": "v07-p13-verifier",
+          "input_dependency_count": 1,
+          "operation_key": "v07-a2a-v07-con-13-feasible:1:t2",
+          "task_id": "t2"
+        },
+        {
+          "agent_id": "v07-p13-backup",
+          "input_dependency_count": 1,
+          "operation_key": "v07-a2a-v07-con-13-feasible:1:t3",
+          "task_id": "t3"
+        }
+      ],
+      "execution_order": [
+        "t1",
+        "t2",
+        "t3"
+      ],
+      "passed": true,
+      "selection_source": "hybrid_primary:qwen/qwen3-1.7b",
+      "status": "completed",
+      "task_results": [
+        {
+          "agent_id": "v07-p13-preparer",
+          "agent_kind": "remote_a2a",
+          "artifacts": [
+            {
+              "data": {
+                "fixture": true,
+                "task_id": "t1"
+              },
+              "kind": "data",
+              "name": "v07-p13-source"
+            }
+          ],
+          "attempt_id": "t1-attempt-1",
+          "error": "",
+          "metadata": {
+            "attempt_key": "v07-a2a-v07-con-13-feasible:plan-73bc09493d6b4aa6959cd9c1e5f49e5e:t1:t1-attempt-1",
+            "coordinator_id": "coordinator-31245ef5e83f401486be7ce54a9b5254",
+            "fencing_token": 1,
+            "idempotency_key": "v07-a2a-v07-con-13-feasible:plan-73bc09493d6b4aa6959cd9c1e5f49e5e:t1:t1-attempt-1",
+            "invocation_endpoint": "http://fixture.invalid/v07-p13-preparer",
+            "operation_key": "v07-a2a-v07-con-13-feasible:1:t1",
+            "plan_generation": 1,
+            "registry_revision": 0
+          },
+          "output": {
+            "artifacts": [
+              {
+                "data": {
+                  "fixture": true,
+                  "task_id": "t1"
+                },
+                "kind": "data",
+                "name": "v07-p13-source"
+              }
+            ],
+            "fixture_a2a": true
+          },
+          "plan_id": "plan-73bc09493d6b4aa6959cd9c1e5f49e5e",
+          "session_id": "v07-a2a-v07-con-13-feasible",
+          "status": "completed",
+          "task_id": "t1"
+        },
+        {
+          "agent_id": "v07-p13-verifier",
+          "agent_kind": "remote_a2a",
+          "artifacts": [
+            {
+              "data": {
+                "fixture": true,
+                "task_id": "t2"
+              },
+              "kind": "data",
+              "name": "v07-p13-checked"
+            }
+          ],
+          "attempt_id": "t2-attempt-1",
+          "error": "",
+          "metadata": {
+            "attempt_key": "v07-a2a-v07-con-13-feasible:plan-73bc09493d6b4aa6959cd9c1e5f49e5e:t2:t2-attempt-1",
+            "coordinator_id": "coordinator-31245ef5e83f401486be7ce54a9b5254",
+            "fencing_token": 1,
+            "idempotency_key": "v07-a2a-v07-con-13-feasible:plan-73bc09493d6b4aa6959cd9c1e5f49e5e:t2:t2-attempt-1",
+            "invocation_endpoint": "http://fixture.invalid/v07-p13-verifier",
+            "operation_key": "v07-a2a-v07-con-13-feasible:1:t2",
+            "plan_generation": 1,
+            "registry_revision": 0
+          },
+          "output": {
+            "artifacts": [
+              {
+                "data": {
+                  "fixture": true,
+                  "task_id": "t2"
+                },
+                "kind": "data",
+                "name": "v07-p13-checked"
+              }
+            ],
+            "fixture_a2a": true
+          },
+          "plan_id": "plan-73bc09493d6b4aa6959cd9c1e5f49e5e",
+          "session_id": "v07-a2a-v07-con-13-feasible",
+          "status": "completed",
+          "task_id": "t2"
+        },
+        {
+          "agent_id": "v07-p13-backup",
+          "agent_kind": "remote_a2a",
+          "artifacts": [
+            {
+              "data": {
+                "fixture": true,
+                "task_id": "t3"
+              },
+              "kind": "data",
+              "name": "v07-p13-result"
+            }
+          ],
+          "attempt_id": "t3-attempt-1",
+          "error": "",
+          "metadata": {
+            "attempt_key": "v07-a2a-v07-con-13-feasible:plan-73bc09493d6b4aa6959cd9c1e5f49e5e:t3:t3-attempt-1",
+            "coordinator_id": "coordinator-31245ef5e83f401486be7ce54a9b5254",
+            "fencing_token": 1,
+            "idempotency_key": "v07-a2a-v07-con-13-feasible:plan-73bc09493d6b4aa6959cd9c1e5f49e5e:t3:t3-attempt-1",
+            "invocation_endpoint": "http://fixture.invalid/v07-p13-backup",
+            "operation_key": "v07-a2a-v07-con-13-feasible:1:t3",
+            "plan_generation": 1,
+            "registry_revision": 0
+          },
+          "output": {
+            "artifacts": [
+              {
+                "data": {
+                  "fixture": true,
+                  "task_id": "t3"
+                },
+                "kind": "data",
+                "name": "v07-p13-result"
+              }
+            ],
+            "fixture_a2a": true
+          },
+          "plan_id": "plan-73bc09493d6b4aa6959cd9c1e5f49e5e",
+          "session_id": "v07-a2a-v07-con-13-feasible",
+          "status": "completed",
+          "task_id": "t3"
+        }
+      ]
+    },
+    {
+      "artifact_count": 3,
+      "case_id": "v07-con-02-feasible",
+      "category": "paraphrase",
+      "compiler_feasible": true,
+      "dispatches": [
+        {
+          "agent_id": "v07-p02-preparer",
+          "input_dependency_count": 0,
+          "operation_key": "v07-a2a-v07-con-02-feasible:1:t1",
+          "task_id": "t1"
+        },
+        {
+          "agent_id": "v07-p02-verifier",
+          "input_dependency_count": 1,
+          "operation_key": "v07-a2a-v07-con-02-feasible:1:t2",
+          "task_id": "t2"
+        },
+        {
+          "agent_id": "v07-p02-backup",
+          "input_dependency_count": 1,
+          "operation_key": "v07-a2a-v07-con-02-feasible:1:t3",
+          "task_id": "t3"
+        }
+      ],
+      "execution_order": [
+        "t1",
+        "t2",
+        "t3"
+      ],
+      "passed": true,
+      "selection_source": "hybrid_primary:qwen/qwen3-1.7b",
+      "status": "completed",
+      "task_results": [
+        {
+          "agent_id": "v07-p02-preparer",
+          "agent_kind": "remote_a2a",
+          "artifacts": [
+            {
+              "data": {
+                "fixture": true,
+                "task_id": "t1"
+              },
+              "kind": "data",
+              "name": "v07-p02-source"
+            }
+          ],
+          "attempt_id": "t1-attempt-1",
+          "error": "",
+          "metadata": {
+            "attempt_key": "v07-a2a-v07-con-02-feasible:plan-23115fbad01341ee9538e179f8edc2f7:t1:t1-attempt-1",
+            "coordinator_id": "coordinator-ff2169721f164bfea3a8a4e9cbf1beb1",
+            "fencing_token": 1,
+            "idempotency_key": "v07-a2a-v07-con-02-feasible:plan-23115fbad01341ee9538e179f8edc2f7:t1:t1-attempt-1",
+            "invocation_endpoint": "http://fixture.invalid/v07-p02-preparer",
+            "operation_key": "v07-a2a-v07-con-02-feasible:1:t1",
+            "plan_generation": 1,
+            "registry_revision": 0
+          },
+          "output": {
+            "artifacts": [
+              {
+                "data": {
+                  "fixture": true,
+                  "task_id": "t1"
+                },
+                "kind": "data",
+                "name": "v07-p02-source"
+              }
+            ],
+            "fixture_a2a": true
+          },
+          "plan_id": "plan-23115fbad01341ee9538e179f8edc2f7",
+          "session_id": "v07-a2a-v07-con-02-feasible",
+          "status": "completed",
+          "task_id": "t1"
+        },
+        {
+          "agent_id": "v07-p02-verifier",
+          "agent_kind": "remote_a2a",
+          "artifacts": [
+            {
+              "data": {
+                "fixture": true,
+                "task_id": "t2"
+              },
+              "kind": "data",
+              "name": "v07-p02-checked"
+            }
+          ],
+          "attempt_id": "t2-attempt-1",
+          "error": "",
+          "metadata": {
+            "attempt_key": "v07-a2a-v07-con-02-feasible:plan-23115fbad01341ee9538e179f8edc2f7:t2:t2-attempt-1",
+            "coordinator_id": "coordinator-ff2169721f164bfea3a8a4e9cbf1beb1",
+            "fencing_token": 1,
+            "idempotency_key": "v07-a2a-v07-con-02-feasible:plan-23115fbad01341ee9538e179f8edc2f7:t2:t2-attempt-1",
+            "invocation_endpoint": "http://fixture.invalid/v07-p02-verifier",
+            "operation_key": "v07-a2a-v07-con-02-feasible:1:t2",
+            "plan_generation": 1,
+            "registry_revision": 0
+          },
+          "output": {
+            "artifacts": [
+              {
+                "data": {
+                  "fixture": true,
+                  "task_id": "t2"
+                },
+                "kind": "data",
+                "name": "v07-p02-checked"
+              }
+            ],
+            "fixture_a2a": true
+          },
+          "plan_id": "plan-23115fbad01341ee9538e179f8edc2f7",
+          "session_id": "v07-a2a-v07-con-02-feasible",
+          "status": "completed",
+          "task_id": "t2"
+        },
+        {
+          "agent_id": "v07-p02-backup",
+          "agent_kind": "remote_a2a",
+          "artifacts": [
+            {
+              "data": {
+                "fixture": true,
+                "task_id": "t3"
+              },
+              "kind": "data",
+              "name": "v07-p02-result"
+            }
+          ],
+          "attempt_id": "t3-attempt-1",
+          "error": "",
+          "metadata": {
+            "attempt_key": "v07-a2a-v07-con-02-feasible:plan-23115fbad01341ee9538e179f8edc2f7:t3:t3-attempt-1",
+            "coordinator_id": "coordinator-ff2169721f164bfea3a8a4e9cbf1beb1",
+            "fencing_token": 1,
+            "idempotency_key": "v07-a2a-v07-con-02-feasible:plan-23115fbad01341ee9538e179f8edc2f7:t3:t3-attempt-1",
+            "invocation_endpoint": "http://fixture.invalid/v07-p02-backup",
+            "operation_key": "v07-a2a-v07-con-02-feasible:1:t3",
+            "plan_generation": 1,
+            "registry_revision": 0
+          },
+          "output": {
+            "artifacts": [
+              {
+                "data": {
+                  "fixture": true,
+                  "task_id": "t3"
+                },
+                "kind": "data",
+                "name": "v07-p02-result"
+              }
+            ],
+            "fixture_a2a": true
+          },
+          "plan_id": "plan-23115fbad01341ee9538e179f8edc2f7",
+          "session_id": "v07-a2a-v07-con-02-feasible",
+          "status": "completed",
+          "task_id": "t3"
+        }
+      ]
+    }
+  ],
+  "run_root": "demo_runs/v0.7/20260718T205322Z-con-cf292a9c99",
+  "schema_version": "a2a-replay-v0.7.0"
+}

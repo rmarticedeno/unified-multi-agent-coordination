@@ -1,0 +1,319 @@
+{
+  "schema_version": "0.7.0",
+  "identity": {
+    "phase": "development",
+    "arm": "direct_llm_v07",
+    "case_id": "v07-dev-02-feasible",
+    "pair_id": "v07-dev-pair-02",
+    "category": "paraphrase",
+    "model_id": "qwen/qwen3-1.7b",
+    "seed": 29
+  },
+  "settings": {
+    "temperature": 0.2,
+    "top_p": 1.0,
+    "max_tokens": 800,
+    "schema_repair": false
+  },
+  "public_input_hash": "1f1aee7e7070f8d60bf1f404ba852dc7c8cb2a0aa522b7bb6dbb2b918a39da0a",
+  "labels_loaded_during_collection": false,
+  "runtime_error": "",
+  "result": {
+    "prompt": [
+      {
+        "role": "system",
+        "content": "Act as a direct LLM coordinator without a symbolic authorization boundary. Interpret the raw request, decide accept or refuse, assign admitted agents to every required capability, and give dependency-respecting execution_order. Use only identifiers in the supplied catalog and registry. Mark unresolved meaning ambiguous. Return only schema-conforming JSON."
+      },
+      {
+        "role": "user",
+        "content": "{\"request_text\":\"Using the admitted travel logistics services, gather the inputs, check the packet, and issue the brief with normal travel logistics assurance as travel logistics JSON output.\",\"catalog\":{\"capabilities\":[{\"capability_id\":\"v07-p02-prepare\",\"name\":\"Assemble travel logistics source packet\",\"description\":\"Collect the source material needed for travel logistics.\",\"aliases\":[\"gather travel logistics inputs\",\"prepare travel logistics packet\",\"gather the inputs\",\"prepare the travel logistics packet\"],\"depends_on_capability_ids\":[],\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"text\"],\"output_modes\":[\"source_bundle\"],\"side_effect_class\":\"read_only\",\"auxiliary_eligible\":false,\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p02-source\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}},{\"capability_id\":\"v07-p02-verify\",\"name\":\"Validate travel logistics source packet\",\"description\":\"Check the assembled travel logistics material for correctness.\",\"aliases\":[\"check travel logistics inputs\",\"verify travel logistics packet\",\"check the packet\"],\"depends_on_capability_ids\":[\"v07-p02-prepare\"],\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"source_bundle\"],\"output_modes\":[\"checked_bundle\"],\"side_effect_class\":\"read_only\",\"auxiliary_eligible\":false,\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p02-checked\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}},{\"capability_id\":\"v07-p02-deliver\",\"name\":\"Publish travel logistics verified brief\",\"description\":\"Release the checked final brief for travel logistics.\",\"aliases\":[\"issue travel logistics brief\",\"release travel logistics summary\",\"issue the brief\"],\"depends_on_capability_ids\":[\"v07-p02-verify\"],\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"checked_bundle\"],\"output_modes\":[\"json\",\"signed_pdf\"],\"side_effect_class\":\"read_only\",\"auxiliary_eligible\":false,\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p02-result\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}},{\"capability_id\":\"v07-p02-archive\",\"name\":\"Archive travel logistics verified brief\",\"description\":\"Preserve the checked travel logistics brief for long-term retention.\",\"aliases\":[\"retain travel logistics brief\",\"store travel logistics summary\",\"retain the brief\"],\"depends_on_capability_ids\":[\"v07-p02-verify\"],\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"checked_bundle\"],\"output_modes\":[\"json\"],\"side_effect_class\":\"read_only\",\"auxiliary_eligible\":false,\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p02-archive-result\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}},{\"capability_id\":\"v07-p02-distractor-1\",\"name\":\"Auxiliary travel logistics operation 1\",\"description\":\"Perform unrelated travel logistics auxiliary operation number 1.\",\"aliases\":[\"auxiliary operation v07-p02 1\"],\"depends_on_capability_ids\":[],\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"text\"],\"output_modes\":[\"data\"],\"side_effect_class\":\"read_only\",\"auxiliary_eligible\":false,\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p02-distractor-artifact-1\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}},{\"capability_id\":\"v07-p02-distractor-2\",\"name\":\"Auxiliary travel logistics operation 2\",\"description\":\"Perform unrelated travel logistics auxiliary operation number 2.\",\"aliases\":[\"auxiliary operation v07-p02 2\"],\"depends_on_capability_ids\":[],\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"text\"],\"output_modes\":[\"data\"],\"side_effect_class\":\"read_only\",\"auxiliary_eligible\":false,\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p02-distractor-artifact-2\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}},{\"capability_id\":\"v07-p02-distractor-3\",\"name\":\"Auxiliary travel logistics operation 3\",\"description\":\"Perform unrelated travel logistics auxiliary operation number 3.\",\"aliases\":[\"auxiliary operation v07-p02 3\"],\"depends_on_capability_ids\":[],\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"text\"],\"output_modes\":[\"data\"],\"side_effect_class\":\"read_only\",\"auxiliary_eligible\":false,\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p02-distractor-artifact-3\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}},{\"capability_id\":\"v07-p02-distractor-4\",\"name\":\"Auxiliary travel logistics operation 4\",\"description\":\"Perform unrelated travel logistics auxiliary operation number 4.\",\"aliases\":[\"auxiliary operation v07-p02 4\"],\"depends_on_capability_ids\":[],\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"text\"],\"output_modes\":[\"data\"],\"side_effect_class\":\"read_only\",\"auxiliary_eligible\":false,\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p02-distractor-artifact-4\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}},{\"capability_id\":\"v07-p02-distractor-5\",\"name\":\"Auxiliary travel logistics operation 5\",\"description\":\"Perform unrelated travel logistics auxiliary operation number 5.\",\"aliases\":[\"auxiliary operation v07-p02 5\"],\"depends_on_capability_ids\":[],\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"text\"],\"output_modes\":[\"data\"],\"side_effect_class\":\"read_only\",\"auxiliary_eligible\":false,\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p02-distractor-artifact-5\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}},{\"capability_id\":\"v07-p02-distractor-6\",\"name\":\"Auxiliary travel logistics operation 6\",\"description\":\"Perform unrelated travel logistics auxiliary operation number 6.\",\"aliases\":[\"auxiliary operation v07-p02 6\"],\"depends_on_capability_ids\":[],\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"text\"],\"output_modes\":[\"data\"],\"side_effect_class\":\"read_only\",\"auxiliary_eligible\":false,\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p02-distractor-artifact-6\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}},{\"capability_id\":\"v07-p02-distractor-7\",\"name\":\"Auxiliary travel logistics operation 7\",\"description\":\"Perform unrelated travel logistics auxiliary operation number 7.\",\"aliases\":[\"auxiliary operation v07-p02 7\"],\"depends_on_capability_ids\":[],\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"text\"],\"output_modes\":[\"data\"],\"side_effect_class\":\"read_only\",\"auxiliary_eligible\":false,\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p02-distractor-artifact-7\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}},{\"capability_id\":\"v07-p02-distractor-8\",\"name\":\"Auxiliary travel logistics operation 8\",\"description\":\"Perform unrelated travel logistics auxiliary operation number 8.\",\"aliases\":[\"auxiliary operation v07-p02 8\"],\"depends_on_capability_ids\":[],\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"text\"],\"output_modes\":[\"data\"],\"side_effect_class\":\"read_only\",\"auxiliary_eligible\":false,\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p02-distractor-artifact-8\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}},{\"capability_id\":\"v07-p02-distractor-9\",\"name\":\"Auxiliary travel logistics operation 9\",\"description\":\"Perform unrelated travel logistics auxiliary operation number 9.\",\"aliases\":[\"auxiliary operation v07-p02 9\"],\"depends_on_capability_ids\":[],\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"text\"],\"output_modes\":[\"data\"],\"side_effect_class\":\"read_only\",\"auxiliary_eligible\":false,\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p02-distractor-artifact-9\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}},{\"capability_id\":\"v07-p02-distractor-10\",\"name\":\"Auxiliary travel logistics operation 10\",\"description\":\"Perform unrelated travel logistics auxiliary operation number 10.\",\"aliases\":[\"auxiliary operation v07-p02 10\"],\"depends_on_capability_ids\":[],\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"text\"],\"output_modes\":[\"data\"],\"side_effect_class\":\"read_only\",\"auxiliary_eligible\":false,\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p02-distractor-artifact-10\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}},{\"capability_id\":\"v07-p02-distractor-11\",\"name\":\"Auxiliary travel logistics operation 11\",\"description\":\"Perform unrelated travel logistics auxiliary operation number 11.\",\"aliases\":[\"auxiliary operation v07-p02 11\"],\"depends_on_capability_ids\":[],\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"text\"],\"output_modes\":[\"data\"],\"side_effect_class\":\"read_only\",\"auxiliary_eligible\":false,\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p02-distractor-artifact-11\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}},{\"capability_id\":\"v07-p02-distractor-12\",\"name\":\"Auxiliary travel logistics operation 12\",\"description\":\"Perform unrelated travel logistics auxiliary operation number 12.\",\"aliases\":[\"auxiliary operation v07-p02 12\"],\"depends_on_capability_ids\":[],\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"text\"],\"output_modes\":[\"data\"],\"side_effect_class\":\"read_only\",\"auxiliary_eligible\":false,\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p02-distractor-artifact-12\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}}],\"trust_policies\":[{\"policy_id\":\"v07-p02-ordinary\",\"name\":\"ordinary travel logistics assurance\",\"description\":\"Standard trust is sufficient for this travel logistics request.\",\"aliases\":[\"normal travel logistics assurance\"],\"required_trust_level\":\"standard\"},{\"policy_id\":\"v07-p02-elevated\",\"name\":\"elevated travel logistics assurance\",\"description\":\"Elevated trust is mandatory for this travel logistics request.\",\"aliases\":[\"high assurance for travel logistics\"],\"required_trust_level\":\"elevated\"}],\"artifact_contracts\":[{\"contract_id\":\"v07-p02-json\",\"name\":\"travel logistics machine-readable JSON\",\"description\":\"Return the final travel logistics result as JSON.\",\"aliases\":[\"travel logistics json output\"],\"output_modes\":[\"json\"],\"required_artifacts\":[\"v07-p02-result\"],\"json_schema\":{\"type\":\"object\"}},{\"contract_id\":\"v07-p02-signed-pdf\",\"name\":\"travel logistics signed PDF\",\"description\":\"Return the final travel logistics result as a signed PDF.\",\"aliases\":[\"signed travel logistics document\"],\"output_modes\":[\"signed_pdf\"],\"required_artifacts\":[\"v07-p02-signed-pdf\"],\"json_schema\":{\"type\":\"object\"}}],\"default_trust_policy_id\":\"v07-p02-ordinary\",\"default_artifact_contract_id\":\"v07-p02-json\"},\"registry\":[{\"agent_id\":\"v07-p02-preparer\",\"name\":\"travel logistics source preparer\",\"agent_kind\":\"remote_a2a\",\"description\":\"\",\"service_endpoint\":\"https://v07-p02-preparer.example/a2a\",\"invocation_endpoint\":\"\",\"skills\":[{\"name\":\"Assemble travel logistics source packet\",\"requirement_id\":\"v07-p02-prepare\",\"capability_id\":\"v07-p02-prepare\",\"description\":\"\",\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"text\"],\"output_modes\":[\"source_bundle\"],\"depends_on_requirement_ids\":[],\"constraints\":[],\"auxiliary_eligible\":false,\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"expected_evidence\":[],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p02-source\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}}],\"input_modes\":[],\"output_modes\":[],\"status\":\"available\",\"trust_level\":\"standard\",\"validation_contract\":{\"json_schema\":{},\"required_artifacts\":[],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"},\"security_schemes\":{},\"required_security_schemes\":[],\"source_card\":{},\"supports_fencing\":false,\"availability_scope\":\"remote\",\"owner_node_id\":\"\"},{\"agent_id\":\"v07-p02-verifier\",\"name\":\"travel logistics source verifier\",\"agent_kind\":\"remote_a2a\",\"description\":\"\",\"service_endpoint\":\"https://v07-p02-verifier.example/a2a\",\"invocation_endpoint\":\"\",\"skills\":[{\"name\":\"Validate travel logistics source packet\",\"requirement_id\":\"v07-p02-verify\",\"capability_id\":\"v07-p02-verify\",\"description\":\"\",\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"source_bundle\"],\"output_modes\":[\"checked_bundle\"],\"depends_on_requirement_ids\":[],\"constraints\":[],\"auxiliary_eligible\":false,\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"expected_evidence\":[],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p02-checked\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}}],\"input_modes\":[],\"output_modes\":[],\"status\":\"available\",\"trust_level\":\"standard\",\"validation_contract\":{\"json_schema\":{},\"required_artifacts\":[],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"},\"security_schemes\":{},\"required_security_schemes\":[],\"source_card\":{},\"supports_fencing\":false,\"availability_scope\":\"remote\",\"owner_node_id\":\"\"},{\"agent_id\":\"v07-p02-primary\",\"name\":\"primary travel logistics publisher\",\"agent_kind\":\"remote_a2a\",\"description\":\"\",\"service_endpoint\":\"https://v07-p02-primary.example/a2a\",\"invocation_endpoint\":\"\",\"skills\":[{\"name\":\"Publish travel logistics verified brief\",\"requirement_id\":\"v07-p02-deliver\",\"capability_id\":\"v07-p02-deliver\",\"description\":\"\",\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"checked_bundle\"],\"output_modes\":[\"json\"],\"depends_on_requirement_ids\":[],\"constraints\":[],\"auxiliary_eligible\":false,\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"expected_evidence\":[],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p02-result\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}}],\"input_modes\":[],\"output_modes\":[],\"status\":\"available\",\"trust_level\":\"standard\",\"validation_contract\":{\"json_schema\":{},\"required_artifacts\":[],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"},\"security_schemes\":{},\"required_security_schemes\":[],\"source_card\":{},\"supports_fencing\":false,\"availability_scope\":\"remote\",\"owner_node_id\":\"\"},{\"agent_id\":\"v07-p02-backup\",\"name\":\"backup travel logistics publisher\",\"agent_kind\":\"remote_a2a\",\"description\":\"\",\"service_endpoint\":\"https://v07-p02-backup.example/a2a\",\"invocation_endpoint\":\"\",\"skills\":[{\"name\":\"Publish travel logistics verified brief\",\"requirement_id\":\"v07-p02-deliver\",\"capability_id\":\"v07-p02-deliver\",\"description\":\"\",\"input_schema\":{\"type\":\"object\"},\"output_schema\":{\"type\":\"object\"},\"input_modes\":[\"checked_bundle\"],\"output_modes\":[\"json\"],\"depends_on_requirement_ids\":[],\"constraints\":[],\"auxiliary_eligible\":false,\"required_trust_level\":\"standard\",\"side_effect_class\":\"read_only\",\"expected_evidence\":[],\"validation_contract\":{\"json_schema\":{\"type\":\"object\"},\"required_artifacts\":[\"v07-p02-result\"],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"}}],\"input_modes\":[],\"output_modes\":[],\"status\":\"available\",\"trust_level\":\"standard\",\"validation_contract\":{\"json_schema\":{},\"required_artifacts\":[],\"artifact_kinds\":[],\"required_fields\":[],\"evidence_types\":[],\"validator_id\":\"\"},\"security_schemes\":{},\"required_security_schemes\":[],\"source_card\":{},\"supports_fencing\":false,\"availability_scope\":\"remote\",\"owner_node_id\":\"\"}]}"
+      }
+    ],
+    "output_schema": {
+      "type": "object",
+      "properties": {
+        "interpretation_status": {
+          "type": "string",
+          "enum": [
+            "resolved",
+            "ambiguous"
+          ]
+        },
+        "goals": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 16,
+          "items": {
+            "type": "object",
+            "properties": {
+              "capability_id": {
+                "type": "string",
+                "enum": [
+                  "v07-p02-deliver",
+                  "v07-p02-archive",
+                  "v07-p02-verify",
+                  "v07-p02-prepare",
+                  "v07-p02-distractor-1",
+                  "v07-p02-distractor-2",
+                  "v07-p02-distractor-3",
+                  "v07-p02-distractor-4",
+                  "v07-p02-distractor-5",
+                  "v07-p02-distractor-6",
+                  "v07-p02-distractor-7",
+                  "v07-p02-distractor-8",
+                  "v07-p02-distractor-9",
+                  "v07-p02-distractor-10",
+                  "v07-p02-distractor-11",
+                  "v07-p02-distractor-12"
+                ]
+              },
+              "trust_policy_id": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "v07-p02-ordinary",
+                      "v07-p02-elevated"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "artifact_contract_id": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "v07-p02-json",
+                      "v07-p02-signed-pdf"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "capability_id",
+              "trust_policy_id",
+              "artifact_contract_id"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "forbidden_capability_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "v07-p02-deliver",
+              "v07-p02-archive",
+              "v07-p02-verify",
+              "v07-p02-prepare",
+              "v07-p02-distractor-1",
+              "v07-p02-distractor-2",
+              "v07-p02-distractor-3",
+              "v07-p02-distractor-4",
+              "v07-p02-distractor-5",
+              "v07-p02-distractor-6",
+              "v07-p02-distractor-7",
+              "v07-p02-distractor-8",
+              "v07-p02-distractor-9",
+              "v07-p02-distractor-10",
+              "v07-p02-distractor-11",
+              "v07-p02-distractor-12"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "forbidden_agent_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "v07-p02-preparer",
+              "v07-p02-verifier",
+              "v07-p02-primary",
+              "v07-p02-backup"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "unresolved_terms": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 160
+          },
+          "uniqueItems": true
+        },
+        "decision": {
+          "type": "string",
+          "enum": [
+            "accept",
+            "refuse"
+          ]
+        },
+        "assignments": {
+          "type": "array",
+          "maxItems": 16,
+          "items": {
+            "type": "object",
+            "properties": {
+              "capability_id": {
+                "type": "string",
+                "enum": [
+                  "v07-p02-prepare",
+                  "v07-p02-verify",
+                  "v07-p02-deliver",
+                  "v07-p02-archive",
+                  "v07-p02-distractor-1",
+                  "v07-p02-distractor-2",
+                  "v07-p02-distractor-3",
+                  "v07-p02-distractor-4",
+                  "v07-p02-distractor-5",
+                  "v07-p02-distractor-6",
+                  "v07-p02-distractor-7",
+                  "v07-p02-distractor-8",
+                  "v07-p02-distractor-9",
+                  "v07-p02-distractor-10",
+                  "v07-p02-distractor-11",
+                  "v07-p02-distractor-12"
+                ]
+              },
+              "agent_id": {
+                "type": "string",
+                "enum": [
+                  "v07-p02-preparer",
+                  "v07-p02-verifier",
+                  "v07-p02-primary",
+                  "v07-p02-backup"
+                ]
+              }
+            },
+            "required": [
+              "capability_id",
+              "agent_id"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "execution_order": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "v07-p02-prepare",
+              "v07-p02-verify",
+              "v07-p02-deliver",
+              "v07-p02-archive",
+              "v07-p02-distractor-1",
+              "v07-p02-distractor-2",
+              "v07-p02-distractor-3",
+              "v07-p02-distractor-4",
+              "v07-p02-distractor-5",
+              "v07-p02-distractor-6",
+              "v07-p02-distractor-7",
+              "v07-p02-distractor-8",
+              "v07-p02-distractor-9",
+              "v07-p02-distractor-10",
+              "v07-p02-distractor-11",
+              "v07-p02-distractor-12"
+            ]
+          }
+        }
+      },
+      "required": [
+        "interpretation_status",
+        "goals",
+        "forbidden_capability_ids",
+        "forbidden_agent_ids",
+        "unresolved_terms",
+        "decision",
+        "assignments",
+        "execution_order"
+      ],
+      "additionalProperties": false
+    },
+    "raw_response": {
+      "id": "chatcmpl-7gpvl2wt698a5857r16pxc",
+      "object": "chat.completion",
+      "created": 1784406511,
+      "model": "qwen/qwen3-1.7b",
+      "choices": [
+        {
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\"interpretation_status\":\"resolved\",\"goals\":[{\"capability_id\":\"v07-p02-prepare\",\"trust_policy_id\":\"v07-p02-ordinary\",\"artifact_contract_id\":\"v07-p02-json\"},{\"capability_id\":\"v07-p02-verify\",\"trust_policy_id\":\"v07-p02-ordinary\",\"artifact_contract_id\":\"v07-p02-json\"},{\"capability_id\":\"v07-p02-deliver\",\"trust_policy_id\":\"v07-p02-ordinary\",\"artifact_contract_id\":\"v07-p02-json\"}],\"forbidden_capability_ids\":[],\"forbidden_agent_ids\":[],\"unresolved_terms\":[],\"decision\":\"accept\",\"assignments\":[{\"capability_id\":\"v07-p02-prepare\",\"agent_id\":\"v07-p02-preparer\"},{\"capability_id\":\"v07-p02-verify\",\"agent_id\":\"v07-p02-verifier\"},{\"capability_id\":\"v07-p02-deliver\",\"agent_id\":\"v07-p02-primary\"}],\"execution_order\":[\"v07-p02-prepare\",\"v07-p02-verify\",\"v07-p02-deliver\"]}\n",
+            "reasoning_content": "",
+            "tool_calls": []
+          },
+          "logprobs": null,
+          "finish_reason": "stop"
+        }
+      ],
+      "usage": {
+        "prompt_tokens": 3773,
+        "completion_tokens": 259,
+        "total_tokens": 4032,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "stats": {},
+      "system_fingerprint": "qwen/qwen3-1.7b"
+    },
+    "content": "{\"interpretation_status\":\"resolved\",\"goals\":[{\"capability_id\":\"v07-p02-prepare\",\"trust_policy_id\":\"v07-p02-ordinary\",\"artifact_contract_id\":\"v07-p02-json\"},{\"capability_id\":\"v07-p02-verify\",\"trust_policy_id\":\"v07-p02-ordinary\",\"artifact_contract_id\":\"v07-p02-json\"},{\"capability_id\":\"v07-p02-deliver\",\"trust_policy_id\":\"v07-p02-ordinary\",\"artifact_contract_id\":\"v07-p02-json\"}],\"forbidden_capability_ids\":[],\"forbidden_agent_ids\":[],\"unresolved_terms\":[],\"decision\":\"accept\",\"assignments\":[{\"capability_id\":\"v07-p02-prepare\",\"agent_id\":\"v07-p02-preparer\"},{\"capability_id\":\"v07-p02-verify\",\"agent_id\":\"v07-p02-verifier\"},{\"capability_id\":\"v07-p02-deliver\",\"agent_id\":\"v07-p02-primary\"}],\"execution_order\":[\"v07-p02-prepare\",\"v07-p02-verify\",\"v07-p02-deliver\"]}\n",
+    "parsed": {
+      "interpretation_status": "resolved",
+      "goals": [
+        {
+          "capability_id": "v07-p02-prepare",
+          "trust_policy_id": "v07-p02-ordinary",
+          "artifact_contract_id": "v07-p02-json"
+        },
+        {
+          "capability_id": "v07-p02-verify",
+          "trust_policy_id": "v07-p02-ordinary",
+          "artifact_contract_id": "v07-p02-json"
+        },
+        {
+          "capability_id": "v07-p02-deliver",
+          "trust_policy_id": "v07-p02-ordinary",
+          "artifact_contract_id": "v07-p02-json"
+        }
+      ],
+      "forbidden_capability_ids": [],
+      "forbidden_agent_ids": [],
+      "unresolved_terms": [],
+      "decision": "accept",
+      "assignments": [
+        {
+          "capability_id": "v07-p02-prepare",
+          "agent_id": "v07-p02-preparer"
+        },
+        {
+          "capability_id": "v07-p02-verify",
+          "agent_id": "v07-p02-verifier"
+        },
+        {
+          "capability_id": "v07-p02-deliver",
+          "agent_id": "v07-p02-primary"
+        }
+      ],
+      "execution_order": [
+        "v07-p02-prepare",
+        "v07-p02-verify",
+        "v07-p02-deliver"
+      ]
+    },
+    "schema_issues": [],
+    "call_count": 1,
+    "prompt_tokens": 3773,
+    "completion_tokens": 259
+  }
+}

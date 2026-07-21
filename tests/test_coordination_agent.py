@@ -3,7 +3,6 @@ from datetime import datetime, timedelta, timezone
 
 import httpx
 import pytest
-from lingo.mock import MockLLM
 
 from unified_multi_agent_coordination import (
     AgentRegistryEntry,
@@ -11,12 +10,9 @@ from unified_multi_agent_coordination import (
     CoordinationAgent,
     CoordinationPlanResult,
     CoordinationSdk,
-    DraftRequirementSelection,
     InMemoryCoordinationLedger,
     JsonlCoordinationLedger,
     LedgerEvent,
-    LingoLinguisticCoordinator,
-    LinguisticPlanDraft,
     ProblemRequest,
     RetryPolicy,
     SolutionProposal,
@@ -27,6 +23,7 @@ from unified_multi_agent_coordination import (
     LeaseRecord,
     RemoteRegistryError,
 )
+from unified_multi_agent_coordination.hybrid_strategy_validation import strategy_catalog
 
 
 class FakeResponse:
@@ -88,10 +85,9 @@ async def test_build_solution_plan_refreshes_registry_filters_self_and_authorize
             FakeResponse({"agents": [_card("coordinator"), _card("summarizer")]})
         ),
     )
-    linguistic = LingoLinguisticCoordinator(llm=MockLLM([request]))
-    agent = CoordinationAgent(sdk=sdk, linguistic_coordinator=linguistic)
+    agent = CoordinationAgent(sdk=sdk)
 
-    result = await agent.build_solution_plan("Summarize this report.")
+    result = await agent.build_solution_plan(request)
 
     assert [entry.agent_id for entry in result.registry_snapshot] == ["summarizer"]
     assert result.proposal.tasks[0].assigned_to == "summarizer"
@@ -148,35 +144,46 @@ async def test_build_solution_plan_retries_transient_registry_failure():
 
 
 @pytest.mark.asyncio
-async def test_build_solution_plan_uses_linguistic_planner_when_direct_match_is_missing():
-    request = ProblemRequest(
-        user_goal="Summarize the report.",
-        requirements=[CapabilityRequirement(name="summarize", validation_contract={"json_schema": {"type": "object"}})],
-        required_artifacts=["summary"],
-    )
+async def test_build_solution_plan_fails_closed_when_raw_request_has_no_semantic_catalog():
     sdk = CoordinationSdk(
         remote_registry_url="http://registry.example",
         http_client=FakeHttpClient(FakeResponse({"agents": [_card("other", skill="classify")]})),
     )
-    linguistic = LingoLinguisticCoordinator(
-        llm=MockLLM(
-            [
-                request,
-                LinguisticPlanDraft(selections=[DraftRequirementSelection(
-                    requirement_id="summarize", capability_id="summarize"
-                )]),
-                LinguisticPlanDraft(selections=[DraftRequirementSelection(
-                    requirement_id="summarize", capability_id="summarize"
-                )]),
-            ]
-        )
-    )
-    agent = CoordinationAgent(sdk=sdk, linguistic_coordinator=linguistic)
+    agent = CoordinationAgent(sdk=sdk)
 
     result = await agent.build_solution_plan("Summarize this report.")
 
-    assert result.proposal.tasks[0].assigned_to is None
+    assert result.proposal.tasks == []
     assert not result.feasibility_report.feasible
+    assert result.admission_issues[0]["code"] == "missing_catalog"
+
+
+@pytest.mark.asyncio
+async def test_raw_semantic_admission_fails_closed_without_or_during_interpreter():
+    catalog = strategy_catalog()
+    missing = CoordinationAgent(
+        sdk=CoordinationSdk(),
+        semantic_catalog=catalog,
+    )
+
+    missing_result = await missing.build_solution_plan("Deliver the result.")
+
+    assert missing_result.admission_issues[0]["code"] == "missing_interpreter"
+
+    class BrokenInterpreter:
+        async def interpret(self, *_args, **_kwargs):
+            raise RuntimeError("model transport failed")
+
+    broken = CoordinationAgent(
+        sdk=CoordinationSdk(),
+        semantic_catalog=catalog,
+        semantic_interpreter=BrokenInterpreter(),  # type: ignore[arg-type]
+    )
+
+    broken_result = await broken.build_solution_plan("Deliver the result.")
+
+    assert broken_result.admission_issues[0]["code"] == "schema_invalid"
+    assert "model transport failed" in broken_result.admission_issues[0]["message"]
 
 
 @pytest.mark.asyncio
@@ -591,7 +598,7 @@ def test_coordination_metadata_dependency_artifacts_and_completion_contract():
     assert CoordinationAgent._artifact_named([{"name": "other"}], "summary") is False
 
 
-def test_direct_plan_self_filter_registry_failure_and_auxiliary_noop_paths():
+def test_self_filter_registry_failure_and_auxiliary_noop_paths():
     requirement = CapabilityRequirement(
         name="summarize",
         input_modes=["text"],
@@ -607,19 +614,25 @@ def test_direct_plan_self_filter_registry_failure_and_auxiliary_noop_paths():
     unavailable = available.model_copy(update={"agent_id": "down", "status": "unavailable"})
     agent = CoordinationAgent(sdk=CoordinationSdk(), self_agent_id="worker")
     assert agent._without_self([available, unavailable]) == [unavailable]
-    assert agent._first_exact_skill_agent("summarize", [unavailable]) is None
-    assert agent._first_exact_skill_agent("summarize", [unavailable, available]) == available
-    assert agent._direct_solution_plan(ProblemRequest(user_goal="empty"), [available]) is None
 
     request = ProblemRequest(
         user_goal="Summarize",
         requirements=[requirement],
         required_artifacts=["summary"],
     )
-    proposal = agent._direct_solution_plan(request, [available])
-    assert proposal is not None and proposal.tasks[0].assigned_to == "worker"
-    assert agent._direct_solution_plan(request, [unavailable]) is None
-    unassigned = agent._unassigned_solution_plan(request)
+    unassigned = SolutionProposal(
+        tasks=[
+            TaskSpec(
+                task_id="t1",
+                requirement_name="summarize",
+                requirement_id=requirement.requirement_id,
+                capability_id=requirement.capability_id,
+                validation_contract=requirement.validation_contract,
+            )
+        ],
+        execution_order=["t1"],
+        expected_artifacts=["summary"],
+    )
     unchanged = agent._with_auxiliary_specs(
         request,
         unassigned,
@@ -722,17 +735,3 @@ def test_fault_injection_order_payload_and_completion_helpers(monkeypatch):
     }
     assert agent._payload_for_task({}, first) == {}
     assert agent._payload_for_task({"value": 2}, first) == {"value": 2}
-
-    no_artifacts = ProblemRequest(user_goal="work")
-    assert agent._completion_criteria(no_artifacts) == ["all task validators pass"]
-    one = CapabilityRequirement(name="one")
-    request = ProblemRequest(
-        user_goal="work", requirements=[one], required_artifacts=["result"]
-    )
-    assert agent._task_expected_artifacts(one, request) == ["result"]
-    two = CapabilityRequirement(name="two")
-    multi = ProblemRequest(
-        user_goal="work", requirements=[one, two], required_artifacts=["one"]
-    )
-    assert agent._task_expected_artifacts(one, multi) == ["one"]
-    assert agent._task_expected_artifacts(two, multi) == []

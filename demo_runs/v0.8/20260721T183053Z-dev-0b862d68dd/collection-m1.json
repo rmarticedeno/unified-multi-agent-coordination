@@ -1,0 +1,7 @@
+{
+  "model": "google/gemma-4-e2b",
+  "expected_outputs": 288,
+  "observed_outputs": 288,
+  "runtime_errors": 0,
+  "complete": true
+}

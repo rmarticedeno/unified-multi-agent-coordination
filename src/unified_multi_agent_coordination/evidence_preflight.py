@@ -219,7 +219,11 @@ def _validate_consensus(repository_root: Path, manifest: dict[str, Any]) -> dict
     if _sha256(path) != str(item["sha256"]).lower():
         raise RuntimeError("Consensus campaign digest differs from the manifest.")
     schema_version = campaign.get("schema_version")
-    if schema_version not in {"consensus-campaign-v2", "consensus-campaign-v3"}:
+    if schema_version not in {
+        "consensus-campaign-v2",
+        "consensus-campaign-v3",
+        "consensus-campaign-v4",
+    }:
         raise RuntimeError("Consensus campaign uses an unsupported schema.")
     if schema_version == "consensus-campaign-v2":
         expected: list[tuple[str, int]] = []
@@ -257,7 +261,7 @@ def _validate_consensus(repository_root: Path, manifest: dict[str, Any]) -> dict
     image_id = str(campaign.get("provenance", {}).get("image", {}).get("image_id", ""))
     clean = campaign.get("provenance", {}).get("dirty_state") is False
     v3_conditions_valid = True
-    if schema_version == "consensus-campaign-v3":
+    if schema_version in {"consensus-campaign-v3", "consensus-campaign-v4"}:
         primary = [result for result in results if result.get("primary", True)]
         supplementary = [result for result in results if not result.get("primary", True)]
         reported_conditions = campaign.get("condition_results")
