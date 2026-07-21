@@ -109,6 +109,14 @@ Before freezing, 48 development-only cases covered paraphrase, ambiguity, negati
 
 Qualification also exercised registry permutations, missing providers, malformed intent, alias collisions, explicit negation, prompt injection, and bounded-search exhaustion. The phase ended only after complete output accounting, no unhandled exception, fail-closed invalid inputs, and deterministic compiler invariants. The larger models were not used to tune the frozen protocol.
 
+\section{Version 0.8 Development Qualification}
+
+The v0.8 development matrix is complete at \VEightDevelopmentOutputCount{} observations: 72 cases, two permitted models, two arms, and two requested seeds. Qwen3-8B was not loaded and has no v0.8 observation. Both Qwen3-1.7B and Gemma-4-E2B passed every predeclared qualification gate. At primary seed 11, the pooled hybrid achieved \VEightDevelopmentHybridBalancedAccuracy\% balanced accuracy, \VEightDevelopmentHybridRecall\% feasible recall, \VEightDevelopmentHybridUnsafe{} unsafe acceptances, 100\% specificity, and 100\% schema validity. Every model/category feasible-recall cell was 100\%, and derived-status macro-F1 was \VEightDevelopmentStatusMacroFOne\%.
+
+The direct arm retained complete feasible recall but achieved \VEightDevelopmentDirectBalancedAccuracy\% pooled balanced accuracy and made \VEightDevelopmentDirectUnsafe{} unsafe acceptances at the primary seed. Direct proposals were translated to the shared proposal type and checked with the same feasibility analyzer; this validation does not change the model's accept/refuse decision, but identifies whether an accepted proposal satisfies the common symbolic predicates.
+
+These figures are qualification history, not held-out evidence. Earlier v0.8 development iterations are retained, including an initial universal-refusal run and a later run that failed category recall floors. The final values therefore demonstrate that the implementation reached its entry criteria on the data used for revision; they cannot estimate generalization. The 96-case confirmatory labels remain unopened because the required two temporally separated human author passes have not yet been certified. Consequently, no v0.8 confirmatory result or v0.7--v0.8 performance claim is made here.
+
 \section{Deterministic Compiler and A2A Evidence}
 
 The compiler benchmark covers one through six tasks and one, two, four, and eight providers with 30 repetitions per cell. Provider choice and topological order remain invariant under registry permutations, alternative-provider recovery succeeds, and a six-task/eight-provider space of 262,144 assignments refuses reproducibly after the 4,096-assignment limit. All four declared invariants pass.

@@ -72,8 +72,9 @@ def test_compiler_recovers_from_incompatible_first_provider():
 
     assert result.report.feasible
     assert result.proposal.tasks[0].assigned_to == "z-valid"
-    assert result.diagnostics.assignments_considered == 2
+    assert result.diagnostics.assignments_considered == 1
     assert result.diagnostics.recovered_alternative_provider
+    assert result.diagnostics.provider_rejections["deliver"]["a-invalid"] == ["modes"]
 
 
 def test_compiler_filters_trust_fencing_unavailability_and_agent_exclusions():
@@ -120,11 +121,16 @@ def test_compiler_is_stable_and_uses_least_sufficient_privilege():
 
 def test_compiler_fails_closed_when_search_limit_is_exhausted():
     required = _requirement(output_modes=["json"])
-    invalid = _agent("a-invalid", _requirement(output_modes=["text"]))
-    valid = _agent("z-valid", required)
+    constraint = ConstraintSpec(
+        constraint_id="missing-global-proof",
+        source="proposal_evidence",
+        path="/proof",
+        operator="eq",
+        expected=True,
+    )
     result = SymbolicPlanCompiler(max_assignment_evaluations=1).compile(
-        _request(required),
-        [invalid, valid],
+        _request(required, [constraint]),
+        [_agent("a-valid", required), _agent("z-valid", required)],
     )
 
     assert not result.report.feasible

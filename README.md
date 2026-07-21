@@ -124,6 +124,16 @@ failed observation without repair. Version 0.5 remains the experiment that
 motivated this redesign, and the unexecuted study-specific v0.6 protocol is
 preserved as superseded.
 
+## Version 0.8 Follow-up
+
+The versioned v0.8 path adds evidence-grounded semantic admission,
+deterministically derived ambiguity, Unicode-aware lexical retrieval, and
+constraint-directed provider search while preserving v0.7. Its development
+study uses 72 cases, two arms, seeds 11 and 29, and only Qwen3-1.7B and
+Gemma-4-E2B (576 observations). Confirmatory collection is intentionally
+blocked until the two output-blind human author-review worksheets under
+`corpus/v0.8/review/` are completed and reconciled.
+
 The completed primary-seed hybrid has 71.88% balanced accuracy, 44.79%
 feasible recall, and one unsafe acceptance, compared with 53.13%, 98.96%, and
 89 unsafe acceptances for the direct arm. Only safety superiority and the

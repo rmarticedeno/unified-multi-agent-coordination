@@ -37,6 +37,9 @@ root's `demo_runs/` directory:
 - `v0.7/<run-id>/`: frozen production-path comparison with 768 confirmatory
   observations across Qwen3-1.7B, Gemma-4-E2B, and Qwen3-8B. Developmental
   Qwen qualification runs are retained separately and are not headline evidence.
+- `v0.8/<run-id>/`: two-model follow-up. The complete 576-observation
+  development qualification is retained as development evidence; confirmatory
+  results require a separate 768-observation frozen run after human label review.
 - `consensus/<run-id>/`: immutable 3/5/7 consensus campaign reports. No
   accepted campaign exists until a clean-source full run passes.
 - `local_llm/`: batched local LLM reference reports for `qwen/qwen3-1.7b`

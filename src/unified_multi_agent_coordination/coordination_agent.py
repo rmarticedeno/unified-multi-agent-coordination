@@ -48,8 +48,11 @@ from .semantic_admission import (
     OpenAICompatibleSemanticInterpreter,
     SemanticAdmissionIssue,
     SemanticCatalog,
-    SemanticInterpretationResult,
     SemanticRequestAdmitter,
+)
+from .semantic_admission_v08 import (
+    SemanticInterpretationResultV08,
+    SemanticRequestAdmitterV08,
 )
 from .symbolic_plan_compiler import SymbolicPlanCompiler
 
@@ -103,6 +106,9 @@ class CoordinationAgent:
             self.feasibility_analyzer
         )
         self.semantic_request_admitter = SemanticRequestAdmitter(
+            self.feasibility_analyzer.trust_order
+        )
+        self.semantic_request_admitter_v08 = SemanticRequestAdmitterV08(
             self.feasibility_analyzer.trust_order
         )
         self.dependency_dispatch_policy = (
@@ -999,8 +1005,8 @@ class CoordinationAgent:
         semantic_catalog: SemanticCatalog | None,
     ) -> tuple[
         ProblemRequest | None,
-        SemanticInterpretationResult | None,
-        list[SemanticAdmissionIssue],
+        Any | None,
+        list[Any],
     ]:
         if isinstance(user_request, ProblemRequest):
             request = user_request
@@ -1036,9 +1042,19 @@ class CoordinationAgent:
                     ),
                 )
                 return None, interpretation, [issue]
-            admission = self.semantic_request_admitter.admit(
-                user_request, semantic_catalog, interpretation.intent, registry
-            )
+            admission: Any
+            if isinstance(interpretation, SemanticInterpretationResultV08):
+                admission = self.semantic_request_admitter_v08.admit(
+                    user_request,
+                    semantic_catalog,
+                    interpretation.intent,
+                    registry,
+                    interpretation.retrieval,
+                )
+            else:
+                admission = self.semantic_request_admitter.admit(
+                    user_request, semantic_catalog, interpretation.intent, registry
+                )
             if not admission.admitted:
                 return None, interpretation, admission.issues
             assert admission.request is not None
@@ -1058,8 +1074,8 @@ class CoordinationAgent:
         user_request: str | ProblemRequest,
         context: dict[str, Any] | None,
         registry: list[AgentRegistryEntry],
-        interpretation: SemanticInterpretationResult | None,
-        issues: list[SemanticAdmissionIssue],
+        interpretation: Any | None,
+        issues: list[Any],
         *,
         session_id: str,
         plan_id: str,

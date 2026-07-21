@@ -181,6 +181,12 @@ These requirements define a communication abstraction, not a specific protocol. 
 \section{Feasibility Model}
 \label{sec:feasibility-boundary}
 
+\subsection{Evidence-grounded semantic admission in version 0.8}
+
+Version 0.8 refines the linguistic--symbolic boundary without granting the model planning authority. Candidate retrieval collects every exact identifier, name, and alias match, adds five lexical BM25/TF--IDF candidates, and expands dependency ancestors. Retrieval only reduces the prompt search space: descriptions influence ranking but cannot authorize a goal. Every selected goal, policy, contract, or exclusion must point to exact request evidence outside ignored quoted spans. Zero terminal goals are valid when no safe grounding exists.
+
+Ambiguity is no longer a model-authored verdict. The linguistic component reports alternatives and required unknown terms; deterministic admission derives \emph{resolved}, \emph{ambiguous}, or \emph{unresolved} after checking executable disjunctions, negation scope, quotation boundaries, exclusions, and evidence consistency. Canonicalization may normalize identifiers, apply defaults, remove redundant prerequisites, and reject contradictions, but it may not add a goal. Thus lexical similarity proposes a bounded choice while authorization still requires symbolic identity and contract checks.
+
 Feasibility is a pre-execution judgment about whether a plan is justified by the current contracts and constraints. It is not a prediction that every agent will execute successfully. Runtime failure remains possible and is handled through commitment state and structured feedback. This separation is essential: without it, a failed execution could be mistaken for an unsound planning decision, or an optimistic planning decision could be defended by a later successful accident.
 
 \begin{definition}[Problem request]

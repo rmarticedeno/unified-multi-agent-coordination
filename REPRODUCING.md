@@ -67,6 +67,26 @@ into the historical top-level manifest with
 `scripts/merge_v07_evidence_manifest.py`. The merge preserves older evidence
 families and does not promote a dirty consensus campaign as accepted evidence.
 
+## Version 0.8 two-model follow-up
+
+Version 0.8 permits only `qwen/qwen3-1.7b` and `google/gemma-4-e2b`; its runner
+rejects Qwen3-8B. Generate the corpus and two blank, output-blind author-review
+worksheets, then collect the complete development matrix serially:
+
+```text
+uv run unified-generate-defense-corpus-v08 --output corpus/v0.8
+uv run unified-generate-defense-corpus-v08 --output corpus/v0.8 --prepare-review
+uv run unified-symbolic-benchmark-v08 --output demo_runs/v0.8/deterministic-benchmark.json
+uv run unified-defense-study-v08 --corpus corpus/v0.8 --phase development --model qwen/qwen3-1.7b
+uv run unified-defense-study-v08 --corpus corpus/v0.8 --phase development --model google/gemma-4-e2b --resume demo_runs/v0.8/<development-run-id>
+uv run unified-analyze-defense-study-v08 --run demo_runs/v0.8/<development-run-id> --corpus corpus/v0.8 --phase development
+```
+
+The protocol freezer refuses confirmatory collection until both worksheets are
+completed at separate times and reconciled in the review status record. After
+that human step, freeze and run Qwen followed by Gemma in one 768-observation
+directory. Do not repair or selectively retry confirmatory outputs.
+
 The 36-case local-model study is gated on hash-matched, frozen author provenance
 in `corpus/v0.3/label-provenance.json`. No independent adjudication is claimed.
 Reference labels are never placed in prompts and are loaded only after raw-output

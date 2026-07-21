@@ -92,7 +92,7 @@ def run_benchmark(repetitions: int = REPETITIONS) -> dict[str, Any]:
                     20260718 + task_count * 1000 + provider_count * 100 + repetition
                 ).shuffle(shuffled)
                 started = time.perf_counter()
-                result = SymbolicPlanCompiler().compile(request, shuffled)
+                result = SymbolicPlanCompiler(prefilter_providers=False).compile(request, shuffled)
                 latencies.append((time.perf_counter() - started) * 1000)
                 proposal = result.proposal.model_dump(mode="json")
                 reference = proposal if reference is None else reference
@@ -117,9 +117,13 @@ def run_benchmark(repetitions: int = REPETITIONS) -> dict[str, Any]:
                 }
             )
     recovery_request, recovery_registry = _fixture(2, 4, valid_position="last")
-    recovery = SymbolicPlanCompiler().compile(recovery_request, recovery_registry)
+    recovery = SymbolicPlanCompiler(prefilter_providers=False).compile(
+        recovery_request, recovery_registry
+    )
     exhaustion_request, exhaustion_registry = _fixture(6, 8, valid_position="last")
-    exhaustion = SymbolicPlanCompiler(max_assignment_evaluations=4096).compile(
+    exhaustion = SymbolicPlanCompiler(
+        max_assignment_evaluations=4096, prefilter_providers=False
+    ).compile(
         exhaustion_request,
         exhaustion_registry,
     )

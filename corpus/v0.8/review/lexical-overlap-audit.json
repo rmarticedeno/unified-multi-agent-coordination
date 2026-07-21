@@ -1,0 +1,9 @@
+{
+  "version": "0.8",
+  "confirmatory_cases": 96,
+  "exact_goal_overlap_cases": 0,
+  "exact_goal_overlap_rate": 0.0,
+  "low_overlap_rate": 1.0,
+  "minimum_low_overlap_rate": 0.75,
+  "passed": true
+}

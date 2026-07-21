@@ -296,6 +296,10 @@ result = agent.coordinate(user_request, context=session_context)
 
 Inside \texttt{coordinate}, the \texttt{CoordinationAgent} reads the current registry, bypasses linguistic inference for a typed \texttt{ProblemRequest}, or requires a catalog for raw language. A raw request receives a strict semantic-selection call; production may permit at most one schema-only repair, whereas the v0.7 confirmatory protocol disables repair. Semantic ambiguity and feasibility failures never trigger repair. Deterministic admission constructs the request, and the shared compiler performs dependency closure, plan construction, bounded provider search, and symbolic feasibility. A bounded auxiliary specification is considered only after ordinary provider search fails. The agent records semantic generation, repair when enabled, admission, compilation, provider search, and authorization as distinct stages and dispatches only an authorized plan.
 
+The versioned v0.8 path preserves this v0.7 implementation unchanged. Unicode-aware normalization and executable/quoted-span classification precede lexical retrieval. The wire schema asks for catalog identifiers plus compact evidence-fragment identifiers; the admission component materializes and verifies the corresponding exact request text. Structured results retain raw and canonical intent, derived status, admitted request, and typed issues. Typed \texttt{ProblemRequest} inputs continue to bypass the LLM.
+
+Provider assignment in v0.8 prefilters each requirement by availability, capability coverage, modes, trust, fencing, exclusions, side-effect policy, and artifact contracts. Requirements are ordered by fewest valid providers, then deterministic provider rank; backtracking applies forward checking and stops at the declared bound. Diagnostics record rejection reasons, explored and pruned branches, failed predicates, and conflicting requirements. The v0.7 benchmark explicitly selects its historical exhaustive mode so its frozen behavior and evidence remain reproducible.
+
 \begin{Verbatim}[fontsize=\small,breaklines=true,breakanywhere=true]
 CoordinationAgent.coordinate(problem):
   registry = sdk.registry_snapshot()

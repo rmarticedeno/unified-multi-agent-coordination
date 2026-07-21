@@ -39,6 +39,30 @@ uv run unified-analyze-defense-study-v07 \
   --run demo_runs/v0.7/<run-id> --corpus corpus/v0.7 \
   --phase confirmatory \
   --benchmark demo_runs/v0.7/deterministic-benchmark.json
+uv run unified-generate-defense-corpus-v08 --output corpus/v0.8
+uv run unified-generate-defense-corpus-v08 \
+  --output corpus/v0.8 --prepare-review
+uv run unified-symbolic-benchmark-v08 \
+  --output demo_runs/v0.8/deterministic-benchmark.json
+uv run unified-defense-study-v08 --corpus corpus/v0.8 \
+  --phase development --model qwen/qwen3-1.7b
+uv run unified-defense-study-v08 --corpus corpus/v0.8 \
+  --phase development --model google/gemma-4-e2b \
+  --resume demo_runs/v0.8/<development-run-id>
+uv run unified-analyze-defense-study-v08 \
+  --run demo_runs/v0.8/<development-run-id> \
+  --corpus corpus/v0.8 --phase development
+# Complete and reconcile both output-blind author review worksheets.
+uv run unified-defense-study-v08 --corpus corpus/v0.8 \
+  --freeze-protocol
+uv run unified-defense-study-v08 --corpus corpus/v0.8 \
+  --phase confirmatory --model qwen/qwen3-1.7b
+uv run unified-defense-study-v08 --corpus corpus/v0.8 \
+  --phase confirmatory --model google/gemma-4-e2b \
+  --resume demo_runs/v0.8/<confirmatory-run-id>
+uv run unified-analyze-defense-study-v08 \
+  --run demo_runs/v0.8/<confirmatory-run-id> \
+  --corpus corpus/v0.8 --phase confirmatory
 uv run unified-defense-study --check
 uv run unified-analyze-defense-study \
   demo_runs/v0.3/20260713T013624Z-b9fd8b6f83 \

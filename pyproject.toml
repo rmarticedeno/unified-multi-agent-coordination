@@ -48,6 +48,11 @@ unified-generate-defense-corpus-v07 = "unified_multi_agent_coordination.corpus_v
 unified-defense-study-v07 = "unified_multi_agent_coordination.defense_study_v07:main"
 unified-analyze-defense-study-v07 = "unified_multi_agent_coordination.study_analysis_v07:main"
 unified-symbolic-benchmark-v07 = "unified_multi_agent_coordination.symbolic_benchmark_v07:main"
+unified-generate-defense-corpus-v08 = "unified_multi_agent_coordination.corpus_v08:main"
+unified-defense-study-v08 = "unified_multi_agent_coordination.defense_study_v08:main"
+unified-analyze-defense-study-v08 = "unified_multi_agent_coordination.study_analysis_v08:main"
+unified-symbolic-benchmark-v08 = "unified_multi_agent_coordination.symbolic_benchmark_v08:main"
+unified-thesis-evidence-v08 = "unified_multi_agent_coordination.thesis_evidence_v08:main"
 unified-thesis-evidence = "unified_multi_agent_coordination.thesis_evidence:main"
 unified-hybrid-strategy-validation = "unified_multi_agent_coordination.hybrid_strategy_validation:main"
 

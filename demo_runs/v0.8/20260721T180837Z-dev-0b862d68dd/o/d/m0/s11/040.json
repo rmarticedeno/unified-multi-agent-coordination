@@ -1,0 +1,22 @@
+{
+  "schema_version": "0.8.0",
+  "identity": {
+    "phase": "development",
+    "arm": "direct_llm_v08",
+    "case_id": "v08-dev-21-feasible",
+    "pair_id": "v08-dev-pair-21",
+    "category": "artifact",
+    "model_id": "qwen/qwen3-1.7b",
+    "seed": 11
+  },
+  "settings": {
+    "temperature": 0.2,
+    "top_p": 1.0,
+    "max_tokens": 1000,
+    "schema_repair": false
+  },
+  "public_input_hash": "39fac41df59f92603527c8dbf35b2fa133a45bf69c6fa67aaeb16634154128fd",
+  "labels_loaded_during_collection": false,
+  "runtime_error": "HTTPStatusError: Client error '400 Bad Request' for url 'http://127.0.0.1:1234/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400",
+  "result": null
+}

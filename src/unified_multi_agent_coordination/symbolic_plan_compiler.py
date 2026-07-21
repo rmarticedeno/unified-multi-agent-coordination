@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import itertools
 import math
 from typing import Literal
 
@@ -32,10 +31,15 @@ class PlanCompilationIssue(BaseModel):
 
 class PlanCompilationDiagnostics(BaseModel):
     provider_candidates: dict[str, list[str]] = Field(default_factory=dict)
+    provider_rejections: dict[str, dict[str, list[str]]] = Field(default_factory=dict)
     assignments_total: int = 0
     assignments_considered: int = 0
+    branches_explored: int = 0
+    branches_pruned: int = 0
     recovered_alternative_provider: bool = False
     search_exhausted: bool = False
+    failed_predicates: list[str] = Field(default_factory=list)
+    conflict_requirements: list[str] = Field(default_factory=list)
     issues: list[PlanCompilationIssue] = Field(default_factory=list)
 
 
@@ -55,11 +59,13 @@ class SymbolicPlanCompiler:
         feasibility_analyzer: FeasibilityAnalyzer | None = None,
         *,
         max_assignment_evaluations: int = 4096,
+        prefilter_providers: bool = True,
     ) -> None:
         if max_assignment_evaluations < 1:
             raise ValueError("max_assignment_evaluations must be positive.")
         self.feasibility_analyzer = feasibility_analyzer or FeasibilityAnalyzer()
         self.max_assignment_evaluations = max_assignment_evaluations
+        self.prefilter_providers = prefilter_providers
 
     def compile(
         self,
@@ -78,11 +84,12 @@ class SymbolicPlanCompiler:
         request = request.model_copy(
             update={"requirements": self._topological_requirements(request)}
         )
-        provider_sets: list[list[AgentRegistryEntry | None]] = []
+        provider_sets: dict[str, list[AgentRegistryEntry | None]] = {}
         candidate_ids: dict[str, list[str]] = {}
+        rejection_diagnostics: dict[str, dict[str, list[str]]] = {}
         initial_assignment: list[AgentRegistryEntry | None] = []
         for requirement in request.requirements:
-            exact = [
+            advertised = [
                 agent
                 for agent in registry
                 if agent.status == "available"
@@ -91,32 +98,77 @@ class SymbolicPlanCompiler:
                     for skill in agent.skills
                 )
             ]
+            advertised.sort(key=lambda item: self._provider_rank(requirement, item))
+            initial_assignment.append(advertised[0] if advertised else None)
+            exact: list[AgentRegistryEntry] = []
+            rejected: dict[str, list[str]] = {}
+            for agent in registry:
+                reasons = self._provider_rejection_reasons(request, requirement, agent)
+                if reasons:
+                    rejected[agent.agent_id] = reasons
+                elif self.prefilter_providers:
+                    exact.append(agent)
+            if not self.prefilter_providers:
+                exact = list(advertised)
             exact.sort(key=lambda item: self._provider_rank(requirement, item))
-            initial_assignment.append(exact[0] if exact else None)
             candidate_ids[requirement.requirement_id] = [
                 item.agent_id for item in exact
             ]
-            provider_sets.append(list(exact) or [None])
+            rejection_diagnostics[requirement.requirement_id] = rejected
+            provider_sets[requirement.requirement_id] = list(exact) or [None]
 
-        assignments_total = math.prod(len(item) for item in provider_sets)
+        assignments_total = math.prod(len(item) for item in provider_sets.values())
         considered = 0
+        branches_explored = 0
+        branches_pruned = 0
         best_proposal: SolutionProposal | None = None
         best_report: FeasibilityReport | None = None
         best_score = -1
         selected_assignment: tuple[AgentRegistryEntry | None, ...] | None = None
-        for assignment in itertools.product(*provider_sets):
+        requirement_index = {
+            item.requirement_id: index for index, item in enumerate(request.requirements)
+        }
+        search_order = sorted(
+            request.requirements,
+            key=lambda item: (len(provider_sets[item.requirement_id]), requirement_index[item.requirement_id]),
+        )
+        partial: dict[str, AgentRegistryEntry | None] = {}
+
+        def search(depth: int) -> bool:
+            nonlocal considered, branches_explored, branches_pruned
+            nonlocal best_proposal, best_report, best_score, selected_assignment
             if considered >= self.max_assignment_evaluations:
-                break
-            considered += 1
-            proposal = self._proposal(request, list(assignment))
-            report = self.feasibility_analyzer.check(request, registry, proposal)
-            score = sum(item.passed for item in report.evidence)
-            if score > best_score:
-                best_proposal, best_report, best_score = proposal, report, score
-            if report.feasible:
-                best_proposal, best_report = proposal, report
-                selected_assignment = assignment
-                break
+                return False
+            if depth == len(search_order):
+                considered += 1
+                ordered_assignment = tuple(
+                    partial[item.requirement_id] for item in request.requirements
+                )
+                proposal = self._proposal(request, list(ordered_assignment))
+                report = self.feasibility_analyzer.check(request, registry, proposal)
+                score = sum(item.passed for item in report.evidence)
+                if score > best_score:
+                    best_proposal, best_report, best_score = proposal, report, score
+                if report.feasible:
+                    best_proposal, best_report = proposal, report
+                    selected_assignment = ordered_assignment
+                    return True
+                return False
+            requirement = search_order[depth]
+            candidates = provider_sets[requirement.requirement_id]
+            if candidates == [None]:
+                branches_pruned += 1
+            for candidate in candidates:
+                if considered >= self.max_assignment_evaluations:
+                    return False
+                branches_explored += 1
+                partial[requirement.requirement_id] = candidate
+                if search(depth + 1):
+                    return True
+            partial.pop(requirement.requirement_id, None)
+            return False
+
+        search(0)
 
         assert best_proposal is not None and best_report is not None
         exhausted = (
@@ -159,18 +211,78 @@ class SymbolicPlanCompiler:
                     initial_assignment, selected_assignment, strict=True
                 )
             )
+        failed_predicates = sorted(
+            item.name for item in best_report.evidence if not item.passed
+        )
+        conflict_requirements = sorted(
+            requirement_id
+            for requirement_id, candidates in provider_sets.items()
+            if candidates == [None]
+        )
         return PlanCompilationResult(
             proposal=best_proposal,
             report=best_report,
             diagnostics=PlanCompilationDiagnostics(
                 provider_candidates=candidate_ids,
+                provider_rejections=rejection_diagnostics,
                 assignments_total=assignments_total,
                 assignments_considered=considered,
+                branches_explored=branches_explored,
+                branches_pruned=branches_pruned,
                 recovered_alternative_provider=recovered,
                 search_exhausted=exhausted,
+                failed_predicates=failed_predicates,
+                conflict_requirements=conflict_requirements,
                 issues=compilation_issues,
             ),
         )
+
+    def _provider_rejection_reasons(
+        self,
+        request: ProblemRequest,
+        requirement,
+        agent: AgentRegistryEntry,
+    ) -> list[str]:
+        reasons: list[str] = []
+        if agent.status != "available":
+            reasons.append("unavailable")
+        skill = next(
+            (item for item in agent.skills if item.capability_id == requirement.capability_id),
+            None,
+        )
+        if skill is None:
+            reasons.append("capability")
+            return reasons
+        if not self.feasibility_analyzer._contract_modes_compatible(skill, requirement):
+            reasons.append("modes")
+        if not self.feasibility_analyzer._schema_compatible(
+            skill.input_schema, requirement.input_schema
+        ) or not self.feasibility_analyzer._schema_compatible(
+            skill.output_schema, requirement.output_schema
+        ):
+            reasons.append("schema")
+        if not self.feasibility_analyzer._trust_satisfies(
+            agent.trust_level, requirement.required_trust_level
+        ):
+            reasons.append("trust")
+        if (
+            self.feasibility_analyzer.require_effect_fencing
+            and requirement.side_effect_class in {"unsafe", "unknown"}
+            and not agent.supports_fencing
+        ):
+            reasons.append("fencing")
+        for constraint in request.constraints:
+            if constraint.source != "agent" or constraint.requirement_id not in {
+                "", requirement.requirement_id
+            }:
+                continue
+            if constraint.path != "/agent_id":
+                continue
+            if not self.feasibility_analyzer._compare_constraint(
+                constraint, True, agent.agent_id
+            ):
+                reasons.append(f"constraint:{constraint.constraint_id}")
+        return sorted(set(reasons))
 
     def _provider_rank(self, requirement, agent: AgentRegistryEntry) -> tuple[int, int, int, str]:
         trust_order = self.feasibility_analyzer.trust_order
